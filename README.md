@@ -17,8 +17,8 @@
 | 음성 인식 | Speech |
 | 카테고리 분류 | CreateML (온디바이스 `InfoClassifier.mlmodel`) |
 | 위치 | Core Location |
-| 환율 | exchangerate-api.com |
-| 의존성 | SPM: lottie-ios 4.3.3 · CocoaPods: SwiftLint |
+| 환율 | exchangerate-api.com (무료 플랜, 1일 1회 갱신) |
+| 의존성 | SPM 단일 — lottie-ios 4.3.3, SwiftLintPlugins 0.65.0 |
 
 <br>
 
@@ -41,21 +41,31 @@ API_KEY = 여기에_본인_키
 > ⚠️ `Config.xcconfig`와 `.env`는 `.gitignore`에 등록되어 있습니다. 절대 커밋하지 마세요.
 > 원본 프로젝트는 이 파일들을 커밋해 키가 유출된 이력이 있습니다.
 
-### 2. 의존성 설치
+### 2. 실행
 
 ```bash
-pod install
+open Mwallet.xcodeproj
 ```
 
-### 3. 실행
+의존성은 SPM으로 관리되어 Xcode가 열릴 때 자동으로 해석됩니다. 별도 설치 명령이 없습니다.
+
+빌드 전 `Signing & Capabilities` 탭의 **Team**을 본인 계정으로 지정하세요 (자동 서명으로 설정되어 있습니다).
+
+첫 빌드 시 SwiftLint 빌드 플러그인 신뢰 여부를 묻는 대화상자가 뜨면 **Trust & Enable**을 선택하세요.
+
+### 3. 린트
+
+SwiftLint는 **빌드 플러그인으로 자동 실행**됩니다. 별도 설치(`brew install swiftlint`)가 필요 없고 버전이 0.65.0으로 고정됩니다.
+
+규칙은 [`Mwallet/.swiftlint.yml`](Mwallet/.swiftlint.yml)에서 관리합니다. 현재 원본 프로젝트에서 비활성화해 둔 길이·복잡도 규칙 10개가 그대로 꺼져 있으며, 단계적으로 되살리는 것이 로드맵 P2 항목입니다.
+
+CLI 빌드 시에는 플러그인 검증 우회 플래그가 필요합니다.
 
 ```bash
-open Mwallet.xcworkspace
+xcodebuild -project Mwallet.xcodeproj -scheme Mwallet \
+  -destination 'generic/platform=iOS Simulator' \
+  -skipPackagePluginValidation build
 ```
-
-`.xcodeproj`가 아닌 **`.xcworkspace`** 를 열어야 합니다.
-
-빌드 전 Xcode에서 `Signing & Capabilities` 탭의 **Team**을 본인 계정으로 지정하세요 (자동 서명으로 설정되어 있습니다).
 
 <br>
 
@@ -97,11 +107,12 @@ Mwallet/
 - [ ] `fatalError` 5곳 → 복구 가능한 에러 처리로 전환
 - [ ] `print` 197개 → `OSLog` 전환
 - [ ] CI(빌드 + SwiftLint) 도입
+- [x] SwiftLint 실제 동작 복구 (원본은 미설치 상태로 스킵되고 있었음)
 
 **P2 — 구조**
 - [ ] Repository 레이어 도입, View의 Core Data 직접 참조 제거
 - [ ] `ManualRecord*` 중복 4개 파일 통합
-- [ ] SwiftLint 길이·복잡도 룰 단계적 재활성화
+- [ ] SwiftLint 길이·복잡도 룰 단계적 재활성화 (현재 위반 7건이 베이스라인)
 - [ ] 테스트 타깃 신설
 
 **P3 — 확장**

@@ -1,4 +1,5 @@
 {
+  "originHash" : "f143f8dd2490d7824ab4e87735162c37a483dd15ea09c40eaaac588805b783e2",
   "pins" : [
     {
       "identity" : "lottie-ios",
@@ -8,7 +9,16 @@
         "revision" : "45517c3cfec9469bbdd4f86e32393c28ae9df0bc",
         "version" : "4.3.3"
       }
+    },
+    {
+      "identity" : "swiftlintplugins",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
+      "state" : {
+        "revision" : "3292bab28e6e92000161348003fdef8edc4e582d",
+        "version" : "0.65.0"
+      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

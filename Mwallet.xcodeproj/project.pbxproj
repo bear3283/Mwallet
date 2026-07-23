@@ -23,7 +23,6 @@
 		5760066B2ADD42D3006CD8DF /* CompleteRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066A2ADD42D3006CD8DF /* CompleteRecordView.swift */; };
 		5760066D2ADD42FA006CD8DF /* ManualRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */; };
 		5760066F2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066E2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift */; };
-		57A65D002AD7D3DF00131266 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */; };
 		57A65D052AD7D4A900131266 /* Character+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D042AD7D4A900131266 /* Character+Extension.swift */; };
 		57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D072AD7D4D100131266 /* CharacterForm.swift */; };
 		57A65D0A2AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D092AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift */; };
@@ -92,7 +91,6 @@
 		C1EAD6B02AF8210D00EB3B89 /* InterimProceedingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AF2AF8210D00EB3B89 /* InterimProceedingView.swift */; };
 		C1EAD6B22AF8218200EB3B89 /* InterimPastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B12AF8218200EB3B89 /* InterimPastView.swift */; };
 		C1EAD6B42AF821BF00EB3B89 /* InterimOncomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B32AF821BF00EB3B89 /* InterimOncomingView.swift */; };
-		C508FA0EFA4BFAF8AEC92219 /* Pods_Mwallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F6EFEA01698B097C00508F1 /* Pods_Mwallet.framework */; };
 		E23357A42AE2724800E17CFF /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A32AE2724700E17CFF /* CustomDatePicker.swift */; };
 		E23357A62AE273E700E17CFF /* NSObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A52AE273E700E17CFF /* NSObject+Extension.swift */; };
 		E23357A82AE2B42300E17CFF /* dateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A72AE2B42300E17CFF /* dateFormatter.swift */; };
@@ -155,8 +153,6 @@
 		57EA421F2ADE38EE006CA587 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		57F72CEE2B04C85800464B06 /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
 		57F72CF02B04CAE900464B06 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
-		5A264F73DEF94158A4C1808B /* Pods-Mwallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mwallet.release.xcconfig"; path = "Target Support Files/Pods-Mwallet/Pods-Mwallet.release.xcconfig"; sourceTree = "<group>"; };
-		9F6EFEA01698B097C00508F1 /* Pods_Mwallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mwallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailViewModel.swift; sourceTree = "<group>"; };
 		C15760172AEE782C0089FFE5 /* CountryList.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryList.csv; sourceTree = "<group>"; };
 		C157601D2AF1DD830089FFE5 /* CountryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfo.swift; sourceTree = "<group>"; };
@@ -205,7 +201,6 @@
 		C1EAD6AF2AF8210D00EB3B89 /* InterimProceedingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterimProceedingView.swift; sourceTree = "<group>"; };
 		C1EAD6B12AF8218200EB3B89 /* InterimPastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterimPastView.swift; sourceTree = "<group>"; };
 		C1EAD6B32AF821BF00EB3B89 /* InterimOncomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterimOncomingView.swift; sourceTree = "<group>"; };
-		D403454D866DAC0CA77B99FB /* Pods-Mwallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mwallet.debug.xcconfig"; path = "Target Support Files/Pods-Mwallet/Pods-Mwallet.debug.xcconfig"; sourceTree = "<group>"; };
 		E23357A32AE2724700E17CFF /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
 		E23357A52AE273E700E17CFF /* NSObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extension.swift"; sourceTree = "<group>"; };
 		E23357A72AE2B42300E17CFF /* dateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateFormatter.swift; sourceTree = "<group>"; };
@@ -236,29 +231,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				C18167FE2AFDDF9200130F79 /* Lottie in Frameworks */,
-				C508FA0EFA4BFAF8AEC92219 /* Pods_Mwallet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E1B4059A622E42F91BDE588 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D403454D866DAC0CA77B99FB /* Pods-Mwallet.debug.xcconfig */,
-				5A264F73DEF94158A4C1808B /* Pods-Mwallet.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		571A425D2ACE857500FA3D2B = {
 			isa = PBXGroup;
 			children = (
 				571A42682ACE857500FA3D2B /* Mwallet */,
 				571A42672ACE857500FA3D2B /* Products */,
-				0E1B4059A622E42F91BDE588 /* Pods */,
 				CCFDDCF8C1BD32155454F0C1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -502,7 +485,6 @@
 		CCFDDCF8C1BD32155454F0C1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9F6EFEA01698B097C00508F1 /* Pods_Mwallet.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -536,8 +518,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 571A42742ACE857600FA3D2B /* Build configuration list for PBXNativeTarget "Mwallet" */;
 			buildPhases = (
-				048EC20E1169C74DF5DE61F4 /* [CP] Check Pods Manifest.lock */,
-				C1F13BF52ACE8BE400BDC1C1 /* SwiftLint Script */,
 				571A42622ACE857500FA3D2B /* Sources */,
 				571A42632ACE857500FA3D2B /* Frameworks */,
 				571A42642ACE857500FA3D2B /* Resources */,
@@ -545,6 +525,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C1A11EA700000000000000A3 /* PBXTargetDependency */,
 			);
 			name = Mwallet;
 			packageProductDependencies = (
@@ -581,6 +562,7 @@
 			mainGroup = 571A425D2ACE857500FA3D2B;
 			packageReferences = (
 				C18167FC2AFDDF9200130F79 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				C1A11EA700000000000000A1 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			productRefGroup = 571A42672ACE857500FA3D2B /* Products */;
 			projectDirPath = "";
@@ -596,7 +578,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57A65D002AD7D3DF00131266 /* .swiftlint.yml in Resources */,
 				C17966092ADD66F90036E866 /* Pretendard-Bold.otf in Resources */,
 				571A42712ACE857600FA3D2B /* Preview Assets.xcassets in Resources */,
 				C17966042ADD66F90036E866 /* Pretendard-SemiBold.otf in Resources */,
@@ -615,50 +596,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		048EC20E1169C74DF5DE61F4 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Mwallet-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C1F13BF52ACE8BE400BDC1C1 /* SwiftLint Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "SwiftLint Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		571A42622ACE857500FA3D2B /* Sources */ = {
@@ -731,7 +668,6 @@
 				E23733902AF7EC1E008C2613 /* CurrencyInfoModel.swift in Sources */,
 				C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */,
 				57CC201A2AE551BE0034BD57 /* TravelChoiceInExpenseModal.swift in Sources */,
-				57CC201A2AE551BE0034BD57 /* TravelChoiceInExpenseModal.swift in Sources */,
 				57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */,
 				575F287F2AF38C0300F9484E /* AddTravelRequestModal.swift in Sources */,
 				57A65D102AD7D52700131266 /* String+Extension.swift in Sources */,
@@ -760,6 +696,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C1A11EA700000000000000A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = C1A11EA700000000000000A2 /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		571A42722ACE857600FA3D2B /* Debug */ = {
@@ -887,7 +830,6 @@
 		};
 		571A42752ACE857600FA3D2B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D403454D866DAC0CA77B99FB /* Pods-Mwallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -930,7 +872,6 @@
 		};
 		571A42762ACE857600FA3D2B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5A264F73DEF94158A4C1808B /* Pods-Mwallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -995,6 +936,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C1A11EA700000000000000A1 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.65.0;
+			};
+		};
 		C18167FC2AFDDF9200130F79 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -1006,6 +955,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C1A11EA700000000000000A2 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1A11EA700000000000000A1 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
 		C18167FD2AFDDF9200130F79 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C18167FC2AFDDF9200130F79 /* XCRemoteSwiftPackageReference "lottie-ios" */;
