@@ -11,8 +11,22 @@
         <attribute name="payAmount" optional="YES" attributeType="Double" defaultValueString="-1" usesScalarValueType="YES"/>
         <attribute name="payDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="paymentMethod" optional="YES" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES"/>
-        <attribute name="voiceRecordFile" optional="YES" attributeType="Binary" valueTransformerName=""/>
+        <attribute name="voiceRecordFile" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" valueTransformerName=""/>
         <relationship name="travel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Travel" inverseName="expenseArray" inverseEntity="Travel"/>
+    </entity>
+    <entity name="Receipt" representedClassName="Receipt" syncable="YES" codeGenerationType="class">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String" defaultValueString="기타"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="currency" optional="YES" attributeType="String" defaultValueString="KRW"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="exchangeRate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="memo" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="merchant" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="missionName" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="timeZoneIdentifier" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Travel" representedClassName="Travel" syncable="YES" codeGenerationType="class">
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
