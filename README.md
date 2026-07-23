@@ -94,28 +94,48 @@ Mwallet/
 
 <br>
 
+## 기능 현황
+
+**영수증 탭** (`Mwallet/Receipt/`)
+
+| 기능 | 상태 |
+|---|---|
+| 목록 · 검색 · 사역별 필터 · 일자별 합계 | ✅ |
+| 추가 / 수정 폼 (사진 첨부 포함) | ✅ |
+| 상세 보기 · 삭제 · 환율 사후 적용 | ✅ |
+| 카테고리별 비율 차트 | ✅ |
+| CSV 내보내기 (RFC 4180) | ✅ |
+| CloudKit 동기화 | 구조만 준비 — [`docs/CloudKit-활성화.md`](docs/CloudKit-활성화.md) |
+| 기간 필터 · 인원별 정산 · 사진 여러 장 | 미구현 |
+
+<br>
+
 ## 로드맵
 
-원본 코드베이스 분석에서 도출된 개선 과제입니다. 상세 내용은 별도 논의 후 이슈로 등록합니다.
-
-**P0 — 정합성 / 보안**
-- [ ] 환율 조회 실패 시 `-1` / `-100` 센티널이 Core Data에 저장되는 문제 제거
-- [ ] `getExchangeRateFromKRW`의 0 나눗셈 방어
-- [ ] CSV 이스케이프 정상화 (`"` 이중화, 전 필드 인용, 수식 주입 차단)
+**P0 — 정합성**
+- [x] 환율 조회 실패 시 `-1` / `-100` 센티널이 Core Data에 저장되는 문제 제거
+- [x] `getExchangeRateFromKRW`의 0 나눗셈 방어
+- [x] 환율 캐시 만료 판정을 UTC 절대시각 기준으로 수정
+- [ ] **`DateGapHandler` 시간대 시프트 제거** — 44곳. 저장 형식 문제라 데이터가 쌓이기 전에
+- [ ] 화면과 CSV의 환율 기준 통일 (화면은 오늘 환율, CSV는 기록 시점 환율)
 
 **P1 — 안정성**
-- [ ] `fatalError` 5곳 → 복구 가능한 에러 처리로 전환
-- [ ] `print` 197개 → `OSLog` 전환
-- [ ] CI(빌드 + SwiftLint) 도입
 - [x] SwiftLint 실제 동작 복구 (원본은 미설치 상태로 스킵되고 있었음)
+- [x] SwiftLint 위반 0건 달성
+- [ ] 테스트 타깃 신설
+- [ ] CI(빌드 + 린트 + 테스트) 도입
+- [ ] `print` 181개 → `OSLog` 전환
+- [ ] `fatalError` 5곳 → 복구 가능한 에러 처리로 전환
+- [ ] 기존 `CSVArchive` 를 `ReceiptCSVEncoder` 로 교체 (이스케이프 결함 잔존)
 
 **P2 — 구조**
-- [ ] Repository 레이어 도입, View의 Core Data 직접 참조 제거
-- [ ] `ManualRecord*` 중복 4개 파일 통합
-- [ ] SwiftLint 길이·복잡도 룰 단계적 재활성화 (현재 위반 7건이 베이스라인)
-- [ ] 테스트 타깃 신설
+- [x] 데드 코드 제거, `TempSave` → `FirstLaunchSeeder` 정리
+- [ ] `ManualRecord*` 4개 파일 통합 (View 쌍 73% 중복)
+- [ ] Repository 레이어 도입, View 13곳의 Core Data 직접 참조 제거
+- [ ] `Travel.isDefault` 도입 → `tempTravelName` 매직 문자열 제거
+- [ ] SwiftLint 길이·복잡도 룰 10개 단계적 재활성화
 
 **P3 — 확장**
 - [ ] 환율 프록시 서버 (클라이언트 키 임베딩 해소)
-- [ ] `@MainActor` 적용, `asyncAfter` 타이밍 의존 제거
-- [ ] 데이터 백업 / 기기 이전 경로
+- [ ] `@MainActor` 적용, `asyncAfter` 5곳 타이밍 의존 제거
+- [ ] `participantArray` 의 `customClassName` 정리 (CloudKit 활성화 시 필요할 수 있음)
