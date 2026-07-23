@@ -112,9 +112,12 @@ struct AllExpenseView: View {
     var allExpenseSummaryTotal: some View {
         let totalSum = expenseViewModel.filteredAllExpensesByCountry.reduce(0) { total, expense in
             let isoCode = currencyInfoModel[Int(expense.currency)]?.isoCodeNm ?? "Unknown"
-            let rate = exchangeRatehandler.getExchangeRateFromKRW(currencyCode: isoCode)
             let amount = (expense.payAmount != -1) ? expense.payAmount : 0
-            return total + amount * (rate ?? -100)
+            // 환율을 얻지 못한 항목은 합계에서 제외한다.
+            guard let rate = exchangeRatehandler.getExchangeRateFromKRW(currencyCode: isoCode) else {
+                return total
+            }
+            return total + amount * rate
         }
         return NavigationLink {
             AllExpenseDetailView(

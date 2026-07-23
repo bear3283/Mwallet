@@ -429,7 +429,7 @@ final class ManualRecordInExpenseViewModel: NSObject, ObservableObject {
         expense.country = Int64(country)
         expense.currency = Int64(currency)
         let code = CurrencyInfoModel.shared.currencyResult[currency]?.isoCodeNm ?? "Unknown"
-        expense.exchangeRate = exchangeHandler.getExchangeRateFromKRW(currencyCode: code) ?? -1
+        expense.exchangeRate = exchangeHandler.getExchangeRateFromKRW(currencyCode: code) ?? Expense.unknownExchangeRate
         expense.info = info
         expense.location = locationExpression
         expense.participantArray = participantTupleArray.filter { $0.1 == true }.map { $0.0 }

@@ -186,8 +186,11 @@ class ExpenseViewModel: ObservableObject {
             let sum = expenseArray.reduce(0) { (result, expense) in
                 let payAmount = expense.payAmount == -1 ? 0 : expense.payAmount
                 let currencyCode = currencyInfoModel[Int(expense.currency)]?.isoCodeNm ?? "-"
-                let exchangeRate = exchangeRateHandler.getExchangeRateFromKRW(currencyCode: currencyCode)
-                return result + (payAmount * (exchangeRate ?? -100))
+                // 환율을 얻지 못한 항목은 합계에서 제외한다. 임의의 값을 곱하면 총액이 음수가 된다.
+                guard let exchangeRate = exchangeRateHandler.getExchangeRateFromKRW(currencyCode: currencyCode) else {
+                    return result
+                }
+                return result + (payAmount * exchangeRate)
             }
             return sum
         }

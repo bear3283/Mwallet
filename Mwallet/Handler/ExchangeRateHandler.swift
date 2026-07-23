@@ -128,9 +128,12 @@ class ExchangeRateHandler {
         }
     }
 
+    // 1 KRW 당 환율(rate)을 뒤집어 해당 통화 1단위의 원화 가치를 돌려준다.
+    // rate 가 0 이면 무한대가 나오고 음수면 금액 부호가 뒤집히므로 양수인 경우에만 계산한다.
     func getExchangeRateFromKRW(currencyCode: String) -> Double? {
         guard let loadedData = loadExchangeRatesFromUserDefaults(),
-              let rate = loadedData.conversion_rates[currencyCode.uppercased()] else {
+              let rate = loadedData.conversion_rates[currencyCode.uppercased()],
+              rate > 0 else {
             return nil
         }
         return 1 / rate

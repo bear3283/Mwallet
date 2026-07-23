@@ -144,9 +144,12 @@ struct AllExpenseDetailView: View {
             
             // 총 합계
             let totalSum = currencyAndSums.reduce(0) {
-                let exchangeRate = exchangeRatehandler.getExchangeRateFromKRW(currencyCode: currencyInfoModel[Int($1.currency)]?.isoCodeNm ?? "Unknown")
                 let sum = $1.sum == -1 ? 0 : $1.sum
-                return $0 + sum * (exchangeRate ?? -100)
+                // 환율을 얻지 못한 통화는 합계에서 제외한다.
+                guard let exchangeRate = exchangeRatehandler.getExchangeRateFromKRW(currencyCode: currencyInfoModel[Int($1.currency)]?.isoCodeNm ?? "Unknown") else {
+                    return $0
+                }
+                return $0 + sum * exchangeRate
             }
             let formattedSum = expenseViewModel.formatSum(from: totalSum, to: 0)
             Text("\(formattedSum)원")
@@ -337,8 +340,9 @@ struct AllExpenseDetailView: View {
                                     .padding(.leading, 3 )
                             }
                             let currencyCodeName = currencyInfoModel[Int(expense.currency)]?.isoCodeNm ?? "Unknown"
-                            let exchangeRate = exchangeRatehandler.getExchangeRateFromKRW(currencyCode: currencyCodeName) ?? -100
-                            let payAmount = expense.payAmount == -1 ? Double.nan : expense.payAmount * exchangeRate
+                            let exchangeRate = exchangeRatehandler.getExchangeRateFromKRW(currencyCode: currencyCodeName)
+                            // 환율이나 금액이 없으면 nan 을 넘겨 formatSum 이 "-" 로 표시하게 한다.
+                            let payAmount = (expense.payAmount == -1 ? nil : exchangeRate.map { expense.payAmount * $0 }) ?? Double.nan
                             let formattedPayAmount = expenseViewModel.formatSum(from: payAmount, to: 0)
                             Text("(\(formattedPayAmount)원)")
                                 .font(.caption2_fixed)

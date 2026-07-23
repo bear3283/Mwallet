@@ -59,11 +59,8 @@ extension CSVArchive {
             let info = "\"" + (expense.info ?? "-") + "\""
             let payAmountWithCurrency = String(format: "%.0f", expense.payAmount) + (CurrencyInfoModel.shared.currencyResult[Int(expense.currency)]?.symbol ?? "-")
             
-            let exchangeRate = expense.exchangeRate
-            let exchangeRateString = String(format: "%.2f", exchangeRate)
-            
-            let payAmountInWon = expense.payAmount * expense.exchangeRate
-            let payAmountInWonString = String(format: "%.0f", payAmountInWon)
+            // 기록 시점에 환율을 얻지 못한 건은 금액을 지어내지 않고 "-" 로 남긴다.
+            let payAmountInWonString = expense.payAmountInKRW.map { String(format: "%.0f", $0) } ?? "-"
             
             let payDate = expense.payDate?.toString(dateFormat: "yy.MM.dd(E) HH:mm") ?? Date.distantPast.toString(dateFormat: "yy.MM.dd(E) HH:mm")
             let paymentMethod = PaymentMethod.titleFor(rawValue: Int(expense.paymentMethod))
@@ -81,9 +78,11 @@ extension CSVArchive {
             let totalSum = participantsWithMe.reduce(0.0) { sum, participant in
                 let expenses = sortedExpenses?.filter { $0.participantArray?.contains(participant) ?? false }
                 let totalExpense = expenses?.reduce(0, { (currentSum, expense) -> Double in
+                    // 환율 미확보 건은 정산에서 제외한다. 그대로 곱하면 합계가 음수로 어긋난다.
+                    guard let amountInKRW = expense.payAmountInKRW else { return currentSum }
                     let participantCount = Double(expense.participantArray?.count ?? 1)
-                    let dividedExpense = (expense.payAmount * expense.exchangeRate) / participantCount
-                    return currentSum + dividedExpense
+                    guard participantCount > 0 else { return currentSum }
+                    return currentSum + amountInKRW / participantCount
                 }) ?? 0
                 let totalExpenseString = String(format: "%.0f", totalExpense)
                 

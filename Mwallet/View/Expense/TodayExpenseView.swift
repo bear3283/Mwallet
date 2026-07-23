@@ -82,8 +82,11 @@ struct TodayExpenseView: View {
             let totalSum = currencies.reduce(0) { total, currency in
                 let sum = expenseArray.filter({ $0.currency == currency }).reduce(0) { $0 + ($1.payAmount == -1 ? 0 : $1.payAmount) }
                 let isoCodeName = currencyInfoModel[Int(currency)]?.isoCodeNm ?? "Unknown"
-                let rate = exchangeRateHandler.getExchangeRateFromKRW(currencyCode: isoCodeName)
-                return total + sum * (rate ?? -100)
+                // 환율을 얻지 못한 통화는 합계에서 제외한다.
+                guard let rate = exchangeRateHandler.getExchangeRateFromKRW(currencyCode: isoCodeName) else {
+                    return total
+                }
+                return total + sum * rate
             }
 
             VStack(alignment: .leading, spacing: 0) {
@@ -132,8 +135,11 @@ struct TodayExpenseView: View {
                     let totalSum = currencies.reduce(0) { total, currency in
                         let sum = filteredExpenseArray.filter({ $0.currency == currency }).reduce(0) { $0 + ($1.payAmount == -1 ? 0 : $1.payAmount) }
                         let isoCodeName = currencyInfoModel[Int(currency)]?.isoCodeNm ?? "Unknown"
-                        let rate = exchangeRateHandler.getExchangeRateFromKRW(currencyCode: isoCodeName)
-                        return total + sum * (rate ?? -100)
+                        // 환율을 얻지 못한 통화는 합계에서 제외한다.
+                        guard let rate = exchangeRateHandler.getExchangeRateFromKRW(currencyCode: isoCodeName) else {
+                            return total
+                        }
+                        return total + sum * rate
                     }
 
                     NavigationLink {
