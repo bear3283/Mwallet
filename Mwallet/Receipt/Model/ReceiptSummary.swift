@@ -15,8 +15,11 @@ struct ReceiptFilter {
     // nil 이면 전체 사역
     var missionName: String?
     var searchText: String = ""
+    // 영수증 사진이 없는 것만 모아 보기
+    var onlyMissingPhoto = false
 
     func matches(_ receipt: Receipt) -> Bool {
+        if onlyMissingPhoto && !receipt.needsPhoto { return false }
         if let missionName, receipt.missionTitle != missionName { return false }
 
         let keyword = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -57,20 +60,25 @@ struct ReceiptSummary {
     // 환율을 얻지 못해 원화 합계에 넣지 못한 건수.
     // 합계를 지어내는 대신 몇 건이 빠졌는지 사용자에게 알린다.
     let unconvertibleCount: Int
+    // 영수증 사진이 아직 없는 건수. 증빙 제출 전에 채워야 할 숙제다.
+    let missingPhotoCount: Int
     let byCategory: [CategoryTotal]
     let byCurrency: [CurrencyTotal]
 
     var totalCount: Int { convertibleCount + unconvertibleCount }
     var hasUnconvertible: Bool { unconvertibleCount > 0 }
+    var hasMissingPhoto: Bool { missingPhotoCount > 0 }
 
     init(receipts: [Receipt]) {
         var total: Double = 0
         var convertible = 0
         var unconvertible = 0
+        var missingPhoto = 0
         var categoryAmounts: [String: (amount: Double, count: Int)] = [:]
         var currencyAmounts: [String: (amount: Double, count: Int)] = [:]
 
         for receipt in receipts {
+            if receipt.needsPhoto { missingPhoto += 1 }
             let currency = receipt.currencyCode
             let currencyEntry = currencyAmounts[currency] ?? (0, 0)
             currencyAmounts[currency] = (currencyEntry.amount + receipt.amount, currencyEntry.count + 1)
@@ -90,6 +98,7 @@ struct ReceiptSummary {
         self.totalInKRW = total
         self.convertibleCount = convertible
         self.unconvertibleCount = unconvertible
+        self.missingPhotoCount = missingPhoto
         self.byCategory = categoryAmounts
             .map { CategoryTotal(category: $0.key, amountInKRW: $0.value.amount, count: $0.value.count) }
             .sorted { $0.amountInKRW > $1.amountInKRW }

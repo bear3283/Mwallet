@@ -6,6 +6,7 @@
 //  집계는 ReceiptSummary 에 위임해 통계·CSV 화면과 같은 값을 쓴다.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct ReceiptHomeView: View {
@@ -22,6 +23,13 @@ struct ReceiptHomeView: View {
     @State private var isAddingExpense = false
     @State private var deletionTarget: Receipt?
     @State private var errorMessage: String?
+
+    // 사진 첨부 흐름: 썸네일 탭 → 소스 선택 → 보관함/카메라 → 저장
+    @State private var attachTarget: Receipt?
+    @State private var isChoosingPhotoSource = false
+    @State private var isPickingFromLibrary = false
+    @State private var isTakingPhoto = false
+    @State private var pickedItem: PhotosPickerItem?
 
     var body: some View {
         NavigationStack {
@@ -99,6 +107,34 @@ struct ReceiptHomeView: View {
             } message: {
                 Text("첨부한 사진도 함께 삭제되며 되돌릴 수 없습니다.")
             }
+            .confirmationDialog(
+                "영수증 사진",
+                isPresented: $isChoosingPhotoSource,
+                titleVisibility: .visible
+            ) {
+                Button("사진 보관함에서 선택") { isPickingFromLibrary = true }
+                if CameraPicker.isAvailable {
+                    Button("사진 촬영") { isTakingPhoto = true }
+                }
+                Button("취소", role: .cancel) { attachTarget = nil }
+            }
+            .photosPicker(isPresented: $isPickingFromLibrary, selection: $pickedItem, matching: .images)
+            .fullScreenCover(isPresented: $isTakingPhoto) {
+                CameraPicker { data in
+                    isTakingPhoto = false
+                    attach(data)
+                } onCancel: {
+                    isTakingPhoto = false
+                    attachTarget = nil
+                }
+                .ignoresSafeArea()
+            }
+            .onChange(of: attachTarget) { _, target in
+                isChoosingPhotoSource = target != nil
+            }
+            .onChange(of: pickedItem) { _, item in
+                loadFromLibrary(item)
+            }
             .alert("삭제하지 못했습니다", isPresented: errorBinding) {
                 Button("확인", role: .cancel) { errorMessage = nil }
             } message: {
@@ -140,8 +176,14 @@ struct ReceiptHomeView: View {
     private var missionChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 4) {
-                ReceiptChip(title: "전체", isSelected: filter.missionName == nil) {
+                ReceiptChip(title: "전체", isSelected: filter.missionName == nil && !filter.onlyMissingPhoto) {
                     filter.missionName = nil
+                    filter.onlyMissingPhoto = false
+                }
+                if missingPhotoCount > 0 {
+                    ReceiptChip(title: "영수증 없음 \(missingPhotoCount)", isSelected: filter.onlyMissingPhoto) {
+                        filter.onlyMissingPhoto.toggle()
+                    }
                 }
                 ForEach(missionNames, id: \.self) { name in
                     ReceiptChip(title: name, isSelected: filter.missionName == name) {
@@ -171,6 +213,11 @@ struct ReceiptHomeView: View {
                     .foregroundStyle(.gray300)
             }
             .padding(.top, 6)
+
+            if summaryValue.hasMissingPhoto {
+                ReceiptNotice(text: "영수증 사진이 없는 항목이 \(summaryValue.missingPhotoCount)건 있습니다")
+                    .padding(.top, 8)
+            }
 
             if summaryValue.hasUnconvertible {
                 ReceiptNotice(text: "환율을 받지 못한 \(summaryValue.unconvertibleCount)건은 합계에서 빠졌습니다")
@@ -213,15 +260,24 @@ struct ReceiptHomeView: View {
                         .padding(.bottom, 2)
 
                         ForEach(section.receipts) { receipt in
-                            NavigationLink {
-                                ReceiptDetailView(receipt: receipt)
-                            } label: {
-                                ReceiptRow(receipt: receipt, showsMission: filter.missionName == nil)
+                            // 썸네일과 본문의 목적지가 달라 한 링크로 묶지 않는다.
+                            HStack(spacing: 12) {
+                                ReceiptThumbnail(receipt: receipt) {
+                                    attachTarget = receipt
+                                }
+                                NavigationLink {
+                                    ReceiptDetailView(receipt: receipt)
+                                } label: {
+                                    ReceiptRowContent(receipt: receipt, showsMission: filter.missionName == nil)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
+                            .padding(.vertical, 12)
                             .contextMenu {
                                 Button("삭제", role: .destructive) { deletionTarget = receipt }
                             }
+
+                            Divider()
                         }
                     }
                 }
@@ -276,6 +332,34 @@ struct ReceiptHomeView: View {
     }
 
     // MARK: - 동작
+
+    private var missingPhotoCount: Int {
+        allReceipts.filter { $0.needsPhoto }.count
+    }
+
+    private func loadFromLibrary(_ item: PhotosPickerItem?) {
+        guard let item else { return }
+        Task {
+            defer { pickedItem = nil }
+            guard let original = try? await item.loadTransferable(type: Data.self),
+                  let processed = ReceiptImageProcessor.process(original) else {
+                errorMessage = "사진을 불러오지 못했습니다."
+                attachTarget = nil
+                return
+            }
+            attach(processed)
+        }
+    }
+
+    private func attach(_ data: Data) {
+        guard let target = attachTarget else { return }
+        do {
+            try store.attachPhoto(data, to: target)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        attachTarget = nil
+    }
 
     private func confirmDeletion() {
         guard let target = deletionTarget else { return }

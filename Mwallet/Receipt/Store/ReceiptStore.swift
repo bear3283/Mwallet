@@ -105,6 +105,13 @@ final class ReceiptStore {
         try context.save()
     }
 
+    // 목록에서 사진만 바로 붙인다. 편집 폼을 열지 않으므로
+    // 기록 시점 환율과 시간대 같은 스냅샷 값은 건드리지 않는다.
+    func attachPhoto(_ data: Data, to receipt: Receipt) throws {
+        receipt.imageData = data
+        try context.save()
+    }
+
     // 오프라인에서 기록해 환율을 못 받은 건에 현재 환율을 채운다.
     // 그날의 환율이 아니라 지금 환율이므로, 화면에서 그 사실을 알리고 쓴다.
     func applyCurrentExchangeRate(to receipt: Receipt) throws {

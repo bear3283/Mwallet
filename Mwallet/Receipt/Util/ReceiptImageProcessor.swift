@@ -19,8 +19,12 @@ enum ReceiptImageProcessor {
     // 디코딩에 실패하면 nil 을 돌려주어 호출부가 첨부를 취소하도록 한다.
     static func process(_ data: Data) -> Data? {
         guard let image = UIImage(data: data) else { return nil }
-        let resized = resize(image, maxDimension: maxDimension)
-        return resized.jpegData(compressionQuality: compressionQuality)
+        return compress(image)
+    }
+
+    // 카메라로 찍은 UIImage 는 Data 를 거치지 않고 바로 들어온다.
+    static func compress(_ image: UIImage) -> Data? {
+        resize(image, maxDimension: maxDimension).jpegData(compressionQuality: compressionQuality)
     }
 
     static func resize(_ image: UIImage, maxDimension: CGFloat) -> UIImage {

@@ -54,6 +54,7 @@
 		C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010C /* ReceiptRow.swift */; };
 		C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* ReceiptHomeView.swift */; };
 		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
+		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
 		C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */; };
 		C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */; };
 		C15760182AEE782C0089FFE5 /* CountryList.csv in Resources */ = {isa = PBXBuildFile; fileRef = C15760172AEE782C0089FFE5 /* CountryList.csv */; };
@@ -173,6 +174,7 @@
 		C1A11EA7000000000000010C /* ReceiptRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptRow.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E3 /* ReceiptHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHomeView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCSVEncoder.swift; sourceTree = "<group>"; };
 		C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailViewModel.swift; sourceTree = "<group>"; };
 		C15760172AEE782C0089FFE5 /* CountryList.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryList.csv; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */,
+				C1A11EA700000000000004A1 /* CameraPicker.swift */,
 				C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */,
 			);
 			path = Util;
@@ -693,6 +696,7 @@
 				C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */,
 				C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */,
 				C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */,
+				C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */,
 				C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */,
 				57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */,
 				C19AFAF82AE16C600037A5F5 /* UpcomingTravelViewModel.swift in Sources */,
@@ -905,6 +909,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Mwallet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "영수증을 바로 촬영해 기록에 첨부하려면 카메라 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 기록을 위해 마이크 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성 정보를 텍스트로 변환하려면 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -947,6 +952,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Mwallet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "영수증을 바로 촬영해 기록에 첨부하려면 카메라 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 기록을 위해 마이크 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성 정보를 텍스트로 변환하려면 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

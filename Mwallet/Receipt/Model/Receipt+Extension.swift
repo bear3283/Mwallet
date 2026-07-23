@@ -67,6 +67,12 @@ extension Receipt {
         return amount * rate
     }
 
+    // 영수증 사진이 아직 없는 기록인지.
+    // 현장에서 금액만 먼저 남기고 사진은 나중에 붙이는 흐름을 위해 따로 센다.
+    var needsPhoto: Bool {
+        (imageData?.isEmpty ?? true)
+    }
+
     // 원화 환산이 불가능한 기록인지. 목록에서 경고를 띄우는 데 쓴다.
     var needsExchangeRate: Bool {
         currencyCode != ReceiptCurrency.base && validExchangeRate == nil
