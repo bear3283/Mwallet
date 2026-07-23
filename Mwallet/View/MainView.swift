@@ -58,8 +58,18 @@ struct MainView: View {
                     }
                 }
                 .tag(2)
+
+            MissionHomeView()
+                .tabItem {
+                    VStack {
+                        Image(systemName: viewModel.selection == 3 ? "doc.text.fill" : "doc.text")
+                        Text("사역 재정")
+                            .font(.caption1)
+                    }
+                }
+                .tag(3)
         }
-        
+
         .onAppear {
 //            UITabBar.appearance().backgroundColor = .white
 //            UITabBar.appearance().barTintColor = .white

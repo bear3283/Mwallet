@@ -45,6 +45,10 @@
 		57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F72CF02B04CAE900464B06 /* Double+Extension.swift */; };
 		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
 		C1A11EA700000000000000C4 /* Receipt+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000C3 /* Receipt+Extension.swift */; };
+		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
+		C1A11EA700000000000000E2 /* AddExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddExpenseView.swift */; };
+		C1A11EA700000000000000E4 /* MissionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* MissionHomeView.swift */; };
+		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
 		C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */; };
 		C15760182AEE782C0089FFE5 /* CountryList.csv in Resources */ = {isa = PBXBuildFile; fileRef = C15760172AEE782C0089FFE5 /* CountryList.csv */; };
 		C157601E2AF1DD830089FFE5 /* CountryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157601D2AF1DD830089FFE5 /* CountryInfo.swift */; };
@@ -157,6 +161,10 @@
 		57F72CF02B04CAE900464B06 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000C3 /* Receipt+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Receipt+Extension.swift"; sourceTree = "<group>"; };
+		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000E1 /* AddExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000E3 /* MissionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionHomeView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
 		C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailViewModel.swift; sourceTree = "<group>"; };
 		C15760172AEE782C0089FFE5 /* CountryList.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryList.csv; sourceTree = "<group>"; };
 		C157601D2AF1DD830089FFE5 /* CountryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfo.swift; sourceTree = "<group>"; };
@@ -330,8 +338,36 @@
 			isa = PBXGroup;
 			children = (
 				C1A11EA700000000000000C2 /* Model */,
+				C1A11EA700000000000000D0 /* Store */,
+				C1A11EA700000000000000E0 /* View */,
+				C1A11EA700000000000000F0 /* Util */,
 			);
 			path = Mission;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000D0 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000000D1 /* ReceiptStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000E0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000000E1 /* AddExpenseView.swift */,
+				C1A11EA700000000000000E3 /* MissionHomeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000F0 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 		C1A11EA700000000000000C2 /* Model */ = {
@@ -656,6 +692,10 @@
 				57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */,
 				C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */,
 				C1A11EA700000000000000C4 /* Receipt+Extension.swift in Sources */,
+				C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */,
+				C1A11EA700000000000000E2 /* AddExpenseView.swift in Sources */,
+				C1A11EA700000000000000E4 /* MissionHomeView.swift in Sources */,
+				C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */,
 				57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */,
 				C19AFAF82AE16C600037A5F5 /* UpcomingTravelViewModel.swift in Sources */,
 				E2D5C0662ADD924100907501 /* AllExpenseView.swift in Sources */,
