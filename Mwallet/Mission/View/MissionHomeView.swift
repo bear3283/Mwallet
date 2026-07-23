@@ -47,6 +47,14 @@ struct MissionHomeView: View {
                         Label("지출 추가", systemImage: "plus")
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        ReceiptStatsView(receipts: filtered, missionName: filter.missionName)
+                    } label: {
+                        Label("통계", systemImage: "chart.pie")
+                    }
+                    .disabled(allReceipts.isEmpty)
+                }
             }
             .sheet(isPresented: $isAddingExpense) {
                 AddExpenseView()
