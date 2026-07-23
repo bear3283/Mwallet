@@ -84,10 +84,7 @@ struct TravelListView: View {
                 self.travelCount = Int(nowTravel?.count ?? 0)
                 self.defaultTravelCnt = Int(defaultExpense?.count ?? 0)
                 self.defaultTravel = viewModel.findTravelNameDefault()
-                let loadedData = handler.loadExchangeRatesFromUserDefaults()
-                if loadedData == nil || !handler.isSameDate(loadedData?.time_last_update_unix) {
-                    handler.fetchAndSaveExchangeRates()
-                }
+                handler.refreshExchangeRatesIfNeeded()
                 travelTabViewRedrawer = false
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                     travelTabViewRedrawer = true

@@ -71,11 +71,7 @@ struct MainView: View {
             UITabBar.appearance().scrollEdgeAppearance = appearance
             UITabBar.appearance().standardAppearance = appearance
             
-            let loadedData = exchangeRateHandler.loadExchangeRatesFromUserDefaults()
-            if loadedData == nil || !exchangeRateHandler.isSameDate(loadedData?.time_last_update_unix) {
-                print("exchangeRate API 실행 !!")
-                exchangeRateHandler.fetchAndSaveExchangeRates()
-            }
+            exchangeRateHandler.refreshExchangeRatesIfNeeded()
             
             DateGapHandler.shared.requestAuthorization()
         }
