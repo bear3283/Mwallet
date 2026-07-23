@@ -45,8 +45,10 @@
 		57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F72CF02B04CAE900464B06 /* Double+Extension.swift */; };
 		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
 		C1A11EA700000000000000C4 /* Receipt+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000C3 /* Receipt+Extension.swift */; };
+		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
 		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
 		C1A11EA700000000000000E2 /* AddExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddExpenseView.swift */; };
+		C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010C /* ReceiptRow.swift */; };
 		C1A11EA700000000000000E4 /* MissionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* MissionHomeView.swift */; };
 		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
 		C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */; };
@@ -161,8 +163,10 @@
 		57F72CF02B04CAE900464B06 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000C3 /* Receipt+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Receipt+Extension.swift"; sourceTree = "<group>"; };
+		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E1 /* AddExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseView.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000010C /* ReceiptRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptRow.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E3 /* MissionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionHomeView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
 		C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailViewModel.swift; sourceTree = "<group>"; };
@@ -357,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				C1A11EA700000000000000E1 /* AddExpenseView.swift */,
+				C1A11EA7000000000000010C /* ReceiptRow.swift */,
 				C1A11EA700000000000000E3 /* MissionHomeView.swift */,
 			);
 			path = View;
@@ -374,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				C1A11EA700000000000000C3 /* Receipt+Extension.swift */,
+				C1A11EA7000000000000010A /* ReceiptSummary.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -692,8 +698,10 @@
 				57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */,
 				C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */,
 				C1A11EA700000000000000C4 /* Receipt+Extension.swift in Sources */,
+				C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */,
 				C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */,
 				C1A11EA700000000000000E2 /* AddExpenseView.swift in Sources */,
+				C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */,
 				C1A11EA700000000000000E4 /* MissionHomeView.swift in Sources */,
 				C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */,
 				57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */,

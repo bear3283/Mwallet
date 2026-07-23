@@ -86,6 +86,22 @@ extension Receipt {
         return formatter.string(from: paidDate)
     }
 
+    // 기록 당시 현지 시각만 표기. 기기 시간대와 다르면 약어를 덧붙여
+    // "22:15 PHT" 처럼 어느 지역 시각인지 알 수 있게 한다.
+    var formattedTimeOnly: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = recordedTimeZone
+        formatter.dateFormat = "HH:mm"
+        let time = formatter.string(from: paidDate)
+
+        guard recordedTimeZone.identifier != TimeZone.current.identifier,
+              let abbreviation = recordedTimeZone.abbreviation(for: paidDate) else {
+            return time
+        }
+        return "\(time) \(abbreviation)"
+    }
+
     // 현지 통화 기준 금액 표기. 예: "$ 24.50"
     var formattedAmount: String {
         let formatter = NumberFormatter()
