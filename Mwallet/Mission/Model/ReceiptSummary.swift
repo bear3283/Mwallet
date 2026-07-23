@@ -141,6 +141,16 @@ enum ReceiptFormat {
         return (formatter.string(from: NSNumber(value: value)) ?? "0") + "원"
     }
 
+    // 환율은 소수점을 버리면 안 된다. 24.5 를 24 로 보여 주면
+    // 사용자가 환산 금액을 검산했을 때 맞지 않는다.
+    static func exchangeRate(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        return (formatter.string(from: NSNumber(value: value)) ?? "0") + "원"
+    }
+
     static func dayTitle(_ date: Date, calendar: Calendar = .current) -> String {
         if calendar.isDateInToday(date) { return "오늘" }
         if calendar.isDateInYesterday(date) { return "어제" }

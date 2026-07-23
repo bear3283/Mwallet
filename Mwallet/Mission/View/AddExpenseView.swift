@@ -11,11 +11,19 @@ import SwiftUI
 
 struct AddExpenseView: View {
 
+    // 추가와 수정이 같은 폼을 쓴다.
+    // 화면을 따로 만들면 필드가 늘 때마다 두 곳을 고쳐야 하고 한쪽을 빠뜨리게 된다.
+    enum Mode {
+        case create
+        case edit(Receipt)
+    }
+
     @Environment(\.dismiss) private var dismiss
 
     private let store = ReceiptStore()
+    private let mode: Mode
 
-    @State private var draft = ReceiptDraft()
+    @State private var draft: ReceiptDraft
     @State private var pickedItem: PhotosPickerItem?
     @State private var isProcessingImage = false
     @State private var isEnteringNewCategory = false
@@ -27,10 +35,29 @@ struct AddExpenseView: View {
     private let missionNameSuggestions: [String]
     private let categories: [String]
 
-    init() {
+    init(mode: Mode = .create) {
+        self.mode = mode
         let store = ReceiptStore()
         self.missionNameSuggestions = store.existingMissionNames()
-        self.categories = store.availableCategories()
+
+        switch mode {
+        case .create:
+            _draft = State(initialValue: ReceiptDraft())
+            self.categories = store.availableCategories()
+        case .edit(let receipt):
+            _draft = State(initialValue: ReceiptDraft(from: receipt))
+            // 수정 중인 영수증의 카테고리가 목록에 없으면 Picker 선택이 풀린다.
+            var available = store.availableCategories()
+            if !available.contains(receipt.categoryName) {
+                available.append(receipt.categoryName)
+            }
+            self.categories = available
+        }
+    }
+
+    private var isEditing: Bool {
+        if case .edit = mode { return true }
+        return false
     }
 
     var body: some View {
@@ -41,7 +68,7 @@ struct AddExpenseView: View {
                 detailSection
                 photoSection
             }
-            .navigationTitle("지출 추가")
+            .navigationTitle(isEditing ? "지출 수정" : "지출 추가")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -240,7 +267,12 @@ struct AddExpenseView: View {
 
     private func save() {
         do {
-            try store.create(from: draft)
+            switch mode {
+            case .create:
+                try store.create(from: draft)
+            case .edit(let receipt):
+                try store.update(receipt, with: draft)
+            }
             dismiss()
         } catch {
             errorMessage = error.localizedDescription

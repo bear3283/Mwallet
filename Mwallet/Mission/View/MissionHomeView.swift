@@ -86,12 +86,16 @@ struct MissionHomeView: View {
                 ForEach(daySections) { section in
                     Section {
                         ForEach(section.receipts) { receipt in
-                            ReceiptRow(receipt: receipt, showsMission: filter.missionName == nil)
-                                .swipeActions(edge: .trailing) {
-                                    Button("삭제", role: .destructive) {
-                                        deletionTarget = receipt
-                                    }
+                            NavigationLink {
+                                ReceiptDetailView(receipt: receipt)
+                            } label: {
+                                ReceiptRow(receipt: receipt, showsMission: filter.missionName == nil)
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button("삭제", role: .destructive) {
+                                    deletionTarget = receipt
                                 }
+                            }
                         }
                     } header: {
                         HStack {

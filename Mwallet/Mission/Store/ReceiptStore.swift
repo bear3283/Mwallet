@@ -22,6 +22,20 @@ struct ReceiptDraft {
     var memo: String = ""
     var imageData: Data?
 
+    init() { }
+
+    // 편집 화면이 기존 값을 채워 열 때 쓴다.
+    init(from receipt: Receipt) {
+        self.missionName = receipt.missionName ?? ""
+        self.date = receipt.paidDate
+        self.merchant = receipt.merchant ?? ""
+        self.amountText = Self.editableAmountText(receipt.amount)
+        self.currency = receipt.currencyCode
+        self.category = receipt.categoryName
+        self.memo = receipt.memoText
+        self.imageData = receipt.imageData
+    }
+
     var amount: Double? {
         let trimmed = amountText.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: ",", with: "")
         guard let value = Double(trimmed), value >= 0 else { return nil }
@@ -30,6 +44,16 @@ struct ReceiptDraft {
 
     var isValid: Bool {
         amount != nil && amount != 0
+    }
+
+    // 24.5 는 "24.5", 3200 은 "3200" 으로 보여 준다.
+    // 소수점 없는 금액에 ".0" 이 붙으면 편집할 때 거슬린다.
+    private static func editableAmountText(_ value: Double) -> String {
+        guard value != 0 else { return "" }
+        if value == value.rounded() {
+            return String(Int(value))
+        }
+        return String(value)
     }
 }
 
@@ -53,7 +77,12 @@ final class ReceiptStore {
         let receipt = Receipt(context: context)
         receipt.id = UUID()
         receipt.createdAt = Date()
-        apply(draft, to: receipt)
+        applyFields(draft, to: receipt)
+
+        // 기록 시점의 상태를 스냅샷으로 남긴다.
+        receipt.timeZoneIdentifier = TimeZone.current.identifier
+        receipt.exchangeRate = snapshotExchangeRate(for: draft.currency)
+
         try context.save()
         return receipt
     }
@@ -61,7 +90,25 @@ final class ReceiptStore {
     // MARK: - 수정 / 삭제
 
     func update(_ receipt: Receipt, with draft: ReceiptDraft) throws {
-        apply(draft, to: receipt)
+        let previousCurrency = receipt.currencyCode
+        let previousRate = receipt.validExchangeRate
+
+        applyFields(draft, to: receipt)
+
+        // 기록 당시의 시간대는 편집으로 바뀌지 않는다. 그대로 둔다.
+        // 환율도 마찬가지로, 통화가 그대로이고 이미 유효한 값이 있으면 보존한다.
+        // 오타를 고쳤다고 해서 그날의 환율이 오늘 환율로 바뀌면 안 된다.
+        if draft.currency != previousCurrency || previousRate == nil {
+            receipt.exchangeRate = snapshotExchangeRate(for: draft.currency)
+        }
+
+        try context.save()
+    }
+
+    // 오프라인에서 기록해 환율을 못 받은 건에 현재 환율을 채운다.
+    // 그날의 환율이 아니라 지금 환율이므로, 화면에서 그 사실을 알리고 쓴다.
+    func applyCurrentExchangeRate(to receipt: Receipt) throws {
+        receipt.exchangeRate = snapshotExchangeRate(for: receipt.currencyCode)
         try context.save()
     }
 
@@ -102,7 +149,9 @@ final class ReceiptStore {
 
     // MARK: - 내부
 
-    private func apply(_ draft: ReceiptDraft, to receipt: Receipt) {
+    // 사용자가 폼에서 입력한 필드만 옮긴다.
+    // 시간대와 환율은 기록 시점 스냅샷이라 create/update 에서 따로 다룬다.
+    private func applyFields(_ draft: ReceiptDraft, to receipt: Receipt) {
         receipt.missionName = draft.missionName.trimmingCharacters(in: .whitespacesAndNewlines)
         receipt.date = draft.date
         receipt.merchant = draft.merchant.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -111,14 +160,6 @@ final class ReceiptStore {
         receipt.category = ReceiptCategory.normalized(draft.category)
         receipt.memo = draft.memo.trimmingCharacters(in: .whitespacesAndNewlines)
         receipt.imageData = draft.imageData
-
-        // 기록 당시의 시간대를 남긴다. date 자체는 절대 시각으로 두고
-        // 표시할 때만 이 값을 적용해 현지 시각을 복원한다.
-        receipt.timeZoneIdentifier = TimeZone.current.identifier
-
-        // 환율은 기록 시점 값을 스냅샷으로 저장한다.
-        // 나중에 조회하면 그날의 환율을 알 수 없어 정산 금액을 복원할 수 없다.
-        receipt.exchangeRate = snapshotExchangeRate(for: draft.currency)
     }
 
     // 원화면 환산이 필요 없으므로 1 을 쓴다.
