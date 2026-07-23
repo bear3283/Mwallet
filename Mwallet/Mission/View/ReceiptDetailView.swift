@@ -21,39 +21,50 @@ struct ReceiptDetailView: View {
     @State private var errorMessage: String?
 
     var body: some View {
-        List {
-            if let data = receipt.imageData, let image = UIImage(data: data) {
-                Section {
-                    Button {
-                        isViewingImage = true
-                    } label: {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: .infinity)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                    }
-                    .buttonStyle(.plain)
-                    .listRowInsets(EdgeInsets())
-                } footer: {
-                    Text("사진을 누르면 크게 볼 수 있습니다. \(ReceiptImageProcessor.formattedSize(of: data))")
-                }
-            }
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 0) {
+                photo
 
-            amountSection
-            detailSection
+                amountBlock
+                    .padding(.top, 24)
 
-            Section {
-                Button("삭제", role: .destructive) {
+                Divider()
+                    .padding(.top, 20)
+
+                MissionSectionTitle(text: "상세")
+                    .padding(.top, 20)
+
+                detailBlock
+                    .padding(.top, 4)
+
+                Divider()
+
+                Button {
                     isConfirmingDeletion = true
+                } label: {
+                    Text("영수증 삭제")
+                        .font(.body1_fixed)
+                        .foregroundStyle(.mainPink)
+                        .padding(.vertical, 16)
                 }
+
+                // 떠 있는 탭바가 마지막 항목을 가리지 않도록 여유를 둔다.
+                Spacer(minLength: 100)
             }
+            .padding(.horizontal, MissionLayout.gutter)
         }
-        .navigationTitle(receipt.merchantName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(receipt.merchantName)
+                    .font(.subhead3_1_fixed)
+                    .foregroundStyle(.black)
+                    .lineLimit(1)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("편집") { isEditing = true }
+                    .font(.subhead2_2_fixed)
+                    .foregroundStyle(.black)
             }
         }
         .sheet(isPresented: $isEditing) {
@@ -79,29 +90,48 @@ struct ReceiptDetailView: View {
         }
     }
 
+    // MARK: - 사진
+
+    @ViewBuilder
+    private var photo: some View {
+        if let data = receipt.imageData, let image = UIImage(data: data) {
+            Button {
+                isViewingImage = true
+            } label: {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 16)
+
+            Text("사진을 누르면 크게 볼 수 있어요 · \(ReceiptImageProcessor.formattedSize(of: data))")
+                .font(.caption1_fixed)
+                .foregroundStyle(.gray300)
+                .padding(.top, 8)
+        }
+    }
+
     // MARK: - 금액
 
-    private var amountSection: some View {
-        Section("금액") {
-            LabeledContent("결제 금액") {
-                Text(receipt.formattedAmount)
-                    .monospacedDigit()
-            }
+    private var amountBlock: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(receipt.formattedAmount)
+                .font(.display4_fixed)
+                .foregroundStyle(.black)
+                .monospacedDigit()
 
             if receipt.currencyCode != ReceiptCurrency.base {
-                LabeledContent("원화 환산") {
-                    Text(receipt.formattedAmountInKRW)
-                        .monospacedDigit()
-                }
-
                 if let rate = receipt.validExchangeRate {
-                    LabeledContent("적용 환율") {
-                        Text("1 \(receipt.currencyCode) = \(ReceiptFormat.exchangeRate(rate))")
-                            .foregroundStyle(.secondary)
-                            .monospacedDigit()
-                    }
+                    Text("\(receipt.formattedAmountInKRW) · 1 \(receipt.currencyCode) = \(ReceiptFormat.exchangeRate(rate))")
+                        .font(.caption2_fixed)
+                        .foregroundStyle(.gray300)
+                        .padding(.top, 6)
                 } else {
-                    unavailableRateRow
+                    unavailableRate
+                        .padding(.top, 10)
                 }
             }
         }
@@ -109,45 +139,55 @@ struct ReceiptDetailView: View {
 
     // 오프라인에서 기록해 환율을 못 받은 건을 되살리는 통로.
     // 목록에서 "합계에서 빠졌습니다" 라고 알리기만 하고 고칠 방법이 없으면 막다른 길이 된다.
-    private var unavailableRateRow: some View {
+    private var unavailableRate: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("환율을 받지 못해 원화 합계에서 빠져 있습니다", systemImage: "exclamationmark.triangle")
-                .font(.footnote)
-                .foregroundStyle(.orange)
+            MissionNotice(text: "환율을 받지 못해 원화 합계에서 빠져 있어요")
 
-            Button("현재 환율 적용") { applyCurrentRate() }
-                .font(.footnote)
+            Button {
+                applyCurrentRate()
+            } label: {
+                Text("현재 환율 적용")
+                    .font(.caption2_fixed)
+                    .foregroundStyle(.black)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 14)
+                    .background(Color.gray100)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
 
             Text("지출 당일이 아닌 오늘 기준 환율이 적용됩니다.")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+                .font(.caption1_fixed)
+                .foregroundStyle(.gray300)
         }
-        .padding(.vertical, 2)
     }
 
     // MARK: - 상세
 
-    private var detailSection: some View {
-        Section("상세") {
-            LabeledContent("사역", value: receipt.missionTitle)
-            LabeledContent("카테고리", value: receipt.categoryName)
-            LabeledContent("결제 일자", value: receipt.formattedDate())
+    private var detailBlock: some View {
+        VStack(spacing: 0) {
+            MissionValueRow(label: "사역", value: receipt.missionTitle)
+            Divider()
+            MissionValueRow(label: "카테고리", value: receipt.categoryName)
+            Divider()
+            MissionValueRow(label: "결제 일자", value: receipt.formattedDate())
 
             if receipt.recordedTimeZone.identifier != TimeZone.current.identifier {
-                LabeledContent("기록 지역") {
-                    Text(receipt.recordedTimeZone.identifier)
-                        .foregroundStyle(.secondary)
-                }
+                Divider()
+                MissionValueRow(label: "기록 지역", value: receipt.recordedTimeZone.identifier)
             }
 
             if !receipt.memoText.isEmpty {
-                VStack(alignment: .leading, spacing: 4) {
+                Divider()
+                VStack(alignment: .leading, spacing: 6) {
                     Text("메모")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.body1_fixed)
+                        .foregroundStyle(.gray400)
                     Text(receipt.memoText)
+                        .font(.body1_fixed)
+                        .foregroundStyle(.black)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.vertical, 2)
+                .padding(.vertical, 12)
             }
         }
     }

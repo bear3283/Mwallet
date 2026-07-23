@@ -67,7 +67,7 @@ struct MainView: View {
                         } else {
                             Image("tabitem4_unactive")
                         }
-                        Text("사역 재정")
+                        Text("영수증")
                             .font(.caption1)
                     }
                 }

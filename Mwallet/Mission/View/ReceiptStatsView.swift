@@ -36,81 +36,99 @@ struct ReceiptStatsView: View {
     }
 
     var body: some View {
-        List {
-            totalSection
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 0) {
+                totalBlock
+                    .padding(.top, 16)
 
-            if slices.isEmpty {
-                Section {
-                    ContentUnavailableView(
-                        "집계할 지출이 없습니다",
-                        systemImage: "chart.pie",
-                        description: Text("원화로 환산할 수 있는 기록이 있어야 비율을 낼 수 있습니다.")
+                if slices.isEmpty {
+                    MissionEmptyState(
+                        message: "집계할 지출이 없어요",
+                        detail: "원화로 환산할 수 있는 기록이 있어야 비율을 낼 수 있습니다."
                     )
-                }
-            } else {
-                chartSection
-                breakdownSection
-            }
+                } else {
+                    Divider()
+                        .padding(.top, 20)
 
-            exportSection
+                    MissionSectionTitle(text: "카테고리별 비율")
+                        .padding(.top, 20)
+
+                    chart
+
+                    breakdown
+                }
+
+                Divider()
+                    .padding(.top, 12)
+
+                exportBlock
+                    .padding(.top, 20)
+
+                // 떠 있는 탭바가 버튼을 가리지 않도록 여유를 둔다.
+                Spacer(minLength: 100)
+            }
+            .padding(.horizontal, MissionLayout.gutter)
         }
-        .navigationTitle("통계")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("통계")
+                    .font(.subhead3_1_fixed)
+                    .foregroundStyle(.black)
+            }
+        }
     }
 
     // MARK: - 총액
 
-    private var totalSection: some View {
-        Section {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(missionName ?? "전체 사역")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+    private var totalBlock: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(missionName ?? "전체 사역")
+                .font(.caption2_fixed)
+                .foregroundStyle(.gray300)
+
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(ReceiptFormat.krw(summary.totalInKRW))
-                    .font(.largeTitle.weight(.semibold))
+                    .font(.display4_fixed)
+                    .foregroundStyle(.black)
                     .monospacedDigit()
                 Text("\(summary.totalCount)건")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                if summary.hasUnconvertible {
-                    Label(
-                        "환율을 받지 못한 \(summary.unconvertibleCount)건은 비율 계산에서 빠졌습니다",
-                        systemImage: "exclamationmark.triangle"
-                    )
-                    .font(.caption)
-                    .foregroundStyle(.orange)
-                }
+                    .font(.caption2_fixed)
+                    .foregroundStyle(.gray300)
             }
-            .padding(.vertical, 4)
+            .padding(.top, 6)
+
+            if summary.hasUnconvertible {
+                MissionNotice(text: "환율을 받지 못한 \(summary.unconvertibleCount)건은 비율 계산에서 빠졌습니다")
+                    .padding(.top, 8)
+            }
         }
     }
 
     // MARK: - 원형 차트
 
-    private var chartSection: some View {
-        Section("카테고리별 비율") {
-            Chart(slices) { slice in
-                SectorMark(
-                    angle: .value("금액", slice.amountInKRW),
-                    innerRadius: .ratio(0.62),
-                    angularInset: 1.5
-                )
-                .cornerRadius(4)
-                .foregroundStyle(ReceiptCategoryPalette.color(for: slice.category))
-            }
-            .chartLegend(.hidden)   // 아래 목록이 범례 겸 직접 라벨 역할을 한다
-            .frame(height: 220)
-            .padding(.vertical, 8)
-            .overlay {
-                VStack(spacing: 2) {
-                    Text("총 지출")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text(ReceiptFormat.krw(summary.totalInKRW))
-                        .font(.headline)
-                        .monospacedDigit()
-                }
+    private var chart: some View {
+        Chart(slices) { slice in
+            SectorMark(
+                angle: .value("금액", slice.amountInKRW),
+                innerRadius: .ratio(0.64),
+                angularInset: 1.5
+            )
+            .cornerRadius(4)
+            .foregroundStyle(ReceiptCategoryPalette.color(for: slice.category))
+        }
+        .chartLegend(.hidden)   // 아래 목록이 범례 겸 직접 라벨 역할을 한다
+        .frame(height: 200)
+        .padding(.vertical, 16)
+        .overlay {
+            VStack(spacing: 2) {
+                Text("총 지출")
+                    .font(.caption1_fixed)
+                    .foregroundStyle(.gray300)
+                Text(ReceiptFormat.krw(summary.totalInKRW))
+                    .font(.subhead3_1_fixed)
+                    .foregroundStyle(.black)
+                    .monospacedDigit()
             }
         }
     }
@@ -119,48 +137,66 @@ struct ReceiptStatsView: View {
 
     // 색상만으로 구분하지 않도록 카테고리명·금액·비율을 함께 적는다.
     // 라이트 모드에서 일부 색은 배경 대비가 낮아 이 표기가 필수다.
-    private var breakdownSection: some View {
-        Section {
+    private var breakdown: some View {
+        VStack(spacing: 0) {
             ForEach(slices) { slice in
+                Divider()
                 HStack(spacing: 10) {
                     RoundedRectangle(cornerRadius: 3)
                         .fill(ReceiptCategoryPalette.color(for: slice.category))
-                        .frame(width: 12, height: 12)
+                        .frame(width: 10, height: 10)
 
                     Text(slice.category)
+                        .font(.body1_fixed)
+                        .foregroundStyle(.black)
 
-                    Spacer()
+                    Spacer(minLength: 8)
 
-                    VStack(alignment: .trailing, spacing: 1) {
-                        Text(ReceiptFormat.krw(slice.amountInKRW))
-                            .monospacedDigit()
-                        Text("\(percentText(slice.amountInKRW)) · \(slice.count)건")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .monospacedDigit()
-                    }
+                    Text(ReceiptFormat.krw(slice.amountInKRW))
+                        .font(.subhead2_1_fixed)
+                        .foregroundStyle(.black)
+                        .monospacedDigit()
+
+                    Text("\(percentText(slice.amountInKRW))")
+                        .font(.caption1_fixed)
+                        .foregroundStyle(.gray300)
+                        .monospacedDigit()
+                        .frame(width: 46, alignment: .trailing)
                 }
+                .padding(.vertical, 12)
             }
-        } footer: {
+
             if hasFoldedCategories {
                 Text("기본 목록에 없는 카테고리는 '기타' 에 합산했습니다.")
+                    .font(.caption1_fixed)
+                    .foregroundStyle(.gray300)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 8)
             }
         }
     }
 
     // MARK: - 내보내기
 
-    private var exportSection: some View {
-        Section {
-            ShareLink(
-                item: csvFile,
-                preview: SharePreview(csvFile.fileName)
-            ) {
-                Label("CSV 내보내기", systemImage: "square.and.arrow.up")
+    private var exportBlock: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            ShareLink(item: csvFile, preview: SharePreview(csvFile.fileName)) {
+                HStack(spacing: 8) {
+                    Image(systemName: "square.and.arrow.up")
+                    Text("CSV 내보내기")
+                }
+                .font(.subhead2_1_fixed)
+                .foregroundStyle(.white)
+                .padding(.vertical, 14.5)
+                .frame(maxWidth: .infinity)
+                .background(receipts.isEmpty ? Color.gray200 : Color.black)
+                .cornerRadius(12)
             }
             .disabled(receipts.isEmpty)
-        } footer: {
-            Text("영수증 \(receipts.count)건을 표 형식으로 내보냅니다. 통화가 섞여 있어도 현지 금액과 적용 환율, 원화 환산액이 각각 들어갑니다.")
+
+            Text("영수증 \(receipts.count)건을 표로 내보냅니다. 통화가 섞여 있어도 현지 금액과 적용 환율, 원화 환산액이 각각 들어갑니다.")
+                .font(.caption1_fixed)
+                .foregroundStyle(.gray300)
         }
     }
 

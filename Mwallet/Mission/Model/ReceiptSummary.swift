@@ -134,6 +134,12 @@ enum ReceiptGrouping {
 
 enum ReceiptFormat {
 
+    // 원화로 환산할 수 있는 항목이 하나도 없으면 0원 대신 "-" 로 적는다.
+    // 0원은 실제로 0원을 쓴 것으로 읽힌다.
+    static func krwOrDash(_ summary: ReceiptSummary) -> String {
+        summary.convertibleCount == 0 ? "-" : krw(summary.totalInKRW)
+    }
+
     static func krw(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal

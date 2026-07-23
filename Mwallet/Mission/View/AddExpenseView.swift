@@ -2,8 +2,7 @@
 //  AddExpenseView.swift
 //  Mwallet
 //
-//  사역 재정 영수증 추가 폼.
-//  Mission 기능 전용이며 기존 여행 가계부의 지출 기록과는 별개다.
+//  영수증 입력 폼. 레이아웃과 타이포그래피는 기록 탭과 같은 규칙을 따른다.
 //
 
 import PhotosUI
@@ -30,7 +29,9 @@ struct AddExpenseView: View {
     @State private var newCategory = ""
     @State private var errorMessage: String?
 
-    @FocusState private var isAmountFocused: Bool
+    @FocusState private var focusedField: Field?
+
+    private enum Field { case mission, amount, merchant, memo }
 
     private let missionNameSuggestions: [String]
     private let categories: [String]
@@ -46,7 +47,7 @@ struct AddExpenseView: View {
             self.categories = store.availableCategories()
         case .edit(let receipt):
             _draft = State(initialValue: ReceiptDraft(from: receipt))
-            // 수정 중인 영수증의 카테고리가 목록에 없으면 Picker 선택이 풀린다.
+            // 수정 중인 영수증의 카테고리가 목록에 없으면 선택이 풀린다.
             var available = store.availableCategories()
             if !available.contains(receipt.categoryName) {
                 available.append(receipt.categoryName)
@@ -62,29 +63,71 @@ struct AddExpenseView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                missionSection
-                amountSection
-                detailSection
-                photoSection
+            VStack(spacing: 0) {
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        amountBlock
+                            .padding(.top, 12)
+
+                        Divider()
+                            .padding(.top, 20)
+
+                        MissionSectionTitle(text: "사역")
+                            .padding(.top, 20)
+                        missionBlock
+
+                        Divider()
+
+                        MissionSectionTitle(text: "상세")
+                            .padding(.top, 20)
+                        detailBlock
+
+                        Divider()
+
+                        MissionSectionTitle(text: "증빙")
+                            .padding(.top, 20)
+                        photoBlock
+
+                        Spacer(minLength: 24)
+                    }
+                    .padding(.horizontal, MissionLayout.gutter)
+                }
+
+                MissionPrimaryButton(
+                    title: isEditing ? "수정 완료" : "저장",
+                    isEnabled: draft.isValid && !isProcessingImage
+                ) {
+                    save()
+                }
+                .padding(.horizontal, MissionLayout.gutter)
+                .padding(.top, 8)
+                .padding(.bottom, 12)
             }
-            .navigationTitle(isEditing ? "지출 수정" : "지출 추가")
+            .background(Color.white)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(isEditing ? "영수증 수정" : "영수증 추가")
+                        .font(.subhead3_1_fixed)
+                        .foregroundStyle(.black)
+                }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("취소") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") { save() }
-                        .disabled(!draft.isValid || isProcessingImage)
+                        .font(.subhead2_2_fixed)
+                        .foregroundStyle(.gray400)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("완료") { isAmountFocused = false }
+                    Button("완료") { focusedField = nil }
                 }
             }
             .onChange(of: pickedItem) { _, newItem in
                 loadImage(from: newItem)
+            }
+            .alert("새 카테고리", isPresented: $isEnteringNewCategory) {
+                TextField("카테고리 이름", text: $newCategory)
+                Button("추가") { draft.category = ReceiptCategory.normalized(newCategory) }
+                Button("취소", role: .cancel) { }
             }
             .alert("저장하지 못했습니다", isPresented: errorBinding) {
                 Button("확인", role: .cancel) { errorMessage = nil }
@@ -94,39 +137,19 @@ struct AddExpenseView: View {
         }
     }
 
-    // MARK: - 사역 / 일자
+    // MARK: - 금액
 
-    private var missionSection: some View {
-        Section {
-            TextField("사역 이름", text: $draft.missionName)
-                .textInputAutocapitalization(.never)
-
-            if !missionNameSuggestions.isEmpty {
-                Menu("이전 사역에서 선택") {
-                    ForEach(missionNameSuggestions, id: \.self) { name in
-                        Button(name) { draft.missionName = name }
-                    }
-                }
-                .font(.footnote)
-            }
-
-            DatePicker("결제 일자", selection: $draft.date, displayedComponents: [.date, .hourAndMinute])
-        } header: {
-            Text("사역")
-        } footer: {
-            Text("사역 이름으로 영수증을 묶어 나중에 따로 정산할 수 있습니다.")
-        }
-    }
-
-    // MARK: - 금액 / 통화
-
-    private var amountSection: some View {
-        Section {
-            HStack {
+    private var amountBlock: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
                 TextField("0", text: $draft.amountText)
+                    .font(.display4_fixed)
+                    .foregroundStyle(.black)
                     .keyboardType(.decimalPad)
-                    .focused($isAmountFocused)
-                    .multilineTextAlignment(.trailing)
+                    .focused($focusedField, equals: .amount)
+                    .tint(.mainPink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
 
                 Picker("통화", selection: $draft.currency) {
                     ForEach(ReceiptCurrency.presets, id: \.self) { code in
@@ -134,87 +157,136 @@ struct AddExpenseView: View {
                     }
                 }
                 .labelsHidden()
-                .frame(width: 90)
+                .tint(.gray400)
+                .background(Color.gray100)
+                .clipShape(RoundedRectangle(cornerRadius: 6))
             }
 
             if draft.currency != ReceiptCurrency.base {
-                LabeledContent("원화 환산") {
-                    Text(convertedPreview)
-                        .foregroundStyle(.secondary)
+                if currentRate == nil {
+                    MissionNotice(text: "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다")
+                } else {
+                    Text("원화 환산 \(convertedPreview)")
+                        .font(.caption2_fixed)
+                        .foregroundStyle(.gray300)
                 }
             }
-        } header: {
-            Text("금액")
-        } footer: {
-            if draft.currency != ReceiptCurrency.base && currentRate == nil {
-                Text("환율 정보를 아직 받지 못했습니다. 금액은 그대로 저장되며, 환율을 받은 뒤 상세 화면에서 다시 계산할 수 있습니다.")
+        }
+    }
+
+    // MARK: - 사역
+
+    private var missionBlock: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            MissionFieldRow(label: "사역 이름") {
+                TextField("예) 2026 필리핀 단기선교", text: $draft.missionName)
+                    .focused($focusedField, equals: .mission)
+                    .missionField()
+            }
+
+            if !missionNameSuggestions.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 4) {
+                        ForEach(missionNameSuggestions, id: \.self) { name in
+                            MissionChip(title: name, isSelected: draft.missionName == name) {
+                                draft.missionName = name
+                            }
+                        }
+                    }
+                }
+                .padding(.bottom, 10)
+            }
+
+            MissionFieldRow(label: "결제 일자") {
+                DatePicker("", selection: $draft.date, displayedComponents: [.date, .hourAndMinute])
+                    .labelsHidden()
+                    .tint(.mainPink)
             }
         }
     }
 
     // MARK: - 상세
 
-    private var detailSection: some View {
-        Section("상세") {
-            TextField("상호명", text: $draft.merchant)
+    private var detailBlock: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            MissionFieldRow(label: "상호명") {
+                TextField("어디에서 썼나요", text: $draft.merchant)
+                    .focused($focusedField, equals: .merchant)
+                    .missionField()
+            }
 
-            Picker("카테고리", selection: $draft.category) {
-                ForEach(categories, id: \.self) { name in
-                    Text(name).tag(name)
+            MissionFieldRow(label: "카테고리") {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 4) {
+                        ForEach(categories, id: \.self) { name in
+                            MissionChip(title: name, isSelected: draft.category == name) {
+                                draft.category = name
+                            }
+                        }
+                        MissionChip(title: "+ 직접 입력", isSelected: false) {
+                            newCategory = ""
+                            isEnteringNewCategory = true
+                        }
+                    }
                 }
             }
 
-            Button("카테고리 직접 입력") {
-                newCategory = ""
-                isEnteringNewCategory = true
+            MissionFieldRow(label: "메모") {
+                TextField("남길 말이 있다면", text: $draft.memo, axis: .vertical)
+                    .lineLimit(2...4)
+                    .focused($focusedField, equals: .memo)
+                    .missionField()
             }
-            .font(.footnote)
-
-            TextField("메모", text: $draft.memo, axis: .vertical)
-                .lineLimit(2...4)
-        }
-        .alert("새 카테고리", isPresented: $isEnteringNewCategory) {
-            TextField("카테고리 이름", text: $newCategory)
-            Button("추가") {
-                let normalized = ReceiptCategory.normalized(newCategory)
-                draft.category = normalized
-            }
-            Button("취소", role: .cancel) { }
         }
     }
 
-    // MARK: - 영수증 사진
+    // MARK: - 증빙
 
-    private var photoSection: some View {
-        Section {
+    private var photoBlock: some View {
+        VStack(alignment: .leading, spacing: 10) {
             if let data = draft.imageData, let image = UIImage(data: data) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
                     .frame(maxHeight: 220)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .listRowInsets(EdgeInsets())
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
 
-                LabeledContent("파일 크기") {
+                HStack {
                     Text(ReceiptImageProcessor.formattedSize(of: data))
-                        .foregroundStyle(.secondary)
-                }
-
-                Button("사진 삭제", role: .destructive) {
-                    draft.imageData = nil
-                    pickedItem = nil
+                        .font(.caption1_fixed)
+                        .foregroundStyle(.gray300)
+                    Spacer()
+                    Button {
+                        draft.imageData = nil
+                        pickedItem = nil
+                    } label: {
+                        Text("사진 삭제")
+                            .font(.caption2_fixed)
+                            .foregroundStyle(.mainPink)
+                    }
                 }
             } else {
                 PhotosPicker(selection: $pickedItem, matching: .images, photoLibrary: .shared()) {
-                    Label(isProcessingImage ? "불러오는 중…" : "영수증 사진 첨부", systemImage: "camera")
+                    HStack(spacing: 8) {
+                        Image(systemName: "camera")
+                        Text(isProcessingImage ? "불러오는 중…" : "영수증 사진 첨부")
+                    }
+                    .font(.body1_fixed)
+                    .foregroundStyle(.gray400)
+                    .padding(.vertical, 20)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.gray100)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .disabled(isProcessingImage)
+
+                Text("사진은 장변 \(Int(ReceiptImageProcessor.maxDimension))px 로 줄여 저장합니다.")
+                    .font(.caption1_fixed)
+                    .foregroundStyle(.gray300)
             }
-        } header: {
-            Text("증빙")
-        } footer: {
-            Text("사진은 장변 \(Int(ReceiptImageProcessor.maxDimension))px 로 줄여 저장합니다.")
         }
+        .padding(.top, 12)
     }
 
     // MARK: - 파생 값
@@ -226,11 +298,7 @@ struct AddExpenseView: View {
 
     private var convertedPreview: String {
         guard let amount = draft.amount, let rate = currentRate else { return "-" }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        let value = amount * rate
-        return (formatter.string(from: NSNumber(value: value)) ?? "0") + "원"
+        return ReceiptFormat.krw(amount * rate)
     }
 
     private var errorBinding: Binding<Bool> {
