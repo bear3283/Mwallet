@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		571A426A2ACE857500FA3D2B /* MwalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571A42692ACE857500FA3D2B /* MwalletApp.swift */; };
-		571A426C2ACE857500FA3D2B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571A426B2ACE857500FA3D2B /* ContentView.swift */; };
 		571A426E2ACE857600FA3D2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 571A426D2ACE857600FA3D2B /* Assets.xcassets */; };
 		571A42712ACE857600FA3D2B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 571A42702ACE857600FA3D2B /* Preview Assets.xcassets */; };
 		5720A56F2B0F4C4700B12E66 /* InfoClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5720A56E2B0F4C4700B12E66 /* InfoClassifier.mlmodel */; };
@@ -34,8 +33,8 @@
 		57A65D162AD7D6B000131266 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D152AD7D6B000131266 /* PaymentMethod.swift */; };
 		57A65D182AD7DDA700131266 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D172AD7DDA700131266 /* RecordView.swift */; };
 		57B213DE2AFD167A00AFADC7 /* String+DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B213DD2AFD167A00AFADC7 /* String+DesignSystem.swift */; };
-		57B2AA422AEFD3980042E55C /* EmtpyFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2AA412AEFD3980042E55C /* EmtpyFile.swift */; };
 		57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C41DFB2AD4F1EB00345253 /* Persistence.swift */; };
+		C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */; };
 		57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */; };
 		57CC201A2AE551BE0034BD57 /* TravelChoiceInExpenseModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CC20192AE551BE0034BD57 /* TravelChoiceInExpenseModal.swift */; };
 		57CE9C732ADE4CAE00EDAD11 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CE9C722ADE4CAE00EDAD11 /* Currency.swift */; };
@@ -113,15 +112,12 @@
 		E26DBB312AFAC0AD00AC76E3 /* ManualRecordInExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DBB302AFAC0AD00AC76E3 /* ManualRecordInExpenseViewModel.swift */; };
 		E2D4247E2AEF580E00A9ADC9 /* ExchangeRateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D4247D2AEF580E00A9ADC9 /* ExchangeRateHandler.swift */; };
 		E2D5C05C2ADD921400907501 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C05B2ADD921400907501 /* MainView.swift */; };
-		E2D5C05E2ADD922000907501 /* DummyRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C05D2ADD922000907501 /* DummyRecordView.swift */; };
 		E2D5C0602ADD922700907501 /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C05F2ADD922700907501 /* ExpenseView.swift */; };
 		E2D5C0622ADD923000907501 /* TodayExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0612ADD923000907501 /* TodayExpenseView.swift */; };
 		E2D5C0642ADD923800907501 /* TodayExpenseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0632ADD923800907501 /* TodayExpenseDetailView.swift */; };
 		E2D5C0662ADD924100907501 /* AllExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0652ADD924100907501 /* AllExpenseView.swift */; };
 		E2D5C0682ADD924800907501 /* AllExpenseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0672ADD924800907501 /* AllExpenseDetailView.swift */; };
-		E2D5C06A2ADD925C00907501 /* DummyRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0692ADD925C00907501 /* DummyRecordViewModel.swift */; };
 		E2D5C06C2ADD926200907501 /* ExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C06B2ADD926200907501 /* ExpenseViewModel.swift */; };
-		E2D5C06F2ADD927B00907501 /* TempSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C06E2ADD927B00907501 /* TempSave.swift */; };
 		E2D5C0722ADD928C00907501 /* findCurrentTravel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */; };
 		E385832F2B12DC520011E70A /* CSVArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = E385832E2B12DC520011E70A /* CSVArchive.swift */; };
 /* End PBXBuildFile section */
@@ -129,7 +125,6 @@
 /* Begin PBXFileReference section */
 		571A42662ACE857500FA3D2B /* Mwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		571A42692ACE857500FA3D2B /* MwalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MwalletApp.swift; sourceTree = "<group>"; };
-		571A426B2ACE857500FA3D2B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		571A426D2ACE857600FA3D2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		571A42702ACE857600FA3D2B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5720A56E2B0F4C4700B12E66 /* InfoClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = InfoClassifier.mlmodel; sourceTree = "<group>"; };
@@ -156,8 +151,8 @@
 		57A65D152AD7D6B000131266 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
 		57A65D172AD7DDA700131266 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		57B213DD2AFD167A00AFADC7 /* String+DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+DesignSystem.swift"; sourceTree = "<group>"; };
-		57B2AA412AEFD3980042E55C /* EmtpyFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmtpyFile.swift; sourceTree = "<group>"; };
 		57C41DFB2AD4F1EB00345253 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSeeder.swift; sourceTree = "<group>"; };
 		57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateChoiceModal.swift; sourceTree = "<group>"; };
 		57CC20192AE551BE0034BD57 /* TravelChoiceInExpenseModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelChoiceInExpenseModal.swift; sourceTree = "<group>"; };
 		57CE9C722ADE4CAE00EDAD11 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
@@ -235,15 +230,12 @@
 		E26DBB302AFAC0AD00AC76E3 /* ManualRecordInExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualRecordInExpenseViewModel.swift; sourceTree = "<group>"; };
 		E2D4247D2AEF580E00A9ADC9 /* ExchangeRateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateHandler.swift; sourceTree = "<group>"; };
 		E2D5C05B2ADD921400907501 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		E2D5C05D2ADD922000907501 /* DummyRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyRecordView.swift; sourceTree = "<group>"; };
 		E2D5C05F2ADD922700907501 /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
 		E2D5C0612ADD923000907501 /* TodayExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayExpenseView.swift; sourceTree = "<group>"; };
 		E2D5C0632ADD923800907501 /* TodayExpenseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayExpenseDetailView.swift; sourceTree = "<group>"; };
 		E2D5C0652ADD924100907501 /* AllExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExpenseView.swift; sourceTree = "<group>"; };
 		E2D5C0672ADD924800907501 /* AllExpenseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExpenseDetailView.swift; sourceTree = "<group>"; };
-		E2D5C0692ADD925C00907501 /* DummyRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyRecordViewModel.swift; sourceTree = "<group>"; };
 		E2D5C06B2ADD926200907501 /* ExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewModel.swift; sourceTree = "<group>"; };
-		E2D5C06E2ADD927B00907501 /* TempSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempSave.swift; sourceTree = "<group>"; };
 		E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = findCurrentTravel.swift; sourceTree = "<group>"; };
 		E366F1762B02014B003CCA88 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E385832E2B12DC520011E70A /* CSVArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVArchive.swift; sourceTree = "<group>"; };
@@ -288,11 +280,9 @@
 				578858262ADBBED5001B82FA /* Model */,
 				C17550562AD5518C00A61BE5 /* View */,
 				C17550572AD5519800A61BE5 /* ViewModel */,
-				571C52CF2AE49C4100C10377 /* Protocol */,
 				57A65D032AD7D49100131266 /* Extension */,
 				C1A11EA700000000000000C1 /* Mission */,
 				E2D5C0702ADD928100907501 /* Handler */,
-				E2D5C06D2ADD927000907501 /* Dummy */,
 				C190C20A2ADCD4520099EE3A /* DesignSystem */,
 				571A426D2ACE857600FA3D2B /* Assets.xcassets */,
 				571A426F2ACE857600FA3D2B /* Preview Content */,
@@ -321,14 +311,6 @@
 			path = Modal;
 			sourceTree = "<group>";
 		};
-		571C52CF2AE49C4100C10377 /* Protocol */ = {
-			isa = PBXGroup;
-			children = (
-				57B2AA412AEFD3980042E55C /* EmtpyFile.swift */,
-			);
-			path = Protocol;
-			sourceTree = "<group>";
-		};
 		578858262ADBBED5001B82FA /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -336,6 +318,7 @@
 				E237338B2AF7E95B008C2613 /* CurrencyList.csv */,
 				C15760172AEE782C0089FFE5 /* CountryList.csv */,
 				57C41DFB2AD4F1EB00345253 /* Persistence.swift */,
+				C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */,
 				5754FAB42AD3F94900A3FCE8 /* Mwallet.xcdatamodeld */,
 				57A65D062AD7D4BE00131266 /* Enumeration */,
 				C157601D2AF1DD830089FFE5 /* CountryInfo.swift */,
@@ -476,8 +459,6 @@
 			isa = PBXGroup;
 			children = (
 				C18168012AFDE07000130F79 /* SplashView.swift */,
-				571A426B2ACE857500FA3D2B /* ContentView.swift */,
-				E2D5C05D2ADD922000907501 /* DummyRecordView.swift */,
 				C19AFAEB2AE107460037A5F5 /* SettingView.swift */,
 				C18168032AFDE08700130F79 /* LottieView.swift */,
 			);
@@ -505,7 +486,6 @@
 				572DBD482AE2D7F100FC88B6 /* ManualRecordViewModel.swift */,
 				C17550582AD57B6500A61BE5 /* AddTravelViewModel.swift */,
 				E26DBB302AFAC0AD00AC76E3 /* ManualRecordInExpenseViewModel.swift */,
-				E2D5C0692ADD925C00907501 /* DummyRecordViewModel.swift */,
 				E2D5C06B2ADD926200907501 /* ExpenseViewModel.swift */,
 				C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */,
 				C19AFAE62ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift */,
@@ -563,14 +543,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E2D5C06D2ADD927000907501 /* Dummy */ = {
-			isa = PBXGroup;
-			children = (
-				E2D5C06E2ADD927B00907501 /* TempSave.swift */,
-			);
-			path = Dummy;
 			sourceTree = "<group>";
 		};
 		E2D5C0702ADD928100907501 /* Handler */ = {
@@ -691,13 +663,11 @@
 				E2D5C05C2ADD921400907501 /* MainView.swift in Sources */,
 				5760066D2ADD42FA006CD8DF /* ManualRecordView.swift in Sources */,
 				E23357A42AE2724800E17CFF /* CustomDatePicker.swift in Sources */,
-				E2D5C06F2ADD927B00907501 /* TempSave.swift in Sources */,
 				E2D5C0602ADD922700907501 /* ExpenseView.swift in Sources */,
 				E237338E2AF7EB8B008C2613 /* CurrencyInfo.swift in Sources */,
 				5744185F2B033C420057A2B5 /* travelModalSortRule.swift in Sources */,
 				C19AFAE32ADFB5AE0037A5F5 /* Font+Extension.swift in Sources */,
 				E26DBB2F2AFAC08C00AC76E3 /* ManualRecordInExpenseView.swift in Sources */,
-				571A426C2ACE857500FA3D2B /* ContentView.swift in Sources */,
 				57A65D122AD7D5D500131266 /* RecordViewModel.swift in Sources */,
 				C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */,
 				C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */,
@@ -723,14 +693,13 @@
 				57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */,
 				C19AFAF82AE16C600037A5F5 /* UpcomingTravelViewModel.swift in Sources */,
 				E2D5C0662ADD924100907501 /* AllExpenseView.swift in Sources */,
-				E2D5C05E2ADD922000907501 /* DummyRecordView.swift in Sources */,
 				57A65D182AD7DDA700131266 /* RecordView.swift in Sources */,
 				C179660E2ADD6BF90036E866 /* Color+Extension.swift in Sources */,
 				57B213DE2AFD167A00AFADC7 /* String+DesignSystem.swift in Sources */,
 				C1EAD6A22AF6717C00EB3B89 /* InterimRecordView.swift in Sources */,
 				C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */,
 				57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */,
-				57B2AA422AEFD3980042E55C /* EmtpyFile.swift in Sources */,
+				C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */,
 				C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */,
 				C18168022AFDE07000130F79 /* SplashView.swift in Sources */,
 				E2D4247E2AEF580E00A9ADC9 /* ExchangeRateHandler.swift in Sources */,
@@ -769,7 +738,6 @@
 				E2D5C0642ADD923800907501 /* TodayExpenseDetailView.swift in Sources */,
 				C1EAD6A42AF6851E00EB3B89 /* InterimRecordViewModel.swift in Sources */,
 				C1DC9A4B2AF3EFAD00CB6298 /* MainViewModel.swift in Sources */,
-				E2D5C06A2ADD925C00907501 /* DummyRecordViewModel.swift in Sources */,
 				C17550522AD54FB000A61BE5 /* TravelListView.swift in Sources */,
 				C19AFAF42AE139CD0037A5F5 /* TravelListViewModel.swift in Sources */,
 				E2D5C06C2ADD926200907501 /* ExpenseViewModel.swift in Sources */,

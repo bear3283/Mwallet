@@ -157,7 +157,7 @@ struct AllExpenseDetailView: View {
                 .padding(.top, 6)
             
             // 화폐별 합계
-            HStack (spacing: 0) {
+            HStack(spacing: 0) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 0) {
                         ForEach(currencyAndSums.indices, id: \.self) { idx in
@@ -183,9 +183,9 @@ struct AllExpenseDetailView: View {
     }
     
     private var reverseButton: some View {
-        Button(action: {
+        Button {
             isReverse.toggle()
-        }) {
+        } label: {
             Image("arrowUpDown")
                 .resizable()
                 .frame(width: 18, height: 18)
@@ -251,7 +251,7 @@ struct AllExpenseDetailView: View {
     }
 
     private func drawExpenseGroup(expenses: [Expense], title: String, backgroundColor: Color) -> some View {
-        VStack (alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
                 Text(title)
                     .font(.subhead1_fixed)
@@ -287,7 +287,7 @@ struct AllExpenseDetailView: View {
                         given_travel: expense.travel
                     )
                     .environmentObject(mainVM)
-                } label : {
+                } label: {
                     HStack(alignment: .center, spacing: 0) {
                         Image(ExpenseInfoCategory(rawValue: Int(expense.category))?.modalImageString ?? "nil")
                             .font(.system(size: 36))

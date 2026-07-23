@@ -203,7 +203,7 @@ class ExpenseViewModel: ObservableObject {
             (categoryArray[4], sumArray[4]),
             (categoryArray[5], sumArray[5]),
             (categoryArray[6], sumArray[6]),
-            (categoryArray[7], sumArray[7]),
+            (categoryArray[7], sumArray[7])
         ].sorted {
             $0.1 >= $1.1
         }
@@ -219,7 +219,7 @@ class ExpenseViewModel: ObservableObject {
     
     func setupSelectedTravel() {
         travelStream = travelPublisher
-            .sink { [weak self] travel in
+            .sink { [weak self] _ in
                 guard let self = self else { return }
                 self.fetchExpense()
                 self.filteredTodayExpenses = self.getFilteredTodayExpenses()

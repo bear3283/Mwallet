@@ -9,7 +9,8 @@ import SwiftUI
 
 @main
 struct MwalletApp: App {
-    let tempSave = TempSave.shared
+    // 첫 실행 때 '임시 기록' 기본 여행을 만든다. 접근하는 것만으로 초기화된다.
+    private let seeder = FirstLaunchSeeder.shared
     
     var body: some Scene {
         WindowGroup {

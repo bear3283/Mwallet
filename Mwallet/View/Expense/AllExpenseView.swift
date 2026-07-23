@@ -18,7 +18,7 @@ struct AllExpenseView: View {
     let countryInfoModel = CountryInfoModel.shared.countryResult
     @State private var isShareModalPresented = false
     @State private var isConfirmationDialoguePresented = false
-    @State private var shareItem: CSVArchive? = nil
+    @State private var shareItem: CSVArchive?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
