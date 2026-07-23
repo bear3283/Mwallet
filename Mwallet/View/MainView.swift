@@ -59,7 +59,7 @@ struct MainView: View {
                 }
                 .tag(2)
 
-            MissionHomeView()
+            ReceiptHomeView()
                 .tabItem {
                     VStack {
                         if viewModel.selection == 3 {

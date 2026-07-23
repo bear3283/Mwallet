@@ -1,5 +1,5 @@
 //
-//  AddExpenseView.swift
+//  AddReceiptView.swift
 //  Mwallet
 //
 //  영수증 입력 폼. 레이아웃과 타이포그래피는 기록 탭과 같은 규칙을 따른다.
@@ -8,7 +8,7 @@
 import PhotosUI
 import SwiftUI
 
-struct AddExpenseView: View {
+struct AddReceiptView: View {
 
     // 추가와 수정이 같은 폼을 쓴다.
     // 화면을 따로 만들면 필드가 늘 때마다 두 곳을 고쳐야 하고 한쪽을 빠뜨리게 된다.
@@ -72,34 +72,34 @@ struct AddExpenseView: View {
                         Divider()
                             .padding(.top, 20)
 
-                        MissionSectionTitle(text: "사역")
+                        ReceiptSectionTitle(text: "사역")
                             .padding(.top, 20)
                         missionBlock
 
                         Divider()
 
-                        MissionSectionTitle(text: "상세")
+                        ReceiptSectionTitle(text: "상세")
                             .padding(.top, 20)
                         detailBlock
 
                         Divider()
 
-                        MissionSectionTitle(text: "증빙")
+                        ReceiptSectionTitle(text: "증빙")
                             .padding(.top, 20)
                         photoBlock
 
                         Spacer(minLength: 24)
                     }
-                    .padding(.horizontal, MissionLayout.gutter)
+                    .padding(.horizontal, ReceiptLayout.gutter)
                 }
 
-                MissionPrimaryButton(
+                ReceiptPrimaryButton(
                     title: isEditing ? "수정 완료" : "저장",
                     isEnabled: draft.isValid && !isProcessingImage
                 ) {
                     save()
                 }
-                .padding(.horizontal, MissionLayout.gutter)
+                .padding(.horizontal, ReceiptLayout.gutter)
                 .padding(.top, 8)
                 .padding(.bottom, 12)
             }
@@ -164,7 +164,7 @@ struct AddExpenseView: View {
 
             if draft.currency != ReceiptCurrency.base {
                 if currentRate == nil {
-                    MissionNotice(text: "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다")
+                    ReceiptNotice(text: "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다")
                 } else {
                     Text("원화 환산 \(convertedPreview)")
                         .font(.caption2_fixed)
@@ -178,17 +178,17 @@ struct AddExpenseView: View {
 
     private var missionBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            MissionFieldRow(label: "사역 이름") {
+            ReceiptFieldRow(label: "사역 이름") {
                 TextField("예) 2026 필리핀 단기선교", text: $draft.missionName)
                     .focused($focusedField, equals: .mission)
-                    .missionField()
+                    .receiptField()
             }
 
             if !missionNameSuggestions.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 4) {
                         ForEach(missionNameSuggestions, id: \.self) { name in
-                            MissionChip(title: name, isSelected: draft.missionName == name) {
+                            ReceiptChip(title: name, isSelected: draft.missionName == name) {
                                 draft.missionName = name
                             }
                         }
@@ -197,7 +197,7 @@ struct AddExpenseView: View {
                 .padding(.bottom, 10)
             }
 
-            MissionFieldRow(label: "결제 일자") {
+            ReceiptFieldRow(label: "결제 일자") {
                 DatePicker("", selection: $draft.date, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
                     .tint(.mainPink)
@@ -209,21 +209,21 @@ struct AddExpenseView: View {
 
     private var detailBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            MissionFieldRow(label: "상호명") {
+            ReceiptFieldRow(label: "상호명") {
                 TextField("어디에서 썼나요", text: $draft.merchant)
                     .focused($focusedField, equals: .merchant)
-                    .missionField()
+                    .receiptField()
             }
 
-            MissionFieldRow(label: "카테고리") {
+            ReceiptFieldRow(label: "카테고리") {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 4) {
                         ForEach(categories, id: \.self) { name in
-                            MissionChip(title: name, isSelected: draft.category == name) {
+                            ReceiptChip(title: name, isSelected: draft.category == name) {
                                 draft.category = name
                             }
                         }
-                        MissionChip(title: "+ 직접 입력", isSelected: false) {
+                        ReceiptChip(title: "+ 직접 입력", isSelected: false) {
                             newCategory = ""
                             isEnteringNewCategory = true
                         }
@@ -231,11 +231,11 @@ struct AddExpenseView: View {
                 }
             }
 
-            MissionFieldRow(label: "메모") {
+            ReceiptFieldRow(label: "메모") {
                 TextField("남길 말이 있다면", text: $draft.memo, axis: .vertical)
                     .lineLimit(2...4)
                     .focused($focusedField, equals: .memo)
-                    .missionField()
+                    .receiptField()
             }
         }
     }
@@ -349,5 +349,5 @@ struct AddExpenseView: View {
 }
 
 #Preview {
-    AddExpenseView()
+    AddReceiptView()
 }

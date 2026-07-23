@@ -1,5 +1,5 @@
 //
-//  MissionHomeView.swift
+//  ReceiptHomeView.swift
 //  Mwallet
 //
 //  영수증 탭. 레이아웃과 타이포그래피는 가계부 탭과 같은 규칙을 따른다.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct MissionHomeView: View {
+struct ReceiptHomeView: View {
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Receipt.date, ascending: false)],
@@ -30,10 +30,10 @@ struct MissionHomeView: View {
                     .frame(height: 12)
 
                 searchField
-                    .padding(.horizontal, MissionLayout.gutter)
+                    .padding(.horizontal, ReceiptLayout.gutter)
 
                 if allReceipts.isEmpty {
-                    MissionEmptyState(
+                    ReceiptEmptyState(
                         message: "아직 영수증이 없어요",
                         detail: "지출이 생기면 바로 남겨두세요.\n오프라인에서도 저장됩니다."
                     )
@@ -47,7 +47,7 @@ struct MissionHomeView: View {
                         .frame(height: 20)
 
                     summaryBlock
-                        .padding(.horizontal, MissionLayout.gutter)
+                        .padding(.horizontal, ReceiptLayout.gutter)
 
                     Spacer()
                         .frame(height: 20)
@@ -87,7 +87,7 @@ struct MissionHomeView: View {
                 }
             }
             .sheet(isPresented: $isAddingExpense) {
-                AddExpenseView()
+                AddReceiptView()
             }
             .confirmationDialog(
                 "이 영수증을 삭제할까요?",
@@ -140,16 +140,16 @@ struct MissionHomeView: View {
     private var missionChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 4) {
-                MissionChip(title: "전체", isSelected: filter.missionName == nil) {
+                ReceiptChip(title: "전체", isSelected: filter.missionName == nil) {
                     filter.missionName = nil
                 }
                 ForEach(missionNames, id: \.self) { name in
-                    MissionChip(title: name, isSelected: filter.missionName == name) {
+                    ReceiptChip(title: name, isSelected: filter.missionName == name) {
                         filter.missionName = name
                     }
                 }
             }
-            .padding(.horizontal, MissionLayout.gutter)
+            .padding(.horizontal, ReceiptLayout.gutter)
         }
     }
 
@@ -173,7 +173,7 @@ struct MissionHomeView: View {
             .padding(.top, 6)
 
             if summaryValue.hasUnconvertible {
-                MissionNotice(text: "환율을 받지 못한 \(summaryValue.unconvertibleCount)건은 합계에서 빠졌습니다")
+                ReceiptNotice(text: "환율을 받지 못한 \(summaryValue.unconvertibleCount)건은 합계에서 빠졌습니다")
                     .padding(.top, 8)
             }
 
@@ -201,11 +201,11 @@ struct MissionHomeView: View {
     private var receiptList: some View {
         ScrollView(showsIndicators: false) {
             if filtered.isEmpty {
-                MissionEmptyState(message: "검색 결과가 없어요")
+                ReceiptEmptyState(message: "검색 결과가 없어요")
             } else {
                 LazyVStack(alignment: .leading, spacing: 0) {
                     ForEach(daySections) { section in
-                        MissionSectionTitle(
+                        ReceiptSectionTitle(
                             text: ReceiptFormat.dayTitle(section.day),
                             trailing: ReceiptFormat.krwOrDash(section.dayTotal)
                         )
@@ -225,7 +225,7 @@ struct MissionHomeView: View {
                         }
                     }
                 }
-                .padding(.horizontal, MissionLayout.gutter)
+                .padding(.horizontal, ReceiptLayout.gutter)
                 // 떠 있는 탭바가 마지막 항목을 가리지 않도록 여유를 둔다.
                 .padding(.bottom, 90)
             }
@@ -289,6 +289,6 @@ struct MissionHomeView: View {
 }
 
 #Preview {
-    MissionHomeView()
+    ReceiptHomeView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

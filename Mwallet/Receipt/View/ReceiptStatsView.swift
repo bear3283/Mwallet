@@ -42,7 +42,7 @@ struct ReceiptStatsView: View {
                     .padding(.top, 16)
 
                 if slices.isEmpty {
-                    MissionEmptyState(
+                    ReceiptEmptyState(
                         message: "집계할 지출이 없어요",
                         detail: "원화로 환산할 수 있는 기록이 있어야 비율을 낼 수 있습니다."
                     )
@@ -50,7 +50,7 @@ struct ReceiptStatsView: View {
                     Divider()
                         .padding(.top, 20)
 
-                    MissionSectionTitle(text: "카테고리별 비율")
+                    ReceiptSectionTitle(text: "카테고리별 비율")
                         .padding(.top, 20)
 
                     chart
@@ -67,7 +67,7 @@ struct ReceiptStatsView: View {
                 // 떠 있는 탭바가 버튼을 가리지 않도록 여유를 둔다.
                 Spacer(minLength: 100)
             }
-            .padding(.horizontal, MissionLayout.gutter)
+            .padding(.horizontal, ReceiptLayout.gutter)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -99,7 +99,7 @@ struct ReceiptStatsView: View {
             .padding(.top, 6)
 
             if summary.hasUnconvertible {
-                MissionNotice(text: "환율을 받지 못한 \(summary.unconvertibleCount)건은 비율 계산에서 빠졌습니다")
+                ReceiptNotice(text: "환율을 받지 못한 \(summary.unconvertibleCount)건은 비율 계산에서 빠졌습니다")
                     .padding(.top, 8)
             }
         }

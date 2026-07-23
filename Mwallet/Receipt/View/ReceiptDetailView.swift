@@ -2,7 +2,7 @@
 //  ReceiptDetailView.swift
 //  Mwallet
 //
-//  영수증 상세. 수정은 AddExpenseView 를 편집 모드로 재사용한다.
+//  영수증 상세. 수정은 AddReceiptView 를 편집 모드로 재사용한다.
 //
 
 import SwiftUI
@@ -31,7 +31,7 @@ struct ReceiptDetailView: View {
                 Divider()
                     .padding(.top, 20)
 
-                MissionSectionTitle(text: "상세")
+                ReceiptSectionTitle(text: "상세")
                     .padding(.top, 20)
 
                 detailBlock
@@ -51,7 +51,7 @@ struct ReceiptDetailView: View {
                 // 떠 있는 탭바가 마지막 항목을 가리지 않도록 여유를 둔다.
                 Spacer(minLength: 100)
             }
-            .padding(.horizontal, MissionLayout.gutter)
+            .padding(.horizontal, ReceiptLayout.gutter)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -68,7 +68,7 @@ struct ReceiptDetailView: View {
             }
         }
         .sheet(isPresented: $isEditing) {
-            AddExpenseView(mode: .edit(receipt))
+            AddReceiptView(mode: .edit(receipt))
         }
         .fullScreenCover(isPresented: $isViewingImage) {
             imageViewer
@@ -141,7 +141,7 @@ struct ReceiptDetailView: View {
     // 목록에서 "합계에서 빠졌습니다" 라고 알리기만 하고 고칠 방법이 없으면 막다른 길이 된다.
     private var unavailableRate: some View {
         VStack(alignment: .leading, spacing: 8) {
-            MissionNotice(text: "환율을 받지 못해 원화 합계에서 빠져 있어요")
+            ReceiptNotice(text: "환율을 받지 못해 원화 합계에서 빠져 있어요")
 
             Button {
                 applyCurrentRate()
@@ -165,15 +165,15 @@ struct ReceiptDetailView: View {
 
     private var detailBlock: some View {
         VStack(spacing: 0) {
-            MissionValueRow(label: "사역", value: receipt.missionTitle)
+            ReceiptValueRow(label: "사역", value: receipt.missionTitle)
             Divider()
-            MissionValueRow(label: "카테고리", value: receipt.categoryName)
+            ReceiptValueRow(label: "카테고리", value: receipt.categoryName)
             Divider()
-            MissionValueRow(label: "결제 일자", value: receipt.formattedDate())
+            ReceiptValueRow(label: "결제 일자", value: receipt.formattedDate())
 
             if receipt.recordedTimeZone.identifier != TimeZone.current.identifier {
                 Divider()
-                MissionValueRow(label: "기록 지역", value: receipt.recordedTimeZone.identifier)
+                ReceiptValueRow(label: "기록 지역", value: receipt.recordedTimeZone.identifier)
             }
 
             if !receipt.memoText.isEmpty {

@@ -1,5 +1,5 @@
 //
-//  MissionDesign.swift
+//  ReceiptDesign.swift
 //  Mwallet
 //
 //  영수증 탭이 나머지 탭과 같은 시각 언어를 쓰도록 맞춘 공용 조각들.
@@ -17,13 +17,13 @@
 
 import SwiftUI
 
-enum MissionLayout {
+enum ReceiptLayout {
     static let gutter: CGFloat = 20
 }
 
 // MARK: - 섹션 제목
 
-struct MissionSectionTitle: View {
+struct ReceiptSectionTitle: View {
     let text: String
     var trailing: String?
 
@@ -45,7 +45,7 @@ struct MissionSectionTitle: View {
 // MARK: - 선택 칩
 
 // 기존 AllExpenseView 의 국가 선택 칩과 같은 규격.
-struct MissionChip: View {
+struct ReceiptChip: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
@@ -66,7 +66,7 @@ struct MissionChip: View {
 
 // MARK: - 값 표시 행
 
-struct MissionValueRow: View {
+struct ReceiptValueRow: View {
     let label: String
     let value: String
     var valueColor: Color = .black
@@ -96,7 +96,7 @@ struct MissionValueRow: View {
 // MARK: - 입력 행
 
 // ManualRecordView 의 gray100 필드 규격을 따른다.
-struct MissionFieldRow<Content: View>: View {
+struct ReceiptFieldRow<Content: View>: View {
     let label: String
     @ViewBuilder var content: Content
 
@@ -111,7 +111,7 @@ struct MissionFieldRow<Content: View>: View {
     }
 }
 
-struct MissionTextFieldStyle: ViewModifier {
+struct ReceiptTextFieldStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.body1_fixed)
@@ -125,13 +125,13 @@ struct MissionTextFieldStyle: ViewModifier {
 }
 
 extension View {
-    func missionField() -> some View { modifier(MissionTextFieldStyle()) }
+    func receiptField() -> some View { modifier(ReceiptTextFieldStyle()) }
 }
 
 // MARK: - 버튼
 
 // ButtonTheme 의 LargeButtonActive 규격을 화면 안에서 쓸 수 있게 옮긴 것.
-struct MissionPrimaryButton: View {
+struct ReceiptPrimaryButton: View {
     let title: String
     var isEnabled = true
     let action: () -> Void
@@ -152,7 +152,7 @@ struct MissionPrimaryButton: View {
 
 // MARK: - 빈 상태
 
-struct MissionEmptyState: View {
+struct ReceiptEmptyState: View {
     let message: String
     var detail: String?
 
@@ -176,7 +176,7 @@ struct MissionEmptyState: View {
 
 // MARK: - 경고 문구
 
-struct MissionNotice: View {
+struct ReceiptNotice: View {
     let text: String
 
     var body: some View {
