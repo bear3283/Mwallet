@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig.example
+//  Mwallet
+//
+//  이 파일을 Config.xcconfig 로 복사한 뒤 본인의 키를 채우세요.
+//  Config.xcconfig 는 .gitignore 에 의해 커밋되지 않습니다.
+//
+//  Configuration settings file format documentation can be found at:
+//  https://help.apple.com/xcode/#/dev745c5c974
+
+API_KEY = YOUR_EXCHANGERATE_API_KEY_HERE

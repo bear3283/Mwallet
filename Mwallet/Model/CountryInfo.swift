@@ -1,0 +1,18 @@
+//
+//  CountryInfo.swift
+//  Mwallet
+//
+//  Created by GYURI PARK on 2023/11/01.
+//
+
+import Foundation
+
+struct CountryInfo {
+    let englishNm: String
+    let koreanNm: String
+    let locationNm: String
+    let flagString: String
+    let defaultImageString: String
+    let relatedCurrencyArray: [String]
+    let blurImageString: String
+}
