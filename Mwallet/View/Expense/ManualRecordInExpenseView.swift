@@ -163,6 +163,8 @@ struct ManualRecordInExpenseView: View {
 
             viewModel.soundRecordData = given_soundRecordData
 
+            // 수기 입력에도 결제 위치가 저장되므로 이 화면에서 위치 권한을 요청한다.
+            DateGapHandler.shared.requestAuthorization()
             viewModel.getLocation()
             
             viewModel.firstChosenTravelInManualRecord = MainViewModel.shared.chosenTravelInManualRecord

@@ -62,7 +62,11 @@ struct MainView: View {
             MissionHomeView()
                 .tabItem {
                     VStack {
-                        Image(systemName: viewModel.selection == 3 ? "doc.text.fill" : "doc.text")
+                        if viewModel.selection == 3 {
+                            Image("tabitem4_active")
+                        } else {
+                            Image("tabitem4_unactive")
+                        }
                         Text("사역 재정")
                             .font(.caption1)
                     }
@@ -82,8 +86,10 @@ struct MainView: View {
             UITabBar.appearance().standardAppearance = appearance
             
             exchangeRateHandler.refreshExchangeRatesIfNeeded()
-            
-            DateGapHandler.shared.requestAuthorization()
+
+            // 위치 권한은 여기서 묻지 않는다. 앱을 켜자마자 물으면 맥락 없는 요청이 되고,
+            // 위치를 쓰지 않는 사역 재정 탭 사용자에게도 팝업이 뜬다.
+            // 실제로 위치가 필요한 지출 기록 시작 지점에서 요청한다.
         }
         .accentColor(Color.mainPink)
         .environmentObject(viewModel)

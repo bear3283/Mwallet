@@ -52,11 +52,16 @@ final class DateGapHandler {
     var currentLocation: CLLocation?
     private var timeDifferenceInterval: TimeInterval = 0
     
+    // 위치가 실제로 필요한 시점(지출 기록 시작)에 호출한다.
+    // 앱을 켜자마자 묻지 않으려고 진입점을 옮겼고, 이제 여러 화면에서 불리므로
+    // 매니저를 두 번 만들지 않도록 한 번만 준비한다.
     func requestAuthorization() {
+        guard locationManager == nil else { return }
+
         locationManager = CLLocationManager()
         locationManager?.delegate = locationManagerDelegate
         locationManagerDelegate.parent = self
-        
+
         locationManager?.requestWhenInUseAuthorization()
     }
     

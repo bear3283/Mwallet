@@ -696,6 +696,10 @@ final class RecordViewModel: ObservableObject {
     }
     
     func startRecording() async {
+        // 지출 기록에는 결제 위치가 함께 저장된다. 사용자가 녹음을 시작한
+        // 이 시점이 위치 권한을 요청할 맥락이다. (이미 준비됐으면 무시된다)
+        DateGapHandler.shared.requestAuthorization()
+
         let recordingSession = AVAudioSession.sharedInstance()
         do {
             try recordingSession.setCategory(.playAndRecord, mode: .default)

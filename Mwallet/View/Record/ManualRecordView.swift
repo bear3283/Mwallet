@@ -98,6 +98,9 @@ struct ManualRecordView: View {
             Text("현재 화면의 정보를 모두 초기화하고 이전 화면으로 돌아갈까요?")
         }
         .onAppear {
+            // 수기 입력에도 결제 위치가 저장되므로 이 화면에서 위치 권한을 요청한다.
+            DateGapHandler.shared.requestAuthorization()
+
             viewModel.wantToActivateAutoSaveTimer = given_wantToActivateAutoSaveTimer
             
             if given_wantToActivateAutoSaveTimer { // 녹음 버튼으로 진입한 경우
