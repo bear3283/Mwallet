@@ -14,7 +14,7 @@ struct AddReceiptView: View {
     // 화면을 따로 만들면 필드가 늘 때마다 두 곳을 고쳐야 하고 한쪽을 빠뜨리게 된다.
     enum Mode {
         case create
-        case edit(Receipt)
+        case edit(Expense)
     }
 
     @Environment(\.dismiss) private var dismiss
@@ -25,32 +25,30 @@ struct AddReceiptView: View {
     @State private var draft: ReceiptDraft
     @State private var pickedItem: PhotosPickerItem?
     @State private var isProcessingImage = false
-    @State private var isEnteringNewCategory = false
-    @State private var newCategory = ""
     @State private var errorMessage: String?
 
     @FocusState private var focusedField: Field?
 
     private enum Field { case mission, amount, merchant, memo }
 
-    private let missionNameSuggestions: [String]
+    private let travels: [Travel]
     private let categories: [String]
 
     init(mode: Mode = .create) {
         self.mode = mode
         let store = ReceiptStore()
-        self.missionNameSuggestions = store.existingMissionNames()
+        self.travels = store.availableTravels()
 
         switch mode {
         case .create:
             _draft = State(initialValue: ReceiptDraft())
             self.categories = store.availableCategories()
-        case .edit(let receipt):
-            _draft = State(initialValue: ReceiptDraft(from: receipt))
+        case .edit(let expense):
+            _draft = State(initialValue: ReceiptDraft(from: expense))
             // 수정 중인 영수증의 카테고리가 목록에 없으면 선택이 풀린다.
             var available = store.availableCategories()
-            if !available.contains(receipt.categoryName) {
-                available.append(receipt.categoryName)
+            if !available.contains(expense.categoryName) {
+                available.append(expense.categoryName)
             }
             self.categories = available
         }
@@ -124,11 +122,6 @@ struct AddReceiptView: View {
             .onChange(of: pickedItem) { _, newItem in
                 loadImage(from: newItem)
             }
-            .alert("새 카테고리", isPresented: $isEnteringNewCategory) {
-                TextField("카테고리 이름", text: $newCategory)
-                Button("추가") { draft.category = ReceiptCategory.normalized(newCategory) }
-                Button("취소", role: .cancel) { }
-            }
             .alert("저장하지 못했습니다", isPresented: errorBinding) {
                 Button("확인", role: .cancel) { errorMessage = nil }
             } message: {
@@ -152,7 +145,7 @@ struct AddReceiptView: View {
                     .minimumScaleFactor(0.5)
 
                 Picker("통화", selection: $draft.currency) {
-                    ForEach(ReceiptCurrency.presets, id: \.self) { code in
+                    ForEach(ExpenseCode.currencyPresets, id: \.self) { code in
                         Text(code).tag(code)
                     }
                 }
@@ -162,7 +155,7 @@ struct AddReceiptView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 6))
             }
 
-            if draft.currency != ReceiptCurrency.base {
+            if draft.currency != ExpenseCode.baseCurrency {
                 if currentRate == nil {
                     ReceiptNotice(text: "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다")
                 } else {
@@ -178,23 +171,28 @@ struct AddReceiptView: View {
 
     private var missionBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ReceiptFieldRow(label: "사역 이름") {
-                TextField("예) 2026 필리핀 단기선교", text: $draft.missionName)
-                    .focused($focusedField, equals: .mission)
-                    .receiptField()
-            }
-
-            if !missionNameSuggestions.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 4) {
-                        ForEach(missionNameSuggestions, id: \.self) { name in
-                            ReceiptChip(title: name, isSelected: draft.missionName == name) {
-                                draft.missionName = name
+            ReceiptFieldRow(label: "사역 일정") {
+                if travels.isEmpty {
+                    Text("여행 탭에서 사역 일정을 먼저 만들어 주세요")
+                        .font(.caption2_fixed)
+                        .foregroundStyle(.gray300)
+                } else {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 4) {
+                            ReceiptChip(title: "미분류", isSelected: draft.travel == nil) {
+                                draft.travel = nil
+                            }
+                            ForEach(travels, id: \.objectID) { travel in
+                                ReceiptChip(
+                                    title: travel.name ?? "이름 없음",
+                                    isSelected: draft.travel?.objectID == travel.objectID
+                                ) {
+                                    draft.travel = travel
+                                }
                             }
                         }
                     }
                 }
-                .padding(.bottom, 10)
             }
 
             ReceiptFieldRow(label: "결제 일자") {
@@ -218,14 +216,12 @@ struct AddReceiptView: View {
             ReceiptFieldRow(label: "카테고리") {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 4) {
+                        // 카테고리는 Core Data 에 Int64 코드로 저장되므로 자유 입력을 받지 않는다.
+                        // 기록 탭과 같은 목록이라 두 화면의 분류가 어긋나지 않는다.
                         ForEach(categories, id: \.self) { name in
                             ReceiptChip(title: name, isSelected: draft.category == name) {
                                 draft.category = name
                             }
-                        }
-                        ReceiptChip(title: "+ 직접 입력", isSelected: false) {
-                            newCategory = ""
-                            isEnteringNewCategory = true
                         }
                     }
                 }
@@ -292,7 +288,7 @@ struct AddReceiptView: View {
     // MARK: - 파생 값
 
     private var currentRate: Double? {
-        guard draft.currency != ReceiptCurrency.base else { return 1 }
+        guard draft.currency != ExpenseCode.baseCurrency else { return 1 }
         return ExchangeRateHandler.shared.getExchangeRateFromKRW(currencyCode: draft.currency)
     }
 
@@ -338,8 +334,8 @@ struct AddReceiptView: View {
             switch mode {
             case .create:
                 try store.create(from: draft)
-            case .edit(let receipt):
-                try store.update(receipt, with: draft)
+            case .edit(let expense):
+                try store.update(expense, with: draft)
             }
             dismiss()
         } catch {

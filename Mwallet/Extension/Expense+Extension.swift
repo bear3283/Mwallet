@@ -81,6 +81,41 @@ extension Expense {
     }
 }
 
+// MARK: - 코드 변환
+// 화면은 통화·카테고리를 문자열로 다루는데 Core Data 는 Int64 코드로 저장한다.
+// 역방향 변환을 한곳에 모아 두어 각 화면이 제 나름의 방식을 만들지 않게 한다.
+
+enum ExpenseCode {
+
+    static let baseCurrency = "KRW"
+
+    // 자주 쓰는 통화만 앞에 세운다. 전체 목록은 166개라 선택지로 늘어놓기 어렵다.
+    static let currencyPresets = ["KRW", "USD", "PHP", "THB", "VND", "IDR", "JPY", "EUR"]
+
+    // ISO 코드 → Int64. CurrencyList.csv 는 [Int: CurrencyInfo] 라 역으로 찾는다.
+    private static let currencyIndexByCode: [String: Int] = {
+        var map: [String: Int] = [:]
+        for (index, info) in CurrencyInfoModel.shared.currencyResult {
+            // 같은 코드가 여러 번 나오면 더 작은 인덱스를 남긴다.
+            if let existing = map[info.isoCodeNm], existing <= index { continue }
+            map[info.isoCodeNm] = index
+        }
+        return map
+    }()
+
+    static func currencyIndex(for code: String) -> Int64 {
+        Int64(currencyIndexByCode[code.uppercased()] ?? currencyIndexByCode[baseCurrency] ?? 0)
+    }
+
+    static func currencyCode(for index: Int64) -> String {
+        CurrencyInfoModel.shared.currencyResult[Int(index)]?.isoCodeNm ?? baseCurrency
+    }
+
+    static func categoryIndex(for description: String) -> Int64 {
+        Int64(ExpenseInfoCategory.from(description: description).rawValue)
+    }
+}
+
 // MARK: - 표시용 포맷
 
 extension Expense {

@@ -11,10 +11,10 @@ import SwiftUI
 
 struct ReceiptStatsView: View {
 
-    let receipts: [Receipt]
+    let expenses: [Expense]
     let missionName: String?
 
-    private var summary: ReceiptSummary { ReceiptSummary(receipts: receipts) }
+    private var summary: ReceiptSummary { ReceiptSummary(expenses: expenses) }
 
     // 기본 목록에 없는 카테고리는 '기타' 로 접어 검증한 색 조합을 유지한다.
     private var slices: [CategoryTotal] {
@@ -186,15 +186,15 @@ struct ReceiptStatsView: View {
                     Text("CSV 내보내기")
                 }
                 .font(.subhead2_1_fixed)
-                .foregroundStyle(receipts.isEmpty ? Color.gray300 : Color.black)
+                .foregroundStyle(expenses.isEmpty ? Color.gray300 : Color.black)
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
-                .background(receipts.isEmpty ? Color.gray100 : Color.mainGreen)
+                .background(expenses.isEmpty ? Color.gray100 : Color.mainGreen)
                 .cornerRadius(12)
             }
-            .disabled(receipts.isEmpty)
+            .disabled(expenses.isEmpty)
 
-            Text("영수증 \(receipts.count)건을 표로 내보냅니다. 통화가 섞여 있어도 현지 금액과 적용 환율, 원화 환산액이 각각 들어갑니다.")
+            Text("영수증 \(expenses.count)건을 표로 내보냅니다. 통화가 섞여 있어도 현지 금액과 적용 환율, 원화 환산액이 각각 들어갑니다.")
                 .font(.caption1_fixed)
                 .foregroundStyle(.gray300)
         }
@@ -204,7 +204,7 @@ struct ReceiptStatsView: View {
 
     private var csvFile: ReceiptCSVFile {
         ReceiptCSVFile(
-            data: ReceiptCSVEncoder.encode(receipts),
+            data: ReceiptCSVEncoder.encode(expenses),
             fileName: ReceiptCSVEncoder.fileName(missionName: missionName)
         )
     }

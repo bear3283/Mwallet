@@ -11,7 +11,7 @@ struct ReceiptDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @ObservedObject var receipt: Receipt
+    @ObservedObject var expense: Expense
 
     private let store = ReceiptStore()
 
@@ -56,7 +56,7 @@ struct ReceiptDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text(receipt.merchantName)
+                Text(expense.merchantName)
                     .font(.subhead3_1_fixed)
                     .foregroundStyle(.black)
                     .lineLimit(1)
@@ -68,7 +68,7 @@ struct ReceiptDetailView: View {
             }
         }
         .sheet(isPresented: $isEditing) {
-            AddReceiptView(mode: .edit(receipt))
+            AddReceiptView(mode: .edit(expense))
         }
         .fullScreenCover(isPresented: $isViewingImage) {
             imageViewer
@@ -94,7 +94,7 @@ struct ReceiptDetailView: View {
 
     @ViewBuilder
     private var photo: some View {
-        if let data = receipt.imageData, let image = UIImage(data: data) {
+        if let data = expense.imageData, let image = UIImage(data: data) {
             Button {
                 isViewingImage = true
             } label: {
@@ -118,14 +118,14 @@ struct ReceiptDetailView: View {
 
     private var amountBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(receipt.formattedAmount)
+            Text(expense.formattedAmount)
                 .font(.display4_fixed)
                 .foregroundStyle(.black)
                 .monospacedDigit()
 
-            if receipt.currencyCode != ReceiptCurrency.base {
-                if let rate = receipt.validExchangeRate {
-                    Text("\(receipt.formattedAmountInKRW) · 1 \(receipt.currencyCode) = \(ReceiptFormat.exchangeRate(rate))")
+            if expense.currencyCode != ExpenseCode.baseCurrency {
+                if let rate = expense.validExchangeRate {
+                    Text("\(expense.formattedAmountInKRW) · 1 \(expense.currencyCode) = \(ReceiptFormat.exchangeRate(rate))")
                         .font(.caption2_fixed)
                         .foregroundStyle(.gray300)
                         .padding(.top, 6)
@@ -165,24 +165,24 @@ struct ReceiptDetailView: View {
 
     private var detailBlock: some View {
         VStack(spacing: 0) {
-            ReceiptValueRow(label: "사역", value: receipt.missionTitle)
+            ReceiptValueRow(label: "사역", value: expense.missionTitle)
             Divider()
-            ReceiptValueRow(label: "카테고리", value: receipt.categoryName)
+            ReceiptValueRow(label: "카테고리", value: expense.categoryName)
             Divider()
-            ReceiptValueRow(label: "결제 일자", value: receipt.formattedDate())
+            ReceiptValueRow(label: "결제 일자", value: expense.formattedDate())
 
-            if receipt.recordedTimeZone.identifier != TimeZone.current.identifier {
+            if expense.recordedTimeZone.identifier != TimeZone.current.identifier {
                 Divider()
-                ReceiptValueRow(label: "기록 지역", value: receipt.recordedTimeZone.identifier)
+                ReceiptValueRow(label: "기록 지역", value: expense.recordedTimeZone.identifier)
             }
 
-            if !receipt.memoText.isEmpty {
+            if !expense.memoText.isEmpty {
                 Divider()
                 VStack(alignment: .leading, spacing: 6) {
                     Text("메모")
                         .font(.body1_fixed)
                         .foregroundStyle(.gray400)
-                    Text(receipt.memoText)
+                    Text(expense.memoText)
                         .font(.body1_fixed)
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -198,7 +198,7 @@ struct ReceiptDetailView: View {
         ZStack {
             Color.black.ignoresSafeArea()
 
-            if let data = receipt.imageData, let image = UIImage(data: data) {
+            if let data = expense.imageData, let image = UIImage(data: data) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
@@ -236,7 +236,7 @@ struct ReceiptDetailView: View {
 
     private func applyCurrentRate() {
         do {
-            try store.applyCurrentExchangeRate(to: receipt)
+            try store.applyCurrentExchangeRate(to: expense)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -244,7 +244,7 @@ struct ReceiptDetailView: View {
 
     private func delete() {
         do {
-            try store.delete(receipt)
+            try store.delete(expense)
             dismiss()
         } catch {
             errorMessage = error.localizedDescription

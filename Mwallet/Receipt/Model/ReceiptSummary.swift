@@ -18,18 +18,18 @@ struct ReceiptFilter {
     // 영수증 사진이 없는 것만 모아 보기
     var onlyMissingPhoto = false
 
-    func matches(_ receipt: Receipt) -> Bool {
-        if onlyMissingPhoto && !receipt.needsPhoto { return false }
-        if let missionName, receipt.missionTitle != missionName { return false }
+    func matches(_ expense: Expense) -> Bool {
+        if onlyMissingPhoto && !expense.needsPhoto { return false }
+        if let missionName, expense.missionTitle != missionName { return false }
 
         let keyword = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !keyword.isEmpty else { return true }
 
         let haystack = [
-            receipt.merchantName,
-            receipt.memoText,
-            receipt.categoryName,
-            receipt.missionTitle
+            expense.merchantName,
+            expense.memoText,
+            expense.categoryName,
+            expense.missionTitle
         ]
         return haystack.contains { $0.localizedCaseInsensitiveContains(keyword) }
     }
@@ -69,7 +69,7 @@ struct ReceiptSummary {
     var hasUnconvertible: Bool { unconvertibleCount > 0 }
     var hasMissingPhoto: Bool { missingPhotoCount > 0 }
 
-    init(receipts: [Receipt]) {
+    init(expenses: [Expense]) {
         var total: Double = 0
         var convertible = 0
         var unconvertible = 0
@@ -77,20 +77,20 @@ struct ReceiptSummary {
         var categoryAmounts: [String: (amount: Double, count: Int)] = [:]
         var currencyAmounts: [String: (amount: Double, count: Int)] = [:]
 
-        for receipt in receipts {
-            if receipt.needsPhoto { missingPhoto += 1 }
-            let currency = receipt.currencyCode
+        for expense in expenses {
+            if expense.needsPhoto { missingPhoto += 1 }
+            let currency = expense.currencyCode
             let currencyEntry = currencyAmounts[currency] ?? (0, 0)
-            currencyAmounts[currency] = (currencyEntry.amount + receipt.amount, currencyEntry.count + 1)
+            currencyAmounts[currency] = (currencyEntry.amount + expense.payAmount, currencyEntry.count + 1)
 
-            guard let krw = receipt.amountInKRW else {
+            guard let krw = expense.amountInKRW else {
                 unconvertible += 1
                 continue
             }
             convertible += 1
             total += krw
 
-            let category = receipt.categoryName
+            let category = expense.categoryName
             let categoryEntry = categoryAmounts[category] ?? (0, 0)
             categoryAmounts[category] = (categoryEntry.amount + krw, categoryEntry.count + 1)
         }
@@ -112,11 +112,11 @@ struct ReceiptSummary {
 
 struct ReceiptDaySection: Identifiable {
     let day: Date
-    let receipts: [Receipt]
+    let expenses: [Expense]
 
     var id: Date { day }
 
-    var dayTotal: ReceiptSummary { ReceiptSummary(receipts: receipts) }
+    var dayTotal: ReceiptSummary { ReceiptSummary(expenses: expenses) }
 }
 
 enum ReceiptGrouping {
@@ -125,17 +125,17 @@ enum ReceiptGrouping {
     // 영수증마다 기록 당시 시간대가 다를 수 있지만, 그 기준으로 묶으면
     // 절대 시각 정렬과 어긋나 구간이 끊길 수 있어 목록에서는 기기 기준을 쓴다.
     // 각 행에는 기록 당시의 현지 시각을 그대로 보여준다.
-    static func byDay(_ receipts: [Receipt], calendar: Calendar = .current) -> [ReceiptDaySection] {
-        let grouped = Dictionary(grouping: receipts) { receipt in
-            calendar.startOfDay(for: receipt.paidDate)
+    static func byDay(_ expenses: [Expense], calendar: Calendar = .current) -> [ReceiptDaySection] {
+        let grouped = Dictionary(grouping: expenses) { expense in
+            calendar.startOfDay(for: expense.paidDate)
         }
         return grouped
-            .map { ReceiptDaySection(day: $0.key, receipts: $0.value.sorted { $0.paidDate > $1.paidDate }) }
+            .map { ReceiptDaySection(day: $0.key, expenses: $0.value.sorted { $0.paidDate > $1.paidDate }) }
             .sorted { $0.day > $1.day }
     }
 
-    static func missionNames(in receipts: [Receipt]) -> [String] {
-        Array(Set(receipts.map { $0.missionTitle })).sorted()
+    static func missionNames(in expenses: [Expense]) -> [String] {
+        Array(Set(expenses.map { $0.missionTitle })).sorted()
     }
 }
 

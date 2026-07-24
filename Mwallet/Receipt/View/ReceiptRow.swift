@@ -14,13 +14,13 @@ import SwiftUI
 
 struct ReceiptThumbnail: View {
 
-    let receipt: Receipt
+    let expense: Expense
     let onTapWhenMissing: () -> Void
 
     private let side: CGFloat = 40
 
     var body: some View {
-        if receipt.needsPhoto {
+        if expense.needsPhoto {
             Button(action: onTapWhenMissing) {
                 RoundedRectangle(cornerRadius: 6)
                     .strokeBorder(
@@ -36,7 +36,7 @@ struct ReceiptThumbnail: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel("영수증 사진 첨부")
-        } else if let data = receipt.imageData, let image = UIImage(data: data) {
+        } else if let data = expense.imageData, let image = UIImage(data: data) {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
@@ -50,13 +50,13 @@ struct ReceiptThumbnail: View {
 
 struct ReceiptRowContent: View {
 
-    let receipt: Receipt
+    let expense: Expense
     var showsMission: Bool = true
 
     var body: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(receipt.merchantName)
+                Text(expense.merchantName)
                     .font(.subhead2_2_fixed)
                     .foregroundStyle(.black)
                     .lineLimit(1)
@@ -70,7 +70,7 @@ struct ReceiptRowContent: View {
             Spacer(minLength: 8)
 
             VStack(alignment: .trailing, spacing: 3) {
-                Text(receipt.formattedAmount)
+                Text(expense.formattedAmount)
                     .font(.subhead2_1_fixed)
                     .foregroundStyle(.black)
                     .monospacedDigit()
@@ -83,19 +83,19 @@ struct ReceiptRowContent: View {
 
     @ViewBuilder
     private var secondaryLine: some View {
-        if receipt.currencyCode != ReceiptCurrency.base {
-            if receipt.needsExchangeRate {
+        if expense.currencyCode != ExpenseCode.baseCurrency {
+            if expense.needsExchangeRate {
                 Text("환율 없음")
                     .font(.caption1_fixed)
                     .foregroundStyle(.mainOrange)
             } else {
-                Text(receipt.formattedAmountInKRW)
+                Text(expense.formattedAmountInKRW)
                     .font(.caption1_fixed)
                     .foregroundStyle(.gray300)
                     .monospacedDigit()
             }
         } else {
-            Text(receipt.formattedTimeOnly)
+            Text(expense.formattedTimeOnly)
                 .font(.caption1_fixed)
                 .foregroundStyle(.gray300)
         }
@@ -103,8 +103,8 @@ struct ReceiptRowContent: View {
 
     // 시각은 넣지 않는다. 시간대 약어까지 붙으면 줄이 넘쳐 상호명이 잘린다.
     private var metaLine: String {
-        var parts = [receipt.categoryName]
-        if showsMission { parts.append(receipt.missionTitle) }
+        var parts = [expense.categoryName]
+        if showsMission { parts.append(expense.missionTitle) }
         return parts.joined(separator: " · ")
     }
 }

@@ -12,20 +12,20 @@ import SwiftUI
 struct ReceiptHomeView: View {
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Receipt.date, ascending: false)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Expense.payDate, ascending: false)],
         animation: .default
     )
-    private var allReceipts: FetchedResults<Receipt>
+    private var allReceipts: FetchedResults<Expense>
 
     private let store = ReceiptStore()
 
     @State private var filter = ReceiptFilter()
     @State private var isAddingExpense = false
-    @State private var deletionTarget: Receipt?
+    @State private var deletionTarget: Expense?
     @State private var errorMessage: String?
 
     // 사진 첨부 흐름: 썸네일 탭 → 소스 선택 → 보관함/카메라 → 저장
-    @State private var attachTarget: Receipt?
+    @State private var attachTarget: Expense?
     @State private var isChoosingPhotoSource = false
     @State private var isPickingFromLibrary = false
     @State private var isTakingPhoto = false
@@ -74,7 +74,7 @@ struct ReceiptHomeView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 18) {
                         NavigationLink {
-                            ReceiptStatsView(receipts: filtered, missionName: filter.missionName)
+                            ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
                         } label: {
                             Image(systemName: "chart.pie")
                                 .foregroundStyle(allReceipts.isEmpty ? Color.gray200 : Color.black)
@@ -255,22 +255,22 @@ struct ReceiptHomeView: View {
                         .padding(.top, 20)
                         .padding(.bottom, 2)
 
-                        ForEach(section.receipts) { receipt in
+                        ForEach(section.expenses) { expense in
                             // 썸네일과 본문의 목적지가 달라 한 링크로 묶지 않는다.
                             HStack(spacing: 12) {
-                                ReceiptThumbnail(receipt: receipt) {
-                                    attachTarget = receipt
+                                ReceiptThumbnail(expense: expense) {
+                                    attachTarget = expense
                                 }
                                 NavigationLink {
-                                    ReceiptDetailView(receipt: receipt)
+                                    ReceiptDetailView(expense: expense)
                                 } label: {
-                                    ReceiptRowContent(receipt: receipt, showsMission: filter.missionName == nil)
+                                    ReceiptRowContent(expense: expense, showsMission: filter.missionName == nil)
                                 }
                                 .buttonStyle(.plain)
                             }
                             .padding(.vertical, 12)
                             .contextMenu {
-                                Button("삭제", role: .destructive) { deletionTarget = receipt }
+                                Button("삭제", role: .destructive) { deletionTarget = expense }
                             }
 
                             Divider()
@@ -286,7 +286,7 @@ struct ReceiptHomeView: View {
 
     // MARK: - 파생 값
 
-    private var filtered: [Receipt] {
+    private var filtered: [Expense] {
         allReceipts.filter { filter.matches($0) }
     }
 
@@ -295,7 +295,7 @@ struct ReceiptHomeView: View {
     }
 
     private var summaryValue: ReceiptSummary {
-        ReceiptSummary(receipts: filtered)
+        ReceiptSummary(expenses: filtered)
     }
 
     private var missionNames: [String] {

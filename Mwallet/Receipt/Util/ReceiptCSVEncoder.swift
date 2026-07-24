@@ -19,21 +19,21 @@ enum ReceiptCSVEncoder {
         "통화", "현지금액", "적용환율", "원화환산", "메모"
     ]
 
-    static func encode(_ receipts: [Receipt]) -> Data {
+    static func encode(_ expenses: [Expense]) -> Data {
         var rows = [columns]
 
-        for receipt in receipts.sorted(by: { $0.paidDate < $1.paidDate }) {
+        for expense in expenses.sorted(by: { $0.paidDate < $1.paidDate }) {
             rows.append([
-                receipt.missionTitle,
-                isoDateString(receipt),
-                receipt.recordedTimeZone.identifier,
-                receipt.merchantName,
-                receipt.categoryName,
-                receipt.currencyCode,
-                decimalString(receipt.amount, digits: 2),
-                receipt.validExchangeRate.map { decimalString($0, digits: 4) } ?? "",
-                receipt.amountInKRW.map { decimalString($0, digits: 0) } ?? "",
-                receipt.memoText
+                expense.missionTitle,
+                isoDateString(expense),
+                expense.recordedTimeZone.identifier,
+                expense.merchantName,
+                expense.categoryName,
+                expense.currencyCode,
+                decimalString(expense.payAmount, digits: 2),
+                expense.validExchangeRate.map { decimalString($0, digits: 4) } ?? "",
+                expense.amountInKRW.map { decimalString($0, digits: 0) } ?? "",
+                expense.memoText
             ])
         }
 
@@ -69,12 +69,12 @@ enum ReceiptCSVEncoder {
     }
 
     // 기록 당시 현지 시각으로 적되 오프셋을 함께 남겨 절대 시각을 복원할 수 있게 한다.
-    private static func isoDateString(_ receipt: Receipt) -> String {
+    private static func isoDateString(_ expense: Expense) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = receipt.recordedTimeZone
+        formatter.timeZone = expense.recordedTimeZone
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ssZ"
-        return formatter.string(from: receipt.paidDate)
+        return formatter.string(from: expense.paidDate)
     }
 
     // MARK: - 파일 이름
