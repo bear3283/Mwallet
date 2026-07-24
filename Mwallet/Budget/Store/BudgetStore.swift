@@ -39,14 +39,14 @@ final class BudgetStore {
         )
     }
 
-    // 예산을 세울 수 있는 사역 일정. '임시 기록' 은 사용자가 만든 일정이 아니다.
+    // 예산을 세울 수 있는 여행. '임시 기록' 은 사용자가 만든 여행이 아니다.
     func availableTravels() -> [Travel] {
         let request = Travel.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Travel.startDate, ascending: false)]
         do {
             return try context.fetch(request).filter { $0.name != tempTravelName }
         } catch {
-            print("BudgetStore | 사역 일정 조회 실패: \(error.localizedDescription)")
+            print("BudgetStore | 여행 조회 실패: \(error.localizedDescription)")
             return []
         }
     }

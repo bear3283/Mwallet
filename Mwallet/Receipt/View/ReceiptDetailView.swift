@@ -165,7 +165,7 @@ struct ReceiptDetailView: View {
 
     private var detailBlock: some View {
         VStack(spacing: 0) {
-            ReceiptValueRow(label: "사역", value: expense.missionTitle)
+            ReceiptValueRow(label: "여행", value: expense.missionTitle)
             Divider()
             ReceiptValueRow(label: "카테고리", value: expense.categoryName)
             Divider()

@@ -15,7 +15,7 @@ import UniformTypeIdentifiers
 enum ReceiptCSVEncoder {
 
     private static let columns = [
-        "사역", "결제일자", "기록지역", "상호명", "카테고리",
+        "여행", "결제일자", "기록지역", "상호명", "카테고리",
         "통화", "현지금액", "적용환율", "원화환산", "메모"
     ]
 
@@ -85,7 +85,7 @@ enum ReceiptCSVEncoder {
         formatter.dateFormat = "yyyyMMdd"
         let stamp = formatter.string(from: now)
 
-        let base = missionName.map { sanitized($0) } ?? "전체사역"
+        let base = missionName.map { sanitized($0) } ?? "전체여행"
         return "Mwallet_\(base)_\(stamp).csv"
     }
 
@@ -94,7 +94,7 @@ enum ReceiptCSVEncoder {
         let cleaned = name.components(separatedBy: invalid).joined()
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .replacingOccurrences(of: " ", with: "_")
-        return cleaned.isEmpty ? "사역" : cleaned
+        return cleaned.isEmpty ? "여행" : cleaned
     }
 }
 

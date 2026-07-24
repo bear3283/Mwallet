@@ -195,7 +195,7 @@ struct ReceiptHomeView: View {
 
     private var summaryBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(filter.missionName ?? "전체 사역")
+            Text(filter.missionName ?? "전체 여행")
                 .font(.caption2_fixed)
                 .foregroundStyle(.gray300)
 

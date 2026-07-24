@@ -70,7 +70,7 @@ struct AddReceiptView: View {
                         Divider()
                             .padding(.top, 20)
 
-                        ReceiptSectionTitle(text: "사역")
+                        ReceiptSectionTitle(text: "여행")
                             .padding(.top, 20)
                         missionBlock
 
@@ -171,9 +171,9 @@ struct AddReceiptView: View {
 
     private var missionBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ReceiptFieldRow(label: "사역 일정") {
+            ReceiptFieldRow(label: "여행") {
                 if travels.isEmpty {
-                    Text("여행 탭에서 사역 일정을 먼저 만들어 주세요")
+                    Text("여행 탭에서 일정을 먼저 만들어 주세요")
                         .font(.caption2_fixed)
                         .foregroundStyle(.gray300)
                 } else {

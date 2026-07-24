@@ -46,29 +46,11 @@ enum ExpenseInfoCategory: Int {
         }
     }
 
+    // 색은 ReceiptCategoryPalette 한곳에서만 정한다.
+    // 그 팔레트는 도넛 링의 인접쌍 기준으로 색각 이상 분리도를 검증했고,
+    // 여기서 따로 색을 만들면 화면마다 같은 카테고리가 다른 색으로 보인다.
     var color: Color {
-        switch self {
-        case .plane:
-            return Color("graphCyan")
-        case .room:
-            return Color("graphMagenta")
-        case .transportation:
-            return Color("graphYellow")
-        case .food:
-            return Color("graphOrange")
-        case .tour:
-            return Color("graphRed")
-        case .shopping:
-            return Color("graphPurple")
-        case .gift:
-            return Color("graphGreen")
-        case .ministry:
-            return Color.mainGreen
-        case .offering:
-            return Color.mainOrange
-        case .unknown:
-            return Color("gray200")
-        }
+        ReceiptCategoryPalette.color(for: description)
     }
 
     var visibleDescription: String {
@@ -155,10 +137,11 @@ enum ExpenseInfoCategory: Int {
         return ExpenseInfoCategory(rawValue: rawValue)?.description ?? "전체"
     }
 
-    // 사용자가 고를 수 있는 카테고리. unknown(기타)은 맨 뒤로 보낸다.
-    // 영수증 입력·예결산 항목이 같은 목록을 쓴다.
+    // 사용자가 고를 수 있는 카테고리. 영수증 입력·예결산이 같은 목록을 쓴다.
+    // 여행이면 누구나 쓰는 항목을 앞에 두고, 사역비·헌금처럼 쓰는 사람이
+    // 정해진 항목은 뒤로 보낸다. unknown(기타)은 맨 끝이다.
     static let selectable: [ExpenseInfoCategory] = [
-        .food, .room, .transportation, .plane, .ministry, .offering, .shopping, .gift, .unknown
+        .food, .room, .transportation, .plane, .shopping, .tour, .gift, .ministry, .offering, .unknown
     ]
 
     static func from(description: String) -> ExpenseInfoCategory {

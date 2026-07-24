@@ -83,7 +83,7 @@ struct ReceiptStatsView: View {
 
     private var totalBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(missionName ?? "전체 사역")
+            Text(missionName ?? "전체 여행")
                 .font(.caption2_fixed)
                 .foregroundStyle(.gray300)
 

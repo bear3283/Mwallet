@@ -125,7 +125,7 @@ final class ReceiptStore {
 
     // MARK: - 조회 보조
 
-    // 사역 일정 목록. 영수증을 어느 일정에 넣을지 고르는 데 쓴다.
+    // 여행 목록. 영수증을 어느 여행에 넣을지 고르는 데 쓴다.
     // '임시 기록' 여행은 사용자가 만든 일정이 아니라 목록에서 뺀다.
     func availableTravels() -> [Travel] {
         let request = Travel.fetchRequest()
@@ -133,7 +133,7 @@ final class ReceiptStore {
         do {
             return try context.fetch(request).filter { $0.name != tempTravelName }
         } catch {
-            print("ReceiptStore | 사역 일정 조회 실패: \(error.localizedDescription)")
+            print("ReceiptStore | 여행 조회 실패: \(error.localizedDescription)")
             return []
         }
     }

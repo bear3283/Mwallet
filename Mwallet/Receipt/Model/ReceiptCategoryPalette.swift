@@ -21,17 +21,19 @@ enum ReceiptCategoryPalette {
     static let order = ExpenseInfoCategory.selectable.map { $0.description }
     static let fallback = ExpenseInfoCategory.unknown.description
 
-    // 마지막 '기타'는 채도 낮은 회색이라 나머지 8색과 성격이 다르다.
-    // 앞 8색은 도넛 링의 인접쌍(순환 포함) 기준으로 색각 이상 분리도를 검증했다.
+    // 마지막 '기타'는 채도 낮은 회색이라 나머지 9색과 성격이 다르다.
+    // 앞 9색은 도넛 링의 인접쌍(순환 포함) 기준으로 색각 이상 분리도를 검증했다.
+    // 순서를 바꾸면 인접쌍이 달라져 검증 결과가 무효가 된다.
     private static let hexes: [(light: UInt32, dark: UInt32)] = [
         (0x2A78D6, 0x3987E5),   // 식비   blue
         (0xEB6834, 0xD95926),   // 숙소   orange
         (0x1BAF7A, 0x199E70),   // 교통   aqua
         (0xEDA100, 0xC98500),   // 항공   yellow
-        (0xE87BA4, 0xD55181),   // 사역비 magenta
-        (0x008300, 0x008300),   // 헌금   green
-        (0x4A3AA7, 0x9085E9),   // 쇼핑   violet
-        (0xE34948, 0xE66767),   // 선물   red
+        (0xE87BA4, 0xD55181),   // 쇼핑   magenta
+        (0x008300, 0x008300),   // 관광   green
+        (0x4A3AA7, 0x9085E9),   // 선물   violet
+        (0xE34948, 0xE66767),   // 사역비 red
+        (0x6E7A18, 0x7F8C1F),   // 헌금   olive
         (0x9A9A9A, 0x8A8A8A)    // 기타   gray
     ]
 

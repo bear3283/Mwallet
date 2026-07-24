@@ -33,7 +33,7 @@ struct BudgetView: View {
 
                 if travels.isEmpty {
                     ReceiptEmptyState(
-                        message: "사역 일정이 없어요",
+                        message: "여행이 없어요",
                         detail: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다."
                     )
                 } else {
