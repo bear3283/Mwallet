@@ -40,7 +40,7 @@ struct AddTravelRequestModal: View {
             }
             MediumButtonActive(title: "여행 생성하기") {
                 viewModel.addTravelRequestModalIsShown = false
-                MainViewModel.shared.selection = 0
+                MainViewModel.shared.navigationToTravelView()
             }
         }
     }

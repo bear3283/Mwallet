@@ -30,31 +30,31 @@ struct MainView: View {
                 }
                 .tag(0)
             
-            RecordView()
-                .tabItem {
-                    VStack {
-                        if viewModel.selection == 1 {
-                            Image("tabitem2_active")
-                        } else {
-                            Image("tabitem2_unactive")
-                        }
-                        Text("지출 기록")
-                            .font(.caption1)
-                        
-                    }
-                }
-                .tag(1)
-            
             ExpenseView()
                 .tabItem {
                     VStack {
-                        if viewModel.selection == 2 {
+                        if viewModel.selection == 1 {
                             Image("tabitem3_active")
                         } else {
                             Image("tabitem3_unactive")
                         }
                         Text("가계부")
                             .font(.caption1)
+                    }
+                }
+                .tag(1)
+
+            RecordView()
+                .tabItem {
+                    VStack {
+                        if viewModel.selection == 2 {
+                            Image("tabitem2_active")
+                        } else {
+                            Image("tabitem2_unactive")
+                        }
+                        Text("지출 기록")
+                            .font(.caption1)
+
                     }
                 }
                 .tag(2)
