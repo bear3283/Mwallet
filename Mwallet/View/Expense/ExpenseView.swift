@@ -137,7 +137,7 @@ struct ExpenseView: View {
                             .layoutPriority(-1)
                         
                         Capsule()
-                            .strokeBorder(.mainPink, lineWidth: 1.0)
+                            .strokeBorder(.mainGreen, lineWidth: 1.0)
                             .layoutPriority(-1)
                         
                         HStack(spacing: 12) {
@@ -156,9 +156,7 @@ struct ExpenseView: View {
                     }
                 }
             }
-            Text("가계부")
-                .font(.display1_fixed)
-                .foregroundStyle(.black)
+            // 상단 '가계부' 타이틀은 두지 않는다. 탭바가 현재 위치를 알려준다.
             Spacer()
         }
     }

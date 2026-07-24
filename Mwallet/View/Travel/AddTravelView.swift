@@ -111,14 +111,14 @@ struct AddTravelView: View {
                         +
                         Text("*")
                             .font(.subhead1)
-                            .foregroundStyle(Color.mainPink)
+                            .foregroundStyle(Color.mainGreen)
                     }
                     
                     Rectangle()
                         .stroke(Color.white, lineWidth: 1)
                         .frame(width: 104, height: 1)
                         .overlay(
-                            LinearGradient(gradient: Gradient(colors: [Color.mainPink, viewModel.endDate != nil ? Color.mainPink : Color.white]),
+                            LinearGradient(gradient: Gradient(colors: [Color.mainGreen, viewModel.endDate != nil ? Color.mainGreen : Color.white]),
                                            startPoint: .leading, endPoint: .trailing)
                         )
                     
@@ -139,7 +139,7 @@ struct AddTravelView: View {
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 4)
                                         .inset(by: 0.5)
-                                        .stroke(viewModel.startDate != nil ? LinearGradient(gradient: Gradient(colors: [Color.mainPink, Color.mainOrange]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.gray200, Color.gray200]), startPoint: .topLeading, endPoint: .bottomTrailing),
+                                        .stroke(viewModel.startDate != nil ? LinearGradient(gradient: Gradient(colors: [Color.mainGreen, Color.mainOrange]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.gray200, Color.gray200]), startPoint: .topLeading, endPoint: .bottomTrailing),
                                                 lineWidth: viewModel.startDate != nil ? 2.0 : 1.0)
                                 )
                             
@@ -173,7 +173,7 @@ struct AddTravelView: View {
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 4)
                                         .inset(by: 0.5)
-                                        .stroke(viewModel.endDate != nil ? LinearGradient(gradient: Gradient(colors: [Color.mainPink, Color.mainOrange]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.gray200, Color.gray200]), startPoint: .topLeading, endPoint: .bottomTrailing),
+                                        .stroke(viewModel.endDate != nil ? LinearGradient(gradient: Gradient(colors: [Color.mainGreen, Color.mainOrange]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.gray200, Color.gray200]), startPoint: .topLeading, endPoint: .bottomTrailing),
                                                 lineWidth: viewModel.endDate != nil ? 2.0 : 1.0)
                                 )
                             
@@ -388,7 +388,7 @@ struct AddTravelView: View {
                                 ZStack {
                                     Circle()
                                         .frame(width: 38, height: 38)
-                                        .foregroundStyle(Color.mainPink)
+                                        .foregroundStyle(Color.mainGreen)
                                     
                                     Circle()
                                         .frame(width: 35, height: 35)
@@ -396,7 +396,7 @@ struct AddTravelView: View {
                                     
                                     Circle()
                                         .frame(width: 33, height: 33)
-                                        .foregroundStyle(Color.mainPink)
+                                        .foregroundStyle(Color.mainGreen)
                                     
                                     Text(String(day))
                                         .font(.calendar2)
@@ -416,7 +416,7 @@ struct AddTravelView: View {
                                         .overlay(
                                             Circle()
                                                 .stroke(Color.white)
-                                                .fill(Color.mainPink)
+                                                .fill(Color.mainGreen)
                                         )
                                     
                                     Text(String(day))
@@ -452,7 +452,7 @@ struct AddTravelView: View {
                                         .overlay(
                                             Circle()
                                                 .stroke(Color.white)
-                                                .fill(Color.mainPink)
+                                                .fill(Color.mainGreen)
                                         )
                                     
                                     Text(String(day))

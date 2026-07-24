@@ -202,7 +202,7 @@ struct ManualRecordView: View {
                                 .font(.display4)
                                 .keyboardType(.decimalPad)
                                 .layoutPriority(-1)
-                                .tint(.mainPink)
+                                .tint(.mainGreen)
                                 .onTapGesture {
                                     viewModel.autoSaveTimer?.invalidate()
                                     viewModel.secondCounter = nil
@@ -372,7 +372,7 @@ struct ManualRecordView: View {
                             .lineLimit(nil)
                             .foregroundStyle(.black)
                             .font(.body3)
-                            .tint(.mainPink)
+                            .tint(.mainGreen)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 6)
                             .onTapGesture {
@@ -705,7 +705,7 @@ struct ManualRecordView: View {
                                     .lineLimit(nil)
                                     .foregroundStyle(.black)
                                     .font(.body3)
-                                    .tint(.mainPink)
+                                    .tint(.mainGreen)
                                     .padding(.horizontal, 8)
                                     .padding(.vertical, 6)
                                     .onTapGesture {
@@ -905,26 +905,26 @@ struct PlayngRecordSoundView: View {
                 .onDisappear {
                     timer?.invalidate()
                 }
-                .shadow(color: .mainPink, radius: 3)
+                .shadow(color: .mainGreen, radius: 3)
             
             Circle()
-                .strokeBorder(.mainPink, lineWidth: 1)
+                .strokeBorder(.mainGreen, lineWidth: 1)
             
             HStack(spacing: 3) {
                 Capsule()
-                    .foregroundStyle(.mainPink)
+                    .foregroundStyle(.mainGreen)
                     .frame(width: 1.5, height: level == 2 ? 10 : 7)
                 Capsule()
-                    .foregroundStyle(.mainPink)
+                    .foregroundStyle(.mainGreen)
                     .frame(width: 1.5, height: level == 1 ? 15 : 12)
                 Capsule()
-                    .foregroundStyle(.mainPink)
+                    .foregroundStyle(.mainGreen)
                     .frame(width: 1.5, height: level == 0 ? 20 : 17)
                 Capsule()
-                    .foregroundStyle(.mainPink)
+                    .foregroundStyle(.mainGreen)
                     .frame(width: 1.5, height: level == 1 ? 15 : 12)
                 Capsule()
-                    .foregroundStyle(.mainPink)
+                    .foregroundStyle(.mainGreen)
                     .frame(width: 1.5, height: level == 2 ? 10 : 7)
             }
             .animation(.bouncy(duration: stepLength * 1.25), value: level)

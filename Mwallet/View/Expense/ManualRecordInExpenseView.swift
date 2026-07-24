@@ -217,7 +217,7 @@ struct ManualRecordInExpenseView: View {
                                 .font(.display4_fixed)
                                 .keyboardType(.decimalPad)
                                 .layoutPriority(-1)
-                                .tint(.mainPink)
+                                .tint(.mainGreen)
                                 .onTapGesture {
                                     viewModel.autoSaveTimer?.invalidate()
                                     viewModel.secondCounter = nil
@@ -390,7 +390,7 @@ struct ManualRecordInExpenseView: View {
                             .lineLimit(nil)
                             .foregroundStyle(.black)
                             .font(.body3_fixed)
-                            .tint(.mainPink)
+                            .tint(.mainGreen)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 6)
                             .onTapGesture {
@@ -718,7 +718,7 @@ struct ManualRecordInExpenseView: View {
                                     .lineLimit(nil)
                                     .foregroundStyle(.black)
                                     .font(.body3_fixed)
-                                    .tint(.mainPink)
+                                    .tint(.mainGreen)
                                     .padding(.horizontal, 8)
                                     .padding(.vertical, 6)
                                     .onTapGesture {

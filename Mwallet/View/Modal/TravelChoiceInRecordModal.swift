@@ -281,7 +281,7 @@ struct TravelBlockView: View {
                 } else {
                     if DateGapHandler.shared.convertBeforeShowing(date: travel.startDate ?? Date.distantPast) < now && DateGapHandler.shared.convertBeforeShowing(date: travel.endDate ?? Date.distantFuture) > now {
                         Text("여행 중")
-                            .foregroundStyle(.mainPink)
+                            .foregroundStyle(.mainGreen)
                             .font(.caption1)
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
@@ -311,7 +311,7 @@ struct CheckStickerView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(travel.id == (chosenTravel?.id ?? UUID()) ? Color(.mainPink) : .black)
+                .fill(travel.id == (chosenTravel?.id ?? UUID()) ? Color(.mainGreen) : .black)
                 .frame(width: 20, height: 20)
                 .opacity(travel.id == (chosenTravel?.id ?? UUID()) ? 1.0 : 0.25)
                 .overlay(

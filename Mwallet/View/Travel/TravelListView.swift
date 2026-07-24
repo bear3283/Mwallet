@@ -111,22 +111,14 @@ struct TravelListView: View {
         .ignoresSafeArea(edges: .bottom)
     }
     
+    // 상단 큰 타이틀("여행 관리")은 두지 않는다. 탭바가 현재 위치를 알려준다.
+    // '진행 중인 여행'은 목록의 섹션 라벨이라 남긴다.
     private var titleHeader: some View {
-        VStack(spacing: 16) {
-            HStack {
-                Text("여행 관리")
-                    .font(.display2)
-                    .padding(.leading, 20)
-                
-                Spacer()
-            }
-            
-            HStack {
-                Text("진행 중인 여행")
-                    .padding(.leading, 20)
-                    .font(.subhead3_1)
-                Spacer()
-            }
+        HStack {
+            Text("진행 중인 여행")
+                .padding(.leading, 20)
+                .font(.subhead3_1)
+            Spacer()
         }
     }
     

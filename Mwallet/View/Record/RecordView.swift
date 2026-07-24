@@ -212,7 +212,7 @@ struct RecordView: View {
                     .layoutPriority(-1)
                 
                 Capsule()
-                    .strokeBorder(.mainPink, lineWidth: 1.0)
+                    .strokeBorder(.mainGreen, lineWidth: 1.0)
                     .layoutPriority(-1)
                 
                 HStack(spacing: 12) {

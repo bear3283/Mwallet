@@ -91,7 +91,7 @@ struct MainView: View {
             // 위치를 쓰지 않는 사역 재정 탭 사용자에게도 팝업이 뜬다.
             // 실제로 위치가 필요한 지출 기록 시작 지점에서 요청한다.
         }
-        .accentColor(Color.mainPink)
+        .accentColor(Color.mainGreen)
         .environmentObject(viewModel)
         
     }

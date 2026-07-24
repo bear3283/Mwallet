@@ -20,7 +20,7 @@ struct SplashView: View {
                 Rectangle()
                     .overlay(LinearGradient(
                         stops: [
-                            Gradient.Stop(color: .mainPink, location: 0.00),
+                            Gradient.Stop(color: .mainGreen, location: 0.00),
                             Gradient.Stop(color: .mainOrange, location: 1.00)
                         ],
                         startPoint: UnitPoint(x: 0.5, y: 0),

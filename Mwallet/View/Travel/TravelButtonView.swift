@@ -86,7 +86,7 @@ struct TravelButtonView: View {
                                 } else {
                                     ZStack {
                                         Circle()
-                                            .fill(Color(.mainPink))
+                                            .fill(Color(.mainGreen))
                                             .frame(width: 20, height: 20)
                                             .overlay(
                                                 Circle()

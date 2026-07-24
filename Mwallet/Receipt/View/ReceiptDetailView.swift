@@ -44,7 +44,7 @@ struct ReceiptDetailView: View {
                 } label: {
                     Text("영수증 삭제")
                         .font(.body1_fixed)
-                        .foregroundStyle(.mainPink)
+                        .foregroundStyle(.mainGreen)
                         .padding(.vertical, 16)
                 }
 

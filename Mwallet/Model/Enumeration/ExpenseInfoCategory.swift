@@ -63,7 +63,7 @@ enum ExpenseInfoCategory: Int {
         case .gift:
             return Color("graphGreen")
         case .ministry:
-            return Color.mainPink
+            return Color.mainGreen
         case .offering:
             return Color.mainOrange
         case .unknown:

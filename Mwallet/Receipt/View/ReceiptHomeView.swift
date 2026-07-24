@@ -70,11 +70,7 @@ struct ReceiptHomeView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("영수증")
-                        .font(.display1_fixed)
-                        .foregroundStyle(.black)
-                }
+                // 상단 타이틀 헤더는 두지 않는다. 탭바가 현재 위치를 알려준다.
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 18) {
                         NavigationLink {
@@ -153,7 +149,7 @@ struct ReceiptHomeView: View {
             TextField("상호명, 메모, 카테고리", text: $filter.searchText)
                 .font(.body1_fixed)
                 .foregroundStyle(.black)
-                .tint(.mainPink)
+                .tint(.mainGreen)
                 .autocorrectionDisabled()
             if !filter.searchText.isEmpty {
                 Button {

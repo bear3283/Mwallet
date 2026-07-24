@@ -147,7 +147,7 @@ struct AddReceiptView: View {
                     .foregroundStyle(.black)
                     .keyboardType(.decimalPad)
                     .focused($focusedField, equals: .amount)
-                    .tint(.mainPink)
+                    .tint(.mainGreen)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
 
@@ -200,7 +200,7 @@ struct AddReceiptView: View {
             ReceiptFieldRow(label: "결제 일자") {
                 DatePicker("", selection: $draft.date, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
-                    .tint(.mainPink)
+                    .tint(.mainGreen)
             }
         }
     }
@@ -263,7 +263,7 @@ struct AddReceiptView: View {
                     } label: {
                         Text("사진 삭제")
                             .font(.caption2_fixed)
-                            .foregroundStyle(.mainPink)
+                            .foregroundStyle(.mainGreen)
                     }
                 }
             } else {

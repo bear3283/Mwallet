@@ -17,12 +17,12 @@ struct LargeButtonActive: View {
             
             Text(title)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(Color.black)
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
             
         }
-        .background(Color.black)
+        .background(Color.mainGreen)
         .cornerRadius(12)
         .padding(.horizontal, 16)
         .padding(.top, 4)
@@ -111,11 +111,11 @@ struct MediumButtonMain: View {
         Button(action: action) {
             Text(title)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(Color.black)
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
         }
-        .background(Color.mainPink)
+        .background(Color.mainGreen)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)
@@ -131,11 +131,11 @@ struct MediumButtonActive: View {
         Button(action: action) {
             Text(title)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(Color.black)
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
         }
-        .background(Color.black)
+        .background(Color.mainGreen)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)
@@ -178,9 +178,9 @@ struct NextButtonActive: View {
                     .padding(.vertical, 13)
             }
             .font(.system(size: 18, weight: .medium))
-            .foregroundStyle(Color.white)
+            .foregroundStyle(Color.black)
         }
-        .background(Color.black)
+        .background(Color.mainGreen)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)
@@ -222,12 +222,12 @@ struct DoneButtonActive: View {
         Button(action: action) {
             Text(title)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(Color.black)
                 .padding(.horizontal, 42)
                 .padding(.vertical, 14.5)
                 
         }
-        .background(Color.black)
+        .background(Color.mainGreen)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)

@@ -186,10 +186,10 @@ struct ReceiptStatsView: View {
                     Text("CSV 내보내기")
                 }
                 .font(.subhead2_1_fixed)
-                .foregroundStyle(.white)
+                .foregroundStyle(receipts.isEmpty ? Color.gray300 : Color.black)
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
-                .background(receipts.isEmpty ? Color.gray200 : Color.black)
+                .background(receipts.isEmpty ? Color.gray100 : Color.mainGreen)
                 .cornerRadius(12)
             }
             .disabled(receipts.isEmpty)
