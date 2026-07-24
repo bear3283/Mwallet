@@ -1,0 +1,87 @@
+//
+//  BudgetStore.swift
+//  Mwallet
+//
+//  카테고리별 예산의 읽기·쓰기.
+//  한 사역 일정에 카테고리당 하나의 Budget 만 두어 합산 규칙을 단순하게 유지한다.
+//
+
+import CoreData
+import Foundation
+
+final class BudgetStore {
+
+    private let context: NSManagedObjectContext
+
+    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        self.context = context
+    }
+
+    // MARK: - 조회
+
+    func budgets(for travel: Travel?) -> [Budget] {
+        guard let travel else { return [] }
+        let set = travel.budgetArray as? Set<Budget> ?? []
+        return set.sorted { $0.category < $1.category }
+    }
+
+    func expenses(for travel: Travel?) -> [Expense] {
+        guard let travel else { return [] }
+        let set = travel.expenseArray as? Set<Expense> ?? []
+        return set.sorted { $0.paidDate > $1.paidDate }
+    }
+
+    func summary(for travel: Travel?) -> BudgetSummary {
+        BudgetSummary(
+            travel: travel,
+            budgets: budgets(for: travel),
+            expenses: expenses(for: travel)
+        )
+    }
+
+    // 예산을 세울 수 있는 사역 일정. '임시 기록' 은 사용자가 만든 일정이 아니다.
+    func availableTravels() -> [Travel] {
+        let request = Travel.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Travel.startDate, ascending: false)]
+        do {
+            return try context.fetch(request).filter { $0.name != tempTravelName }
+        } catch {
+            print("BudgetStore | 사역 일정 조회 실패: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    // MARK: - 쓰기
+
+    // 카테고리별 예산을 통째로 맞춘다.
+    // 0 원은 '배정하지 않음' 이므로 레코드를 남기지 않고 지운다.
+    func save(_ amounts: [ExpenseInfoCategory: Double], for travel: Travel) throws {
+        let existing = budgets(for: travel)
+        var byCategory: [Int64: Budget] = [:]
+        for budget in existing {
+            // 같은 카테고리가 중복으로 있으면 하나만 남기고 정리한다.
+            if let kept = byCategory[budget.category] {
+                context.delete(kept.amount >= budget.amount ? budget : kept)
+                if kept.amount < budget.amount { byCategory[budget.category] = budget }
+            } else {
+                byCategory[budget.category] = budget
+            }
+        }
+
+        for category in ExpenseInfoCategory.selectable {
+            let key = Int64(category.rawValue)
+            let amount = amounts[category] ?? 0
+
+            if amount > 0 {
+                let budget = byCategory[key] ?? Budget(context: context)
+                budget.travel = travel
+                budget.category = key
+                budget.amount = amount
+            } else if let obsolete = byCategory[key] {
+                context.delete(obsolete)
+            }
+        }
+
+        try context.save()
+    }
+}

@@ -46,6 +46,10 @@
 		C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */; };
 		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
 		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
+		C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006B1 /* BudgetSummary.swift */; };
+		C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006C1 /* BudgetStore.swift */; };
+		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
+		C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006E1 /* BudgetEditView.swift */; };
 		C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddReceiptView.swift */; };
 		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
 		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
@@ -163,6 +167,10 @@
 		C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCategoryPalette.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006B1 /* BudgetSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSummary.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006C1 /* BudgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStore.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006E1 /* BudgetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEditView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E1 /* AddReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
@@ -279,6 +287,7 @@
 				C17550562AD5518C00A61BE5 /* View */,
 				C17550572AD5519800A61BE5 /* ViewModel */,
 				57A65D032AD7D49100131266 /* Extension */,
+				C1A11EA700000000000006A0 /* Budget */,
 				C1A11EA700000000000000C1 /* Receipt */,
 				E2D5C0702ADD928100907501 /* Handler */,
 				C190C20A2ADCD4520099EE3A /* DesignSystem */,
@@ -325,6 +334,41 @@
 				E237338F2AF7EC1E008C2613 /* CurrencyInfoModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006B1 /* BudgetSummary.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A2 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006C1 /* BudgetStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006D1 /* BudgetView.swift */,
+				C1A11EA700000000000006E1 /* BudgetEditView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A0 /* Budget */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006A1 /* Model */,
+				C1A11EA700000000000006A2 /* Store */,
+				C1A11EA700000000000006A3 /* View */,
+			);
+			path = Budget;
 			sourceTree = "<group>";
 		};
 		C1A11EA700000000000000C1 /* Receipt */ = {
@@ -678,6 +722,10 @@
 				C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */,
 				C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */,
 				C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */,
+				C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */,
+				C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */,
+				C1A11EA700000000000006D2 /* BudgetView.swift in Sources */,
+				C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */,
 				C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */,
 				C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */,
 				C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */,

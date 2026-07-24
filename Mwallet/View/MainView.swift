@@ -30,7 +30,7 @@ struct MainView: View {
                 }
                 .tag(0)
             
-            ExpenseView()
+            BudgetView()
                 .tabItem {
                     VStack {
                         if viewModel.selection == 1 {
@@ -38,7 +38,7 @@ struct MainView: View {
                         } else {
                             Image("tabitem3_unactive")
                         }
-                        Text("가계부")
+                        Text("예결산")
                             .font(.caption1)
                     }
                 }
