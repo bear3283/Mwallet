@@ -35,7 +35,7 @@ struct SplashView: View {
                     MissionMarkView(progress: markProgress)
                         .frame(width: 132, height: 132)
 
-                    Text("Mission Wallet")
+                    Text("Mwallet")
                         .font(.custom(FontsManager.Pretendard.semiBold, fixedSize: 18))
                         .foregroundStyle(.white)
                         .opacity(wordmarkOpacity)
