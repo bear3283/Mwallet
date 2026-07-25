@@ -16,7 +16,7 @@ struct MainView: View {
     var body: some View {
         TabView(selection: $viewModel.selection) {
             
-            TravelListView(month: Date())
+            TravelMapView()
                 .tabItem {
                     VStack {
                         if viewModel.selection == 0 {
@@ -24,7 +24,7 @@ struct MainView: View {
                         } else {
                             Image("tabitem1_unactive")
                         }
-                        Text("여행 관리")
+                        Text("여행")
                             .font(.caption1)
                     }
                 }

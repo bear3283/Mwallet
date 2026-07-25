@@ -1,0 +1,224 @@
+//
+//  TravelMapView.swift
+//  Mwallet
+//
+//  여행 탭. 사진 캐러셀 대신 '돈을 쓴 곳'을 지도에 찍는다.
+//  각 지출이 카테고리 색 핀으로 지도에 올라가고, 아래에 여행별 요약이 붙는다.
+//
+
+import CoreLocation
+import MapKit
+import SwiftUI
+
+struct TravelMapView: View {
+
+    private let budgetStore = BudgetStore()
+    private let receiptStore = ReceiptStore()
+
+    @State private var travels: [Travel] = []
+    @State private var selectedTravel: Travel?
+    @State private var cameraPosition: MapCameraPosition = .automatic
+    @State private var refreshToken = UUID()
+
+    // 지도에 찍을 지출들. 좌표가 있는 것만.
+    private var mappedExpenses: [Expense] {
+        _ = refreshToken
+        return budgetStore.expenses(for: selectedTravel).filter { $0.coordinate != nil }
+    }
+
+    private var summary: BudgetSummary {
+        _ = refreshToken
+        return budgetStore.summary(for: selectedTravel)
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 0) {
+                Spacer()
+                    .frame(height: 12)
+
+                if travels.isEmpty {
+                    ReceiptEmptyState(
+                        message: "아직 여행이 없어요",
+                        detail: "여행을 추가하고 지출을 남기면\n돈을 쓴 곳이 지도에 표시됩니다."
+                    )
+                } else {
+                    travelChips
+
+                    Spacer()
+                        .frame(height: 16)
+
+                    mapCard
+                        .padding(.horizontal, ReceiptLayout.gutter)
+
+                    Spacer()
+                        .frame(height: 16)
+
+                    summaryRow
+                        .padding(.horizontal, ReceiptLayout.gutter)
+
+                    Spacer(minLength: 0)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                // 상단 타이틀 헤더는 두지 않는다. 탭바가 현재 위치를 알려준다.
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        AddTravelView()
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(.black)
+                    }
+                }
+            }
+            .onAppear(perform: reload)
+        }
+    }
+
+    // MARK: - 여행 선택
+
+    private var travelChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 4) {
+                ForEach(travels, id: \.objectID) { travel in
+                    ReceiptChip(
+                        title: travel.name ?? "이름 없음",
+                        isSelected: selectedTravel?.objectID == travel.objectID
+                    ) {
+                        selectedTravel = travel
+                        refreshToken = UUID()
+                        fitCameraToExpenses()
+                    }
+                }
+            }
+            .padding(.horizontal, ReceiptLayout.gutter)
+        }
+    }
+
+    // MARK: - 지도
+
+    private var mapCard: some View {
+        ZStack(alignment: .bottomLeading) {
+            Map(position: $cameraPosition) {
+                ForEach(mappedExpenses, id: \.objectID) { expense in
+                    if let coordinate = expense.coordinate {
+                        Annotation(
+                            expense.merchantName,
+                            coordinate: coordinate,
+                            anchor: .bottom
+                        ) {
+                            pin(for: expense)
+                        }
+                    }
+                }
+            }
+            .mapStyle(.standard(pointsOfInterest: .excludingAll))
+            .frame(height: 320)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+
+            if mappedExpenses.isEmpty {
+                mapEmptyBadge
+                    .padding(12)
+            }
+        }
+    }
+
+    private func pin(for expense: Expense) -> some View {
+        let category = ExpenseInfoCategory(rawValue: Int(expense.category)) ?? .unknown
+        return ZStack {
+            Circle()
+                .fill(category.color)
+                .frame(width: 26, height: 26)
+                .overlay(Circle().stroke(.white, lineWidth: 2))
+                .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
+            Image(systemName: "wonsign")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.white)
+        }
+    }
+
+    // 좌표가 있는 지출이 없을 때, 지도 위에 안내를 얹는다.
+    private var mapEmptyBadge: some View {
+        Text("위치를 남긴 지출이 아직 없어요")
+            .font(.caption1_fixed)
+            .foregroundStyle(.gray400)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(.ultraThinMaterial, in: Capsule())
+    }
+
+    // MARK: - 요약
+
+    private var summaryRow: some View {
+        HStack(alignment: .center, spacing: 0) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(selectedTravel?.name ?? "여행")
+                    .font(.subhead2_1_fixed)
+                    .foregroundStyle(.black)
+                    .lineLimit(1)
+                Text("\(mappedExpenses.count)곳에서 지출")
+                    .font(.caption1_fixed)
+                    .foregroundStyle(.gray300)
+            }
+
+            Spacer(minLength: 12)
+
+            if summary.hasBudget {
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(BudgetFormat.percent(summary.ratio))
+                        .font(.subhead2_1_fixed)
+                        .foregroundStyle(summary.isOverspent ? Color.mainOrange : Color.black)
+                        .monospacedDigit()
+                    Text(ReceiptFormat.krw(summary.totalSpent))
+                        .font(.caption1_fixed)
+                        .foregroundStyle(.gray300)
+                        .monospacedDigit()
+                }
+            } else {
+                Text(ReceiptFormat.krw(summary.totalSpent))
+                    .font(.subhead2_1_fixed)
+                    .foregroundStyle(.black)
+                    .monospacedDigit()
+            }
+        }
+        .padding(16)
+        .background(Color.gray100)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    // MARK: - 동작
+
+    private func reload() {
+        travels = budgetStore.availableTravels()
+        if selectedTravel == nil || !travels.contains(where: { $0.objectID == selectedTravel?.objectID }) {
+            selectedTravel = travels.first
+        }
+        refreshToken = UUID()
+        fitCameraToExpenses()
+    }
+
+    // 지출 핀이 모두 보이도록 카메라를 맞춘다.
+    private func fitCameraToExpenses() {
+        let coordinates = mappedExpenses.compactMap { $0.coordinate }
+        guard !coordinates.isEmpty else {
+            cameraPosition = .automatic
+            return
+        }
+        let lats = coordinates.map(\.latitude)
+        let lons = coordinates.map(\.longitude)
+        let center = CLLocationCoordinate2D(
+            latitude: (lats.min()! + lats.max()!) / 2,
+            longitude: (lons.min()! + lons.max()!) / 2
+        )
+        // 핀이 가장자리에 붙지 않도록 여유를 1.4배 준다. 한 곳뿐이면 기본 폭.
+        let span = MKCoordinateSpan(
+            latitudeDelta: max((lats.max()! - lats.min()!) * 1.4, 0.02),
+            longitudeDelta: max((lons.max()! - lons.min()!) * 1.4, 0.02)
+        )
+        withAnimation {
+            cameraPosition = .region(MKCoordinateRegion(center: center, span: span))
+        }
+    }
+}
