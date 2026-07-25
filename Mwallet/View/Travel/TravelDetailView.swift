@@ -52,7 +52,7 @@ struct TravelDetailView: View {
                     
                     // 6. 버튼
                     HStack {
-                        MediumButtonWhite(title: "가계부 보기", action: {
+                        MediumButtonWhite(title: "예결산 보기", action: {
                             // 선택값 초기화
                             mainVM.selectedTravel = self.selectedTravel?.first
                             travelID = mainVM.selectedTravel?.id ?? UUID()
@@ -384,6 +384,31 @@ struct TravelDetailView: View {
             
         }
         .padding(.horizontal, 32)
+    }
+}
+
+extension TravelDetailView {
+
+    // Travel 객체 하나로 여는 편의 이니셜라이저.
+    // 지도(TravelMapView)에서 여행 상세로 들어갈 때 쓴다.
+    // 국기·배경 이미지는 country 기반 계산이 필요해 여기서는 기본값으로 두고,
+    // travelCountry 섹션은 빈 배열이면 '자동으로 채워져요' 안내를 보여 준다.
+    init(travel: Travel) {
+        let start = travel.startDate ?? Date()
+        let today = Calendar.current.startOfDay(for: Date())
+        let dayDiff = Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: start), to: today).day ?? 0
+
+        _travelID = State(initialValue: travel.id ?? UUID())
+        _travelName = State(initialValue: travel.name ?? "")
+        _startDate = State(initialValue: start)
+        _endDate = State(initialValue: travel.endDate)
+        _dayCnt = State(initialValue: max(dayDiff, 0))
+        _participantCnt = State(initialValue: travel.participantArray?.count ?? 0)
+        _participantArr = State(initialValue: travel.participantArray ?? [])
+        _flagImageArr = State(initialValue: [])
+        _defaultImageString = State(initialValue: "DefaultImage")
+        _blurImageString = State(initialValue: "BlurredDefaultImage")
+        _koreanNM = State(initialValue: [])
     }
 }
 

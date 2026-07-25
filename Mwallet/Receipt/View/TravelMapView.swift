@@ -12,6 +12,8 @@ import SwiftUI
 
 struct TravelMapView: View {
 
+    @EnvironmentObject private var mainVM: MainViewModel
+
     private let budgetStore = BudgetStore()
     private let receiptStore = ReceiptStore()
 
@@ -54,8 +56,16 @@ struct TravelMapView: View {
                     Spacer()
                         .frame(height: 16)
 
-                    summaryRow
+                    if let travel = selectedTravel {
+                        NavigationLink {
+                            TravelDetailView(travel: travel)
+                                .environmentObject(mainVM)
+                        } label: {
+                            summaryRow
+                        }
+                        .buttonStyle(.plain)
                         .padding(.horizontal, ReceiptLayout.gutter)
+                    }
 
                     Spacer(minLength: 0)
                 }
@@ -182,6 +192,11 @@ struct TravelMapView: View {
                     .foregroundStyle(.black)
                     .monospacedDigit()
             }
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13))
+                .foregroundStyle(.gray300)
+                .padding(.leading, 10)
         }
         .padding(16)
         .background(Color.gray100)
