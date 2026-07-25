@@ -241,15 +241,20 @@ struct RecordView: View {
             
             Group {
                 if (!isDetectingPress && viewModel.voiceSentence == "") || (!viewModel.AreThereOtherTravels && !viewModel.isExplicitTempRecord) {
-                    VStack {
-                        Text("지출 내역을 말해주세요")
-                            .foregroundStyle(.gray300)
+                    VStack(spacing: 20) {
+                        Text("말하면 바로 기록돼요")
+                            .foregroundStyle(.gray400)
                             .font(.display3)
-                        Text("(ex. 빵집, 520엔, 현금으로)")
-                            .foregroundStyle(.gray300)
-                            .font(.display1)
+
+                        // 처음 쓰는 사람도 따라 할 수 있게 실제 말투를 예시로 보여 준다.
+                        VStack(spacing: 10) {
+                            recordExampleRow(icon: "🍽", text: "점심 15000원 카드")
+                            recordExampleRow(icon: "🚕", text: "택시 3천원 현금")
+                            recordExampleRow(icon: "⛺️", text: "숙소 8만원")
+                        }
+                        .padding(.horizontal, 20)
                     }
-                    
+
                 } else {
                     ZStack {
                         ThreeDotsView()
@@ -656,6 +661,23 @@ struct RecordView: View {
             .multilineTextAlignment(.center)
             .opacity(!isDetectingPress && !viewModel.alertView_emptyIsShown && !viewModel.alertView_shortIsShown ? 1 : 0.0000001)
             .allowsHitTesting(false)
+    }
+
+    // 무엇을·얼마·어떻게 순서로 말하면 된다는 걸 실제 예시로 보여 준다.
+    private func recordExampleRow(icon: String, text: String) -> some View {
+        HStack(spacing: 12) {
+            Text(icon)
+                .font(.body3)
+            Text("\"\(text)\"")
+                .font(.body2)
+                .foregroundStyle(.black)
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity)
+        .background(Color.gray100)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
