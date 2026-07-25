@@ -9,9 +9,20 @@
 
 ## ⚠️ 먼저 알아둘 것
 
-**단일 스토어를 선택했으므로, 동기화를 켜면 `Receipt` 뿐 아니라 기존 `Travel`·`Expense`·`User`
-데이터도 함께 iCloud 로 올라갑니다.** 사역 영수증만 올리려면 모델을 두 Configuration 으로
-나눠야 하고, 그때는 저장된 데이터의 이전이 필요합니다.
+**단일 스토어이므로 동기화를 켜면 모든 데이터(`Expense`·`Travel`·`Budget`·`User`)가
+함께 iCloud 로 올라갑니다.** 이 앱은 여행·팀 단위 공동 재정을 다루므로 전부 동기화되는
+것이 자연스럽지만, 특정 엔티티만 올리려면 모델을 두 Configuration 으로 나눠야 하고
+그때는 저장된 데이터의 이전이 필요합니다.
+
+### 돌아오기 전 마지막 점검 3가지 — 하나라도 어긋나면 앱이 죽습니다
+
+1. **컨테이너 식별자 완전 일치** — 포털·Xcode·코드 세 곳이 모두
+   `iCloud.com.Mwallet.app` 이어야 합니다. 대소문자·점 하나라도 다르면 실행 즉시 크래시.
+2. **Background Modes 의 Remote notifications 까지 체크** — iCloud Capability 만
+   추가하고 이걸 빠뜨리는 경우가 많습니다.
+3. **스위치는 마지막에** — Xcode Capability 를 다 추가하기 전에
+   `isCloudKitSyncEnabled = true` 로 바꾸면 앱이 켜지자마자 죽습니다. 이 크래시는
+   코드로 못 막습니다(아래 참고). 돌아오시면 **제가 스위치를 켜겠습니다.**
 
 <br>
 
