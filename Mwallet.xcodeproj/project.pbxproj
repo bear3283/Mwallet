@@ -81,6 +81,7 @@
 		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
 		C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010C /* ReceiptRow.swift */; };
 		C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010E /* ReceiptDetailView.swift */; };
+		C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000007A1 /* LocationPickerView.swift */; };
 		C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */; };
 		C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */; };
 		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
@@ -193,6 +194,7 @@
 		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010C /* ReceiptRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptRow.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010E /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000007A1 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCategoryPalette.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCSVEncoder.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 				C1A11EA700000000000003A1 /* ReceiptDesign.swift */,
 				C1A11EA700000000000001C1 /* ReceiptStatsView.swift */,
 				C1A11EA7000000000000010E /* ReceiptDetailView.swift */,
+				C1A11EA700000000000007A1 /* LocationPickerView.swift */,
 				C1A11EA7000000000000010C /* ReceiptRow.swift */,
 				C1A11EA700000000000000E3 /* ReceiptHomeView.swift */,
 			);
@@ -695,6 +698,7 @@
 				C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */,
 				C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */,
 				C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */,
+				C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */,
 				C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */,
 				C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */,
 				C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */,
@@ -905,7 +909,7 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSCameraUsageDescription = "영수증을 바로 촬영해 기록에 첨부하려면 카메라 사용 권한이 필요합니다.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "지출한 장소를 지도에 남기고 위치별로 지출을 보여드리기 위해 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 기록을 위해 마이크 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성 정보를 텍스트로 변환하려면 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -950,7 +954,7 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSCameraUsageDescription = "영수증을 바로 촬영해 기록에 첨부하려면 카메라 사용 권한이 필요합니다.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "지출한 장소를 지도에 남기고 위치별로 지출을 보여드리기 위해 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 기록을 위해 마이크 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성 정보를 텍스트로 변환하려면 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

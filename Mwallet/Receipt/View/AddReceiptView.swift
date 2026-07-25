@@ -25,6 +25,7 @@ struct AddReceiptView: View {
     @State private var draft: ReceiptDraft
     @State private var pickedItem: PhotosPickerItem?
     @State private var isProcessingImage = false
+    @State private var isPickingLocation = false
     @State private var errorMessage: String?
 
     @FocusState private var focusedField: Field?
@@ -86,6 +87,12 @@ struct AddReceiptView: View {
                             .padding(.top, 20)
                         photoBlock
 
+                        Divider()
+
+                        ReceiptSectionTitle(text: "위치")
+                            .padding(.top, 20)
+                        locationBlock
+
                         Spacer(minLength: 24)
                     }
                     .padding(.horizontal, ReceiptLayout.gutter)
@@ -121,6 +128,12 @@ struct AddReceiptView: View {
             }
             .onChange(of: pickedItem) { _, newItem in
                 loadImage(from: newItem)
+            }
+            .sheet(isPresented: $isPickingLocation) {
+                LocationPickerView(initial: draft.coordinate) { coordinate, name in
+                    draft.coordinate = coordinate
+                    draft.placeName = name
+                }
             }
             .alert("저장하지 못했습니다", isPresented: errorBinding) {
                 Button("확인", role: .cancel) { errorMessage = nil }
@@ -237,6 +250,49 @@ struct AddReceiptView: View {
     }
 
     // MARK: - 증빙
+
+    // MARK: - 위치
+
+    private var locationBlock: some View {
+        Button {
+            isPickingLocation = true
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: draft.coordinate == nil ? "mappin.slash" : "mappin.circle.fill")
+                    .font(.system(size: 18))
+                    .foregroundStyle(draft.coordinate == nil ? Color.gray300 : Color.mainGreen)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    if let name = draft.placeName, draft.coordinate != nil {
+                        Text(name)
+                            .font(.body1_fixed)
+                            .foregroundStyle(.black)
+                            .lineLimit(1)
+                        Text("지도에서 다시 고르기")
+                            .font(.caption1_fixed)
+                            .foregroundStyle(.gray300)
+                    } else {
+                        Text("어디서 썼나요")
+                            .font(.body1_fixed)
+                            .foregroundStyle(.gray400)
+                        Text("지도로 위치를 남겨 두면 나중에 지출을 지도에서 볼 수 있어요")
+                            .font(.caption1_fixed)
+                            .foregroundStyle(.gray300)
+                            .lineLimit(1)
+                    }
+                }
+
+                Spacer(minLength: 8)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13))
+                    .foregroundStyle(.gray300)
+            }
+            .padding(.vertical, 14)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
 
     private var photoBlock: some View {
         VStack(alignment: .leading, spacing: 10) {

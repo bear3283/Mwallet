@@ -9,6 +9,7 @@
 //
 
 import CoreData
+import CoreLocation
 import Foundation
 
 // 화면에서 입력받은 값을 담는 중간 타입.
@@ -22,6 +23,8 @@ struct ReceiptDraft {
     var category: String = ExpenseInfoCategory.food.description
     var memo: String = ""
     var imageData: Data?
+    var coordinate: CLLocationCoordinate2D?
+    var placeName: String?
 
     init() { }
 
@@ -35,6 +38,8 @@ struct ReceiptDraft {
         self.category = expense.categoryName
         self.memo = expense.memoText
         self.imageData = expense.imageData
+        self.coordinate = expense.coordinate
+        self.placeName = expense.location
     }
 
     var amount: Double? {
@@ -157,6 +162,8 @@ final class ReceiptStore {
         expense.category = ExpenseCode.categoryIndex(for: draft.category)
         expense.memo = draft.memo.trimmingCharacters(in: .whitespacesAndNewlines)
         expense.imageData = draft.imageData
+        expense.setCoordinate(draft.coordinate)
+        expense.location = draft.placeName
     }
 
     // 원화면 환산이 필요 없으므로 1 을 쓴다.

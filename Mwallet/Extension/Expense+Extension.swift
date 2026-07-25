@@ -3,6 +3,7 @@
 //  Mwallet
 //
 
+import CoreLocation
 import Foundation
 
 extension Expense {
@@ -78,6 +79,18 @@ extension Expense {
     // 현장에서 금액만 먼저 남기고 사진은 나중에 붙이는 흐름을 위해 따로 센다.
     var needsPhoto: Bool {
         imageData?.isEmpty ?? true
+    }
+
+    // 지출한 위치의 좌표. 둘 다 있어야 유효하다.
+    // Core Data 는 스칼라 nil 을 못 담아 NSNumber? 로 두었으므로 여기서 풀어 준다.
+    var coordinate: CLLocationCoordinate2D? {
+        guard let lat = latitude?.doubleValue, let lon = longitude?.doubleValue else { return nil }
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+
+    func setCoordinate(_ coordinate: CLLocationCoordinate2D?) {
+        latitude = coordinate.map { NSNumber(value: $0.latitude) }
+        longitude = coordinate.map { NSNumber(value: $0.longitude) }
     }
 }
 
