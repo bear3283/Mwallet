@@ -34,30 +34,12 @@
 		57A65D182AD7DDA700131266 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D172AD7DDA700131266 /* RecordView.swift */; };
 		57B213DE2AFD167A00AFADC7 /* String+DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B213DD2AFD167A00AFADC7 /* String+DesignSystem.swift */; };
 		57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C41DFB2AD4F1EB00345253 /* Persistence.swift */; };
-		C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */; };
 		57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */; };
 		57CE9C732ADE4CAE00EDAD11 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CE9C722ADE4CAE00EDAD11 /* Currency.swift */; };
 		57CE9C752ADE97A600EDAD11 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CE9C742ADE97A600EDAD11 /* Date+Extension.swift */; };
 		57EA42202ADE38EE006CA587 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EA421F2ADE38EE006CA587 /* Country.swift */; };
 		57F72CEF2B04C85800464B06 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F72CEE2B04C85800464B06 /* NumberFormatter.swift */; };
 		57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F72CF02B04CAE900464B06 /* Double+Extension.swift */; };
-		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
-		C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */; };
-		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
-		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
-		C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006B1 /* BudgetSummary.swift */; };
-		C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006C1 /* BudgetStore.swift */; };
-		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
-		C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006E1 /* BudgetEditView.swift */; };
-		C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddReceiptView.swift */; };
-		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
-		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
-		C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010E /* ReceiptDetailView.swift */; };
-		C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010C /* ReceiptRow.swift */; };
-		C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* ReceiptHomeView.swift */; };
-		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
-		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
-		C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */; };
 		C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */; };
 		C15760182AEE782C0089FFE5 /* CountryList.csv in Resources */ = {isa = PBXBuildFile; fileRef = C15760172AEE782C0089FFE5 /* CountryList.csv */; };
 		C157601E2AF1DD830089FFE5 /* CountryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157601D2AF1DD830089FFE5 /* CountryInfo.swift */; };
@@ -78,7 +60,6 @@
 		C18168022AFDE07000130F79 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18168012AFDE07000130F79 /* SplashView.swift */; };
 		C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */; };
 		C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */; };
-		C1A11EA700000000000005A2 /* MissionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000005A1 /* MissionMark.swift */; };
 		C192C41E2B0F40A700842C89 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C192C41D2B0F40A700842C89 /* Constants.swift */; };
 		C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */; };
 		C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */; };
@@ -92,6 +73,25 @@
 		C19AFAF42AE139CD0037A5F5 /* TravelListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF32AE139CD0037A5F5 /* TravelListViewModel.swift */; };
 		C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */; };
 		C19AFAF82AE16C600037A5F5 /* UpcomingTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF72AE16C600037A5F5 /* UpcomingTravelViewModel.swift */; };
+		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
+		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
+		C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddReceiptView.swift */; };
+		C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* ReceiptHomeView.swift */; };
+		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
+		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
+		C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010C /* ReceiptRow.swift */; };
+		C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010E /* ReceiptDetailView.swift */; };
+		C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */; };
+		C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */; };
+		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
+		C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */; };
+		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
+		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
+		C1A11EA700000000000005A2 /* MissionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000005A1 /* MissionMark.swift */; };
+		C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006B1 /* BudgetSummary.swift */; };
+		C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006C1 /* BudgetStore.swift */; };
+		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
+		C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006E1 /* BudgetEditView.swift */; };
 		C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */; };
 		C1CDAE552B027FC900270DD2 /* TravelItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CDAE542B027FC900270DD2 /* TravelItemView.swift */; };
 		C1CDAE572B02845F00270DD2 /* TravelItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CDAE562B02845F00270DD2 /* TravelItemViewModel.swift */; };
@@ -115,6 +115,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09B729543014D75A007F3F2E /* Mwallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mwallet.entitlements; sourceTree = "<group>"; };
 		571A42662ACE857500FA3D2B /* Mwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		571A42692ACE857500FA3D2B /* MwalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MwalletApp.swift; sourceTree = "<group>"; };
 		571A426D2ACE857600FA3D2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -144,30 +145,12 @@
 		57A65D172AD7DDA700131266 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		57B213DD2AFD167A00AFADC7 /* String+DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+DesignSystem.swift"; sourceTree = "<group>"; };
 		57C41DFB2AD4F1EB00345253 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSeeder.swift; sourceTree = "<group>"; };
 		57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateChoiceModal.swift; sourceTree = "<group>"; };
 		57CE9C722ADE4CAE00EDAD11 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		57CE9C742ADE97A600EDAD11 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		57EA421F2ADE38EE006CA587 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		57F72CEE2B04C85800464B06 /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
 		57F72CF02B04CAE900464B06 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
-		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
-		C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCategoryPalette.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000006B1 /* BudgetSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSummary.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000006C1 /* BudgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStore.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000006E1 /* BudgetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEditView.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000000E1 /* AddReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptView.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000010E /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000010C /* ReceiptRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptRow.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000000E3 /* ReceiptHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHomeView.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCSVEncoder.swift; sourceTree = "<group>"; };
 		C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailViewModel.swift; sourceTree = "<group>"; };
 		C15760172AEE782C0089FFE5 /* CountryList.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryList.csv; sourceTree = "<group>"; };
 		C157601D2AF1DD830089FFE5 /* CountryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfo.swift; sourceTree = "<group>"; };
@@ -189,7 +172,6 @@
 		C18168012AFDE07000130F79 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberView.swift; sourceTree = "<group>"; };
 		C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTheme.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000005A1 /* MissionMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionMark.swift; sourceTree = "<group>"; };
 		C192C41D2B0F40A700842C89 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailView.swift; sourceTree = "<group>"; };
 		C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAddTravelView.swift; sourceTree = "<group>"; };
@@ -203,6 +185,25 @@
 		C19AFAF32AE139CD0037A5F5 /* TravelListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelListViewModel.swift; sourceTree = "<group>"; };
 		C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousTravelViewModel.swift; sourceTree = "<group>"; };
 		C19AFAF72AE16C600037A5F5 /* UpcomingTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingTravelViewModel.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
+		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000E1 /* AddReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000E3 /* ReceiptHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHomeView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000010C /* ReceiptRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptRow.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000010E /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCategoryPalette.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCSVEncoder.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSeeder.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000005A1 /* MissionMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionMark.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006B1 /* BudgetSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSummary.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006C1 /* BudgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStore.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000006E1 /* BudgetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEditView.swift; sourceTree = "<group>"; };
 		C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingHandler.swift; sourceTree = "<group>"; };
 		C1CDAE542B027FC900270DD2 /* TravelItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelItemView.swift; sourceTree = "<group>"; };
 		C1CDAE562B02845F00270DD2 /* TravelItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelItemViewModel.swift; sourceTree = "<group>"; };
@@ -257,6 +258,7 @@
 		571A42682ACE857500FA3D2B /* Mwallet */ = {
 			isa = PBXGroup;
 			children = (
+				09B729543014D75A007F3F2E /* Mwallet.entitlements */,
 				C19AFAE82AE00A7F0037A5F5 /* Utils */,
 				C179660A2ADD67440036E866 /* Info.plist */,
 				571A42692ACE857500FA3D2B /* MwalletApp.swift */,
@@ -309,92 +311,6 @@
 				C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */,
 				E237338D2AF7EB8B008C2613 /* CurrencyInfo.swift */,
 				E237338F2AF7EC1E008C2613 /* CurrencyInfoModel.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000006A1 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000006B1 /* BudgetSummary.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000006A2 /* Store */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000006C1 /* BudgetStore.swift */,
-			);
-			path = Store;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000006A3 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000006D1 /* BudgetView.swift */,
-				C1A11EA700000000000006E1 /* BudgetEditView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000006A0 /* Budget */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000006A1 /* Model */,
-				C1A11EA700000000000006A2 /* Store */,
-				C1A11EA700000000000006A3 /* View */,
-			);
-			path = Budget;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000000C1 /* Receipt */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000000C2 /* Model */,
-				C1A11EA700000000000000D0 /* Store */,
-				C1A11EA700000000000000E0 /* View */,
-				C1A11EA700000000000000F0 /* Util */,
-			);
-			path = Receipt;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000000D0 /* Store */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000000D1 /* ReceiptStore.swift */,
-			);
-			path = Store;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000000E0 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000000E1 /* AddReceiptView.swift */,
-				C1A11EA700000000000003A1 /* ReceiptDesign.swift */,
-				C1A11EA700000000000001C1 /* ReceiptStatsView.swift */,
-				C1A11EA7000000000000010E /* ReceiptDetailView.swift */,
-				C1A11EA7000000000000010C /* ReceiptRow.swift */,
-				C1A11EA700000000000000E3 /* ReceiptHomeView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000000F0 /* Util */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */,
-				C1A11EA700000000000004A1 /* CameraPicker.swift */,
-				C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */,
-			);
-			path = Util;
-			sourceTree = "<group>";
-		};
-		C1A11EA700000000000000C2 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */,
-				C1A11EA7000000000000010A /* ReceiptSummary.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -545,6 +461,92 @@
 				C192C41D2B0F40A700842C89 /* Constants.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000C1 /* Receipt */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000000C2 /* Model */,
+				C1A11EA700000000000000D0 /* Store */,
+				C1A11EA700000000000000E0 /* View */,
+				C1A11EA700000000000000F0 /* Util */,
+			);
+			path = Receipt;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000C2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */,
+				C1A11EA7000000000000010A /* ReceiptSummary.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000D0 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000000D1 /* ReceiptStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000E0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000000E1 /* AddReceiptView.swift */,
+				C1A11EA700000000000003A1 /* ReceiptDesign.swift */,
+				C1A11EA700000000000001C1 /* ReceiptStatsView.swift */,
+				C1A11EA7000000000000010E /* ReceiptDetailView.swift */,
+				C1A11EA7000000000000010C /* ReceiptRow.swift */,
+				C1A11EA700000000000000E3 /* ReceiptHomeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000000F0 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */,
+				C1A11EA700000000000004A1 /* CameraPicker.swift */,
+				C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A0 /* Budget */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006A1 /* Model */,
+				C1A11EA700000000000006A2 /* Store */,
+				C1A11EA700000000000006A3 /* View */,
+			);
+			path = Budget;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006B1 /* BudgetSummary.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A2 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006C1 /* BudgetStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		C1A11EA700000000000006A3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C1A11EA700000000000006D1 /* BudgetView.swift */,
+				C1A11EA700000000000006E1 /* BudgetEditView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		CCFDDCF8C1BD32155454F0C1 /* Frameworks */ = {
@@ -889,19 +891,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mwallet/Mwallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mwallet/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 36CPZWS26C;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mwallet/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mwallet;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "영수증을 바로 촬영해 기록에 첨부하려면 카메라 사용 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 기록을 위해 마이크 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성 정보를 텍스트로 변환하려면 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -916,7 +920,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Mwallet.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -932,19 +936,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mwallet/Mwallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mwallet/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 36CPZWS26C;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mwallet/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mwallet;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "영수증을 바로 촬영해 기록에 첨부하려면 카메라 사용 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "노마드월렛은 실시간 위치 정보를 활용하는 여행 가계부 앱으로, 원활한 작동을 위해 권한이 반드시 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 기록을 위해 마이크 사용 권한이 필요합니다.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성 정보를 텍스트로 변환하려면 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -959,7 +965,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Mwallet.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

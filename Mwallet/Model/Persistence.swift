@@ -31,7 +31,7 @@ struct PersistenceController {
     // 켜기 전 준비: 유료 Apple Developer 계정, iCloud 컨테이너 생성,
     // Signing & Capabilities 에 iCloud(CloudKit) + Background Modes(Remote notifications).
     // 자세한 절차는 docs/CloudKit-활성화.md 참고.
-    static let isCloudKitSyncEnabled = false
+    static let isCloudKitSyncEnabled = true
     static let cloudKitContainerIdentifier = "iCloud.com.Mwallet.app"
 
     let container: NSPersistentCloudKitContainer
