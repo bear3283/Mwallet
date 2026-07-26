@@ -22,7 +22,7 @@ struct LargeButtonActive: View {
                 .frame(maxWidth: .infinity)
             
         }
-        .background(Color.mainGreen)
+        .background(Color.mainAccent)
         .cornerRadius(12)
         .padding(.horizontal, 16)
         .padding(.top, 4)
@@ -115,7 +115,7 @@ struct MediumButtonMain: View {
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
         }
-        .background(Color.mainGreen)
+        .background(Color.mainAccent)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)
@@ -135,7 +135,7 @@ struct MediumButtonActive: View {
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
         }
-        .background(Color.mainGreen)
+        .background(Color.mainAccent)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)
@@ -180,7 +180,7 @@ struct NextButtonActive: View {
             .font(.system(size: 18, weight: .medium))
             .foregroundStyle(Color.black)
         }
-        .background(Color.mainGreen)
+        .background(Color.mainAccent)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)
@@ -227,7 +227,7 @@ struct DoneButtonActive: View {
                 .padding(.vertical, 14.5)
                 
         }
-        .background(Color.mainGreen)
+        .background(Color.mainAccent)
         .cornerRadius(12)
         .padding(.trailing, 16)
         .padding(.bottom, 45)

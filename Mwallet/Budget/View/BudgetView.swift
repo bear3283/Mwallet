@@ -230,7 +230,7 @@ struct BudgetView: View {
                 Capsule()
                     .fill(Color.gray100)
                 Capsule()
-                    .fill(isOver ? Color.mainOrange : Color.mainGreen)
+                    .fill(isOver ? Color.mainOrange : Color.mainAccent)
                     .frame(width: geometry.size.width * ratio)
             }
         }

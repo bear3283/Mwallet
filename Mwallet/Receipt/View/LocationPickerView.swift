@@ -91,7 +91,7 @@ struct LocationPickerView: View {
         VStack(spacing: 0) {
             Image(systemName: "mappin.circle.fill")
                 .font(.system(size: 32))
-                .foregroundStyle(.mainGreen, .black)
+                .foregroundStyle(.mainAccent, .black)
                 .shadow(color: .black.opacity(0.25), radius: 3, y: 2)
             // 핀 끝이 정확히 중앙을 가리키도록 아래로 반만큼 올린다.
             Image(systemName: "arrowtriangle.down.fill")

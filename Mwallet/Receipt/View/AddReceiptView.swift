@@ -153,7 +153,7 @@ struct AddReceiptView: View {
                     .foregroundStyle(.black)
                     .keyboardType(.decimalPad)
                     .focused($focusedField, equals: .amount)
-                    .tint(.mainGreen)
+                    .tint(.mainAccent)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
 
@@ -211,7 +211,7 @@ struct AddReceiptView: View {
             ReceiptFieldRow(label: "결제 일자") {
                 DatePicker("", selection: $draft.date, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
-                    .tint(.mainGreen)
+                    .tint(.mainAccent)
             }
         }
     }
@@ -260,7 +260,7 @@ struct AddReceiptView: View {
             HStack(spacing: 10) {
                 Image(systemName: draft.coordinate == nil ? "mappin.slash" : "mappin.circle.fill")
                     .font(.system(size: 18))
-                    .foregroundStyle(draft.coordinate == nil ? Color.gray300 : Color.mainGreen)
+                    .foregroundStyle(draft.coordinate == nil ? Color.gray300 : Color.mainAccent)
 
                 VStack(alignment: .leading, spacing: 2) {
                     if let name = draft.placeName, draft.coordinate != nil {
@@ -315,7 +315,7 @@ struct AddReceiptView: View {
                     } label: {
                         Text("사진 삭제")
                             .font(.caption2_fixed)
-                            .foregroundStyle(.mainGreen)
+                            .foregroundStyle(.mainAccent)
                     }
                 }
             } else {

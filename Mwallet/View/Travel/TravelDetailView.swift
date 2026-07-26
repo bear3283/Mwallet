@@ -146,7 +146,7 @@ struct TravelDetailView: View {
                                 Font.custom("Pretendard", size: 14)
                                     .weight(.medium)
                             )
-                            .foregroundColor(Color.mainGreen)
+                            .foregroundColor(Color.mainAccent)
                     }
                     .padding(.horizontal, 11)
                     .padding(.vertical, 7)

@@ -12,7 +12,7 @@
 //    제목        display1_fixed, 항목 제목 subhead3_1_fixed
 //    보조 텍스트  caption2_fixed + gray300
 //    구분        Divider()
-//    강조        mainGreen
+//    강조        mainAccent
 //
 
 import SwiftUI
@@ -59,7 +59,7 @@ struct ReceiptChip: View {
                 .font(.caption2_fixed)
                 // 선택 시 형광 초록 배경 + 검정 글씨. 초록 위 흰 글씨는 대비가 부족하다.
                 .foregroundStyle(isSelected ? Color.black : Color.gray400)
-                .background(isSelected ? Color.mainGreen : Color.gray100)
+                .background(isSelected ? Color.mainAccent : Color.gray100)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         }
     }
@@ -117,7 +117,7 @@ struct ReceiptTextFieldStyle: ViewModifier {
         content
             .font(.body1_fixed)
             .foregroundStyle(.black)
-            .tint(.mainGreen)
+            .tint(.mainAccent)
             .padding(.vertical, 11)
             .padding(.horizontal, 12)
             .background(Color.gray100)
@@ -146,7 +146,7 @@ struct ReceiptPrimaryButton: View {
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
         }
-        .background(isEnabled ? Color.mainGreen : Color.gray100)
+        .background(isEnabled ? Color.mainAccent : Color.gray100)
         .cornerRadius(12)
         .disabled(!isEnabled)
     }

@@ -114,7 +114,7 @@ struct BudgetEditView: View {
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.trailing)
                     .focused($focused, equals: category.rawValue)
-                    .tint(.mainGreen)
+                    .tint(.mainAccent)
                     .frame(maxWidth: 140)
 
                 Text("원")

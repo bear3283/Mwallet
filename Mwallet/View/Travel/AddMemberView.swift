@@ -94,7 +94,7 @@ struct AddMemberView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .inset(by: 1)
-                        .stroke(isSelectedAlone ? Color.mainGreen : Color.gray200, lineWidth: 1)
+                        .stroke(isSelectedAlone ? Color.mainAccent : Color.gray200, lineWidth: 1)
                         .frame(width: 350, height: 53)
                     
                     HStack(spacing: 0) {
@@ -120,7 +120,7 @@ struct AddMemberView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .inset(by: 1)
-                        .stroke(isSelectedTogether ? Color.mainGreen : Color.gray200, lineWidth: 1)
+                        .stroke(isSelectedTogether ? Color.mainAccent : Color.gray200, lineWidth: 1)
                         .frame(width: 350, height: 53)
                     
                     HStack(spacing: 0) {
