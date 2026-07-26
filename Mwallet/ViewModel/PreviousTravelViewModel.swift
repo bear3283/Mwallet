@@ -43,13 +43,6 @@ class PreviousTravelViewModel: ObservableObject {
         }
     }
     
-    func getCountryForExpense(_ expense: Expense) -> Int64 {
-        if let country = expense.country as? Int64 {
-            return country
-        }
-        return -1
-    }
-    
     func filterPreviousTravel(todayDate: Date) -> [Travel] {
         return previousTravel.filter { travel in
             if let endDate = travel.endDate?.convertBeforeShowing() {
