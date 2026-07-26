@@ -74,6 +74,14 @@ struct TravelMapView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // 상단 타이틀 헤더는 두지 않는다. 탭바가 현재 위치를 알려준다.
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink {
+                        SettingView()
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .foregroundStyle(.black)
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         AddTravelView()
