@@ -543,7 +543,7 @@ struct ManualRecordView: View {
                             }
                             .hidden()
                             
-                            Text(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "임시 기록")
+                            Text(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "여행 선택")
                                 .lineLimit(nil)
                                 .foregroundStyle(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? .black : .gray400)
                                 .font(.subhead2_1)

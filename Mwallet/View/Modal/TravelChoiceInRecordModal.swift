@@ -30,7 +30,11 @@ struct TravelChoiceInRecordModal: View {
         }
         .onAppear {
             do {
-                try travelArray = PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest()).sorted(by: travelModalSortRule)
+                // '임시 기록'은 여행을 안 고를 때 자동으로 저장되는 기본함이라
+                // 사용자에게는 보이지 않는다. 선택 목록에서 뺀다.
+                try travelArray = PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest())
+                    .filter { $0.name != tempTravelName }
+                    .sorted(by: travelModalSortRule)
             } catch {
                 print("error fetching travelArray: \(error.localizedDescription)")
             }
