@@ -52,7 +52,7 @@ struct MainView: View {
                         } else {
                             Image("tabitem2_unactive")
                         }
-                        Text("지출 기록")
+                        Text("기록")
                             .font(.caption1)
 
                     }
