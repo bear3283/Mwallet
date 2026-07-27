@@ -11,11 +11,13 @@
 //  데이터 표시는 App Group 스냅샷(MwalletShared)을 읽고, 기록 위젯의 프리셋은
 //  App Group 큐에 담는다(앱이 다음에 열릴 때 Core Data 로 반영).
 //
-//  이 파일과 Shared/MwalletShared.swift 를 위젯 타깃에 추가한다.
-//  절차: 같은 폴더 README-위젯-추가.md 참고.
+//  공유 계약(MwalletShared 등)은 이 파일 하단에 함께 넣어 위젯 타깃이
+//  추가 파일 없이 스스로 컴파일되게 했다. 같은 계약의 앱 쪽 사본은
+//  Shared/MwalletShared.swift 에 있다(앱 타깃 전용). 절차는 README-위젯-추가.md.
 //
 
 import AppIntents
+import Foundation
 import SwiftUI
 import WidgetKit
 
@@ -430,5 +432,106 @@ struct MwalletWidgetBundle: WidgetBundle {
         SettlementWidget()
         RecordWidget()
         ReceiptWidget()
+    }
+}
+
+// MARK: - App Group 공유 계약 (앱 Shared/MwalletShared.swift 와 동일한 값)
+//
+// 위젯 타깃이 파일 추가 없이 스스로 컴파일되도록 여기 포함한다.
+// ⚠️ 앱 쪽 사본(Shared/MwalletShared.swift)과 App Group ID·필드명·키가
+//    반드시 같아야 데이터가 오간다. 한쪽을 바꾸면 다른 쪽도 함께 바꾼다.
+
+enum MwalletShared {
+
+    static let appGroupID = "group.com.Mwallet.app"
+
+    private static let snapshotKey = "budget.snapshot"
+    private static let queueKey = "pending.expenses"
+
+    private static var store: UserDefaults? {
+        UserDefaults(suiteName: appGroupID)
+    }
+
+    static func writeSnapshot(_ snapshot: BudgetSnapshot) {
+        guard let data = try? JSONEncoder().encode(snapshot) else { return }
+        store?.set(data, forKey: snapshotKey)
+    }
+
+    static func readSnapshot() -> BudgetSnapshot? {
+        guard let data = store?.data(forKey: snapshotKey) else { return nil }
+        return try? JSONDecoder().decode(BudgetSnapshot.self, from: data)
+    }
+
+    static func enqueue(_ expense: PendingExpense) {
+        var queue = readQueue()
+        queue.append(expense)
+        writeQueue(queue)
+    }
+
+    static func readQueue() -> [PendingExpense] {
+        guard let data = store?.data(forKey: queueKey) else { return [] }
+        return (try? JSONDecoder().decode([PendingExpense].self, from: data)) ?? []
+    }
+
+    static func drainQueue() -> [PendingExpense] {
+        let queue = readQueue()
+        store?.removeObject(forKey: queueKey)
+        return queue
+    }
+
+    private static func writeQueue(_ queue: [PendingExpense]) {
+        guard let data = try? JSONEncoder().encode(queue) else { return }
+        store?.set(data, forKey: queueKey)
+    }
+}
+
+struct BudgetSnapshot: Codable {
+    var travelName: String
+    var totalPlanned: Double
+    var totalSpent: Double
+    var pendingReceiptCount: Int
+    var categories: [CategorySlice]
+    var updatedAt: Date
+
+    struct CategorySlice: Codable {
+        var name: String
+        var spent: Double
+    }
+
+    var ratio: Double { totalPlanned > 0 ? totalSpent / totalPlanned : 0 }
+    var remaining: Double { totalPlanned - totalSpent }
+    var isOverspent: Bool { totalSpent > totalPlanned }
+    var hasBudget: Bool { totalPlanned > 0 }
+}
+
+struct PendingExpense: Codable, Identifiable {
+    var id: UUID
+    var amount: Double
+    var categoryIndex: Int
+    var paymentMethodIndex: Int
+    var info: String
+    var createdAt: Date
+
+    init(amount: Double, categoryIndex: Int, paymentMethodIndex: Int, info: String) {
+        self.id = UUID()
+        self.amount = amount
+        self.categoryIndex = categoryIndex
+        self.paymentMethodIndex = paymentMethodIndex
+        self.info = info
+        self.createdAt = Date()
+    }
+}
+
+enum MwalletSharedFormat {
+    static func krw(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        let number = formatter.string(from: NSNumber(value: value)) ?? "0"
+        return "\(number)원"
+    }
+
+    static func percent(_ ratio: Double) -> String {
+        "\(Int((ratio * 100).rounded()))%"
     }
 }

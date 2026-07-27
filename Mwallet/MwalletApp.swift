@@ -11,7 +11,8 @@ import SwiftUI
 struct MwalletApp: App {
     // 첫 실행 때 '임시 기록' 기본 여행을 만든다. 접근하는 것만으로 초기화된다.
     private let seeder = FirstLaunchSeeder.shared
-    
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some Scene {
         WindowGroup {
             SplashView()
@@ -19,6 +20,14 @@ struct MwalletApp: App {
                 // 기존 화면들은 viewContext 를 직접 참조하므로 이 주입에 영향받지 않는다.
                 .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
                 .onOpenURL(perform: handleDeepLink)
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // 앱이 활성화될 때 위젯에서 담긴 대기 지출을 Core Data 로 반영한다.
+            if phase == .active {
+                MwalletBridge.flushPendingExpenses(
+                    into: PersistenceController.shared.container.viewContext
+                )
+            }
         }
     }
 

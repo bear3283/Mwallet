@@ -3,11 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09B72A9D3017AAC1007F3F2E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09B72A9C3017AAC1007F3F2E /* WidgetKit.framework */; };
+		09B72A9F3017AAC1007F3F2E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09B72A9E3017AAC1007F3F2E /* SwiftUI.framework */; };
+		09B72AAC3017AAC3007F3F2E /* MwalletWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 09B72A9B3017AAC1007F3F2E /* MwalletWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		571A426A2ACE857500FA3D2B /* MwalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571A42692ACE857500FA3D2B /* MwalletApp.swift */; };
+		FA00000000000000000000A2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
+		FA00000000000000000000B2 /* MwalletBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000B1 /* MwalletBridge.swift */; };
 		571A426E2ACE857600FA3D2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 571A426D2ACE857600FA3D2B /* Assets.xcassets */; };
 		571A42712ACE857600FA3D2B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 571A42702ACE857600FA3D2B /* Preview Assets.xcassets */; };
 		5720A56F2B0F4C4700B12E66 /* InfoClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5720A56E2B0F4C4700B12E66 /* InfoClassifier.mlmodel */; };
@@ -100,10 +105,40 @@
 		E2D5C0722ADD928C00907501 /* findCurrentTravel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		09B72AAA3017AAC3007F3F2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 571A425E2ACE857500FA3D2B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 09B72A9A3017AAC1007F3F2E;
+			remoteInfo = MwalletWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		09B72AB13017AAC3007F3F2E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				09B72AAC3017AAC3007F3F2E /* MwalletWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		09B729543014D75A007F3F2E /* Mwallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mwallet.entitlements; sourceTree = "<group>"; };
+		09B72A9B3017AAC1007F3F2E /* MwalletWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MwalletWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		09B72A9C3017AAC1007F3F2E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		09B72A9E3017AAC1007F3F2E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		09B72AB43017AAD7007F3F2E /* MwalletWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MwalletWidgetExtension.entitlements; sourceTree = "<group>"; };
 		571A42662ACE857500FA3D2B /* Mwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		571A42692ACE857500FA3D2B /* MwalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MwalletApp.swift; sourceTree = "<group>"; };
+		FA00000000000000000000A1 /* MwalletShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletShared.swift; path = Shared/MwalletShared.swift; sourceTree = SOURCE_ROOT; };
+		FA00000000000000000000B1 /* MwalletBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletBridge.swift; path = Shared/MwalletBridge.swift; sourceTree = SOURCE_ROOT; };
 		571A426D2ACE857600FA3D2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		571A42702ACE857600FA3D2B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5720A56E2B0F4C4700B12E66 /* InfoClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = InfoClassifier.mlmodel; sourceTree = "<group>"; };
@@ -199,7 +234,30 @@
 		E366F1762B02014B003CCA88 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		09B72AAD3017AAC3007F3F2E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 09B72A9A3017AAC1007F3F2E /* MwalletWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		09B72AA03017AAC1007F3F2E /* MwalletWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (09B72AAD3017AAC3007F3F2E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MwalletWidget; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		09B72A983017AAC1007F3F2E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09B72A9F3017AAC1007F3F2E /* SwiftUI.framework in Frameworks */,
+				09B72A9D3017AAC1007F3F2E /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		571A42632ACE857500FA3D2B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -213,7 +271,9 @@
 		571A425D2ACE857500FA3D2B = {
 			isa = PBXGroup;
 			children = (
+				09B72AB43017AAD7007F3F2E /* MwalletWidgetExtension.entitlements */,
 				571A42682ACE857500FA3D2B /* Mwallet */,
+				09B72AA03017AAC1007F3F2E /* MwalletWidget */,
 				571A42672ACE857500FA3D2B /* Products */,
 				CCFDDCF8C1BD32155454F0C1 /* Frameworks */,
 			);
@@ -223,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				571A42662ACE857500FA3D2B /* Mwallet.app */,
+				09B72A9B3017AAC1007F3F2E /* MwalletWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -234,6 +295,8 @@
 				C19AFAE82AE00A7F0037A5F5 /* Utils */,
 				C179660A2ADD67440036E866 /* Info.plist */,
 				571A42692ACE857500FA3D2B /* MwalletApp.swift */,
+				FA00000000000000000000A1 /* MwalletShared.swift */,
+				FA00000000000000000000B1 /* MwalletBridge.swift */,
 				57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */,
 				578858262ADBBED5001B82FA /* Model */,
 				C17550562AD5518C00A61BE5 /* View */,
@@ -510,6 +573,8 @@
 		CCFDDCF8C1BD32155454F0C1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				09B72A9C3017AAC1007F3F2E /* WidgetKit.framework */,
+				09B72A9E3017AAC1007F3F2E /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -531,6 +596,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		09B72A9A3017AAC1007F3F2E /* MwalletWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 09B72AAE3017AAC3007F3F2E /* Build configuration list for PBXNativeTarget "MwalletWidgetExtension" */;
+			buildPhases = (
+				09B72A973017AAC1007F3F2E /* Sources */,
+				09B72A983017AAC1007F3F2E /* Frameworks */,
+				09B72A993017AAC1007F3F2E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				09B72AA03017AAC1007F3F2E /* MwalletWidget */,
+			);
+			name = MwalletWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = MwalletWidgetExtension;
+			productReference = 09B72A9B3017AAC1007F3F2E /* MwalletWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		571A42652ACE857500FA3D2B /* Mwallet */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 571A42742ACE857600FA3D2B /* Build configuration list for PBXNativeTarget "Mwallet" */;
@@ -538,11 +625,13 @@
 				571A42622ACE857500FA3D2B /* Sources */,
 				571A42632ACE857500FA3D2B /* Frameworks */,
 				571A42642ACE857500FA3D2B /* Resources */,
+				09B72AB13017AAC3007F3F2E /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				C1A11EA700000000000000A3 /* PBXTargetDependency */,
+				09B72AAB3017AAC3007F3F2E /* PBXTargetDependency */,
 			);
 			name = Mwallet;
 			packageProductDependencies = (
@@ -558,9 +647,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2700;
 				TargetAttributes = {
+					09B72A9A3017AAC1007F3F2E = {
+						CreatedOnToolsVersion = 27.0;
+					};
 					571A42652ACE857500FA3D2B = {
 						CreatedOnToolsVersion = 15.0;
 					};
@@ -584,11 +676,19 @@
 			projectRoot = "";
 			targets = (
 				571A42652ACE857500FA3D2B /* Mwallet */,
+				09B72A9A3017AAC1007F3F2E /* MwalletWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		09B72A993017AAC1007F3F2E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		571A42642ACE857500FA3D2B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -612,6 +712,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		09B72A973017AAC1007F3F2E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		571A42622ACE857500FA3D2B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -694,12 +801,19 @@
 				573889672AF6AFB300FAEF50 /* DateGapHandler.swift in Sources */,
 				57A65D142AD7D65600131266 /* ExpenseInfoCategory.swift in Sources */,
 				571A426A2ACE857500FA3D2B /* MwalletApp.swift in Sources */,
+				FA00000000000000000000A2 /* MwalletShared.swift in Sources */,
+				FA00000000000000000000B2 /* MwalletBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		09B72AAB3017AAC3007F3F2E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 09B72A9A3017AAC1007F3F2E /* MwalletWidgetExtension */;
+			targetProxy = 09B72AAA3017AAC3007F3F2E /* PBXContainerItemProxy */;
+		};
 		C1A11EA700000000000000A3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = C1A11EA700000000000000A2 /* SwiftLintBuildToolPlugin */;
@@ -707,6 +821,72 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		09B72AAF3017AAC3007F3F2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MwalletWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MwalletWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MwalletWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		09B72AB03017AAC3007F3F2E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MwalletWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MwalletWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MwalletWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		571A42722ACE857600FA3D2B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E366F1762B02014B003CCA88 /* Config.xcconfig */;
@@ -927,6 +1107,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		09B72AAE3017AAC3007F3F2E /* Build configuration list for PBXNativeTarget "MwalletWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09B72AAF3017AAC3007F3F2E /* Debug */,
+				09B72AB03017AAC3007F3F2E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		571A42612ACE857500FA3D2B /* Build configuration list for PBXProject "Mwallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

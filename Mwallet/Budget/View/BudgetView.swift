@@ -190,6 +190,7 @@ struct BudgetView: View {
     // 예산을 저장하고 돌아오면 집계를 다시 계산한다.
     private func refreshAfterEditing() {
         refreshToken = UUID()
+        publishWidgetSnapshot()
     }
 
     private func reload() {
@@ -200,6 +201,17 @@ struct BudgetView: View {
                 ?? travels.first
         }
         refreshToken = UUID()
+        publishWidgetSnapshot()
+    }
+
+    // 위젯이 읽을 예결산 스냅샷을 발행한다.
+    private func publishWidgetSnapshot() {
+        let pending = store.expenses(for: selectedTravel).filter { $0.needsPhoto }.count
+        MwalletBridge.publish(
+            summary: store.summary(for: selectedTravel),
+            travelName: selectedTravel?.name ?? "여행",
+            pendingReceiptCount: pending
+        )
     }
 }
 
