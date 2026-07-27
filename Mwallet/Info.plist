@@ -4,6 +4,17 @@
 <dict>
 	<key>API_KEY</key>
 	<string>$(API_KEY)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.Mwallet.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mwallet</string>
+			</array>
+		</dict>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Black.otf</string>
