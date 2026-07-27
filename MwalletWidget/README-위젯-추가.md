@@ -1,50 +1,130 @@
-# 빠른 지출 기록 위젯 추가 절차
+# Mwallet 위젯 추가 절차
 
-`MwalletWidget.swift`는 홈/잠금 화면에서 한 번에 앱의 **기록 탭**을 여는 위젯입니다.
-탭하면 `mwallet://record` 딥링크로 기록 화면이 바로 열립니다. (앱 쪽 딥링크는 이미 반영됨)
+위젯 4종 + 예결산 데이터 공유(App Group)를 붙이는 절차입니다.
+코드는 모두 준비돼 있고, **타깃 생성·capability·파일 소속만 Xcode에서** 하면 됩니다.
+(새 타깃/그룹을 CLI로 만들면 프로젝트가 깨질 수 있어 이 부분만 수동입니다.)
 
-데이터를 직접 쓰지 않는 **딥링크 방식**이라 App Group·공유 저장소가 필요 없습니다.
+## 위젯 구성 (각 크기 제한됨)
 
-## Xcode에서 타깃 추가 (약 1분)
+| 위젯 | 역할 | 지원 크기 |
+|---|---|---|
+| **예산** | 이번 여행 예산·집행률 | `systemSmall`, `systemMedium` |
+| **결산** | 예산 대비 집행·잔액 + 카테고리 | `systemMedium` |
+| **지출 기록** | 눌러서 기록(딥링크) · 중형은 프리셋 큐 기록 | `systemSmall`, `systemMedium`, `accessoryCircular` |
+| **영수증 등록** | 미등록 영수증 N건 → 등록 | `systemSmall`, `accessoryCircular` |
+
+## 데이터 흐름 (App Group, 저장소 이전 없음)
+
+- **읽기(예산·결산·영수증 위젯)**: 앱이 예결산 요약을 스냅샷으로 App Group에 기록 → 위젯이 읽음.
+- **쓰기(기록 위젯 프리셋)**: 위젯이 App Group 큐에 담음 → 앱이 다음에 열릴 때 Core Data로 반영(그때 CloudKit 동기화). 저장소 위치·CloudKit 설정은 건드리지 않음.
+
+---
+
+## 1. 위젯 익스텐션 타깃 만들기
 
 1. Xcode에서 `Mwallet.xcodeproj` 열기.
-2. 메뉴 **File ▸ New ▸ Target…**
-3. **Widget Extension** 선택 → Next.
-4. 설정:
-   - **Product Name**: `MwalletWidget`
-   - **Include Live Activity**: 체크 해제
-   - **Include Configuration App Intent**: 체크 해제 (이 위젯은 설정이 없는 StaticConfiguration)
-   - **Team**: 앱과 동일
-   - **Embed in Application**: `Mwallet`
-   - Finish.
-5. "Activate "MwalletWidget" scheme?" 물으면 **Cancel** (앱 스킴 유지).
+2. **File ▸ New ▸ Target… ▸ Widget Extension** → Next.
+3. **Product Name**: `MwalletWidget`, **Include Live Activity**·**Include Configuration App Intent** 체크 해제, **Embed in Application**: `Mwallet` → Finish.
+4. "Activate scheme?" → **Cancel**.
+5. 자동 생성된 위젯 소스(예: `MwalletWidget.swift`, `MwalletWidgetBundle.swift`)는 **삭제**하거나 내용을 비웁니다. (`@main`이 겹치면 충돌)
 
-## 생성된 파일을 이 파일로 교체
+## 2. App Group capability 추가 (두 타깃 모두)
 
-Widget Extension을 만들면 Xcode가 기본 위젯 파일(`MwalletWidget.swift` 또는
-`MwalletWidgetBundle.swift` 등)을 자동 생성합니다. 그 안에도 `@main`이 있어
-**두 개의 `@main`이 충돌**합니다. 아래 중 하나로 정리하세요.
+App Group ID는 **`group.com.Mwallet.app`** — 코드(`MwalletShared.appGroupID`)와 반드시 동일해야 합니다.
 
-- **간단**: 자동 생성된 위젯 소스 파일들의 내용을 지우고, 이 폴더의
-  `MwalletWidget.swift` 내용을 붙여넣기. (또는 자동 생성 파일 삭제 후
-  이 `MwalletWidget.swift`를 위젯 타깃에 **Add Files…** 로 추가하고
-  Target Membership을 `MwalletWidget`으로 지정)
+1. **Mwallet(앱) 타깃** ▸ Signing & Capabilities ▸ **+ Capability ▸ App Groups** ▸ **+** ▸ `group.com.Mwallet.app` 추가·체크.
+2. **MwalletWidget(위젯) 타깃** ▸ 동일하게 App Groups ▸ 같은 `group.com.Mwallet.app` 체크.
+   - (개발자 계정에 그룹이 자동 등록됩니다. 이미 앱 엔타이틀먼트에 빈 App Groups 배열이 있어 항목만 채우면 됩니다.)
 
-## 확인 사항
+## 3. 파일을 타깃에 추가 (Target Membership)
 
-- 위젯 타깃 **Deployment Target = iOS 17.0** (앱과 동일). `containerBackground` 사용.
-- 위젯 타깃 Bundle ID는 Xcode가 자동 지정 (예: `com.bear3745.Mwallet.app.MwalletWidget`).
-- 앱을 한 번 빌드·실행한 뒤, 홈 화면 길게 눌러 **+** ▸ Mwallet ▸ "빠른 지출 기록" 추가.
-- 잠금 화면 위젯(원형/가로)도 지원합니다.
+프로젝트 네비게이터에서 각 파일 선택 → 우측 File Inspector의 **Target Membership** 체크:
 
-## 동작
+| 파일 | Mwallet(앱) | MwalletWidget(위젯) |
+|---|:---:|:---:|
+| `Shared/MwalletShared.swift` | ✅ | ✅ |
+| `Shared/MwalletBridge.swift` | ✅ | ⬜️ |
+| `MwalletWidget/MwalletWidget.swift` | ⬜️ | ✅ |
 
-- 홈/잠금 화면 위젯을 누르면 앱이 열리며 곧장 **기록 탭**으로 이동합니다.
-  (위젯 탭은 신뢰된 호출이라 "여시겠습니까?" 확인창 없이 바로 열립니다)
+- 파일이 네비게이터에 없으면 **File ▸ Add Files to "Mwallet"…** 로 `Shared/` 폴더와 `MwalletWidget/MwalletWidget.swift` 를 추가한 뒤 위 소속을 지정하세요.
+- 위젯 타깃 **Deployment Target = iOS 17.0** 확인(앱과 동일). `containerBackground`·인터랙티브 버튼이 iOS 17 필요.
 
-## 더 빠르게: 위젯에서 바로 기록 폼 열기 (선택, 추후)
+## 4. 앱에 두 줄 붙이기 (스냅샷 발행 · 큐 반영)
 
-지금은 기록 탭(음성 버튼)까지 엽니다. 위젯을 눌렀을 때 **수기 기록 폼**을
-곧바로 띄우려면 `mwallet://record/manual` 같은 링크를 추가하고, 앱에서
-그 호스트를 받아 `ManualRecordView`를 여는 신호를 주면 됩니다. 필요 시 이어서
-작업할 수 있습니다.
+`Shared/MwalletBridge.swift`가 앱 타깃에 들어가면 아래를 추가합니다.
+
+### (a) 예결산 화면에서 스냅샷 발행 — `Mwallet/Budget/View/BudgetView.swift`
+
+`reload()` 끝에 한 줄:
+
+```swift
+private func reload() {
+    travels = store.availableTravels()
+    if selectedTravel == nil || !travels.contains(where: { $0.objectID == selectedTravel?.objectID }) {
+        selectedTravel = travels.first { $0.objectID == mainVM.selectedTravelInExpense?.objectID }
+            ?? travels.first
+    }
+    refreshToken = UUID()
+    publishWidgetSnapshot()          // ← 추가
+}
+
+// 추가
+private func publishWidgetSnapshot() {
+    let pending = store.expenses(for: selectedTravel).filter { $0.needsPhoto }.count
+    MwalletBridge.publish(
+        summary: store.summary(for: selectedTravel),
+        travelName: selectedTravel?.name ?? "여행",
+        pendingReceiptCount: pending
+    )
+}
+```
+
+`refreshAfterEditing()` 에도 `publishWidgetSnapshot()` 한 줄을 더하면 예산 편집 직후에도 갱신됩니다.
+
+> `store.expenses(for:)`, `Expense.needsPhoto` 는 이미 앱에 있습니다(여행 지도·영수증에서 사용). 이름이 다르면 맞춰 주세요.
+
+### (b) 앱이 활성화될 때 위젯 큐 반영 — `Mwallet/MwalletApp.swift`
+
+```swift
+@main
+struct MwalletApp: App {
+    @Environment(\.scenePhase) private var scenePhase   // ← 추가
+    private let seeder = FirstLaunchSeeder.shared
+
+    var body: some Scene {
+        WindowGroup {
+            SplashView()
+                .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+                .onOpenURL(perform: handleDeepLink)
+        }
+        .onChange(of: scenePhase) { _, phase in           // ← 추가
+            if phase == .active {
+                MwalletBridge.flushPendingExpenses(
+                    into: PersistenceController.shared.container.viewContext
+                )
+            }
+        }
+    }
+    // handleDeepLink(_:) 는 이미 있음
+}
+```
+
+## 5. 확인
+
+1. 앱을 한 번 빌드·실행 → **예결산 탭**을 열어 스냅샷을 만든다.
+2. 홈 화면 길게 눌러 **+** ▸ Mwallet ▸ 예산/결산/지출 기록/영수증 위젯 추가.
+3. 기록 위젯(중형)의 프리셋을 누르면 큐에 담기고, **앱을 열면** 임시 기록에 지출로 반영된다.
+4. 잠금 화면 위젯(원형)도 지원: 지출 기록·영수증.
+
+## 딥링크 (이미 앱에 반영됨)
+
+- `mwallet://record` → 기록 탭
+- `mwallet://receipt` → 영수증 탭
+- `mwallet://budget` → 예결산 탭
+
+## 참고 / 한계
+
+- **프리셋 금액**은 `MwalletWidget.swift`의 `quickPresets`에서 자유롭게 바꿉니다(현재 커피 4,500 / 식사 10,000 / 교통 3,000).
+- 위젯 기록은 **여행을 고르지 않아** 임시 기록(기본함)에 담기고 원화로 저장됩니다.
+- 다른 기기 반영은 앱을 한 번 연 뒤 CloudKit 동기화 시점에 이뤄집니다(큐 방식).
+- 스냅샷은 예결산 탭을 열 때 갱신됩니다. 더 자주 갱신하려면 지출 저장 지점(ReceiptStore 등)에서도 `MwalletBridge.publish(...)`를 호출하세요.

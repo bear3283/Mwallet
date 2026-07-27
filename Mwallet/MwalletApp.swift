@@ -22,13 +22,17 @@ struct MwalletApp: App {
         }
     }
 
-    // 위젯·단축어에서 mwallet://record 로 진입하면 곧장 기록 탭을 연다.
-    // (홈 화면 위젯을 눌러 바로 지출을 기록하는 통로)
+    // 위젯·단축어에서 mwallet:// 링크로 진입하면 해당 탭을 곧장 연다.
+    // record: 기록 탭 · receipt: 영수증 탭 · budget: 예결산 탭
     private func handleDeepLink(_ url: URL) {
         guard url.scheme == "mwallet" else { return }
         switch url.host {
         case "record":
             MainViewModel.shared.selection = MainViewModel.Tab.record
+        case "receipt":
+            MainViewModel.shared.selection = MainViewModel.Tab.receipt
+        case "budget":
+            MainViewModel.shared.selection = MainViewModel.Tab.ledger
         default:
             break
         }
