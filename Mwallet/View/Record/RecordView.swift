@@ -48,8 +48,9 @@ struct RecordView: View {
                         Color(.white)
                         
                         VStack(spacing: 0) {
+                            // 위·아래 유연 Spacer 로 콘텐츠를 세로 중앙에 둔다.
                             Spacer()
-                                .frame(height: 35)
+                                .frame(minHeight: 24)
                             travelChoiceView
                             Spacer()
                                 .frame(height: 36)
@@ -61,6 +62,7 @@ struct RecordView: View {
                                 .frame(height: 20)
                             manualRecordButtonView
                             Spacer()
+                                .frame(minHeight: 24)
                         }
                         
                         ZStack {
@@ -101,8 +103,10 @@ struct RecordView: View {
                         Color(.white)
                         
                         VStack(spacing: 0) {
+                            // 위·아래 모두 유연한 Spacer 로 콘텐츠를 세로 중앙에 둔다.
+                            // (기존엔 위가 고정 80이라 상단에 붙어 아래에 큰 공백이 생겼다)
                             Spacer()
-                                .frame(height: 80)
+                                .frame(minHeight: 60)
                             travelChoiceView
                             Spacer()
                                 .frame(height: 36)
@@ -114,6 +118,7 @@ struct RecordView: View {
                                 .frame(height: 40) // figma: 64
                             manualRecordButtonView
                             Spacer()
+                                .frame(minHeight: 40)
                         }
                         
                         ZStack {
