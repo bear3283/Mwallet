@@ -22,10 +22,10 @@ struct TravelMapView: View {
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var refreshToken = UUID()
 
-    // 지도에 찍을 지출들. 좌표가 있는 것만.
-    private var mappedExpenses: [Expense] {
+    // 지도에 찍을 곳들. 좌표가 있는 지출만, 기록 순서대로 번호가 붙는다.
+    private var stops: [TravelExpenseStop] {
         _ = refreshToken
-        return budgetStore.expenses(for: selectedTravel).filter { $0.coordinate != nil }
+        return TravelExpenseStop.stops(from: budgetStore.expenses(for: selectedTravel))
     }
 
     private var summary: BudgetSummary {
@@ -118,53 +118,7 @@ struct TravelMapView: View {
     // MARK: - 지도
 
     private var mapCard: some View {
-        ZStack(alignment: .bottomLeading) {
-            Map(position: $cameraPosition) {
-                ForEach(mappedExpenses, id: \.objectID) { expense in
-                    if let coordinate = expense.coordinate {
-                        Annotation(
-                            expense.merchantName,
-                            coordinate: coordinate,
-                            anchor: .bottom
-                        ) {
-                            pin(for: expense)
-                        }
-                    }
-                }
-            }
-            .mapStyle(.standard(pointsOfInterest: .excludingAll))
-            .frame(height: 320)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-
-            if mappedExpenses.isEmpty {
-                mapEmptyBadge
-                    .padding(12)
-            }
-        }
-    }
-
-    private func pin(for expense: Expense) -> some View {
-        let category = ExpenseInfoCategory(rawValue: Int(expense.category)) ?? .unknown
-        return ZStack {
-            Circle()
-                .fill(category.color)
-                .frame(width: 26, height: 26)
-                .overlay(Circle().stroke(.white, lineWidth: 2))
-                .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
-            Image(systemName: "wonsign")
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(.white)
-        }
-    }
-
-    // 좌표가 있는 지출이 없을 때, 지도 위에 안내를 얹는다.
-    private var mapEmptyBadge: some View {
-        Text("위치를 남긴 지출이 아직 없어요")
-            .font(.caption1_fixed)
-            .foregroundStyle(.gray400)
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .background(.ultraThinMaterial, in: Capsule())
+        TravelExpenseMap(stops: stops, cameraPosition: $cameraPosition)
     }
 
     // MARK: - 요약
@@ -176,7 +130,7 @@ struct TravelMapView: View {
                     .font(.subhead2_1_fixed)
                     .foregroundStyle(.black)
                     .lineLimit(1)
-                Text("\(mappedExpenses.count)곳에서 지출")
+                Text("\(stops.count)곳에서 지출")
                     .font(.caption1_fixed)
                     .foregroundStyle(.gray300)
             }
@@ -224,24 +178,9 @@ struct TravelMapView: View {
 
     // 지출 핀이 모두 보이도록 카메라를 맞춘다.
     private func fitCameraToExpenses() {
-        let coordinates = mappedExpenses.compactMap { $0.coordinate }
-        guard !coordinates.isEmpty else {
-            cameraPosition = .automatic
-            return
-        }
-        let lats = coordinates.map(\.latitude)
-        let lons = coordinates.map(\.longitude)
-        let center = CLLocationCoordinate2D(
-            latitude: (lats.min()! + lats.max()!) / 2,
-            longitude: (lons.min()! + lons.max()!) / 2
-        )
-        // 핀이 가장자리에 붙지 않도록 여유를 1.4배 준다. 한 곳뿐이면 기본 폭.
-        let span = MKCoordinateSpan(
-            latitudeDelta: max((lats.max()! - lats.min()!) * 1.4, 0.02),
-            longitudeDelta: max((lons.max()! - lons.min()!) * 1.4, 0.02)
-        )
+        let fitted = TravelMapCamera.fitted(to: stops)
         withAnimation {
-            cameraPosition = .region(MKCoordinateRegion(center: center, span: span))
+            cameraPosition = fitted
         }
     }
 }
