@@ -151,23 +151,26 @@ Mwallet/
 - [x] 환율 조회 실패 시 `-1` / `-100` 센티널이 Core Data에 저장되는 문제 제거
 - [x] `getExchangeRateFromKRW`의 0 나눗셈 방어
 - [x] 환율 캐시 만료 판정을 UTC 절대시각 기준으로 수정
-- [ ] **`DateGapHandler` 시간대 시프트 제거** — `DateGapHandler` 참조 10개 파일. 저장 형식 문제라 데이터가 쌓이기 전에. CloudKit을 켠 지금 최우선
-- [ ] 화면과 CSV의 환율 기준 통일 (화면은 오늘 환율, CSV는 기록 시점 환율)
+- [x] **`DateGapHandler` 시간대 시프트 제거** — `convertBeforeSaving` / `convertBeforeShowing` 과 호출부 10개 파일 정리. `payDate` 는 이제 언제나 실제 절대시각이고, 현지 시각 복원은 `timeZoneIdentifier` 가 맡는다
+- [x] 화면과 CSV의 환율 기준 통일 — 화면·통계·예결산·CSV가 모두 `Expense.amountInKRW`(기록 시점 환율) 하나를 쓴다
+- [x] 위치를 못 잡으면 통화가 달러로 고정되던 문제 — 기본값을 원화로 바꾸고 후보 목록에 원화·달러를 항상 남긴다
+- [x] `CountryList.csv` 복수 통화 국가(홍콩·마카오) 파싱 시 통화 유실 + 열 밀림 제거
 
 **P1 — 안정성**
 - [x] SwiftLint 실제 동작 복구 (원본은 미설치 상태로 스킵되고 있었음)
 - [x] SwiftLint 위반 0건 달성
-- [ ] 테스트 타깃 신설 — 미착수
-- [ ] CI(빌드 + 린트 + 테스트) 도입 — 미착수
-- [ ] `print` → `OSLog` 전환 (현재 약 60개, 데드 코드 제거로 181 → 60 감소)
-- [ ] `fatalError` 5곳 → 복구 가능한 에러 처리로 전환
-- [ ] 기존 `CSVArchive` 를 `ReceiptCSVEncoder` 로 교체 (이스케이프 결함 잔존)
+- [x] 테스트 타깃 신설 (`MwalletTests`) — 120건. CSV 파서 · 국가/통화 표 · 환율 · 금액 환산 · CSV 인코딩 · 예산 집계 · 영수증 집계/필터 · 저장 규칙 · 지도 순서 · 위젯 큐
+- [x] CI(빌드 + 린트 + 테스트) 도입 — [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+- [x] `fatalError` 5곳 → 3곳을 복구 가능한 처리로 전환 (남은 2곳은 `Persistence` 의 저장소 개방 실패로, 앱이 할 수 있는 복구가 없음)
+- [x] 기존 `CSVArchive` 를 `ReceiptCSVEncoder` 로 교체 완료
+- [ ] `print` → `OSLog` 전환 (현재 약 60개)
 
 **P2 — 구조**
 - [x] 데드 코드 제거, `TempSave` → `FirstLaunchSeeder` 정리
 - [x] 2차 데드 코드 정리 — 도달 불가 구 여행목록/Interim 기록 화면 계열 16파일 + `Constants` 제거, 구 NomadWallet 잔재(설정 화면 링크·이메일) 정리
 - [x] `ManualRecord*` 통합 진척 — 중복 심하던 `ManualRecordWithExpenseView` 쌍 제거, 현재 `ManualRecordView` + VM 2파일만 잔존
-- [ ] Repository 레이어 도입, View의 Core Data 직접 참조 제거 (13곳 → 현재 3곳)
+- [x] App Group 공유 계약 중복 제거 — 위젯이 `Shared/MwalletShared.swift` 를 함께 컴파일한다 (약 100줄 사본 삭제)
+- [ ] Repository 레이어 도입, View의 Core Data 직접 참조 제거 (13곳 → 현재 4곳)
 - [ ] `Travel.isDefault` 도입 → `tempTravelName` 매직 문자열 제거
 - [ ] SwiftLint 길이·복잡도 룰 10개 단계적 재활성화
 
