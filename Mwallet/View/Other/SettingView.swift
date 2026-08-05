@@ -111,18 +111,27 @@ struct SettingView: View {
         })
     }
     
+    // 지출·예산은 여행에 딸린 자식이라 부모보다 먼저 지운다.
+    // 예전 목록에는 Budget 이 빠져 있어 여행만 지우면 예산이 고아로 남았다.
+    //
+    // NSBatchDeleteRequest 도 걷어냈다. 저장소를 직접 쳐서 viewContext 와
+    // CloudKit 미러링이 변경을 보지 못하기 때문에, 동기화를 켠 지금은 지운 데이터가
+    // 다른 기기에서 되살아난다. 컨텍스트를 통해 지워야 변경 이력이 함께 전파된다.
+    // 삭제량이 크지 않아 성능 손해는 없다.
     private func deleteAllData() {
-        let entities = ["Expense", "Travel", "User"]
-        for entity in entities {
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entity)
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-            
-            do {
-                try managedObjectContext.execute(deleteRequest)
-                try managedObjectContext.save()
-            } catch let error as NSError {
-                print("Error: \(error), \(error.userInfo)")
+        let entities = ["Expense", "Budget", "Travel", "User"]
+        do {
+            for entity in entities {
+                let request = NSFetchRequest<NSManagedObject>(entityName: entity)
+                request.includesPropertyValues = false
+                for object in try managedObjectContext.fetch(request) {
+                    managedObjectContext.delete(object)
+                }
             }
+            try managedObjectContext.save()
+        } catch {
+            print("SettingView | 전체 삭제 실패: \(error.localizedDescription)")
+            managedObjectContext.rollback()
         }
     }
 }
