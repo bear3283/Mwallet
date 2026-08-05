@@ -47,22 +47,30 @@ struct RecordView: View {
                     ZStack {
                         Color(.white)
                         
+                        // 말한 결과가 채워지는 곳(livePropertyView)이 이 화면의 주인공이라
+                        // 그 블록을 화면 세로 한가운데에 둔다. 위·아래 묶음이 남은 공간을
+                        // 똑같이 나눠 가지므로, 위쪽 항목 수가 늘어도 가운데가 밀리지 않는다.
                         VStack(spacing: 0) {
-                            // 위·아래 유연 Spacer 로 콘텐츠를 세로 중앙에 둔다.
-                            Spacer()
-                                .frame(minHeight: 24)
-                            travelChoiceView
-                            Spacer()
-                                .frame(height: 36)
-                            rawSentenceView
-                            Spacer()
-                                .frame(height: 36)
+                            VStack(spacing: 0) {
+                                Spacer(minLength: 24)
+                                travelChoiceView
+                                Spacer()
+                                    .frame(height: 36)
+                                rawSentenceView
+                                Spacer()
+                                    .frame(height: 36)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .bottom)
+
                             livePropertyView
-                            Spacer()
-                                .frame(height: 20)
-                            manualRecordButtonView
-                            Spacer()
-                                .frame(minHeight: 24)
+
+                            VStack(spacing: 0) {
+                                Spacer()
+                                    .frame(height: 20)
+                                manualRecordButtonView
+                                Spacer(minLength: 24)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .top)
                         }
                         
                         ZStack {
@@ -102,23 +110,31 @@ struct RecordView: View {
                     ZStack {
                         Color(.white)
                         
+                        // 말한 결과가 채워지는 곳(livePropertyView)이 이 화면의 주인공이라
+                        // 그 블록을 화면 세로 한가운데에 둔다. 위·아래 묶음이 남은 공간을
+                        // 똑같이 나눠 가지므로, 위쪽 항목 수가 늘어도 가운데가 밀리지 않는다.
+                        // (예전엔 네 항목 묶음 전체를 가운데 두어 3번째인 이 블록이 아래로 처졌다)
                         VStack(spacing: 0) {
-                            // 위·아래 모두 유연한 Spacer 로 콘텐츠를 세로 중앙에 둔다.
-                            // (기존엔 위가 고정 80이라 상단에 붙어 아래에 큰 공백이 생겼다)
-                            Spacer()
-                                .frame(minHeight: 60)
-                            travelChoiceView
-                            Spacer()
-                                .frame(height: 36)
-                            rawSentenceView
-                            Spacer()
-                                .frame(height: 36)
+                            VStack(spacing: 0) {
+                                Spacer(minLength: 60)
+                                travelChoiceView
+                                Spacer()
+                                    .frame(height: 36)
+                                rawSentenceView
+                                Spacer()
+                                    .frame(height: 36)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .bottom)
+
                             livePropertyView
-                            Spacer()
-                                .frame(height: 40) // figma: 64
-                            manualRecordButtonView
-                            Spacer()
-                                .frame(minHeight: 40)
+
+                            VStack(spacing: 0) {
+                                Spacer()
+                                    .frame(height: 40) // figma: 64
+                                manualRecordButtonView
+                                Spacer(minLength: 40)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .top)
                         }
                         
                         ZStack {
