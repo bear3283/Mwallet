@@ -47,7 +47,7 @@ func findCurrentTravel() -> Travel? {
     var currentTravels: [Travel] = []
     // 여행 중인 경우 여기에 해당하는 코드를 구현
     for travel in allTravels {
-        if let startDate = travel.startDate?.convertBeforeShowing(), let endDate = travel.endDate?.convertBeforeShowing() { // 현지 타임존으로 수정하고 비교
+        if let startDate = travel.startDate, let endDate = travel.endDate {
             if (startDate <= todayDate) && (todayDate <= endDate) {
                 currentTravels.append(travel)
             }

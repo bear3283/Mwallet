@@ -23,14 +23,6 @@ extension Date {
         return DateGapHandler.shared.getLocal235959(of: self)
     }
     
-    func convertBeforeSaving() -> Date {
-        return DateGapHandler.shared.convertBeforeSaving(date: self)
-    }
-    
-    func convertBeforeShowing() -> Date {
-        return DateGapHandler.shared.convertBeforeShowing(date: self)
-    }
-    
     func isTimeEqual(to otherDate: Date) -> Bool {
         let calendar = Calendar.current
         let componentsA = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self)

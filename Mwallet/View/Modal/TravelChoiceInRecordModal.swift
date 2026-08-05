@@ -194,13 +194,13 @@ struct TravelBlockView: View {
                                 Group {
                                     if let startDate = travel.startDate {
                                         if let endDate = travel.endDate {
-                                            Text(DateGapHandler.shared.convertBeforeShowing(date: startDate).toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + DateGapHandler.shared.convertBeforeShowing(date: endDate).toString(dateFormat: "YY.MM.dd"))
+                                            Text(startDate.toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + endDate.toString(dateFormat: "YY.MM.dd"))
                                                 .foregroundStyle(.white)
                                                 .lineSpacing(2)
                                                 .font(.caption2)
                                                 .opacity(0.75)
                                         } else {
-                                            Text(DateGapHandler.shared.convertBeforeShowing(date: startDate).toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + "미정")
+                                            Text(startDate.toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + "미정")
                                                 .foregroundStyle(.white)
                                                 .lineSpacing(2)
                                                 .font(.caption2)
@@ -283,13 +283,13 @@ struct TravelBlockView: View {
                 if travel.name == tempTravelName {
                     EmptyView()
                 } else {
-                    if DateGapHandler.shared.convertBeforeShowing(date: travel.startDate ?? Date.distantPast) < now && DateGapHandler.shared.convertBeforeShowing(date: travel.endDate ?? Date.distantFuture) > now {
+                    if (travel.startDate ?? Date.distantPast) < now && (travel.endDate ?? Date.distantFuture) > now {
                         Text("여행 중")
                             .foregroundStyle(.mainAccent)
                             .font(.caption1)
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
-                    } else if DateGapHandler.shared.convertBeforeShowing(date: travel.startDate ?? Date.distantPast) > now {
+                    } else if (travel.startDate ?? Date.distantPast) > now {
                         Text("다가오는 여행")
                             .foregroundStyle(.black)
                             .font(.caption1)
