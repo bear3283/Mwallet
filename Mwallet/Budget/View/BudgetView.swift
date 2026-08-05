@@ -7,6 +7,7 @@
 //
 
 import Charts
+import CoreData
 import SwiftUI
 
 struct BudgetView: View {
@@ -38,7 +39,7 @@ struct BudgetView: View {
                         detail: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다."
                     )
                 } else {
-                    travelChips
+                    travelSelector
 
                     Spacer()
                         .frame(height: 20)
@@ -74,21 +75,76 @@ struct BudgetView: View {
 
     // MARK: - 사역 선택
 
-    private var travelChips: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 4) {
+    // 가로 스크롤 칩은 여행이 늘어나면 뒤쪽이 화면 밖으로 밀려 보이지 않았다.
+    //
+    // 선택기를 따로 두는 대신 화면 제목이 곧 선택기가 되게 했다.
+    // 이 화면은 '한 사역의 장부를 펼친 상태' 이므로 그 사역 이름이 제목이어야
+    // 맞고, 그러면 칩 밴드 한 줄이 통째로 없어져 본문이 위로 올라온다.
+    private var travelSelector: some View {
+        Menu {
+            Picker("여행", selection: travelSelection) {
                 ForEach(travels, id: \.objectID) { travel in
-                    ReceiptChip(
-                        title: travel.name ?? "이름 없음",
-                        isSelected: selectedTravel?.objectID == travel.objectID
-                    ) {
-                        selectedTravel = travel
-                        refreshToken = UUID()
-                    }
+                    Text(travelLabel(travel)).tag(travel.objectID as NSManagedObjectID?)
                 }
             }
-            .padding(.horizontal, ReceiptLayout.gutter)
+        } label: {
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(selectedTravel?.name ?? "여행 선택")
+                        .font(.display2_fixed)
+                        .foregroundStyle(.black)
+                        .lineLimit(1)
+
+                    // 고를 수 있다는 신호. 코발트는 누를 수 있는 것에만 쓴다.
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(Color.mainAccent)
+
+                    Spacer(minLength: 0)
+                }
+
+                Text(metaText)
+                    .font(.caption1_fixed)
+                    .foregroundStyle(.gray300)
+                    .lineLimit(1)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
+        .padding(.horizontal, ReceiptLayout.gutter)
+    }
+
+    // 제목 아래 한 줄. 기간과 인원은 확인용이라 작게 붙인다.
+    private var metaText: String {
+        guard let selectedTravel else { return "여행을 골라 주세요" }
+        let people = (selectedTravel.participantArray?.count ?? 0) + 1
+        return "\(periodText(selectedTravel)) · \(people)명"
+    }
+
+    // Travel 은 Hashable 비교가 번거로워 objectID 로 고른다.
+    private var travelSelection: Binding<NSManagedObjectID?> {
+        Binding(
+            get: { selectedTravel?.objectID },
+            set: { newValue in
+                guard let newValue,
+                      let travel = travels.first(where: { $0.objectID == newValue }) else { return }
+                selectedTravel = travel
+                refreshToken = UUID()
+            }
+        )
+    }
+
+    private func travelLabel(_ travel: Travel) -> String {
+        "\(travel.name ?? "이름 없음")  ·  \(periodText(travel))"
+    }
+
+    private func periodText(_ travel: Travel) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yy.MM.dd"
+        guard let start = travel.startDate else { return "기간 미정" }
+        guard let end = travel.endDate else { return "\(formatter.string(from: start)) ~ 미정" }
+        return "\(formatter.string(from: start)) ~ \(formatter.string(from: end))"
     }
 
     // MARK: - 본문
