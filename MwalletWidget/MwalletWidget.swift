@@ -435,103 +435,12 @@ struct MwalletWidgetBundle: WidgetBundle {
     }
 }
 
-// MARK: - App Group 공유 계약 (앱 Shared/MwalletShared.swift 와 동일한 값)
+// MARK: - App Group 공유 계약
 //
-// 위젯 타깃이 파일 추가 없이 스스로 컴파일되도록 여기 포함한다.
-// ⚠️ 앱 쪽 사본(Shared/MwalletShared.swift)과 App Group ID·필드명·키가
-//    반드시 같아야 데이터가 오간다. 한쪽을 바꾸면 다른 쪽도 함께 바꾼다.
-
-enum MwalletShared {
-
-    static let appGroupID = "group.com.Mwallet.app"
-
-    private static let snapshotKey = "budget.snapshot"
-    private static let queueKey = "pending.expenses"
-
-    private static var store: UserDefaults? {
-        UserDefaults(suiteName: appGroupID)
-    }
-
-    static func writeSnapshot(_ snapshot: BudgetSnapshot) {
-        guard let data = try? JSONEncoder().encode(snapshot) else { return }
-        store?.set(data, forKey: snapshotKey)
-    }
-
-    static func readSnapshot() -> BudgetSnapshot? {
-        guard let data = store?.data(forKey: snapshotKey) else { return nil }
-        return try? JSONDecoder().decode(BudgetSnapshot.self, from: data)
-    }
-
-    static func enqueue(_ expense: PendingExpense) {
-        var queue = readQueue()
-        queue.append(expense)
-        writeQueue(queue)
-    }
-
-    static func readQueue() -> [PendingExpense] {
-        guard let data = store?.data(forKey: queueKey) else { return [] }
-        return (try? JSONDecoder().decode([PendingExpense].self, from: data)) ?? []
-    }
-
-    static func drainQueue() -> [PendingExpense] {
-        let queue = readQueue()
-        store?.removeObject(forKey: queueKey)
-        return queue
-    }
-
-    private static func writeQueue(_ queue: [PendingExpense]) {
-        guard let data = try? JSONEncoder().encode(queue) else { return }
-        store?.set(data, forKey: queueKey)
-    }
-}
-
-struct BudgetSnapshot: Codable {
-    var travelName: String
-    var totalPlanned: Double
-    var totalSpent: Double
-    var pendingReceiptCount: Int
-    var categories: [CategorySlice]
-    var updatedAt: Date
-
-    struct CategorySlice: Codable {
-        var name: String
-        var spent: Double
-    }
-
-    var ratio: Double { totalPlanned > 0 ? totalSpent / totalPlanned : 0 }
-    var remaining: Double { totalPlanned - totalSpent }
-    var isOverspent: Bool { totalSpent > totalPlanned }
-    var hasBudget: Bool { totalPlanned > 0 }
-}
-
-struct PendingExpense: Codable, Identifiable {
-    var id: UUID
-    var amount: Double
-    var categoryIndex: Int
-    var paymentMethodIndex: Int
-    var info: String
-    var createdAt: Date
-
-    init(amount: Double, categoryIndex: Int, paymentMethodIndex: Int, info: String) {
-        self.id = UUID()
-        self.amount = amount
-        self.categoryIndex = categoryIndex
-        self.paymentMethodIndex = paymentMethodIndex
-        self.info = info
-        self.createdAt = Date()
-    }
-}
-
-enum MwalletSharedFormat {
-    static func krw(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        let number = formatter.string(from: NSNumber(value: value)) ?? "0"
-        return "\(number)원"
-    }
-
-    static func percent(_ ratio: Double) -> String {
-        "\(Int((ratio * 100).rounded()))%"
-    }
-}
+// MwalletShared·BudgetSnapshot·PendingExpense·MwalletSharedFormat 는
+// Shared/MwalletShared.swift 한 곳에만 있고, 앱과 위젯 두 타깃이 그 파일을
+// 함께 컴파일한다.
+//
+// 예전에는 위젯이 스스로 컴파일되도록 같은 정의를 여기에 복사해 두었는데,
+// 컴파일러가 두 사본의 불일치를 잡아 주지 못해 키 이름 하나만 어긋나도
+// 데이터가 조용히 오가지 않을 수 있었다.

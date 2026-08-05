@@ -42,10 +42,18 @@ enum MwalletBridge {
     // 위젯 기록은 여행을 고르지 않으므로 기본함(임시 기록)에 원화로 담는다.
     @discardableResult
     static func flushPendingExpenses(into context: NSManagedObjectContext) -> Int {
-        let pending = MwalletShared.drainQueue()
-        guard !pending.isEmpty else { return 0 }
+        guard !MwalletShared.readQueue().isEmpty else { return 0 }
 
-        let travel = defaultTravel(in: context)
+        // 담을 곳이 없으면 큐를 비우지 않는다. 예전에는 먼저 drain 한 뒤
+        // travel 이 nil 이어도 그대로 저장해, 어느 탭에도 안 보이는 지출이 생겼다.
+        // CloudKit 머지 전이라 '임시 기록' 여행이 아직 없을 수 있으므로
+        // 다음 활성화 때 다시 시도하도록 남겨 둔다.
+        guard let travel = defaultTravel(in: context) else {
+            print("MwalletBridge | 기본 여행이 없어 대기 지출을 보류합니다")
+            return 0
+        }
+
+        let pending = MwalletShared.drainQueue()
 
         for item in pending {
             let expense = Expense(context: context)
@@ -57,14 +65,18 @@ enum MwalletBridge {
             expense.currency = ExpenseCode.currencyIndex(for: "KRW")
             expense.exchangeRate = 1               // 원화는 기준 통화라 환율 1
             expense.country = 0
-            expense.payDate = DateGapHandler.shared.convertBeforeSaving(date: item.createdAt)
+            expense.payDate = item.createdAt
             expense.timeZoneIdentifier = TimeZone.current.identifier
         }
 
         do {
             try context.save()
         } catch {
+            // 큐는 이미 비운 뒤라 여기서 그냥 돌아가면 기록이 사라진다.
+            // 만들다 만 객체를 되돌리고 큐를 복구해 다음 기회에 다시 시도한다.
             print("MwalletBridge | 대기 지출 반영 실패: \(error.localizedDescription)")
+            context.rollback()
+            pending.forEach(MwalletShared.enqueue)
             return 0
         }
         return pending.count
