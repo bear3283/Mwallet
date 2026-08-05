@@ -3,8 +3,8 @@ name: CI
 on:
   push:
     branches: [main]
+  # base 를 제한하지 않는다. 제한하면 PR 위에 쌓은 PR 이 CI 를 타지 못한다.
   pull_request:
-    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
