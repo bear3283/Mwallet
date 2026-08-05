@@ -31,7 +31,20 @@ struct PersistenceController {
     // 켜기 전 준비: 유료 Apple Developer 계정, iCloud 컨테이너 생성,
     // Signing & Capabilities 에 iCloud(CloudKit) + Background Modes(Remote notifications).
     // 자세한 절차는 docs/CloudKit-활성화.md 참고.
-    static let isCloudKitSyncEnabled = true
+    static var isCloudKitSyncEnabled: Bool {
+        // 테스트 중에는 끈다.
+        //
+        // 단위 테스트는 이 앱을 호스트로 띄우는데, CI 처럼 서명 없이 빌드하면
+        // entitlement 가 없다. 그 상태로 미러링이 켜지면 위에 적은 이유로
+        // 별도 큐에서 죽고, 테스트는 시작조차 못 한 채 실패한다.
+        // (Testing failed: Early unexpected exit ... signal trap before starting)
+        //
+        // 테스트는 어차피 메모리 전용 저장소를 쓰므로 동기화가 필요 없다.
+        // 실제 앱 실행에는 영향이 없다.
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil { return false }
+        return true
+    }
+
     static let cloudKitContainerIdentifier = "iCloud.com.Mwallet.app"
 
     let container: NSPersistentCloudKitContainer
