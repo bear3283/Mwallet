@@ -13,12 +13,29 @@ struct SettingView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
+    @State private var isConfirmingDelete = false
+    @State private var isConfirmingDeleteAgain = false
+
     var body: some View {
         List {
             defaultSetting
             feedbackAndQuestion
             appVersionCheck
-            //            deleteAll
+            deleteAll
+        }
+        .alert("모든 데이터를 삭제할까요?", isPresented: $isConfirmingDelete) {
+            Button("취소", role: .cancel) { }
+            Button("계속", role: .destructive) { isConfirmingDeleteAgain = true }
+        } message: {
+            Text("여행·지출·예산·영수증 사진이 모두 지워집니다.")
+        }
+        // 되돌릴 수 없고 iCloud 로 다른 기기까지 함께 지워지므로 한 번 더 묻는다.
+        // 첫 알림에서 손이 미끄러진 경우를 여기서 잡는다.
+        .alert("정말 지울까요?", isPresented: $isConfirmingDeleteAgain) {
+            Button("취소", role: .cancel) { }
+            Button("모두 삭제", role: .destructive, action: deleteAllData)
+        } message: {
+            Text("이 동작은 되돌릴 수 없습니다.\niCloud 로 연결된 다른 기기에서도 함께 지워집니다.\n\n남겨야 할 기록이 있다면 영수증 탭에서 CSV 로 먼저 내보내세요.")
         }
         .toolbar(.hidden, for: .tabBar)
         .navigationTitle("설정")
@@ -76,15 +93,17 @@ struct SettingView: View {
     
     private var deleteAll: some View {
         Section {
-            Button {
-                deleteAllData()
+            Button(role: .destructive) {
+                isConfirmingDelete = true
             } label: {
-                HStack(spacing: 0) {
-                    Text("모든 데이터 삭제하기")
-                        .font(.caption3)
-                        .foregroundStyle(.red)
-                }
+                Text("모든 데이터 삭제하기")
+                    .font(.caption3)
+                    .foregroundStyle(.red)
             }
+        } footer: {
+            Text("여행·지출·예산이 모두 지워집니다. 되돌릴 수 없습니다.")
+                .font(.caption2)
+                .foregroundStyle(.gray400)
         }
     }
     
