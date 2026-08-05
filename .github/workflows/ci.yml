@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: 빌드 · 린트 · 테스트
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 환율 API 키는 저장소에 없다. CI 에서는 빈 키로 빌드만 통과시킨다.
+      # 네트워크를 타는 코드는 테스트 대상이 아니라 값이 없어도 문제되지 않는다.
+      # 실제 키가 필요해지면 저장소 Secrets 에 EXCHANGERATE_API_KEY 를 넣는다.
+      - name: 시크릿 설정
+        run: |
+          cp Mwallet/View/Config.xcconfig.example Mwallet/View/Config.xcconfig
+          if [ -n "${{ secrets.EXCHANGERATE_API_KEY }}" ]; then
+            echo "API_KEY = ${{ secrets.EXCHANGERATE_API_KEY }}" > Mwallet/View/Config.xcconfig
+          fi
+
+      # SPM 의존성(lottie-ios, SwiftLintPlugins)을 매번 새로 받지 않는다.
+      - name: SPM 캐시
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: ${{ runner.os }}-spm-
+
+      # SwiftLint 는 빌드 플러그인으로 함께 돈다. 위반이 있으면 경고로 찍힌다.
+      # 서명은 CI 에서 할 수 없으므로 끈다.
+      - name: 빌드 및 테스트
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project Mwallet.xcodeproj \
+            -scheme Mwallet \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -skipPackagePluginValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty && exit ${PIPESTATUS[0]}
+
+      # 린트 위반을 눈에 띄게 남긴다. 빌드 로그에 묻히지 않도록 따로 센다.
+      - name: 위젯 타깃 빌드
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Mwallet.xcodeproj \
+            -scheme MwalletWidgetExtension \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -skipPackagePluginValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty && exit ${PIPESTATUS[0]}
