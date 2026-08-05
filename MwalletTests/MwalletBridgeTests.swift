@@ -68,6 +68,19 @@ final class MwalletBridgeTests: CoreDataTestCase {
         XCTAssertTrue(MwalletShared.readQueue().isEmpty)
     }
 
+    // 위젯은 위치를 묻지 않는다. 0(대한민국)을 넣으면 해외에서 담은 지출도
+    // 국내로 표시된다.
+    func test_위젯_기록의_국가는_알_수_없음이다() throws {
+        makeTravel(name: tempTravelName)
+        try context.save()
+        enqueueSample()
+
+        MwalletBridge.flushPendingExpenses(into: context)
+
+        let expense = try XCTUnwrap(try context.fetch(Expense.fetchRequest()).first)
+        XCTAssertEqual(expense.country, ExpenseCode.unknownCountry)
+    }
+
     // 여기가 예전에 지출을 잃던 자리다. 먼저 큐를 비우고 travel 이 nil 이어도
     // 그대로 저장해, 어느 탭에도 안 보이는 기록이 생겼다.
     func test_기본_여행이_없으면_큐를_비우지_않는다() throws {

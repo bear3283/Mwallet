@@ -102,6 +102,11 @@ enum ExpenseCode {
 
     static let baseCurrency = "KRW"
 
+    // CountryList.csv 의 '알 수 없음' 행. 기록에 국가가 남지 않았을 때 쓴다.
+    // Core Data 의 country 기본값도 이 값이다. 예전 기본값은 0(대한민국)이라
+    // 국가를 한 번도 정하지 않은 기록이 전부 국내로 표시됐다.
+    static let unknownCountry: Int64 = -1
+
     // 자주 쓰는 통화만 앞에 세운다. 전체 목록은 166개라 선택지로 늘어놓기 어렵다.
     static let currencyPresets = ["KRW", "USD", "PHP", "THB", "VND", "IDR", "JPY", "EUR"]
 

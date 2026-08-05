@@ -76,6 +76,17 @@ final class ExpenseAmountTests: XCTestCase {
         XCTAssertFalse(expense.needsExchangeRate)
     }
 
+    // MARK: - 국가
+
+    // 예전 기본값은 0(대한민국)이라, 국가를 한 번도 정하지 않은 기록
+    // (영수증 탭으로 만든 것 전부)이 국내 지출로 표시됐다.
+    func test_국가를_정하지_않은_기록은_알_수_없음이다() {
+        let expense = makeExpense(amount: 1, currency: "KRW", rate: 1)
+
+        XCTAssertEqual(expense.country, ExpenseCode.unknownCountry)
+        XCTAssertEqual(CountryInfoModel.shared.countryResult[Int(expense.country)]?.koreanNm, "알 수 없음")
+    }
+
     // MARK: - 시간대
 
     func test_기록_당시_시간대를_보존한다() {

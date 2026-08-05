@@ -93,6 +93,9 @@ final class FirstLaunchSeeder {
             expense.category = Int64(sample.category.rawValue)
             expense.currency = ExpenseCode.currencyIndex(for: "KRW")
             expense.exchangeRate = 1
+            // 예시는 제주라 국가를 명시한다. country 기본값은 '알 수 없음' 이므로
+            // 적어 두지 않으면 여행 상세의 국가 칸이 비어 보인다.
+            expense.country = 0
             expense.payDate = calendar.date(byAdding: .hour, value: -sample.hoursAgo, to: now)
             expense.timeZoneIdentifier = TimeZone.current.identifier
             expense.location = sample.merchant
