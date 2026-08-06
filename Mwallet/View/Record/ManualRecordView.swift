@@ -134,26 +134,31 @@ struct ManualRecordView: View {
             if viewModel.wantToActivateAutoSaveTimer && (viewModel.payAmount != -1 || viewModel.info != nil) {
                 viewModel.secondCounter = 8
                 viewModel.autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                    if let secondCounter = viewModel.secondCounter {
-                        if secondCounter > 1 {
-                            viewModel.secondCounter! -= 1
-                        } else {
-                            if viewModel.payAmount != -1 || viewModel.info != nil {
-                                viewModel.secondCounter = nil
-                                viewModel.save()
-                                if mainVM.chosenTravelInManualRecord != nil {
-                                    mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
-                                }
-                                viewModel.deleteUselessAudioFiles()
-                                viewModel.savingIsDone = true
-                                viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { t in
-                                    dismiss()
-                                    t.invalidate()
-                                }
-                                timer.invalidate()
-                            } else {
-                                viewModel.secondCounter = nil
-                                timer.invalidate()
+                    // 메인 런루프에 걸린 타이머라 항상 메인에서 깨어난다.
+                    // 클로저 타입은 @Sendable 이라 컴파일러가 그걸 알 수 없어 명시한다.
+                    MainActor.assumeIsolated {
+                        guard let secondCounter = viewModel.secondCounter else { return }
+
+                        guard secondCounter <= 1 else {
+                            viewModel.secondCounter = secondCounter - 1
+                            return
+                        }
+
+                        viewModel.secondCounter = nil
+                        timer.invalidate()
+
+                        guard viewModel.payAmount != -1 || viewModel.info != nil else { return }
+
+                        viewModel.save()
+                        if mainVM.chosenTravelInManualRecord != nil {
+                            mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
+                        }
+                        viewModel.deleteUselessAudioFiles()
+                        viewModel.savingIsDone = true
+                        viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { t in
+                            MainActor.assumeIsolated {
+                                dismiss()
+                                t.invalidate()
                             }
                         }
                     }

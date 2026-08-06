@@ -15,16 +15,20 @@ import Combine
 
 // 음성 기록 준비 단계에서 복구 가능한 실패. 화면은 녹음을 시작하지 않고 넘어간다.
 enum RecordError: LocalizedError {
-    case speechRequestUnavailable
+    case speechRecognizerUnavailable
 
     var errorDescription: String? {
         switch self {
-        case .speechRequestUnavailable:
-            return "음성 인식을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요."
+        case .speechRecognizerUnavailable:
+            return "이 기기에서 한국어 음성 인식을 쓸 수 없습니다. 직접 기록으로 남겨 주세요."
         }
     }
 }
 
+// 화면이 직접 들고 있는 상태다. @Published 갱신은 메인에서만 일어나야 하므로
+// 클래스 전체를 메인 액터에 묶는다. 음성 인식과 오디오 콜백은 임의의 스레드로
+// 오므로, 그 경계에서 메인으로 넘긴다.
+@MainActor
 final class RecordViewModel: ObservableObject {
 
     let viewContext = PersistenceController.shared.container.viewContext
@@ -656,42 +660,48 @@ final class RecordViewModel: ObservableObject {
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
         
+        // 인식기가 없으면(지원하지 않는 지역 설정) 아래 recognitionTask 가 조용히
+        // nil 이 되어 녹음만 돌고 받아쓰기는 아무 일도 하지 않는다. 먼저 막는다.
+        guard let speechRecognizer, speechRecognizer.isAvailable else {
+            throw RecordError.speechRecognizerUnavailable
+        }
+
+        let request = SFSpeechAudioBufferRecognitionRequest()
+        request.shouldReportPartialResults = true
+        if speechRecognizer.supportsOnDeviceRecognition {
+            request.requiresOnDeviceRecognition = true
+        }
+        recognitionRequest = request
+
         let inputNode = audioEngine.inputNode
         inputNode.removeTap(onBus: 0)
         let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, _: AVAudioTime) in
-            self.recognitionRequest?.append(buffer)
+
+        // ⚠️ 이 클로저는 실시간 오디오 스레드에서 돈다.
+        //    예전에는 self.recognitionRequest 를 매 콜백마다 읽었는데,
+        //    메인에서 stopSTT 가 그 프로퍼티를 nil 로 바꾸는 순간과 겹칠 수 있었다.
+        //    지역 상수를 붙잡아 두면 프로퍼티를 건드리지 않아 그 경합이 사라진다.
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+            request.append(buffer)
         }
-        
+
         audioEngine.prepare()
         try audioEngine.start()
-        
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        // 예전에는 여기서 fatalError 를 냈다. 음성 인식 준비에 실패한 것뿐인데
-        // 앱이 죽었다. startSTT 는 throws 이고 호출부가 이미 catch 하므로 던진다.
-        guard let recognitionRequest else {
-            audioEngine.stop()
-            inputNode.removeTap(onBus: 0)
-            throw RecordError.speechRequestUnavailable
-        }
-        recognitionRequest.shouldReportPartialResults = true
-        
-        if speechRecognizer?.supportsOnDeviceRecognition ?? false {
-            recognitionRequest.requiresOnDeviceRecognition = true
-        }
-        
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { result, error in
-            if let result = result {
-                DispatchQueue.main.async {
-                    let transcribedString = result.bestTranscription.formattedString
-                    self.updateVoiceSentence(with: transcribedString)
+
+        // 인식 결과는 임의의 큐로 온다. 화면 상태는 메인으로 넘겨서 바꾼다.
+        recognitionTask = speechRecognizer.recognitionTask(with: request) { [weak self] result, error in
+            guard let self else { return }
+
+            if let result {
+                let transcribed = result.bestTranscription.formattedString
+                Task { @MainActor in
+                    self.updateVoiceSentence(with: transcribed)
                 }
             }
             if error != nil {
-                self.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
+                Task { @MainActor in
+                    self.stopSTT()
+                }
             }
         }
     }

@@ -177,7 +177,9 @@ struct RecordView: View {
                 viewModel.resetInStringProperties()
                 viewModel.wantToActivateAutoSaveTimer = true
                 viewModel.recordButtonResetTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
-                    if !isDetectingPress {
+                    // 메인 런루프에 걸린 타이머라 항상 메인에서 깨어난다.
+                    MainActor.assumeIsolated {
+                        guard !isDetectingPress else { return }
                         viewModel.stopSTT()
                         viewModel.stopRecording()
                     }
