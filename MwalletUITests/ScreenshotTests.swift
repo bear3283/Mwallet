@@ -16,11 +16,18 @@
 
 import XCTest
 
+// XCUIApplication 을 비롯한 XCUITest API 는 메인 액터에 묶여 있다.
+// 클래스 전체를 메인에 두어야 엄격 동시성 검사에서 깨끗하다.
+@MainActor
 final class ScreenshotTests: XCTestCase {
 
     private var app: XCUIApplication!
 
-    override func setUpWithError() throws {
+    // setUpWithError 는 nonisolated 오버라이드라 메인 액터 멤버를 부를 수 없다.
+    // async 형태는 클래스의 @MainActor 격리를 물려받는다.
+    override func setUp() async throws {
+        try await super.setUp()
+
         continueAfterFailure = false
         app = XCUIApplication()
         app.launch()
