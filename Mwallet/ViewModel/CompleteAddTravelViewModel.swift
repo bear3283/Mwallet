@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 class CompleteAddTravelViewModel: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext
@@ -21,20 +22,16 @@ class CompleteAddTravelViewModel: ObservableObject {
         let request = NSFetchRequest<Travel>(entityName: "Travel")
         do {
             savedTravel = try viewContext.fetch(request)
-//            print("fetchTravel | savedTravel.count: \(savedTravel.count)")
         } catch let error {
-            print("Error while fetchTravel : \(error.localizedDescription)")
+            Logger.data.error("여행 조회 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
     
     func filterTravelByID(selectedTravelID: UUID) -> [Travel] {
         return savedTravel.filter { travel in
             if let id = travel.id {
-                print("filterTravelByID | travel.id: \(id)")
-                print("result: \(id == selectedTravelID)")
                 return id == selectedTravelID
             } else {
-                print("filterTravelByID | travel.id: nil")
                 return false
             }
         }
@@ -43,9 +40,8 @@ class CompleteAddTravelViewModel: ObservableObject {
     func saveTravel() {
         do {
             try viewContext.save()
-            print("save travel")
         } catch let error {
-            print("Error while SaveTravel: \(error.localizedDescription)")
+            Logger.data.error("여행 저장 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
     

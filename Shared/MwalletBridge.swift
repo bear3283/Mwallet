@@ -10,6 +10,7 @@
 //
 
 import CoreData
+import OSLog
 import WidgetKit
 
 enum MwalletBridge {
@@ -49,7 +50,7 @@ enum MwalletBridge {
         // CloudKit 머지 전이라 '임시 기록' 여행이 아직 없을 수 있으므로
         // 다음 활성화 때 다시 시도하도록 남겨 둔다.
         guard let travel = defaultTravel(in: context) else {
-            print("MwalletBridge | 기본 여행이 없어 대기 지출을 보류합니다")
+            Logger.widget.notice("기본 여행이 없어 대기 지출을 보류합니다")
             return 0
         }
 
@@ -76,7 +77,7 @@ enum MwalletBridge {
         } catch {
             // 큐는 이미 비운 뒤라 여기서 그냥 돌아가면 기록이 사라진다.
             // 만들다 만 객체를 되돌리고 큐를 복구해 다음 기회에 다시 시도한다.
-            print("MwalletBridge | 대기 지출 반영 실패: \(error.localizedDescription)")
+            Logger.widget.error("대기 지출 반영 실패: \(error.localizedDescription, privacy: .public)")
             context.rollback()
             pending.forEach(MwalletShared.enqueue)
             return 0
@@ -86,9 +87,6 @@ enum MwalletBridge {
 
     // '임시 기록' 기본 여행. 위젯 기록이 담길 곳.
     private static func defaultTravel(in context: NSManagedObjectContext) -> Travel? {
-        let request = Travel.fetchRequest()
-        request.predicate = NSPredicate(format: "name == %@", tempTravelName)
-        request.fetchLimit = 1
-        return (try? context.fetch(request))?.first
+        return Travel.fetchDefault(in: context)
     }
 }

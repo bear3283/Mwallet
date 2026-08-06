@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import OSLog
 
 struct PersistenceController {
     static let shared = PersistenceController()
@@ -64,7 +65,7 @@ struct PersistenceController {
         // 다만 entitlement 자체가 없는 경우는 이 분기로 오지 않는다.
         // 그때는 스토어가 정상적으로 열린 뒤 CloudKit 미러링이 별도 큐에서 죽는다.
         if let error = loadError, wantsCloudKit {
-            print("CloudKit 스토어를 열지 못해 로컬 전용으로 되돌립니다: \(error.localizedDescription)")
+            Logger.data.error("CloudKit 스토어를 열지 못해 로컬 전용으로 되돌립니다: \(error.localizedDescription, privacy: .public)")
             configureStore(inMemory: inMemory, useCloudKit: false)
             loadError = nil
             container.loadPersistentStores { _, error in loadError = error }
@@ -110,7 +111,7 @@ struct PersistenceController {
                 return false
             }.first
         } catch {
-            print("error fetching travel: \(error.localizedDescription)")
+            Logger.data.error("여행 조회 실패: \(error.localizedDescription, privacy: .public)")
         }
         
         if travelToBeDeleted != nil {
@@ -132,7 +133,7 @@ struct PersistenceController {
             
         } catch {
             let nsError = error as NSError
-            print("error while deleteExpenseFromTravel: \(nsError.localizedDescription)")
+            Logger.data.error("지출 삭제 실패: \(nsError.localizedDescription, privacy: .public)")
         }
     }
 }

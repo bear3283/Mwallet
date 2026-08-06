@@ -18,9 +18,9 @@ let travelListSortRule: (Travel, Travel) -> Bool = {
 let travelModalSortRule: (Travel, Travel) -> Bool = {
     let nowDate = Date()
     
-    if $0.name != tempTravelName && $1.name == tempTravelName {
+    if $0.isUserCreated && $1.isDefault {
         return false
-    } else if $0.name == tempTravelName && $1.name != tempTravelName {
+    } else if $0.isDefault && $1.isUserCreated {
         return true
     }
     

@@ -35,7 +35,7 @@ extension Expense {
 
     // 여행에 배정되지 않은 임시 기록은 '미분류' 로 본다.
     var missionTitle: String {
-        guard let name = travel?.name, name != tempTravelName, !name.isEmpty else { return "미분류" }
+        guard let travel, travel.isUserCreated, let name = travel.name, !name.isEmpty else { return "미분류" }
         return name
     }
 

@@ -33,13 +33,14 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 func findCurrentTravel() -> Travel? {
     var allTravels: [Travel] = []
     do {
         allTravels = try PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest())
     } catch {
-        print("error fetching all travels: \(error.localizedDescription)")
+        Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
     }
     var currentTravel: Travel?
     
@@ -62,7 +63,7 @@ func findCurrentTravel() -> Travel? {
         }
     }
     // 여행 중이 아님
-    let defaultTravel = allTravels.first(where: { $0.name == tempTravelName })
+    let defaultTravel = allTravels.first(where: { $0.isDefault })
     return defaultTravel
 }
 
@@ -73,19 +74,13 @@ func findInitialTravelInExpense() -> Travel? {
     do {
         allTravels = try PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest()).sorted(by: travelModalSortRule)
     } catch {
-        print("error fetching all travels: \(error.localizedDescription)")
+        Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
     }
-    allTravelsExceptDefaultTravel = allTravels.filter { travel in
-        if let name = travel.name {
-            return name != tempTravelName
-        } else {
-            return true
-        }
-    }
+    allTravelsExceptDefaultTravel = allTravels.filter { $0.isUserCreated }
         
     let travelFromFindCurrentTravelFunction = findCurrentTravel()
     
-    if travelFromFindCurrentTravelFunction?.name ?? "" == tempTravelName { // 진행 중인 여행이 없는 경우
+    if travelFromFindCurrentTravelFunction?.isDefault == true { // 진행 중인 여행이 없는 경우
         if allTravelsExceptDefaultTravel.count == 0 { // 임시 기록 여행 외에는 다른 여행이 없는 경우
             return travelFromFindCurrentTravelFunction // 임시 기록 여행을 반환한다.
         } else { // 임시 기록 여행 외의 다른 여행이 있는 경우

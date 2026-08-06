@@ -33,7 +33,6 @@
 		57A65D142AD7D65600131266 /* ExpenseInfoCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D132AD7D65600131266 /* ExpenseInfoCategory.swift */; };
 		57A65D162AD7D6B000131266 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D152AD7D6B000131266 /* PaymentMethod.swift */; };
 		57A65D182AD7DDA700131266 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D172AD7DDA700131266 /* RecordView.swift */; };
-		57B213DE2AFD167A00AFADC7 /* String+DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B213DD2AFD167A00AFADC7 /* String+DesignSystem.swift */; };
 		57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C41DFB2AD4F1EB00345253 /* Persistence.swift */; };
 		57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */; };
 		57CE9C732ADE4CAE00EDAD11 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CE9C722ADE4CAE00EDAD11 /* Currency.swift */; };
@@ -93,6 +92,8 @@
 		C1A11EA700000000000009B2 /* TravelExpenseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009B1 /* TravelExpenseMap.swift */; };
 		C1A11EA700000000000009C2 /* TravelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009C1 /* TravelStore.swift */; };
 		C1A11EA700000000000009D2 /* TravelEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009D1 /* TravelEditView.swift */; };
+		C1A11EA700000000000009E2 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009E1 /* Log.swift */; };
+		C1A11EA700000000000009F2 /* Travel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009F1 /* Travel+Extension.swift */; };
 		C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */; };
 		C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */; };
 		C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */; };
@@ -172,7 +173,6 @@
 		57A65D132AD7D65600131266 /* ExpenseInfoCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseInfoCategory.swift; sourceTree = "<group>"; };
 		57A65D152AD7D6B000131266 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
 		57A65D172AD7DDA700131266 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
-		57B213DD2AFD167A00AFADC7 /* String+DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+DesignSystem.swift"; sourceTree = "<group>"; };
 		57C41DFB2AD4F1EB00345253 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateChoiceModal.swift; sourceTree = "<group>"; };
 		57CE9C722ADE4CAE00EDAD11 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
@@ -233,6 +233,8 @@
 		C1A11EA700000000000009B1 /* TravelExpenseMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelExpenseMap.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009C1 /* TravelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelStore.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009D1 /* TravelEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelEditView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000009E1 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000009F1 /* Travel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Travel+Extension.swift"; sourceTree = "<group>"; };
 		C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingHandler.swift; sourceTree = "<group>"; };
 		C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoModel.swift; sourceTree = "<group>"; };
 		C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Extension.swift"; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */,
 				57F72CF02B04CAE900464B06 /* Double+Extension.swift */,
 				C1A11EA700000000000000B1 /* Expense+Extension.swift */,
+				C1A11EA700000000000009F1 /* Travel+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -499,7 +502,6 @@
 				C17965F52ADD64340036E866 /* Fonts */,
 				C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */,
 				C1A11EA700000000000005A1 /* MissionMark.swift */,
-				57B213DD2AFD167A00AFADC7 /* String+DesignSystem.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -508,6 +510,7 @@
 			isa = PBXGroup;
 			children = (
 				C19AFAE92AE00A920037A5F5 /* NavigationUtils.swift */,
+				C1A11EA700000000000009E1 /* Log.swift */,
 				C1A11EA700000000000009A1 /* CSVParser.swift */,
 			);
 			path = Utils;
@@ -791,6 +794,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C19AFAEA2AE00A920037A5F5 /* NavigationUtils.swift in Sources */,
+				C1A11EA700000000000009E2 /* Log.swift in Sources */,
 				C1A11EA700000000000009A2 /* CSVParser.swift in Sources */,
 				57EA42202ADE38EE006CA587 /* Country.swift in Sources */,
 				C157601E2AF1DD830089FFE5 /* CountryInfo.swift in Sources */,
@@ -817,6 +821,7 @@
 				C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */,
 				57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */,
 				C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */,
+				C1A11EA700000000000009F2 /* Travel+Extension.swift in Sources */,
 				C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */,
 				C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */,
 				C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */,
@@ -838,7 +843,6 @@
 				57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */,
 				57A65D182AD7DDA700131266 /* RecordView.swift in Sources */,
 				C179660E2ADD6BF90036E866 /* Color+Extension.swift in Sources */,
-				57B213DE2AFD167A00AFADC7 /* String+DesignSystem.swift in Sources */,
 				C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */,
 				57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */,
 				C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */,

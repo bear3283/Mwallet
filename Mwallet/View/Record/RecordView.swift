@@ -5,12 +5,12 @@
 //  Created by Wonil Lee on 10/12/23.
 //
 
+import OSLog
 import SwiftUI
 
 struct RecordView: View {
     
     init() {
-        print("RecordView | init")
     }
     
     let recordButtonAnimationLength = 0.25
@@ -185,14 +185,9 @@ struct RecordView: View {
                 
                 // MARK: - decide record button action
                 
+                // 기본함밖에 없으면 녹음 버튼이 여행 추가를 먼저 권한다.
                 let sampleTravel = findInitialTravelInExpense()
-                if let sampleTravel, let name = sampleTravel.name {
-                    if name == tempTravelName {
-                        viewModel.AreThereOtherTravels = false
-                    } else {
-                        viewModel.AreThereOtherTravels = true
-                    }
-                }
+                viewModel.AreThereOtherTravels = sampleTravel?.isUserCreated ?? false
             }
             .onDisappear {
                 viewModel.recordButtonResetTimer?.invalidate()
@@ -237,10 +232,10 @@ struct RecordView: View {
                     .layoutPriority(-1)
                 
                 HStack(spacing: 12) {
-                    Text(mainVM.selectedTravel?.name != tempTravelName ? mainVM.selectedTravel?.name ?? "-" : "여행 선택")
+                    Text(mainVM.selectedTravel?.isUserCreated == true ? mainVM.selectedTravel?.name ?? "-" : "여행 선택")
                         .lineLimit(1)
                         .font(.subhead2_2_fixed)
-                        .foregroundStyle(mainVM.selectedTravel?.name != tempTravelName ? .black : .gray400)
+                        .foregroundStyle(mainVM.selectedTravel?.isUserCreated == true ? .black : .gray400)
                     Image("recordTravelChoiceDownChevron")
                         .resizable()
                         .scaledToFit()
@@ -525,7 +520,6 @@ struct RecordView: View {
                     isDetectingPress_letButtonBigger = false
                     viewModel.stopSTT()
                     viewModel.stopRecording()
-                    print("time diff: \(viewModel.endRecordTime - viewModel.startRecordTime)")
                     if Double(viewModel.endRecordTime - viewModel.startRecordTime) < 1.5 {
                         DispatchQueue.main.async {
                             viewModel.alertView_shortIsShown = true
@@ -569,7 +563,7 @@ struct RecordView: View {
                             do {
                                 try viewModel.startSTT()
                             } catch {
-                                print("error starting record: \(error.localizedDescription)")
+                                Logger.record.error("녹음 시작 실패: \(error.localizedDescription, privacy: .public)")
                             }
                         }
                         

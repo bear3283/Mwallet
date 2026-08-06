@@ -5,6 +5,7 @@
 //  Created by GYURI PARK on 2023/10/19.
 //
 
+import OSLog
 import SwiftUI
 import CoreData
 
@@ -149,7 +150,7 @@ struct SettingView: View {
             }
             try managedObjectContext.save()
         } catch {
-            print("SettingView | 전체 삭제 실패: \(error.localizedDescription)")
+            Logger.data.error("전체 삭제 실패: \(error.localizedDescription, privacy: .public)")
             managedObjectContext.rollback()
         }
     }

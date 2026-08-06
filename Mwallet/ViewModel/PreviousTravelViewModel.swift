@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 class PreviousTravelViewModel: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext
@@ -18,9 +19,8 @@ class PreviousTravelViewModel: ObservableObject {
         let request = NSFetchRequest<Travel>(entityName: "Travel")
         do {
             previousTravel = try viewContext.fetch(request)
-            print(" PreviousTravelViewModel : fetchTravel")
         } catch let error {
-            print("Error while fetchTravel : \(error.localizedDescription)")
+            Logger.data.error("여행 조회 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
     
@@ -29,7 +29,7 @@ class PreviousTravelViewModel: ObservableObject {
         do {
         savedExpensesByTravel = try viewContext.fetch(request)
         } catch let error {
-            print("Error while fetchExpense: \(error.localizedDescription)")
+            Logger.data.error("지출 조회 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
     
@@ -46,10 +46,8 @@ class PreviousTravelViewModel: ObservableObject {
     func filterPreviousTravel(todayDate: Date) -> [Travel] {
         return previousTravel.filter { travel in
             if let endDate = travel.endDate {
-                print("filterPreviousTravel | travel.id \(String(describing: travel.id))")
                 return endDate < todayDate
             } else {
-                print("filterPreviousTravel | travel.id: nil")
                 return false
             }
         }

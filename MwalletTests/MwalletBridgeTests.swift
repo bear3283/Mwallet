@@ -52,7 +52,7 @@ final class MwalletBridgeTests: CoreDataTestCase {
     // MARK: - 반영
 
     func test_기본_여행이_있으면_지출로_옮긴다() throws {
-        let temp = makeTravel(name: tempTravelName)
+        let temp = makeTravel(isDefault: true)
         try context.save()
         enqueueSample()
 
@@ -71,7 +71,7 @@ final class MwalletBridgeTests: CoreDataTestCase {
     // 위젯은 위치를 묻지 않는다. 0(대한민국)을 넣으면 해외에서 담은 지출도
     // 국내로 표시된다.
     func test_위젯_기록의_국가는_알_수_없음이다() throws {
-        makeTravel(name: tempTravelName)
+        makeTravel(isDefault: true)
         try context.save()
         enqueueSample()
 
@@ -94,7 +94,7 @@ final class MwalletBridgeTests: CoreDataTestCase {
     }
 
     func test_큐가_비어_있으면_아무_것도_하지_않는다() throws {
-        makeTravel(name: tempTravelName)
+        makeTravel(isDefault: true)
         try context.save()
 
         XCTAssertEqual(MwalletBridge.flushPendingExpenses(into: context), 0)
@@ -102,7 +102,7 @@ final class MwalletBridgeTests: CoreDataTestCase {
     }
 
     func test_여러_건을_한_번에_옮긴다() throws {
-        makeTravel(name: tempTravelName)
+        makeTravel(isDefault: true)
         try context.save()
         enqueueSample(amount: 4_500, label: "커피")
         enqueueSample(amount: 10_000, label: "식사")
@@ -113,7 +113,7 @@ final class MwalletBridgeTests: CoreDataTestCase {
     }
 
     func test_옮긴_지출에_기록_시각과_시간대가_남는다() throws {
-        makeTravel(name: tempTravelName)
+        makeTravel(isDefault: true)
         try context.save()
         enqueueSample()
         let before = Date()

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 struct ExchangeRate: Codable {
     let base_code: String
@@ -86,11 +87,11 @@ class ExchangeRateHandler {
             defer { self.endFetching() }
 
             if let error = error {
-                print("Failed to fetch data from URL: \(error)")
+                Logger.exchangeRate.error("환율 요청 실패: \(error.localizedDescription, privacy: .public)")
                 return
             }
             guard let data = data else {
-                print("No data returned from URL")
+                Logger.exchangeRate.error("환율 응답이 비어 있습니다")
                 return
             }
             do {
@@ -101,9 +102,9 @@ class ExchangeRateHandler {
             } catch {
                 // 쿼터 초과 / 키 오류는 정상 스키마가 아니라 에러 응답으로 돌아온다.
                 if let apiError = try? JSONDecoder().decode(ExchangeRateErrorResponse.self, from: data) {
-                    print("Exchange rate API error: \(apiError.errorType)")
+                    Logger.exchangeRate.error("환율 API 오류: \(apiError.errorType, privacy: .public)")
                 } else {
-                    print("Failed to decode data: \(error)")
+                    Logger.exchangeRate.error("환율 응답 해석 실패: \(error.localizedDescription, privacy: .public)")
                 }
             }
         }.resume()
@@ -117,13 +118,13 @@ class ExchangeRateHandler {
 
     func loadExchangeRatesFromUserDefaults() -> ExchangeRate? {
         guard let savedData = UserDefaults.standard.data(forKey: cacheKey) else {
-            print("No data found in UserDefaults")
+            Logger.exchangeRate.debug("환율 캐시가 아직 없습니다")
             return nil
         }
         do {
             return try JSONDecoder().decode(ExchangeRate.self, from: savedData)
         } catch let error {
-            print("Could not load. \(error)")
+            Logger.exchangeRate.error("환율 캐시 해석 실패: \(error.localizedDescription, privacy: .public)")
             return nil
         }
     }

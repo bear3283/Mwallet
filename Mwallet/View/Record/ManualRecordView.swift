@@ -5,6 +5,7 @@
 //  Created by Wonil Lee on 10/16/23.
 //
 
+import OSLog
 import SwiftUI
 import CoreLocation
 
@@ -550,9 +551,9 @@ struct ManualRecordView: View {
                             }
                             .hidden()
                             
-                            Text(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "여행 선택")
+                            Text(mainVM.chosenTravelInManualRecord?.isUserCreated == true ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "여행 선택")
                                 .lineLimit(nil)
-                                .foregroundStyle(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? .black : .gray400)
+                                .foregroundStyle(mainVM.chosenTravelInManualRecord?.isUserCreated == true ? .black : .gray400)
                                 .font(.subhead2_1)
                         }
                         Spacer()
@@ -780,17 +781,9 @@ struct ManualRecordView: View {
             LargeButtonActive(title: "저장하기") {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 viewModel.save()
-                var defaultTravel = Travel()
-                do {
-                    defaultTravel = try viewContext.fetch(Travel.fetchRequest()).filter { $0.name == tempTravelName }.first ?? Travel()
-                } catch {
-                    print("error fetching default travel: \(error.localizedDescription)")
-                }
-                if mainVM.chosenTravelInManualRecord != nil {
-                    mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
-                } else {
-                    mainVM.selectedTravel = defaultTravel
-                }
+                // 여행을 고르지 않았으면 기본함으로 돌려 둔다.
+                mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
+                    ?? Travel.fetchDefault(in: viewContext)
                 viewModel.deleteUselessAudioFiles()
                 viewModel.savingIsDone = true
                 viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in

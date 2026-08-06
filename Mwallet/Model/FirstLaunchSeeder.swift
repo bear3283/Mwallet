@@ -14,6 +14,7 @@
 import CoreData
 import CoreLocation
 import Foundation
+import OSLog
 
 private struct SampleExpense {
     let merchant: String
@@ -36,11 +37,16 @@ final class FirstLaunchSeeder {
     private let viewContext = PersistenceController.shared.container.viewContext
 
     private init() {
+        // 이름으로 기본함을 구분하던 시절의 기록을 플래그로 옮긴다.
+        // 새로 만드는 것보다 먼저 해야 기본함이 두 개가 되지 않는다.
+        migrateLegacyDefaultTravel()
+
         // 값이 없으면 첫 실행이고, true 로 남아 있어도 아직 시딩 전으로 본다.
         let needsSeeding = (UserDefaults.standard.object(forKey: Self.seededKey) as? Bool) ?? true
         UserDefaults.standard.set(false, forKey: Self.seededKey)
 
-        if needsSeeding {
+        // 표시가 옮겨졌거나 이미 있으면 다시 만들지 않는다.
+        if needsSeeding && Travel.fetchDefault(in: viewContext) == nil {
             addDefaultTravel()
         }
 
@@ -56,12 +62,30 @@ final class FirstLaunchSeeder {
         let now = Date()
         let travel = Travel(context: viewContext)
         travel.id = UUID()
-        travel.name = tempTravelName
+        travel.isDefault = true
+        travel.name = Travel.defaultTravelName
         travel.startDate = now
         travel.endDate = now
         travel.lastUpdate = now
 
         save(context: "기본 여행")
+    }
+
+    // 이미 설치된 기기에는 기본함이 이모지 이름으로 남아 있다.
+    // isDefault 로 표시를 옮기고 이름도 읽을 수 있게 바꾼다.
+    // 이 이름은 화면에 뜨지 않았지만, 여행 편집 화면이 생긴 뒤로는
+    // 사용자가 열어 볼 수 있는 값이 됐다.
+    private func migrateLegacyDefaultTravel() {
+        let request = Travel.fetchRequest()
+        request.predicate = NSPredicate(format: "name == %@", Travel.legacyDefaultName)
+
+        guard let legacy = try? viewContext.fetch(request), !legacy.isEmpty else { return }
+
+        for travel in legacy {
+            travel.isDefault = true
+            travel.name = Travel.defaultTravelName
+        }
+        save(context: "기본 여행 표시 이전")
     }
 
     // 앱을 처음 열었을 때 무엇을 하는 앱인지 한눈에 보이도록,
@@ -117,7 +141,7 @@ final class FirstLaunchSeeder {
         do {
             try viewContext.save()
         } catch {
-            print("FirstLaunchSeeder | \(context) 생성 실패: \(error.localizedDescription)")
+            Logger.data.error("첫 실행 \(context, privacy: .public) 생성 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
 }

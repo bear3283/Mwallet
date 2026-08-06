@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 class TravelDetailViewModel: ObservableObject {
     
@@ -29,7 +30,7 @@ class TravelDetailViewModel: ObservableObject {
         do {
             savedTravel = try viewContext.fetch(request)
         } catch let error {
-            print("Error while fetchTravel : \(error.localizedDescription)")
+            Logger.data.error("여행 조회 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
     

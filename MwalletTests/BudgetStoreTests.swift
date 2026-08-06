@@ -93,7 +93,7 @@ final class BudgetStoreTests: CoreDataTestCase {
     }
 
     func test_임시_기록_여행은_예산_대상이_아니다() {
-        makeTravel(name: tempTravelName)
+        makeTravel(isDefault: true)
         makeTravel(name: "제주 워크숍")
 
         XCTAssertEqual(store.availableTravels().map { $0.name }, ["제주 워크숍"])

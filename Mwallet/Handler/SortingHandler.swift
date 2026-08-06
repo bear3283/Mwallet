@@ -8,7 +8,6 @@
 import Foundation
 
 func sortExpenseByDate(expenseArr: [Expense]?) -> [Expense] {
-    print("sortExpenseByDate")
     guard var expenses = expenseArr else {
         return []
     }

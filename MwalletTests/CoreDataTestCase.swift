@@ -45,10 +45,12 @@ class CoreDataTestCase: XCTestCase {
     func makeTravel(name: String = "제주 워크숍",
                     start: Date = Date(timeIntervalSince1970: 1_700_000_000),
                     end: Date? = nil,
-                    participants: [String] = []) -> Travel {
+                    participants: [String] = [],
+                    isDefault: Bool = false) -> Travel {
         let travel = Travel(context: context)
         travel.id = UUID()
-        travel.name = name
+        travel.isDefault = isDefault
+        travel.name = isDefault ? Travel.defaultTravelName : name
         travel.startDate = start
         travel.endDate = end ?? start.addingTimeInterval(3 * 86_400)
         travel.participantArray = participants

@@ -8,6 +8,7 @@
 import AVFoundation
 import CoreML
 import NaturalLanguage
+import OSLog
 import Speech
 import SwiftUI
 import Combine
@@ -119,7 +120,7 @@ final class RecordViewModel: ObservableObject {
                 do {
                     travelArray = try viewContext.fetch(Travel.fetchRequest())
                 } catch {
-                    print("error fetching travelArray: \(error.localizedDescription)")
+                    Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
                 }
             }
         }
@@ -173,16 +174,15 @@ final class RecordViewModel: ObservableObject {
     var recordButtonResetTimer: Timer?
     
     init() {
-        print("RecordViewModel | init")
         do {
             mlModel = try InfoClassifier(configuration: MLModelConfiguration()).model
         } catch {
-            print("error creating mlModel: \(error.localizedDescription)")
+            Logger.record.error("분류 모델 생성 실패: \(error.localizedDescription, privacy: .public)")
         }
         do {
             infoPredictor = try NLModel(mlModel: mlModel!)
         } catch {
-            print("error creating infoPredictor: \(error.localizedDescription)")
+            Logger.record.error("분류기 생성 실패: \(error.localizedDescription, privacy: .public)")
         }
 
         $payAmount
@@ -708,7 +708,7 @@ final class RecordViewModel: ObservableObject {
             do {
                 try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
             } catch {
-                print("Error deactivating audio session: \(error)")
+                Logger.record.error("오디오 세션 해제 실패: \(error.localizedDescription, privacy: .public)")
             }
         }
     }
@@ -723,7 +723,7 @@ final class RecordViewModel: ObservableObject {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
         } catch {
-            print("Can not setup the Recording")
+            Logger.record.error("녹음을 준비하지 못했습니다")
         }
         
         soundRecordPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -737,7 +737,7 @@ final class RecordViewModel: ObservableObject {
                     try fileManager.removeItem(at: fileURL)
                 }
             } catch {
-                print("error deleting sound files: \(error.localizedDescription)")
+                Logger.record.error("녹음 파일 삭제 실패: \(error.localizedDescription, privacy: .public)")
             }
         }
         
@@ -756,7 +756,7 @@ final class RecordViewModel: ObservableObject {
                 audioRecorder?.prepareToRecord()
                 audioRecorder?.record()
             } catch {
-                print("Failed to Setup the Recording")
+                Logger.record.error("녹음 시작에 실패했습니다")
             }
         }
     }
