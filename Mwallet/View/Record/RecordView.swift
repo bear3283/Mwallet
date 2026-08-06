@@ -710,7 +710,7 @@ struct ThreeDotsView: View {
                     .opacity(0.0000001)
                     .onAppear {
                         timer = Timer.scheduledTimer(withTimeInterval: stepLength, repeats: true) { _ in
-                            levelUp()
+                            MainActor.assumeIsolated { levelUp() }
                         }
                     }
                     .onDisappear {

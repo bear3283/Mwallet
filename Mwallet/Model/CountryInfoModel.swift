@@ -8,30 +8,34 @@
 import Foundation
 import OSLog
 
-class CountryInfoModel {
+// 표는 한 번 읽고 바뀌지 않는다. 불변이라 어느 스레드에서 읽어도 안전하다.
+// (예전에는 lazy var 라 첫 접근이 겹치면 두 번 파싱될 수 있었다)
+final class CountryInfoModel: Sendable {
 
     static let shared = CountryInfoModel()
 
-    private init() {
+    let countryResult: [Int: CountryInfo]
 
+    private init() {
+        countryResult = Self.load()
     }
 
     // 국가 목록을 못 읽어도 앱은 떠야 한다. 예전에는 여기서 fatalError 를 냈는데,
     // 번들 리소스가 손상된 것뿐인데 앱 전체가 죽었다. 지금은 '알 수 없음' 한 건만
     // 남긴 최소 사전으로 되돌아가고, 화면은 기본 국기·기본 이미지로 그려진다.
-    lazy var countryResult: [Int: CountryInfo] = {
+    private static func load() -> [Int: CountryInfo] {
         guard let csvURL = Bundle.main.url(forResource: "CountryList", withExtension: "csv") else {
             Logger.resources.error("CountryList.csv 를 번들에서 찾지 못했습니다")
-            return Self.fallback
+            return fallback
         }
         do {
-            let parsed = try createCountryInfoDictionary(from: csvURL)
-            return parsed.isEmpty ? Self.fallback : parsed
+            let parsed = try makeDictionary(from: csvURL)
+            return parsed.isEmpty ? fallback : parsed
         } catch {
             Logger.resources.error("CountryList.csv 파싱 실패: \(error.localizedDescription, privacy: .public)")
-            return Self.fallback
+            return fallback
         }
-    }()
+    }
 
     // countryResult[-1] 은 여러 화면이 '알 수 없음' 표시에 쓰므로 항상 존재해야 한다.
     private static let fallback: [Int: CountryInfo] = [
@@ -45,7 +49,7 @@ class CountryInfoModel {
     ]
 
     // MARK: 인덱스(국가순서)와 CountryInfo 구조체를 딕셔너리 형태로 만들기
-    func createCountryInfoDictionary(from csvURL: URL) throws -> [Int: CountryInfo] {
+    static func makeDictionary(from csvURL: URL) throws -> [Int: CountryInfo] {
         let csvData = try CSVParser.rows(contentsOf: csvURL)
         var countryInfoDict: [Int: CountryInfo] = [:]
 

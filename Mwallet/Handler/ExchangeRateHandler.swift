@@ -38,7 +38,9 @@ private struct ExchangeRateErrorResponse: Decodable {
     }
 }
 
-class ExchangeRateHandler {
+// 여러 화면의 onAppear 가 동시에 부를 수 있다. 가변 상태(isFetching)는
+// NSLock 으로, 캐시는 UserDefaults 로 보호된다.
+final class ExchangeRateHandler: @unchecked Sendable {
 
     static let shared = ExchangeRateHandler()
 

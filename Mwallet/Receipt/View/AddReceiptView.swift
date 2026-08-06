@@ -319,10 +319,13 @@ struct AddReceiptView: View {
                     }
                 }
             } else {
+                // PhotosPicker 의 label 클로저는 메인 액터에 묶여 있지 않다.
+                // 화면 상태를 안에서 읽지 않도록 문자열을 미리 뽑아 둔다.
+                let title = isProcessingImage ? "불러오는 중…" : "영수증 사진 첨부"
                 PhotosPicker(selection: $pickedItem, matching: .images, photoLibrary: .shared()) {
                     HStack(spacing: 8) {
                         Image(systemName: "camera")
-                        Text(isProcessingImage ? "불러오는 중…" : "영수증 사진 첨부")
+                        Text(title)
                     }
                     .font(.body1_fixed)
                     .foregroundStyle(.gray400)

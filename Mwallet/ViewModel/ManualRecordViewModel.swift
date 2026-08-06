@@ -22,7 +22,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
     
     var location: CLLocation?
     
-    func getLocation(completion: @escaping () -> Void) {
+    func getLocation(completion: @escaping @MainActor @Sendable () -> Void) {
         location = DateGapHandler.shared.currentLocation
         if location == nil {
             let latitude = UserDefaults.standard.object(forKey: "currentLocationLatitude") as? CLLocationDegrees
