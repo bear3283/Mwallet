@@ -87,9 +87,6 @@ enum MwalletBridge {
 
     // '임시 기록' 기본 여행. 위젯 기록이 담길 곳.
     private static func defaultTravel(in context: NSManagedObjectContext) -> Travel? {
-        let request = Travel.fetchRequest()
-        request.predicate = NSPredicate(format: "name == %@", tempTravelName)
-        request.fetchLimit = 1
-        return (try? context.fetch(request))?.first
+        return Travel.fetchDefault(in: context)
     }
 }

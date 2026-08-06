@@ -137,7 +137,7 @@ final class ReceiptStore {
         let request = Travel.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Travel.startDate, ascending: false)]
         do {
-            return try context.fetch(request).filter { $0.name != tempTravelName }
+            return try context.fetch(request).filter { $0.isUserCreated }
         } catch {
             Logger.data.error("영수증 화면의 여행 조회 실패: \(error.localizedDescription, privacy: .public)")
             return []

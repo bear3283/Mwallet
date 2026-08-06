@@ -34,7 +34,7 @@ struct TravelChoiceInRecordModal: View {
                 // '임시 기록'은 여행을 안 고를 때 자동으로 저장되는 기본함이라
                 // 사용자에게는 보이지 않는다. 선택 목록에서 뺀다.
                 try travelArray = PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest())
-                    .filter { $0.name != tempTravelName }
+                    .filter { $0.isUserCreated }
                     .sorted(by: travelModalSortRule)
             } catch {
                 Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
@@ -119,7 +119,7 @@ struct TravelBlockView: View {
         VStack(spacing: 0) { // ^^^
             
             Group {
-                if let name = travel.name, name == tempTravelName {
+                if travel.isDefault {
                     ZStack {
                         Group {
                             RoundedRectangle(cornerRadius: 10)
@@ -268,9 +268,9 @@ struct TravelBlockView: View {
             Spacer()
                 .frame(height: 6)
             
-            Text(travel.name != tempTravelName ? travel.name ?? "-" : " ")
+            Text(travel.isUserCreated ? travel.name ?? "-" : " ")
                 .lineLimit(1)
-                .foregroundStyle(travel.name != tempTravelName ? .black : .gray400)
+                .foregroundStyle(travel.isUserCreated ? .black : .gray400)
                 .font(.subhead1)
                 .opacity(travel.id == (chosenTravel?.id ?? UUID()) ? 1 : 0.6)
                 .padding(.horizontal, 10)
@@ -281,7 +281,7 @@ struct TravelBlockView: View {
                 .frame(height: 2) // 눈으로 보기에 비슷하게 적당히 수정했음 ^^^
             
             Group {
-                if travel.name == tempTravelName {
+                if travel.isDefault {
                     EmptyView()
                 } else {
                     if (travel.startDate ?? Date.distantPast) < now && (travel.endDate ?? Date.distantFuture) > now {

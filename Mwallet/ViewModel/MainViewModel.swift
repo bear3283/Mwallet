@@ -17,7 +17,7 @@ class MainViewModel: ObservableObject {
     @Published var selection: Int = Tab.record
     @Published var selectedTravel: Travel? {
         didSet {
-            if selectedTravel?.name != tempTravelName {
+            if selectedTravel?.isDefault != true {
                 if selectedTravel != selectedTravelInExpense {
                     updateSelectedTravelInExpense()
                 }

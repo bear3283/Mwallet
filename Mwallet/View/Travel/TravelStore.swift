@@ -56,6 +56,7 @@ struct TravelDraft {
 enum TravelStoreError: LocalizedError, Equatable {
     case emptyName
     case endBeforeStart
+    case cannotEditDefault
 
     var errorDescription: String? {
         switch self {
@@ -63,6 +64,8 @@ enum TravelStoreError: LocalizedError, Equatable {
             return "여행 이름을 입력해 주세요."
         case .endBeforeStart:
             return "종료일이 시작일보다 빠릅니다."
+        case .cannotEditDefault:
+            return "'임시 기록'은 고칠 수 없습니다."
         }
     }
 }
@@ -76,6 +79,10 @@ final class TravelStore {
     }
 
     func update(_ travel: Travel, with draft: TravelDraft) throws {
+        // 기본함은 사용자가 만든 일정이 아니라 여행을 고르지 않은 지출이 담기는
+        // 자리다. 화면에서는 목록에 올리지 않아 닿을 수 없지만, 이름이 편집
+        // 가능해진 이상 여기서도 막아 둔다.
+        guard travel.isUserCreated else { throw TravelStoreError.cannotEditDefault }
         guard !draft.trimmedName.isEmpty else { throw TravelStoreError.emptyName }
         guard draft.hasValidPeriod else { throw TravelStoreError.endBeforeStart }
 

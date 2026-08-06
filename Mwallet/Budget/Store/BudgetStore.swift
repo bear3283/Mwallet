@@ -45,7 +45,7 @@ final class BudgetStore {
         let request = Travel.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Travel.startDate, ascending: false)]
         do {
-            return try context.fetch(request).filter { $0.name != tempTravelName }
+            return try context.fetch(request).filter { $0.isUserCreated }
         } catch {
             Logger.data.error("예결산 화면의 여행 조회 실패: \(error.localizedDescription, privacy: .public)")
             return []

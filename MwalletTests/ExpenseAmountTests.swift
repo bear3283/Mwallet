@@ -10,32 +10,8 @@ import CoreData
 import XCTest
 @testable import Mwallet
 
-final class ExpenseAmountTests: XCTestCase {
+final class ExpenseAmountTests: CoreDataTestCase {
 
-    private var container: NSPersistentContainer!
-    private var context: NSManagedObjectContext!
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        // 디스크와 CloudKit 을 건드리지 않는 메모리 전용 저장소.
-        container = PersistenceController(inMemory: true).container
-        context = container.viewContext
-    }
-
-    override func tearDown() {
-        context = nil
-        container = nil
-        super.tearDown()
-    }
-
-    private func makeExpense(amount: Double, currency: String, rate: Double) -> Expense {
-        let expense = Expense(context: context)
-        expense.payAmount = amount
-        expense.currency = ExpenseCode.currencyIndex(for: currency)
-        expense.exchangeRate = rate
-        expense.payDate = Date()
-        return expense
-    }
 
     // MARK: - 유효 환율
 
@@ -115,15 +91,20 @@ final class ExpenseAmountTests: XCTestCase {
     func test_여행에_배정되지_않은_기록은_미분류다() {
         let expense = makeExpense(amount: 1, currency: "KRW", rate: 1)
 
-        // 여행이 없거나 '임시 기록' 이면 미분류.
+        // 여행이 없으면 미분류.
         XCTAssertEqual(expense.missionTitle, "미분류")
 
-        let travel = Travel(context: context)
-        travel.name = tempTravelName
-        expense.travel = travel
+        // 기본함('임시 기록')에 담겨 있어도 미분류.
+        // 이름을 바꿔도 기본함인 사실은 그대로라 여전히 미분류다.
+        let box = makeTravel(isDefault: true)
+        expense.travel = box
         XCTAssertEqual(expense.missionTitle, "미분류")
 
-        travel.name = "제주 워크숍"
+        box.name = "아무 이름"
+        XCTAssertEqual(expense.missionTitle, "미분류")
+
+        // 사용자가 만든 여행에 배정되면 그 이름으로 묶인다.
+        expense.travel = makeTravel(name: "제주 워크숍")
         XCTAssertEqual(expense.missionTitle, "제주 워크숍")
     }
 

@@ -158,7 +158,7 @@ final class ReceiptStoreTests: CoreDataTestCase {
     // MARK: - 목록
 
     func test_임시_기록_여행은_선택지에서_뺀다() {
-        makeTravel(name: tempTravelName)
+        makeTravel(isDefault: true)
         makeTravel(name: "제주 워크숍")
 
         let names = store.availableTravels().map { $0.name }

@@ -185,14 +185,9 @@ struct RecordView: View {
                 
                 // MARK: - decide record button action
                 
+                // 기본함밖에 없으면 녹음 버튼이 여행 추가를 먼저 권한다.
                 let sampleTravel = findInitialTravelInExpense()
-                if let sampleTravel, let name = sampleTravel.name {
-                    if name == tempTravelName {
-                        viewModel.AreThereOtherTravels = false
-                    } else {
-                        viewModel.AreThereOtherTravels = true
-                    }
-                }
+                viewModel.AreThereOtherTravels = sampleTravel?.isUserCreated ?? false
             }
             .onDisappear {
                 viewModel.recordButtonResetTimer?.invalidate()
@@ -237,10 +232,10 @@ struct RecordView: View {
                     .layoutPriority(-1)
                 
                 HStack(spacing: 12) {
-                    Text(mainVM.selectedTravel?.name != tempTravelName ? mainVM.selectedTravel?.name ?? "-" : "여행 선택")
+                    Text(mainVM.selectedTravel?.isUserCreated == true ? mainVM.selectedTravel?.name ?? "-" : "여행 선택")
                         .lineLimit(1)
                         .font(.subhead2_2_fixed)
-                        .foregroundStyle(mainVM.selectedTravel?.name != tempTravelName ? .black : .gray400)
+                        .foregroundStyle(mainVM.selectedTravel?.isUserCreated == true ? .black : .gray400)
                     Image("recordTravelChoiceDownChevron")
                         .resizable()
                         .scaledToFit()

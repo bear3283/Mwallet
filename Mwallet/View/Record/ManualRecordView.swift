@@ -551,9 +551,9 @@ struct ManualRecordView: View {
                             }
                             .hidden()
                             
-                            Text(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "여행 선택")
+                            Text(mainVM.chosenTravelInManualRecord?.isUserCreated == true ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "여행 선택")
                                 .lineLimit(nil)
-                                .foregroundStyle(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? .black : .gray400)
+                                .foregroundStyle(mainVM.chosenTravelInManualRecord?.isUserCreated == true ? .black : .gray400)
                                 .font(.subhead2_1)
                         }
                         Spacer()
@@ -781,17 +781,9 @@ struct ManualRecordView: View {
             LargeButtonActive(title: "저장하기") {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 viewModel.save()
-                var defaultTravel = Travel()
-                do {
-                    defaultTravel = try viewContext.fetch(Travel.fetchRequest()).filter { $0.name == tempTravelName }.first ?? Travel()
-                } catch {
-                    Logger.data.error("기본 여행 조회 실패: \(error.localizedDescription, privacy: .public)")
-                }
-                if mainVM.chosenTravelInManualRecord != nil {
-                    mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
-                } else {
-                    mainVM.selectedTravel = defaultTravel
-                }
+                // 여행을 고르지 않았으면 기본함으로 돌려 둔다.
+                mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
+                    ?? Travel.fetchDefault(in: viewContext)
                 viewModel.deleteUselessAudioFiles()
                 viewModel.savingIsDone = true
                 viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
