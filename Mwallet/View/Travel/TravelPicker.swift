@@ -28,27 +28,25 @@ struct TravelPicker: View {
         Button {
             isChoosing = true
         } label: {
-            HStack(alignment: .center, spacing: 10) {
-                VStack(alignment: .leading, spacing: 4) {
+            // chevron 을 이름 바로 옆에 붙인다. 오른쪽 끝은 탭 동작 버튼 자리라
+            // 거기에 두면 선택기와 동작 버튼이 뒤섞여 보인다.
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(selection?.displayName ?? "여행 선택")
                         .font(.display2_fixed)
                         .foregroundStyle(.black)
                         .lineLimit(1)
 
-                    Text(metaText)
-                        .font(.caption2_fixed)
-                        .foregroundStyle(.gray400)
-                        .lineLimit(1)
+                    // 고를 수 있다는 신호. 코발트는 누를 수 있는 것에만 쓴다.
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(Color.mainAccent)
                 }
 
-                Spacer(minLength: 0)
-
-                // 고를 수 있다는 신호. 코발트는 누를 수 있는 것에만 쓴다.
-                Image(systemName: "chevron.down")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.mainAccent)
-                    .padding(8)
-                    .background(Color.mainAccent.opacity(0.1), in: Circle())
+                Text(metaText)
+                    .font(.caption2_fixed)
+                    .foregroundStyle(.gray400)
+                    .lineLimit(1)
             }
             .contentShape(Rectangle())
         }

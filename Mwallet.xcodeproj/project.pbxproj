@@ -81,6 +81,7 @@
 		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
 		C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */; };
 		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
+		C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000BB1 /* TabActionBar.swift */; };
 		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
 		C1A11EA700000000000005A2 /* MissionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000005A1 /* MissionMark.swift */; };
 		C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006B1 /* BudgetSummary.swift */; };
@@ -230,6 +231,7 @@
 		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSeeder.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
+		C1A11EA70000000000000BB1 /* TabActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabActionBar.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000005A1 /* MissionMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionMark.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006B1 /* BudgetSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSummary.swift; sourceTree = "<group>"; };
@@ -570,6 +572,7 @@
 			children = (
 				C1A11EA700000000000000E1 /* AddReceiptView.swift */,
 				C1A11EA700000000000003A1 /* ReceiptDesign.swift */,
+				C1A11EA70000000000000BB1 /* TabActionBar.swift */,
 				C1A11EA700000000000001C1 /* ReceiptStatsView.swift */,
 				C1A11EA7000000000000010E /* ReceiptDetailView.swift */,
 				C1A11EA700000000000007A1 /* LocationPickerView.swift */,
@@ -895,6 +898,7 @@
 				C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */,
 				C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */,
 				C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */,
+				C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */,
 				C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */,
 				C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */,
 				C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */,

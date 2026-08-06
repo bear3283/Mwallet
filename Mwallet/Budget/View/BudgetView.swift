@@ -51,6 +51,7 @@ struct BudgetView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $isEditingBudget, onDismiss: refreshAfterEditing) {
                 if let travel = selectedTravel {
                     BudgetEditView(travel: travel)
@@ -65,21 +66,18 @@ struct BudgetView: View {
     // '예산 편집' 은 고른 여행에 대한 동작이라 제목과 같은 줄에 둔다.
     // 툴바에 있을 때는 제목보다 한 층 위에 떠서 둘이 따로 놀았다.
     private var travelSelector: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
+        TabHeaderRow {
             TravelPicker(travels: travels, selection: $selectedTravel) {
                 refreshToken = UUID()
             }
-
+        } actions: {
             Button {
                 isEditingBudget = true
             } label: {
-                Text("예산 편집")
-                    .font(.subhead2_2_fixed)
-                    .foregroundStyle(selectedTravel == nil ? Color.gray200 : Color.mainAccent)
+                TabActionLabel(text: "예산 편집", isEnabled: selectedTravel != nil)
             }
             .disabled(selectedTravel == nil)
         }
-        .padding(.horizontal, ReceiptLayout.gutter)
     }
 
     // MARK: - 본문
