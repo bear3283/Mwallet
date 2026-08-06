@@ -78,6 +78,8 @@ struct TravelEditView: View {
 
             Toggle("종료일 정하기", isOn: $hasEndDate)
                 .font(.body1)
+                // 시스템 기본 초록은 브랜드 색과 어긋난다.
+                .tint(Color.mainAccent)
                 .onChange(of: hasEndDate) { _, isOn in
                     // 켤 때는 시작일과 같은 날로 시작한다. 시작일보다 이른 날이 잡히지 않는다.
                     draft.endDate = isOn ? max(draft.endDate ?? draft.startDate, draft.startDate) : nil

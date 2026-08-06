@@ -8,7 +8,10 @@
 //  실행:
 //    xcodebuild test -scheme Mwallet -only-testing:MwalletUITests \
 //      -resultBundlePath <경로>.xcresult
-//    xcrun xcresulttool export attachments --path <경로>.xcresult --output-path <폴더>
+//    xcrun xcresulttool export attachments --path <경로>.xcresult \
+//      --output-path <폴더>
+//
+//  화면 이름은 파일명 앞에 붙는다(01-기록, 02-예결산 …).
 //
 
 import XCTest
@@ -26,8 +29,10 @@ final class ScreenshotTests: XCTestCase {
         // 기다리지 않으면 첫 장이 스플래시로 찍힌다.
         let tabBar = app.tabBars.firstMatch
         XCTAssertTrue(tabBar.waitForExistence(timeout: 15), "탭바가 나타나지 않았습니다")
-        Thread.sleep(forTimeInterval: 1)
+        settle()
     }
+
+    // MARK: - 도구
 
     private func capture(_ name: String) {
         let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
@@ -36,19 +41,30 @@ final class ScreenshotTests: XCTestCase {
         add(shot)
     }
 
-    private func tapTab(_ label: String) {
-        let tab = app.tabBars.buttons[label]
-        if tab.waitForExistence(timeout: 5) {
-            tab.tap()
-        } else {
-            // 탭바가 커스텀이면 일반 버튼으로도 찾아본다.
-            app.buttons[label].firstMatch.tap()
-        }
-        // 전환 애니메이션이 끝나기를 기다린다.
-        Thread.sleep(forTimeInterval: 1.5)
+    /// 애니메이션이 끝나기를 기다린다. 전환 중에 찍으면 흐릿한 장이 남는다.
+    private func settle(_ seconds: TimeInterval = 1.2) {
+        Thread.sleep(forTimeInterval: seconds)
     }
 
-    func test_모든_탭을_캡처한다() throws {
+    private func tapTab(_ label: String) {
+        let tab = app.tabBars.buttons[label]
+        XCTAssertTrue(tab.waitForExistence(timeout: 5), "'\(label)' 탭을 찾지 못했습니다")
+        tab.tap()
+        settle()
+    }
+
+    /// 화면에 보이는 첫 번째 요소를 눌러 본다. 못 찾으면 false.
+    @discardableResult
+    private func tapIfExists(_ element: XCUIElement, timeout: TimeInterval = 4) -> Bool {
+        guard element.waitForExistence(timeout: timeout), element.isHittable else { return false }
+        element.tap()
+        settle()
+        return true
+    }
+
+    // MARK: - 탭 네 개
+
+    func test_01_탭을_캡처한다() throws {
         capture("01-기록")
 
         tapTab("예결산")
@@ -59,21 +75,78 @@ final class ScreenshotTests: XCTestCase {
 
         tapTab("여행")
         capture("04-여행지도")
+    }
 
-        // 여행 요약 줄을 누르면 여행 상세로 들어간다.
-        let summary = app.buttons.containing(.staticText, identifier: "예시: 제주 워크숍").firstMatch
-        if summary.waitForExistence(timeout: 3) {
-            summary.tap()
-            Thread.sleep(forTimeInterval: 2)
-            capture("05-여행상세")
+    // MARK: - 여행 선택 시트
 
-            // 우상단 연필 → 여행 편집
-            let edit = app.buttons["square.and.pencil"].firstMatch
-            if edit.waitForExistence(timeout: 3) {
-                edit.tap()
-                Thread.sleep(forTimeInterval: 1.5)
-                capture("06-여행편집")
-            }
+    func test_02_여행_선택_시트를_캡처한다() throws {
+        tapTab("여행")
+
+        // 여는 버튼은 여행 이름 + 기간을 담은 큰 버튼이다.
+        // 이름이 무엇이든 잡히도록 chevron.down 이 붙은 버튼을 찾는다.
+        let picker = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "~")).firstMatch
+        guard tapIfExists(picker) else {
+            XCTFail("여행 선택 버튼을 찾지 못했습니다. 화면 구조가 바뀌었는지 확인해 주세요.")
+            return
         }
+        capture("05-여행선택시트")
+
+        // 시트를 닫아 다음 테스트에 영향을 주지 않는다.
+        tapIfExists(app.buttons["닫기"])
+    }
+
+    // MARK: - 여행 상세 · 편집
+
+    func test_03_여행_상세와_편집을_캡처한다() throws {
+        tapTab("여행")
+
+        guard tapIfExists(app.buttons.containing(.staticText, identifier: "여행 상세").firstMatch) else {
+            XCTFail("'여행 상세' 줄을 찾지 못했습니다.")
+            return
+        }
+        settle(1.5)
+        capture("06-여행상세")
+
+        // 목록 아래쪽까지 보이도록 한 번 스크롤한 장도 남긴다.
+        app.swipeUp()
+        settle()
+        capture("07-여행상세-아래")
+
+        // 우상단 연필 → 여행 편집
+        let edit = app.navigationBars.buttons.element(boundBy: 1)
+        guard tapIfExists(edit) else {
+            XCTFail("편집 버튼을 찾지 못했습니다.")
+            return
+        }
+        capture("08-여행편집")
+    }
+
+    // MARK: - 여행 생성 (대표 사진)
+    //
+    // 이 흐름은 실제로 여행을 하나 만든다. 시뮬레이터 데이터가 늘어나므로
+    // 평소 실행에서는 건너뛰고, 필요할 때만 이름을 지정해 돌린다.
+    //   -only-testing:MwalletUITests/ScreenshotTests/test_04_여행_생성을_캡처한다
+
+    func test_04_여행_생성을_캡처한다() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["CAPTURE_CREATE_FLOW"] == "1",
+                          "여행을 실제로 만드는 흐름이라 CAPTURE_CREATE_FLOW=1 일 때만 돈다")
+
+        tapTab("여행")
+        guard tapIfExists(app.navigationBars.buttons.element(boundBy: 1)) else {
+            XCTFail("여행 추가(+) 버튼을 찾지 못했습니다.")
+            return
+        }
+        capture("09-여행생성-날짜")
+
+        // 달력에서 오늘을 고르고 다음 단계로.
+        let today = Calendar.current.component(.day, from: Date())
+        tapIfExists(app.staticTexts["\(today)"].firstMatch)
+        tapIfExists(app.buttons["다음"].firstMatch)
+        settle()
+        capture("10-여행생성-인원")
+
+        tapIfExists(app.buttons["완료"].firstMatch)
+        settle(1.5)
+        capture("11-여행생성-완료")
     }
 }
