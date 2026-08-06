@@ -119,7 +119,7 @@ Mwallet/
 | 지출 위치를 지도 핀으로 표시 · 카메라 자동 맞춤 | ✅ |
 | 여행 생성 · 삭제 · 여행 상세 연결 | ✅ |
 | 설정 화면 진입(툴바 기어) | ✅ |
-| 여행 **편집**(이름·기간·인원 수정) | 미구현 |
+| 여행 **편집**(이름·기간·인원 수정) | ✅ |
 
 **지출 기록 탭** (`Mwallet/View/Record/`)
 
@@ -163,23 +163,26 @@ Mwallet/
 - [x] CI(빌드 + 린트 + 테스트) 도입 — [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 - [x] `fatalError` 5곳 → 3곳을 복구 가능한 처리로 전환 (남은 2곳은 `Persistence` 의 저장소 개방 실패로, 앱이 할 수 있는 복구가 없음)
 - [x] 기존 `CSVArchive` 를 `ReceiptCSVEncoder` 로 교체 완료
-- [ ] `print` → `OSLog` 전환 (현재 약 60개)
+- [x] `print` → `OSLog` 전환 — 디버그 노이즈 16개는 삭제, 44개를 5개 카테고리로 이동
+- [ ] **음성 파싱 로직에 테스트 없음** — `divideVoiceSentence` 386줄이 이 앱의 핵심 기능인데 검증이 0건이다
 
 **P2 — 구조**
 - [x] 데드 코드 제거, `TempSave` → `FirstLaunchSeeder` 정리
 - [x] 2차 데드 코드 정리 — 도달 불가 구 여행목록/Interim 기록 화면 계열 16파일 + `Constants` 제거, 구 NomadWallet 잔재(설정 화면 링크·이메일) 정리
 - [x] `ManualRecord*` 통합 진척 — 중복 심하던 `ManualRecordWithExpenseView` 쌍 제거, 현재 `ManualRecordView` + VM 2파일만 잔존
 - [x] App Group 공유 계약 중복 제거 — 위젯이 `Shared/MwalletShared.swift` 를 함께 컴파일한다 (약 100줄 사본 삭제)
+- [x] `Travel.isDefault` 도입 → `tempTravelName` 매직 문자열 제거 (21곳)
 - [ ] Repository 레이어 도입, View의 Core Data 직접 참조 제거 (13곳 → 현재 4곳)
-- [ ] `Travel.isDefault` 도입 → `tempTravelName` 매직 문자열 제거
-- [ ] SwiftLint 길이·복잡도 룰 10개 단계적 재활성화
+- [ ] SwiftLint 길이·복잡도 룰 10개 재활성화 — `ManualRecordView` 946줄 · `RecordViewModel` 798줄 · `RecordView` 743줄 분해가 선행돼야 한다
 
 **P3 — 확장**
-- [ ] 환율 프록시 서버 (클라이언트 키 임베딩 해소)
-- [ ] `@MainActor` 적용, `asyncAfter` 5곳 타이밍 의존 제거
-- [ ] `participantArray` 의 `customClassName` 정리 (CloudKit 활성화 시 필요할 수 있음)
+- [x] `@MainActor` 적용 — ViewModel 8개 + 핸들러 3개. `SWIFT_STRICT_CONCURRENCY=complete` 로 경고 0건
+- [ ] 환율 프록시 서버 (클라이언트 키 임베딩 해소) — 코드가 아니라 인프라 결정이 먼저다
+- [ ] `asyncAfter` 4곳 타이밍 의존 제거
+- [ ] `SWIFT_VERSION` 5.0 → 6.0
+- [ ] `participantArray` 의 `customClassName` 정리
 
 **기능 공백 (코드 리뷰에서 발견 — 로드맵 미등록분)**
-- [ ] **여행 편집 화면** — 여행은 생성·삭제만 되고 기존 이름·기간·인원 수정 흐름이 없음
-- [ ] **지출 → 편집 연결** — 여행 상세에서 지출 탭 시 예결산 탭 전환만 하고 해당 지출 편집으로 열지 않음 (편집은 영수증 탭에서만)
-- [ ] **`Budget` 엔티티 정합** — `SettingView.deleteAllData`의 삭제 대상 목록에 `Budget` 누락(현재 주석 WIP), 살릴 때 orphan 위험
+- [x] **여행 편집 화면** — 여행 상세 우상단 연필. 쓰기 규칙은 `TravelStore` 로 분리
+- [x] **`Budget` 엔티티 정합** — 삭제 목록에 `Budget` 추가, CloudKit 안전한 삭제 방식으로 전환
+- [ ] **지출 → 편집 연결** — 여행 상세의 지출 순서 목록에서 항목을 눌러도 지도만 이동한다. 편집은 여전히 영수증 탭에서만 가능
