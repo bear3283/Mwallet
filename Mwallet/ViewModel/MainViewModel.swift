@@ -26,7 +26,6 @@ class MainViewModel: ObservableObject {
     }
     @Published var selectedTravelInExpense: Travel? {
         didSet {
-            print("selectedTravelInExpense 변경됨 !!!")
             if selectedTravelInExpense == nil {
                 selectedTravelInExpense = findCurrentTravel()
             }
@@ -38,7 +37,6 @@ class MainViewModel: ObservableObject {
     @Published var chosenTravelInManualRecord: Travel?
     
     private init() {
-        print("mainViewModel init")
         selectedTravelInExpense = findInitialTravelInExpense()
         selectedTravel = findCurrentTravel() // defaultTravel이면 selectedTravelInExpense를 업데이트하지 않는다.
     }

@@ -11,6 +11,7 @@
 import CoreData
 import CoreLocation
 import Foundation
+import OSLog
 
 // 화면에서 입력받은 값을 담는 중간 타입.
 // NSManagedObject 를 화면 상태로 직접 쓰면 취소 시 롤백이 번거로워진다.
@@ -138,7 +139,7 @@ final class ReceiptStore {
         do {
             return try context.fetch(request).filter { $0.name != tempTravelName }
         } catch {
-            print("ReceiptStore | 여행 조회 실패: \(error.localizedDescription)")
+            Logger.data.error("영수증 화면의 여행 조회 실패: \(error.localizedDescription, privacy: .public)")
             return []
         }
     }

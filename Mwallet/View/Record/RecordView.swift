@@ -5,12 +5,12 @@
 //  Created by Wonil Lee on 10/12/23.
 //
 
+import OSLog
 import SwiftUI
 
 struct RecordView: View {
     
     init() {
-        print("RecordView | init")
     }
     
     let recordButtonAnimationLength = 0.25
@@ -525,7 +525,6 @@ struct RecordView: View {
                     isDetectingPress_letButtonBigger = false
                     viewModel.stopSTT()
                     viewModel.stopRecording()
-                    print("time diff: \(viewModel.endRecordTime - viewModel.startRecordTime)")
                     if Double(viewModel.endRecordTime - viewModel.startRecordTime) < 1.5 {
                         DispatchQueue.main.async {
                             viewModel.alertView_shortIsShown = true
@@ -569,7 +568,7 @@ struct RecordView: View {
                             do {
                                 try viewModel.startSTT()
                             } catch {
-                                print("error starting record: \(error.localizedDescription)")
+                                Logger.record.error("녹음 시작 실패: \(error.localizedDescription, privacy: .public)")
                             }
                         }
                         

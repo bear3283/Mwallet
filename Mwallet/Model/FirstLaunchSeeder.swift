@@ -14,6 +14,7 @@
 import CoreData
 import CoreLocation
 import Foundation
+import OSLog
 
 private struct SampleExpense {
     let merchant: String
@@ -117,7 +118,7 @@ final class FirstLaunchSeeder {
         do {
             try viewContext.save()
         } catch {
-            print("FirstLaunchSeeder | \(context) 생성 실패: \(error.localizedDescription)")
+            Logger.data.error("첫 실행 \(context, privacy: .public) 생성 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 class AddMemberViewModel: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext
@@ -31,9 +32,8 @@ class AddMemberViewModel: ObservableObject {
     func saveTravel() {
         do {
             try viewContext.save()
-            print("save travel")
         } catch let error {
-            print("Error while SaveTravel: \(error.localizedDescription)")
+            Logger.data.error("여행 저장 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
     
@@ -48,7 +48,7 @@ class AddMemberViewModel: ObservableObject {
                 }
             }.first
         } catch {
-            print("error fetching travel: \(error.localizedDescription)")
+            Logger.data.error("여행 조회 실패: \(error.localizedDescription, privacy: .public)")
         }
         
         MainViewModel.shared.selectedTravel = newTravel

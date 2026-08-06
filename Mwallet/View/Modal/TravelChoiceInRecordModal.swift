@@ -5,6 +5,7 @@
 //  Created by Wonil Lee on 10/16/23.
 //
 
+import OSLog
 import SwiftUI
 
 struct TravelChoiceInRecordModal: View {
@@ -36,7 +37,7 @@ struct TravelChoiceInRecordModal: View {
                     .filter { $0.name != tempTravelName }
                     .sorted(by: travelModalSortRule)
             } catch {
-                print("error fetching travelArray: \(error.localizedDescription)")
+                Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
             }
             updateFlagNameArrayDictAndDefaultImageStringDict()
         }

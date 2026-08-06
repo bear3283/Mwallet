@@ -66,6 +66,7 @@
 		C19AFAE32ADFB5AE0037A5F5 /* Font+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE22ADFB5AE0037A5F5 /* Font+Extension.swift */; };
 		C19AFAE72ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE62ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift */; };
 		C19AFAEA2AE00A920037A5F5 /* NavigationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE92AE00A920037A5F5 /* NavigationUtils.swift */; };
+		C1A11EA700000000000009E2 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009E1 /* Log.swift */; };
 		C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAEB2AE107460037A5F5 /* SettingView.swift */; };
 		C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */; };
 		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
@@ -206,6 +207,7 @@
 		C19AFAE22ADFB5AE0037A5F5 /* Font+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extension.swift"; sourceTree = "<group>"; };
 		C19AFAE62ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAddTravelViewModel.swift; sourceTree = "<group>"; };
 		C19AFAE92AE00A920037A5F5 /* NavigationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationUtils.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000009E1 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		C19AFAEB2AE107460037A5F5 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousTravelViewModel.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 			isa = PBXGroup;
 			children = (
 				C19AFAE92AE00A920037A5F5 /* NavigationUtils.swift */,
+				C1A11EA700000000000009E1 /* Log.swift */,
 				C1A11EA700000000000009A1 /* CSVParser.swift */,
 			);
 			path = Utils;
@@ -791,6 +794,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C19AFAEA2AE00A920037A5F5 /* NavigationUtils.swift in Sources */,
+				C1A11EA700000000000009E2 /* Log.swift in Sources */,
 				C1A11EA700000000000009A2 /* CSVParser.swift in Sources */,
 				57EA42202ADE38EE006CA587 /* Country.swift in Sources */,
 				C157601E2AF1DD830089FFE5 /* CountryInfo.swift in Sources */,

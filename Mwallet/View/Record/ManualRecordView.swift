@@ -5,6 +5,7 @@
 //  Created by Wonil Lee on 10/16/23.
 //
 
+import OSLog
 import SwiftUI
 import CoreLocation
 
@@ -784,7 +785,7 @@ struct ManualRecordView: View {
                 do {
                     defaultTravel = try viewContext.fetch(Travel.fetchRequest()).filter { $0.name == tempTravelName }.first ?? Travel()
                 } catch {
-                    print("error fetching default travel: \(error.localizedDescription)")
+                    Logger.data.error("기본 여행 조회 실패: \(error.localizedDescription, privacy: .public)")
                 }
                 if mainVM.chosenTravelInManualRecord != nil {
                     mainVM.selectedTravel = mainVM.chosenTravelInManualRecord

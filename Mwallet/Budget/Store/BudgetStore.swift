@@ -8,6 +8,7 @@
 
 import CoreData
 import Foundation
+import OSLog
 
 final class BudgetStore {
 
@@ -46,7 +47,7 @@ final class BudgetStore {
         do {
             return try context.fetch(request).filter { $0.name != tempTravelName }
         } catch {
-            print("BudgetStore | 여행 조회 실패: \(error.localizedDescription)")
+            Logger.data.error("예결산 화면의 여행 조회 실패: \(error.localizedDescription, privacy: .public)")
             return []
         }
     }

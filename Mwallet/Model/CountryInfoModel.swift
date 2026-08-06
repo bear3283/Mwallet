@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 class CountryInfoModel {
 
@@ -20,14 +21,14 @@ class CountryInfoModel {
     // 남긴 최소 사전으로 되돌아가고, 화면은 기본 국기·기본 이미지로 그려진다.
     lazy var countryResult: [Int: CountryInfo] = {
         guard let csvURL = Bundle.main.url(forResource: "CountryList", withExtension: "csv") else {
-            print("CountryInfoModel | CountryList.csv 를 번들에서 찾지 못했습니다")
+            Logger.resources.error("CountryList.csv 를 번들에서 찾지 못했습니다")
             return Self.fallback
         }
         do {
             let parsed = try createCountryInfoDictionary(from: csvURL)
             return parsed.isEmpty ? Self.fallback : parsed
         } catch {
-            print("CountryInfoModel | CountryList.csv 파싱 실패: \(error.localizedDescription)")
+            Logger.resources.error("CountryList.csv 파싱 실패: \(error.localizedDescription, privacy: .public)")
             return Self.fallback
         }
     }()

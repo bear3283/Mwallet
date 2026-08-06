@@ -8,6 +8,7 @@
 import AVFoundation
 import Combine
 import CoreLocation
+import OSLog
 
 final class ManualRecordViewModel: NSObject, ObservableObject {
     
@@ -289,7 +290,6 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
     
     override init() {
         super.init()
-        print("ManualRecordViewModel | init")
         
         // MainViewModel의 chosenTravelInManualRecord가 변화할 때 자동으로 이루어질 일을 sink로 처리
         travelStream = travelPublisher.sink { chosenTravel in
@@ -341,7 +341,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
                         return travel.id == chosenTravel.id
                 }.first
             } catch {
-                print("error fetching travelArray: \(error.localizedDescription)")
+                Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
             }
             fetchedTravel?.lastUpdate = Date()
             fetchedTravel?.addToExpenseArray(expense)
@@ -349,7 +349,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
         do {
             try viewContext.save()
         } catch {
-            print("error saving expense: \(error.localizedDescription)")
+            Logger.data.error("지출 저장 실패: \(error.localizedDescription, privacy: .public)")
         }
     }
     
@@ -364,7 +364,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
         do {
             try playSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
         } catch {
-            print("Playing failed in Device")
+            Logger.record.error("스피커 출력 전환에 실패했습니다")
         }
         
         do {
@@ -374,7 +374,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
             audioPlayer?.play()
             
         } catch {
-            print("Playing Failed")
+            Logger.record.error("녹음 재생에 실패했습니다")
         }
     }
     
@@ -394,7 +394,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
                     try fileManager.removeItem(at: fileURL)
                 }
             } catch {
-                print("error deleting sound files: \(error.localizedDescription)")
+                Logger.record.error("녹음 파일 삭제 실패: \(error.localizedDescription, privacy: .public)")
             }
         }
     }
@@ -407,7 +407,7 @@ extension ManualRecordViewModel: AVAudioPlayerDelegate {
                 playingRecordSound = false
             } else {
                 // 재생이 실패했을 때 실행할 코드
-                print("Failed to play recorded sound.")
+                Logger.record.error("녹음 재생이 끝나지 못했습니다")
             }
         }
 }

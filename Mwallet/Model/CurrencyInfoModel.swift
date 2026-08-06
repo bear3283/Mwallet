@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 class CurrencyInfoModel {
 
@@ -18,14 +19,14 @@ class CurrencyInfoModel {
     // 이 둘은 통화 후보를 만들 때 항상 포함되는 값이라 없으면 화폐 선택이 비어 버린다.
     lazy var currencyResult: [Int: CurrencyInfo] = {
         guard let csvURL = Bundle.main.url(forResource: "CurrencyList", withExtension: "csv") else {
-            print("CurrencyInfoModel | CurrencyList.csv 를 번들에서 찾지 못했습니다")
+            Logger.resources.error("CurrencyList.csv 를 번들에서 찾지 못했습니다")
             return Self.fallback
         }
         do {
             let parsed = try createCurrencyInfoDictionary(from: csvURL)
             return parsed.isEmpty ? Self.fallback : parsed
         } catch {
-            print("CurrencyInfoModel | CurrencyList.csv 파싱 실패: \(error.localizedDescription)")
+            Logger.resources.error("CurrencyList.csv 파싱 실패: \(error.localizedDescription, privacy: .public)")
             return Self.fallback
         }
     }()

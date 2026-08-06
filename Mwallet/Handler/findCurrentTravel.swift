@@ -33,13 +33,14 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 func findCurrentTravel() -> Travel? {
     var allTravels: [Travel] = []
     do {
         allTravels = try PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest())
     } catch {
-        print("error fetching all travels: \(error.localizedDescription)")
+        Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
     }
     var currentTravel: Travel?
     
@@ -73,7 +74,7 @@ func findInitialTravelInExpense() -> Travel? {
     do {
         allTravels = try PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest()).sorted(by: travelModalSortRule)
     } catch {
-        print("error fetching all travels: \(error.localizedDescription)")
+        Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
     }
     allTravelsExceptDefaultTravel = allTravels.filter { travel in
         if let name = travel.name {
