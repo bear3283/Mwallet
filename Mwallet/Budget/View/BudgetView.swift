@@ -51,19 +51,6 @@ struct BudgetView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                // 상단 타이틀 헤더는 두지 않는다. 탭바가 현재 위치를 알려준다.
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isEditingBudget = true
-                    } label: {
-                        Text("예산 편집")
-                            .font(.subhead2_2_fixed)
-                            .foregroundStyle(selectedTravel == nil ? Color.gray200 : Color.black)
-                    }
-                    .disabled(selectedTravel == nil)
-                }
-            }
             .sheet(isPresented: $isEditingBudget, onDismiss: refreshAfterEditing) {
                 if let travel = selectedTravel {
                     BudgetEditView(travel: travel)
@@ -75,76 +62,24 @@ struct BudgetView: View {
 
     // MARK: - 사역 선택
 
-    // 가로 스크롤 칩은 여행이 늘어나면 뒤쪽이 화면 밖으로 밀려 보이지 않았다.
-    //
-    // 선택기를 따로 두는 대신 화면 제목이 곧 선택기가 되게 했다.
-    // 이 화면은 '한 사역의 장부를 펼친 상태' 이므로 그 사역 이름이 제목이어야
-    // 맞고, 그러면 칩 밴드 한 줄이 통째로 없어져 본문이 위로 올라온다.
+    // '예산 편집' 은 고른 여행에 대한 동작이라 제목과 같은 줄에 둔다.
+    // 툴바에 있을 때는 제목보다 한 층 위에 떠서 둘이 따로 놀았다.
     private var travelSelector: some View {
-        Menu {
-            Picker("여행", selection: travelSelection) {
-                ForEach(travels, id: \.objectID) { travel in
-                    Text(travelLabel(travel)).tag(travel.objectID as NSManagedObjectID?)
-                }
-            }
-        } label: {
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(selectedTravel?.name ?? "여행 선택")
-                        .font(.display2_fixed)
-                        .foregroundStyle(.black)
-                        .lineLimit(1)
-
-                    // 고를 수 있다는 신호. 코발트는 누를 수 있는 것에만 쓴다.
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Color.mainAccent)
-
-                    Spacer(minLength: 0)
-                }
-
-                Text(metaText)
-                    .font(.caption1_fixed)
-                    .foregroundStyle(.gray300)
-                    .lineLimit(1)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
-        }
-        .padding(.horizontal, ReceiptLayout.gutter)
-    }
-
-    // 제목 아래 한 줄. 기간과 인원은 확인용이라 작게 붙인다.
-    private var metaText: String {
-        guard let selectedTravel else { return "여행을 골라 주세요" }
-        let people = (selectedTravel.participantArray?.count ?? 0) + 1
-        return "\(periodText(selectedTravel)) · \(people)명"
-    }
-
-    // Travel 은 Hashable 비교가 번거로워 objectID 로 고른다.
-    private var travelSelection: Binding<NSManagedObjectID?> {
-        Binding(
-            get: { selectedTravel?.objectID },
-            set: { newValue in
-                guard let newValue,
-                      let travel = travels.first(where: { $0.objectID == newValue }) else { return }
-                selectedTravel = travel
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            TravelPicker(travels: travels, selection: $selectedTravel) {
                 refreshToken = UUID()
             }
-        )
-    }
 
-    private func travelLabel(_ travel: Travel) -> String {
-        "\(travel.name ?? "이름 없음")  ·  \(periodText(travel))"
-    }
-
-    private func periodText(_ travel: Travel) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yy.MM.dd"
-        guard let start = travel.startDate else { return "기간 미정" }
-        guard let end = travel.endDate else { return "\(formatter.string(from: start)) ~ 미정" }
-        return "\(formatter.string(from: start)) ~ \(formatter.string(from: end))"
+            Button {
+                isEditingBudget = true
+            } label: {
+                Text("예산 편집")
+                    .font(.subhead2_2_fixed)
+                    .foregroundStyle(selectedTravel == nil ? Color.gray200 : Color.mainAccent)
+            }
+            .disabled(selectedTravel == nil)
+        }
+        .padding(.horizontal, ReceiptLayout.gutter)
     }
 
     // MARK: - 본문
@@ -154,7 +89,7 @@ struct BudgetView: View {
         if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(
                 message: "아직 예산이 없어요",
-                detail: "오른쪽 위 '예산 편집'에서\n카테고리별로 금액을 세워 보세요."
+                detail: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요."
             )
         } else {
             ScrollView(showsIndicators: false) {
@@ -360,7 +295,7 @@ struct BudgetChartSection: View {
                         .monospacedDigit()
                 }
 
-                progressBar(ratio: line.barRatio, isOver: line.isOverspent)
+                progressBar(ratio: line.barRatio, isOver: line.isOverspent, tint: line.category.color)
 
                 HStack(spacing: 0) {
                     Text("\(ReceiptFormat.krw(line.spent)) / \(ReceiptFormat.krw(line.planned))")
@@ -380,17 +315,28 @@ struct BudgetChartSection: View {
         }
     }
 
-    private func progressBar(ratio: Double, isOver: Bool) -> some View {
+    // 카테고리 줄의 막대는 그 카테고리 색으로 칠한다.
+    // 코발트로 통일하면 왼쪽 점(카테고리 색)과 막대가 서로 다른 뜻의 색을 써서
+    // 숙소처럼 점은 주황인데 막대는 파랑인 줄이 생긴다.
+    private func progressBar(ratio: Double, isOver: Bool, tint: Color = .mainAccent) -> some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Capsule()
                     .fill(Color.gray100)
                 Capsule()
-                    .fill(isOver ? Color.mainOrange : Color.mainAccent)
+                    .fill(barColor(isOver: isOver, tint: tint))
                     .frame(width: geometry.size.width * ratio)
             }
         }
         .frame(height: 8)
+    }
+
+    // 초과는 이미 퍼센트 숫자와 'N원 초과' 문구가 알린다.
+    // 카테고리 줄에서까지 막대를 경고색으로 덮으면, 숙소처럼 주황 계열
+    // 카테고리가 초과가 아닐 때도 초과처럼 읽힌다. 총괄 막대만 경고색을 쓴다.
+    private func barColor(isOver: Bool, tint: Color) -> Color {
+        guard tint == .mainAccent else { return tint }
+        return isOver ? .mainOrange : tint
     }
 
     // MARK: 예산 대비 — 그룹 막대

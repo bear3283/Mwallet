@@ -39,6 +39,16 @@
                ReferencedContainer = "container:Mwallet.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FC00000000000000000000T1"
+               BuildableName = "MwalletUITests.xctest"
+               BlueprintName = "MwalletUITests"
+               ReferencedContainer = "container:Mwallet.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

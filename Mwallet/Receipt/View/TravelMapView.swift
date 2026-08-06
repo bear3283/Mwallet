@@ -45,7 +45,7 @@ struct TravelMapView: View {
                         detail: "여행을 추가하고 지출을 남기면\n돈을 쓴 곳이 지도에 표시됩니다."
                     )
                 } else {
-                    travelChips
+                    travelSelector
 
                     Spacer()
                         .frame(height: 16)
@@ -97,22 +97,14 @@ struct TravelMapView: View {
 
     // MARK: - 여행 선택
 
-    private var travelChips: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 4) {
-                ForEach(travels, id: \.objectID) { travel in
-                    ReceiptChip(
-                        title: travel.name ?? "이름 없음",
-                        isSelected: selectedTravel?.objectID == travel.objectID
-                    ) {
-                        selectedTravel = travel
-                        refreshToken = UUID()
-                        fitCameraToExpenses()
-                    }
-                }
-            }
-            .padding(.horizontal, ReceiptLayout.gutter)
+    // 예결산 탭과 같은 컨트롤을 쓴다. 두 탭이 같은 일(어느 여행을 볼지)을
+    // 하므로 조작 방법이 같아야 익히기 쉽다.
+    private var travelSelector: some View {
+        TravelPicker(travels: travels, selection: $selectedTravel) {
+            refreshToken = UUID()
+            fitCameraToExpenses()
         }
+        .padding(.horizontal, ReceiptLayout.gutter)
     }
 
     // MARK: - 지도
@@ -125,12 +117,13 @@ struct TravelMapView: View {
 
     private var summaryRow: some View {
         HStack(alignment: .center, spacing: 0) {
+            // 여행 이름은 바로 위 제목에 이미 있다. 여기서는 이 줄을 누르면
+            // 무엇이 열리는지를 적는다.
             VStack(alignment: .leading, spacing: 2) {
-                Text(selectedTravel?.name ?? "여행")
+                Text("여행 상세")
                     .font(.subhead2_1_fixed)
                     .foregroundStyle(.black)
-                    .lineLimit(1)
-                Text("\(stops.count)곳에서 지출")
+                Text(stops.isEmpty ? "지도에 표시할 지출 없음" : "\(stops.count)곳에서 지출")
                     .font(.caption1_fixed)
                     .foregroundStyle(.gray300)
             }

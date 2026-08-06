@@ -135,9 +135,12 @@ final class ReceiptStore {
     // '임시 기록' 여행은 사용자가 만든 일정이 아니라 목록에서 뺀다.
     func availableTravels() -> [Travel] {
         let request = Travel.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Travel.startDate, ascending: false)]
         do {
-            return try context.fetch(request).filter { $0.isUserCreated }
+            // 시작일 내림차순이 아니라 '여행 중 → 지난 → 다가오는' 순서로 준다.
+            // 탭을 열었을 때 지금 진행 중인 여행이 먼저 보여야 한다.
+            return try context.fetch(request)
+                .filter { $0.isUserCreated }
+                .sorted(by: travelModalSortRule)
         } catch {
             Logger.data.error("영수증 화면의 여행 조회 실패: \(error.localizedDescription, privacy: .public)")
             return []

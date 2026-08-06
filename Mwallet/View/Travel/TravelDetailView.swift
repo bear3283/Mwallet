@@ -102,8 +102,8 @@ struct TravelDetailView: View {
                         .padding(.horizontal, ReceiptLayout.gutter)
                         .padding(.top, 24)
 
-                    // 하단 버튼에 가리지 않도록 여유를 둔다.
-                    Spacer(minLength: 120)
+                    // 하단 버튼과 떠 있는 탭바가 마지막 항목을 가리지 않도록 비워 둔다.
+                    Spacer(minLength: 200)
                 }
             }
 
@@ -112,7 +112,8 @@ struct TravelDetailView: View {
         .background(Color.white)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar(.hidden, for: .tabBar)
+        // 하단 탭바를 그대로 둔다. 여행 상세에서도 다른 탭으로 바로 건너갈 수
+        // 있어야 하고, 탭바가 사라졌다 나타나면 현재 위치를 잃기 쉽다.
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -306,10 +307,11 @@ struct TravelDetailView: View {
         }
         .padding(.horizontal, ReceiptLayout.gutter)
         .padding(.top, 10)
+        // 떠 있는 탭바 위에 얹는다. 탭바에 가리지 않도록 그만큼 띄운다.
+        .padding(.bottom, 96)
         .background(
             LinearGradient(colors: [Color.white.opacity(0), Color.white, Color.white],
                            startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
         )
     }
 
