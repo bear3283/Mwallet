@@ -37,8 +37,23 @@ struct ReceiptHomeView: View {
                 Spacer()
                     .frame(height: 12)
 
-                searchField
-                    .padding(.horizontal, ReceiptLayout.gutter)
+                // 검색창과 동작 버튼을 한 줄에 둔다. 다른 탭과 같은 자리다.
+                TabHeaderRow {
+                    searchField
+                } actions: {
+                    NavigationLink {
+                        ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
+                    } label: {
+                        TabActionIcon(systemName: "chart.pie", isEnabled: !allReceipts.isEmpty)
+                    }
+                    .disabled(allReceipts.isEmpty)
+
+                    Button {
+                        isAddingExpense = true
+                    } label: {
+                        TabActionIcon(systemName: "plus")
+                    }
+                }
 
                 if allReceipts.isEmpty {
                     ReceiptEmptyState(
@@ -69,27 +84,7 @@ struct ReceiptHomeView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                // 상단 타이틀 헤더는 두지 않는다. 탭바가 현재 위치를 알려준다.
-                ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: 18) {
-                        NavigationLink {
-                            ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
-                        } label: {
-                            Image(systemName: "chart.pie")
-                                .foregroundStyle(allReceipts.isEmpty ? Color.gray200 : Color.black)
-                        }
-                        .disabled(allReceipts.isEmpty)
-
-                        Button {
-                            isAddingExpense = true
-                        } label: {
-                            Image(systemName: "plus")
-                                .foregroundStyle(.black)
-                        }
-                    }
-                }
-            }
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $isAddingExpense) {
                 AddReceiptView()
             }

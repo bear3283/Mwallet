@@ -45,17 +45,22 @@ struct TravelMapView: View {
                         detail: "여행을 추가하고 지출을 남기면\n돈을 쓴 곳이 지도에 표시됩니다."
                     )
                 } else {
-                    travelChips
+                    headerRow
 
                     Spacer()
                         .frame(height: 16)
 
+                    // 지도가 이 탭의 주인공이다. 남는 세로 공간을 모두 준다.
+                    // 예전에는 320pt 로 고정해 두어 상세 줄 아래에 큰 빈 자리가 남았다.
                     mapCard
                         .padding(.horizontal, ReceiptLayout.gutter)
 
+                    // 유연한 Spacer 를 쓰면 지도와 남은 공간을 나눠 가져서
+                    // 상세 줄이 탭바에서 멀어진다. 간격은 고정으로 둔다.
                     Spacer()
-                        .frame(height: 16)
+                        .frame(height: 12)
 
+                    // 상세로 들어가는 줄은 떠 있는 탭바 바로 위에 붙인다.
                     if let travel = selectedTravel {
                         NavigationLink {
                             TravelDetailView(travel: travel)
@@ -65,72 +70,54 @@ struct TravelMapView: View {
                         }
                         .buttonStyle(.plain)
                         .padding(.horizontal, ReceiptLayout.gutter)
+                        // 표준 TabView 는 탭바만큼 안전영역을 이미 비워 준다.
+                        // 여기에 탭바 높이를 또 더하면 상세 줄이 그만큼 떠오른다.
+                        .padding(.bottom, 8)
                     }
-
-                    Spacer(minLength: 0)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                // 상단 타이틀 헤더는 두지 않는다. 탭바가 현재 위치를 알려준다.
-                ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink {
-                        SettingView()
-                    } label: {
-                        Image(systemName: "gearshape")
-                            .foregroundStyle(.black)
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        AddTravelView()
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundStyle(.black)
-                    }
-                }
-            }
+            // 동작 버튼을 본문 첫 줄로 옮겼다. 네비게이션 바를 남겨 두면
+            // 빈 밴드가 하나 더 생겨 본문 전체가 아래로 밀린다.
+            .toolbar(.hidden, for: .navigationBar)
             .onAppear(perform: reload)
         }
     }
 
     // MARK: - 여행 선택
 
-    private var travelChips: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 4) {
-                ForEach(travels, id: \.objectID) { travel in
-                    ReceiptChip(
-                        title: travel.name ?? "이름 없음",
-                        isSelected: selectedTravel?.objectID == travel.objectID
-                    ) {
-                        selectedTravel = travel
-                        refreshToken = UUID()
-                        fitCameraToExpenses()
-                    }
-                }
+    // 예결산 탭과 같은 컨트롤을 쓴다. 두 탭이 같은 일(어느 여행을 볼지)을
+    // 하므로 조작 방법이 같아야 익히기 쉽다.
+    private var headerRow: some View {
+        TabHeaderRow {
+            TravelPicker(travels: travels, selection: $selectedTravel) {
+                refreshToken = UUID()
+                fitCameraToExpenses()
             }
-            .padding(.horizontal, ReceiptLayout.gutter)
+        } actions: {
+            NavigationLink { SettingView() } label: { TabActionIcon(systemName: "gearshape") }
+            NavigationLink { AddTravelView() } label: { TabActionIcon(systemName: "plus") }
         }
     }
 
     // MARK: - 지도
 
     private var mapCard: some View {
-        TravelExpenseMap(stops: stops, cameraPosition: $cameraPosition)
+        TravelExpenseMap(stops: stops, cameraPosition: $cameraPosition, height: nil)
     }
 
     // MARK: - 요약
 
     private var summaryRow: some View {
         HStack(alignment: .center, spacing: 0) {
+            // 여행 이름은 바로 위 제목에 이미 있다. 여기서는 이 줄을 누르면
+            // 무엇이 열리는지를 적는다.
             VStack(alignment: .leading, spacing: 2) {
-                Text(selectedTravel?.name ?? "여행")
+                Text("여행 상세")
                     .font(.subhead2_1_fixed)
                     .foregroundStyle(.black)
-                    .lineLimit(1)
-                Text("\(stops.count)곳에서 지출")
+                Text(stops.isEmpty ? "지도에 표시할 지출 없음" : "\(stops.count)곳에서 지출")
                     .font(.caption1_fixed)
                     .foregroundStyle(.gray300)
             }

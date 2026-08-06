@@ -18,12 +18,18 @@ struct SplashView: View {
             MainView()
         } else {
             ZStack {
-                // 형광 초록에서 딥 그린으로 떨어지는 세로 그라데이션.
-                // 마크가 흰색이라 어느 구간에서도 또렷하게 읽힌다.
+                // 브랜드 코발트에서 같은 계열의 딥 코발트로 떨어지는 세로 그라데이션.
+                //
+                // 예전에는 아래쪽이 딥 그린(0x04A050)이었다. 브랜드 색을 형광 초록에서
+                // 코발트로 바꾸면서 위쪽만 갈아 끼운 탓에, 앱을 여는 첫 화면이
+                // 파랑에서 초록으로 번지며 브랜드와 어긋나 있었다.
+                //
+                // 한 색상 계열 안에서만 명도를 떨어뜨려 깊이를 주고,
+                // 흰 마크가 어느 구간에서도 또렷하게 읽히도록 아래를 충분히 어둡게 둔다.
                 LinearGradient(
                     stops: [
                         Gradient.Stop(color: .mainAccent, location: 0.00),
-                        Gradient.Stop(color: Color(0x04A050), location: 1.00)
+                        Gradient.Stop(color: Color(0x17307F), location: 1.00)
                     ],
                     startPoint: UnitPoint(x: 0.5, y: 0),
                     endPoint: UnitPoint(x: 0.5, y: 1)

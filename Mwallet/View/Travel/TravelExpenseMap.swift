@@ -74,7 +74,10 @@ struct TravelExpenseMap: View {
 
     let stops: [TravelExpenseStop]
     @Binding var cameraPosition: MapCameraPosition
-    var height: CGFloat = 320
+    /// 고정 높이. nil 이면 남는 세로 공간을 모두 채운다.
+    /// 여행 탭에서는 지도가 화면의 주인공이라 채우고, 여행 상세에서는
+    /// 아래에 지출 목록이 이어지므로 고정 높이를 쓴다.
+    var height: CGFloat? = 320
     var highlightedID: NSManagedObjectID?
     var onSelect: ((TravelExpenseStop) -> Void)?
 
@@ -99,6 +102,7 @@ struct TravelExpenseMap: View {
                 }
             }
             .mapStyle(.standard(pointsOfInterest: .excludingAll))
+            .frame(maxHeight: .infinity)
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: 16))
 

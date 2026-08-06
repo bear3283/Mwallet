@@ -86,8 +86,7 @@ struct TravelDetailView: View {
     // MARK: - 본문
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView(showsIndicators: false) {
+        ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     header
                     basicInfoStrip
@@ -102,17 +101,15 @@ struct TravelDetailView: View {
                         .padding(.horizontal, ReceiptLayout.gutter)
                         .padding(.top, 24)
 
-                    // 하단 버튼에 가리지 않도록 여유를 둔다.
-                    Spacer(minLength: 120)
+                    // 떠 있는 탭바가 마지막 항목을 가리지 않도록 비워 둔다.
+                    Spacer(minLength: 110)
                 }
-            }
-
-            bottomButtons
         }
         .background(Color.white)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar(.hidden, for: .tabBar)
+        // 하단 탭바를 그대로 둔다. 여행 상세에서도 다른 탭으로 바로 건너갈 수
+        // 있어야 하고, 탭바가 사라졌다 나타나면 현재 위치를 잃기 쉽다.
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -157,6 +154,16 @@ struct TravelDetailView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 6) {
+            // 여행을 만들 때 고른 대표 사진. 없으면 자리를 차지하지 않는다.
+            if let data = travel.coverImageData, let image = UIImage(data: data) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 140)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .padding(.bottom, 10)
+            }
+
             if isOngoing {
                 HStack(spacing: 6) {
                     Text("여행 중")
@@ -286,31 +293,6 @@ struct TravelDetailView: View {
                 }
             }
         }
-    }
-
-    // MARK: - 하단 버튼
-
-    private var bottomButtons: some View {
-        HStack {
-            MediumButtonWhite(title: "예결산 보기", action: {
-                mainVM.selectedTravel = travel
-                NavigationUtil.popToRootView()
-                mainVM.navigationToExpenseView()
-            })
-
-            MediumButtonMain(title: "지출 기록하기", action: {
-                mainVM.selectedTravel = travel
-                NavigationUtil.popToRootView()
-                mainVM.navigationToRecordView()
-            })
-        }
-        .padding(.horizontal, ReceiptLayout.gutter)
-        .padding(.top, 10)
-        .background(
-            LinearGradient(colors: [Color.white.opacity(0), Color.white, Color.white],
-                           startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-        )
     }
 
     // MARK: - 동작
