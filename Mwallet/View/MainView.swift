@@ -16,7 +16,7 @@ struct MainView: View {
     var body: some View {
         TabView(selection: $viewModel.selection) {
             
-            TravelMapView()
+            TravelListView()
                 .tabItem {
                     VStack {
                         if viewModel.selection == 0 {

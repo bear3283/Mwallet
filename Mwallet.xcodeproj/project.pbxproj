@@ -60,6 +60,7 @@
 		C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */; };
 		C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */; };
 		C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */; };
+		C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000CC1 /* TravelListView.swift */; };
 		C1A11EA70000000000000AA2 /* TravelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000AA1 /* TravelPicker.swift */; };
 		C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */; };
 		C19AFAE12ADF709E0037A5F5 /* AddMemberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */; };
@@ -80,6 +81,7 @@
 		C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */; };
 		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
 		C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */; };
+		C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */; };
 		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
 		C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000BB1 /* TabActionBar.swift */; };
 		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
@@ -89,7 +91,6 @@
 		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
 		C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006E1 /* BudgetEditView.swift */; };
 		C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000007A1 /* LocationPickerView.swift */; };
-		C1A11EA700000000000007B2 /* TravelMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000007B1 /* TravelMapView.swift */; };
 		C1A11EA700000000000009A2 /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009A1 /* CSVParser.swift */; };
 		C1A11EA700000000000009B2 /* TravelExpenseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009B1 /* TravelExpenseMap.swift */; };
 		C1A11EA700000000000009C2 /* TravelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009C1 /* TravelStore.swift */; };
@@ -210,6 +211,7 @@
 		C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberView.swift; sourceTree = "<group>"; };
 		C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTheme.swift; sourceTree = "<group>"; };
 		C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailView.swift; sourceTree = "<group>"; };
+		C1A11EA70000000000000CC1 /* TravelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelListView.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000AA1 /* TravelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPicker.swift; sourceTree = "<group>"; };
 		C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAddTravelView.swift; sourceTree = "<group>"; };
 		C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberViewModel.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 		C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCSVEncoder.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSeeder.swift; sourceTree = "<group>"; };
+		C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSampleSeeder.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000BB1 /* TabActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabActionBar.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
@@ -239,7 +242,6 @@
 		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006E1 /* BudgetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEditView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000007A1 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000007B1 /* TravelMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMapView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009A1 /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009B1 /* TravelExpenseMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelExpenseMap.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009C1 /* TravelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelStore.swift; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				C15760172AEE782C0089FFE5 /* CountryList.csv */,
 				57C41DFB2AD4F1EB00345253 /* Persistence.swift */,
 				C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */,
+				C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */,
 				5754FAB42AD3F94900A3FCE8 /* Mwallet.xcdatamodeld */,
 				57A65D062AD7D4BE00131266 /* Enumeration */,
 				C157601D2AF1DD830089FFE5 /* CountryInfo.swift */,
@@ -440,6 +443,7 @@
 				C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */,
 				C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */,
 				C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */,
+				C1A11EA70000000000000CC1 /* TravelListView.swift */,
 				C1A11EA70000000000000AA1 /* TravelPicker.swift */,
 				C1A11EA700000000000009D1 /* TravelEditView.swift */,
 				C1A11EA700000000000009C1 /* TravelStore.swift */,
@@ -576,7 +580,6 @@
 				C1A11EA700000000000001C1 /* ReceiptStatsView.swift */,
 				C1A11EA7000000000000010E /* ReceiptDetailView.swift */,
 				C1A11EA700000000000007A1 /* LocationPickerView.swift */,
-				C1A11EA700000000000007B1 /* TravelMapView.swift */,
 				C1A11EA7000000000000010C /* ReceiptRow.swift */,
 				C1A11EA700000000000000E3 /* ReceiptHomeView.swift */,
 			);
@@ -878,6 +881,7 @@
 				C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */,
 				C1A11EA700000000000005A2 /* MissionMark.swift in Sources */,
 				C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */,
+				C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */,
 				C1A11EA70000000000000AA2 /* TravelPicker.swift in Sources */,
 				C1A11EA700000000000009D2 /* TravelEditView.swift in Sources */,
 				C1A11EA700000000000009C2 /* TravelStore.swift in Sources */,
@@ -902,7 +906,6 @@
 				C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */,
 				C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */,
 				C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */,
-				C1A11EA700000000000007B2 /* TravelMapView.swift in Sources */,
 				C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */,
 				C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */,
 				C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */,
@@ -914,6 +917,7 @@
 				C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */,
 				57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */,
 				C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */,
+				C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */,
 				C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */,
 				C18168022AFDE07000130F79 /* SplashView.swift in Sources */,
 				E2D4247E2AEF580E00A9ADC9 /* ExchangeRateHandler.swift in Sources */,

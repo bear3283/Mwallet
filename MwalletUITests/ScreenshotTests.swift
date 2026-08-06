@@ -81,16 +81,16 @@ final class ScreenshotTests: XCTestCase {
         capture("03-영수증")
 
         tapTab("여행")
-        capture("04-여행지도")
+        capture("04-여행목록")
     }
 
     // MARK: - 여행 선택 시트
 
     func test_02_여행_선택_시트를_캡처한다() throws {
-        tapTab("여행")
+        // 여행 탭이 목록이 되면서 선택기는 예결산 탭에만 남았다.
+        tapTab("예결산")
 
         // 여는 버튼은 여행 이름 + 기간을 담은 큰 버튼이다.
-        // 이름이 무엇이든 잡히도록 chevron.down 이 붙은 버튼을 찾는다.
         let picker = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "~")).firstMatch
         guard tapIfExists(picker) else {
             XCTFail("여행 선택 버튼을 찾지 못했습니다. 화면 구조가 바뀌었는지 확인해 주세요.")
@@ -107,8 +107,10 @@ final class ScreenshotTests: XCTestCase {
     func test_03_여행_상세와_편집을_캡처한다() throws {
         tapTab("여행")
 
-        guard tapIfExists(app.buttons.containing(.staticText, identifier: "여행 상세").firstMatch) else {
-            XCTFail("'여행 상세' 줄을 찾지 못했습니다.")
+        // 여행 카드 한 장을 누르면 상세로 들어간다.
+        let card = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "예시")).firstMatch
+        guard tapIfExists(card) else {
+            XCTFail("여행 카드를 찾지 못했습니다.")
             return
         }
         settle(1.5)
