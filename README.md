@@ -164,7 +164,8 @@ Mwallet/
 - [x] `fatalError` 5곳 → 3곳을 복구 가능한 처리로 전환 (남은 2곳은 `Persistence` 의 저장소 개방 실패로, 앱이 할 수 있는 복구가 없음)
 - [x] 기존 `CSVArchive` 를 `ReceiptCSVEncoder` 로 교체 완료
 - [x] `print` → `OSLog` 전환 — 디버그 노이즈 16개는 삭제, 44개를 5개 카테고리로 이동
-- [ ] **음성 파싱 로직에 테스트 없음** — `divideVoiceSentence` 386줄이 이 앱의 핵심 기능인데 검증이 0건이다
+- [x] **음성 파싱 로직 테스트** — 32건. 첫 실행에서 '만원' 이 0원으로 잡히던 결함을 찾아 고쳤다
+- [ ] **'점' 이 낱말 안에서도 소수점으로 읽힌다** — '점심 먹었다' 처럼 금액 없는 문장이 0원 빈 기록이 된다 (`VoiceSentenceParsingTests` 에 `XCTExpectFailure` 로 표시해 두었다)
 
 **P2 — 구조**
 - [x] 데드 코드 제거, `TempSave` → `FirstLaunchSeeder` 정리
