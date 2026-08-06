@@ -58,6 +58,11 @@ final class FirstLaunchSeeder {
             UserDefaults.standard.set(true, forKey: Self.sampleSeededKey)
             addSampleTrip()
         }
+
+        // 화면을 채워 놓고 확인하기 위한 예시. 릴리스에는 들어가지 않는다.
+        #if DEBUG
+        DebugSampleSeeder.seedIfNeeded(into: viewContext)
+        #endif
     }
 
     private func addDefaultTravel() {
