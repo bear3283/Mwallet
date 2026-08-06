@@ -123,11 +123,20 @@ struct TravelDetailView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isWarningOn = true
-                } label: {
-                    Image(systemName: "trash")
-                        .foregroundStyle(.black)
+                HStack(spacing: 14) {
+                    NavigationLink {
+                        TravelEditView(travel: travel)
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                            .foregroundStyle(.black)
+                    }
+
+                    Button {
+                        isWarningOn = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundStyle(.black)
+                    }
                 }
             }
         }
@@ -137,6 +146,7 @@ struct TravelDetailView: View {
         } message: {
             Text("현재 선택한 여행방에 저장된 지출 기록 및 관련 데이터를 모두 삭제할까요?")
         }
+        // 편집에서 돌아왔을 때 이름·기간·인원을 다시 읽는다.
         .onAppear {
             refreshToken = UUID()
             cameraPosition = TravelMapCamera.fitted(to: stops)

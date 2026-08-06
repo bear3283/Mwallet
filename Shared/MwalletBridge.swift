@@ -64,7 +64,9 @@ enum MwalletBridge {
             expense.paymentMethod = Int64(item.paymentMethodIndex)
             expense.currency = ExpenseCode.currencyIndex(for: "KRW")
             expense.exchangeRate = 1               // 원화는 기준 통화라 환율 1
-            expense.country = 0
+            // 위젯은 위치를 묻지 않으므로 어느 나라인지 알 수 없다.
+            // 예전에는 0(대한민국)을 넣어, 해외에서 담은 지출도 국내로 표시됐다.
+            expense.country = ExpenseCode.unknownCountry
             expense.payDate = item.createdAt
             expense.timeZoneIdentifier = TimeZone.current.identifier
         }
