@@ -7,6 +7,9 @@
 
 import Foundation
 import SwiftUI
+
+// UIKit 접근성 트리를 훑는다. 그 프로퍼티들은 메인에서만 읽을 수 있다.
+@MainActor
 extension NSObject {
   func accessibilityDescendant(passing test: (Any) -> Bool) -> Any? {
 

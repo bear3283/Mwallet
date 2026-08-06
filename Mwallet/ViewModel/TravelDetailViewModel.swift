@@ -9,6 +9,9 @@ import Foundation
 import CoreData
 import OSLog
 
+// 화면이 직접 들고 있는 상태다. @Published 갱신은 메인에서만 일어나야 하므로
+// 클래스 전체를 메인 액터에 묶는다.
+@MainActor
 class TravelDetailViewModel: ObservableObject {
     
     let viewContext = PersistenceController.shared.container.viewContext

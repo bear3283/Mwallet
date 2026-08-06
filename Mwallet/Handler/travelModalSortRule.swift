@@ -7,27 +7,25 @@
 
 import Foundation
 
-let travelListSortRule: (Travel, Travel) -> Bool = {
-    if let s0 = $0.startDate, let s1 = $1.startDate {
-        s0 < s1
-    } else {
-        true
-    }
+// 전역 let 클로저는 Swift 6 에서 공유 가변 상태로 잡힌다. 함수로 둔다.
+func travelListSortRule(_ lhs: Travel, _ rhs: Travel) -> Bool {
+    guard let s0 = lhs.startDate, let s1 = rhs.startDate else { return true }
+    return s0 < s1
 }
 
-let travelModalSortRule: (Travel, Travel) -> Bool = {
+func travelModalSortRule(_ lhs: Travel, _ rhs: Travel) -> Bool {
     let nowDate = Date()
     
-    if $0.isUserCreated && $1.isDefault {
+    if lhs.isUserCreated && rhs.isDefault {
         return false
-    } else if $0.isDefault && $1.isUserCreated {
+    } else if lhs.isDefault && rhs.isUserCreated {
         return true
     }
     
-    let s0 = $0.startDate ?? Date.distantPast
-    let e0 = $0.endDate ?? Date.distantFuture
-    let s1 = $1.startDate ?? Date.distantPast
-    let e1 = $1.endDate ?? Date.distantFuture
+    let s0 = lhs.startDate ?? Date.distantPast
+    let e0 = lhs.endDate ?? Date.distantFuture
+    let s1 = rhs.startDate ?? Date.distantPast
+    let e1 = rhs.endDate ?? Date.distantFuture
     
     enum TravelTimeState: Int {
         case current

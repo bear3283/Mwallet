@@ -133,27 +133,34 @@ struct ManualRecordView: View {
             
             if viewModel.wantToActivateAutoSaveTimer && (viewModel.payAmount != -1 || viewModel.info != nil) {
                 viewModel.secondCounter = 8
-                viewModel.autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                    if let secondCounter = viewModel.secondCounter {
-                        if secondCounter > 1 {
-                            viewModel.secondCounter! -= 1
-                        } else {
-                            if viewModel.payAmount != -1 || viewModel.info != nil {
-                                viewModel.secondCounter = nil
-                                viewModel.save()
-                                if mainVM.chosenTravelInManualRecord != nil {
-                                    mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
-                                }
-                                viewModel.deleteUselessAudioFiles()
-                                viewModel.savingIsDone = true
-                                viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { t in
-                                    dismiss()
-                                    t.invalidate()
-                                }
-                                timer.invalidate()
-                            } else {
-                                viewModel.secondCounter = nil
-                                timer.invalidate()
+                // Timer 는 Sendable 이 아니라 클로저 파라미터를 격리 블록 안으로
+                // 넘길 수 없다. VM 에 저장해 둔 참조로 무효화한다.
+                viewModel.autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                    // 메인 런루프에 걸린 타이머라 항상 메인에서 깨어난다.
+                    // 클로저 타입은 @Sendable 이라 컴파일러가 그걸 알 수 없어 명시한다.
+                    MainActor.assumeIsolated {
+                        guard let secondCounter = viewModel.secondCounter else { return }
+
+                        guard secondCounter <= 1 else {
+                            viewModel.secondCounter = secondCounter - 1
+                            return
+                        }
+
+                        viewModel.secondCounter = nil
+                        viewModel.autoSaveTimer?.invalidate()
+
+                        guard viewModel.payAmount != -1 || viewModel.info != nil else { return }
+
+                        viewModel.save()
+                        if mainVM.chosenTravelInManualRecord != nil {
+                            mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
+                        }
+                        viewModel.deleteUselessAudioFiles()
+                        viewModel.savingIsDone = true
+                        viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+                            MainActor.assumeIsolated {
+                                dismiss()
+                                viewModel.afterSavingTimer?.invalidate()
                             }
                         }
                     }
@@ -786,9 +793,11 @@ struct ManualRecordView: View {
                     ?? Travel.fetchDefault(in: viewContext)
                 viewModel.deleteUselessAudioFiles()
                 viewModel.savingIsDone = true
-                viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-                    dismiss()
-                    timer.invalidate()
+                viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+                    MainActor.assumeIsolated {
+                        dismiss()
+                        viewModel.afterSavingTimer?.invalidate()
+                    }
                 }
             }
             .opacity((viewModel.payAmount != -1 || viewModel.info != nil) ? 1 : 0.0000001)
@@ -899,7 +908,7 @@ struct PlayngRecordSoundView: View {
                 .frame(width: 54, height: 54)
                 .onAppear {
                     timer = Timer.scheduledTimer(withTimeInterval: stepLength, repeats: true) { _ in
-                        levelUp()
+                        MainActor.assumeIsolated { levelUp() }
                     }
                 }
                 .onDisappear {

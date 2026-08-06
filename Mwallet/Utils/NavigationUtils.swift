@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// UIKit 창 계층을 만지므로 메인에서만 부를 수 있다.
+@MainActor
 struct NavigationUtil {
   static func popToRootView() {
       let keyWindow = UIApplication.shared.connectedScenes

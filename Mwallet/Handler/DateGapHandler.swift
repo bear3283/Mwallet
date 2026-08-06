@@ -23,35 +23,42 @@
 import Foundation
 import CoreLocation
 
+// CLLocationManager 는 자신이 만들어진 큐로 콜백을 보낸다. 이 매니저는
+// DateGapHandler 가 메인에서 만들므로 콜백도 메인으로 온다.
+// CLLocationManagerDelegate 자체는 메인 액터에 묶여 있지 않아, 콜백을
+// nonisolated 로 받고 안에서 메인임을 명시한다.
+@MainActor
 final class LocationManagerDelegateForDateGapHandler: NSObject, CLLocationManagerDelegate {
-    var parent: DateGapHandler?
+    weak var parent: DateGapHandler?
     var updateActivityIsDone = false
     var authActivityIsDone = false
 
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if !updateActivityIsDone {
-            parent?.currentLocation = locations.first
-            if let loc = parent?.currentLocation {
-                UserDefaults.standard.set(loc.coordinate.latitude, forKey: "currentLocationLatitude")
-                UserDefaults.standard.set(loc.coordinate.longitude, forKey: "currentLocationLongitude")
-            }
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        MainActor.assumeIsolated {
+            guard !updateActivityIsDone else { return }
             updateActivityIsDone = true
+
+            parent?.currentLocation = locations.first
+            guard let loc = locations.first else { return }
+            UserDefaults.standard.set(loc.coordinate.latitude, forKey: "currentLocationLatitude")
+            UserDefaults.standard.set(loc.coordinate.longitude, forKey: "currentLocationLongitude")
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedWhenInUse || status == .authorizedAlways {
-            if !authActivityIsDone {
-                parent?.getLocation()
-                authActivityIsDone = true
-            }
+    nonisolated func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        MainActor.assumeIsolated {
+            guard status == .authorizedWhenInUse || status == .authorizedAlways else { return }
+            guard !authActivityIsDone else { return }
+            authActivityIsDone = true
+            parent?.getLocation()
         }
     }
 }
 
+// CLLocationManager 와 그 결과를 다룬다. 메인에서만 쓴다.
+@MainActor
 final class DateGapHandler {
     static let shared = DateGapHandler()
-    let calendar = Calendar.current
 
     private init() { }
 
@@ -76,39 +83,4 @@ final class DateGapHandler {
         locationManager?.startUpdatingLocation()
     }
 
-    func getLocal000(of date: Date) -> Date {
-        let components = calendar.dateComponents([.year, .month, .day], from: date)
-
-        var newComponents = DateComponents()
-        newComponents.year = components.year
-        newComponents.month = components.month
-        newComponents.day = components.day
-        newComponents.hour = 0
-        newComponents.minute = 0
-        newComponents.second = 0
-
-        if let newDate = calendar.date(from: newComponents) {
-            return newDate
-        } else {
-            return date
-        }
-    }
-
-    func getLocal235959(of date: Date) -> Date {
-        let components = calendar.dateComponents([.year, .month, .day], from: date)
-
-        var newComponents = DateComponents()
-        newComponents.year = components.year
-        newComponents.month = components.month
-        newComponents.day = components.day
-        newComponents.hour = 23
-        newComponents.minute = 59
-        newComponents.second = 59
-
-        if let newDate = calendar.date(from: newComponents) {
-            return newDate
-        } else {
-            return date
-        }
-    }
 }

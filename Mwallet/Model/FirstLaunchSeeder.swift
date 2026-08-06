@@ -25,6 +25,8 @@ private struct SampleExpense {
     let hoursAgo: Int
 }
 
+// 앱이 뜰 때 메인에서 한 번 돈다.
+@MainActor
 final class FirstLaunchSeeder {
 
     static let shared = FirstLaunchSeeder()

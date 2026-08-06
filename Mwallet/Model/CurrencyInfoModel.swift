@@ -8,28 +8,33 @@
 import Foundation
 import OSLog
 
-class CurrencyInfoModel {
+// 표는 한 번 읽고 바뀌지 않는다. 불변이라 어느 스레드에서 읽어도 안전하다.
+// (예전에는 lazy var 라 첫 접근이 겹치면 두 번 파싱될 수 있었다)
+final class CurrencyInfoModel: Sendable {
 
     static let shared = CurrencyInfoModel()
 
+    let currencyResult: [Int: CurrencyInfo]
+
     private init() {
+        currencyResult = Self.load()
     }
 
     // 통화 목록을 못 읽어도 앱은 떠야 한다. 원화·달러만 남은 최소 사전으로 되돌아간다.
     // 이 둘은 통화 후보를 만들 때 항상 포함되는 값이라 없으면 화폐 선택이 비어 버린다.
-    lazy var currencyResult: [Int: CurrencyInfo] = {
+    private static func load() -> [Int: CurrencyInfo] {
         guard let csvURL = Bundle.main.url(forResource: "CurrencyList", withExtension: "csv") else {
             Logger.resources.error("CurrencyList.csv 를 번들에서 찾지 못했습니다")
-            return Self.fallback
+            return fallback
         }
         do {
-            let parsed = try createCurrencyInfoDictionary(from: csvURL)
-            return parsed.isEmpty ? Self.fallback : parsed
+            let parsed = try makeDictionary(from: csvURL)
+            return parsed.isEmpty ? fallback : parsed
         } catch {
             Logger.resources.error("CurrencyList.csv 파싱 실패: \(error.localizedDescription, privacy: .public)")
-            return Self.fallback
+            return fallback
         }
-    }()
+    }
 
     // 인덱스는 CurrencyList.csv 의 행 번호와 같아야 한다. 0 원화 · 4 달러.
     private static let fallback: [Int: CurrencyInfo] = [
@@ -39,7 +44,7 @@ class CurrencyInfoModel {
     ]
 
     // MARK: 인덱스(화폐 순서)와 CurrencyInfo 구조체를 딕셔너리 형태로 만들기
-    func createCurrencyInfoDictionary(from csvURL: URL) throws -> [Int: CurrencyInfo] {
+    static func makeDictionary(from csvURL: URL) throws -> [Int: CurrencyInfo] {
         let csvData = try CSVParser.rows(contentsOf: csvURL)
         var currencyInfoDict: [Int: CurrencyInfo] = [:]
 

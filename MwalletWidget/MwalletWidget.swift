@@ -68,8 +68,8 @@ struct StaticProvider: TimelineProvider {
 // MARK: - 빠른 기록 인텐트 (위젯 → App Group 큐)
 
 struct LogExpenseIntent: AppIntent {
-    static var title: LocalizedStringResource = "빠른 지출 기록"
-    static var isDiscoverable = false
+    static let title: LocalizedStringResource = "빠른 지출 기록"
+    static let isDiscoverable = false
 
     @Parameter(title: "금액") var amount: Double
     @Parameter(title: "카테고리") var categoryIndex: Int

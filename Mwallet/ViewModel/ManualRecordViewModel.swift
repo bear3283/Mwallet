@@ -10,6 +10,9 @@ import Combine
 import CoreLocation
 import OSLog
 
+// 화면이 직접 들고 있는 상태다. @Published 갱신은 메인에서만 일어나야 하므로
+// 클래스 전체를 메인 액터에 묶는다.
+@MainActor
 final class ManualRecordViewModel: NSObject, ObservableObject {
     
     let viewContext = PersistenceController.shared.container.viewContext
@@ -19,7 +22,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
     
     var location: CLLocation?
     
-    func getLocation(completion: @escaping () -> Void) {
+    func getLocation(completion: @escaping @MainActor @Sendable () -> Void) {
         location = DateGapHandler.shared.currentLocation
         if location == nil {
             let latitude = UserDefaults.standard.object(forKey: "currentLocationLatitude") as? CLLocationDegrees
@@ -312,7 +315,8 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
     }
     
     deinit {
-        stopPlayingAudio()
+        // 메인 액터 메서드를 부를 수 없으므로 플레이어를 직접 멈춘다.
+        audioPlayer?.stop()
     }
         
     func save() {
@@ -355,7 +359,9 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
     
     // MARK: - voice
     
-    private var audioPlayer: AVAudioPlayer?
+    // 재생은 메인에서만 다루지만 deinit 은 어느 스레드에서 불릴지 모른다.
+    // 해제 시점에 재생을 멈추려면 격리 밖에서도 닿아야 해 nonisolated 로 둔다.
+    private nonisolated(unsafe) var audioPlayer: AVAudioPlayer?
     
     func startPlayingAudio(url: URL) {
         
@@ -401,13 +407,16 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
 }
 
 extension ManualRecordViewModel: AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-            if flag {
-                // 재생이 성공적으로 끝났을 때 실행할 코드
-                playingRecordSound = false
-            } else {
-                // 재생이 실패했을 때 실행할 코드
-                Logger.record.error("녹음 재생이 끝나지 못했습니다")
-            }
+
+    // AVAudioPlayerDelegate 는 메인 액터에 묶여 있지 않다. 이 콜백이 어느 스레드로
+    // 올지 보장이 없으므로 nonisolated 로 받고, 상태 변경만 메인으로 넘긴다.
+    nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        guard flag else {
+            Logger.record.error("녹음 재생이 끝나지 못했습니다")
+            return
         }
+        Task { @MainActor in
+            self.playingRecordSound = false
+        }
+    }
 }

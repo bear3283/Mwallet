@@ -154,16 +154,20 @@ struct LocationPickerView: View {
         geocoder.cancelGeocode()
         let location = CLLocation(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude)
         geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "ko_KR")) { placemarks, _ in
-            isResolving = false
-            guard let place = placemarks?.first else {
-                placeName = nil
-                return
-            }
-            // 상호명이 없으면 동네·거리 이름을 조합한다.
-            let parts = [place.name, place.locality, place.subLocality]
-                .compactMap { $0 }
-            placeName = parts.first.map { first in
-                place.locality.map { first == $0 ? first : "\($0) \(first)" } ?? first
+            // 지오코딩 콜백은 메인으로 온다고 문서화돼 있지만 클로저 타입이
+            // @Sendable 이라 컴파일러가 그걸 알 수 없다.
+            MainActor.assumeIsolated {
+                isResolving = false
+                guard let place = placemarks?.first else {
+                    placeName = nil
+                    return
+                }
+                // 상호명이 없으면 동네·거리 이름을 조합한다.
+                let parts = [place.name, place.locality, place.subLocality]
+                    .compactMap { $0 }
+                placeName = parts.first.map { first in
+                    place.locality.map { first == $0 ? first : "\($0) \(first)" } ?? first
+                }
             }
         }
     }

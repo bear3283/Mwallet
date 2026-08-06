@@ -125,10 +125,12 @@ struct ReceiptDetailView: View {
                 .foregroundStyle(.gray300)
                 .padding(.top, 8)
         } else {
+            // PhotosPicker 의 label 클로저는 메인 액터에 묶여 있지 않다.
+            let title = isAttaching ? "불러오는 중…" : "영수증 사진 첨부"
             PhotosPicker(selection: $pickedItem, matching: .images, photoLibrary: .shared()) {
                 HStack(spacing: 8) {
                     Image(systemName: "camera")
-                    Text(isAttaching ? "불러오는 중…" : "영수증 사진 첨부")
+                    Text(title)
                 }
                 .font(.body1_fixed)
                 .foregroundStyle(.gray400)

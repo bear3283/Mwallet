@@ -10,7 +10,7 @@ import OSLog
 
 struct PersistenceController {
     static let shared = PersistenceController()
-    static var preview: PersistenceController = {
+    static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         // Dummy data will go here later
@@ -77,9 +77,9 @@ struct PersistenceController {
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.name = "viewContext"
-        /// - Tag: viewContextMergePolicy
-        container.viewContext.mergePolicy =
-        NSMergeByPropertyObjectTrumpMergePolicy
+        // 전역 var NSMergeByPropertyObjectTrumpMergePolicy 는 공유 가변 상태로
+        // 잡힌다. 같은 정책의 타입 프로퍼티를 쓴다.
+        container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         container.viewContext.undoManager = nil
         container.viewContext.shouldDeleteInaccessibleFaults = true
       }
