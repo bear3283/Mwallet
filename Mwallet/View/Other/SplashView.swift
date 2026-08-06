@@ -22,7 +22,7 @@ struct SplashView: View {
                 // 마크가 흰색이라 어느 구간에서도 또렷하게 읽힌다.
                 LinearGradient(
                     stops: [
-                        Gradient.Stop(color: .mainGreen, location: 0.00),
+                        Gradient.Stop(color: .mainAccent, location: 0.00),
                         Gradient.Stop(color: Color(0x04A050), location: 1.00)
                     ],
                     startPoint: UnitPoint(x: 0.5, y: 0),

@@ -189,7 +189,7 @@ struct ReceiptStatsView: View {
                 .foregroundStyle(expenses.isEmpty ? Color.gray300 : Color.black)
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
-                .background(expenses.isEmpty ? Color.gray100 : Color.mainGreen)
+                .background(expenses.isEmpty ? Color.gray100 : Color.mainAccent)
                 .cornerRadius(12)
             }
             .disabled(expenses.isEmpty)

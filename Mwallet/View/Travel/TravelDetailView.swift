@@ -4,414 +4,329 @@
 //
 //  Created by GYURI PARK on 2023/10/26.
 //
+//  여행 상세. 지도와 지출 흐름이 주인공이다.
+//  기간·국가·인원은 한 번 확인하면 되는 값이라 위쪽 한 줄로 접어 두고,
+//  화면의 대부분은 '어디서 어떤 순서로 썼는가' 에 쓴다.
+//
 
-import SwiftUI
 import CoreData
+import MapKit
+import SwiftUI
 
 struct TravelDetailView: View {
-    
+
     @EnvironmentObject var mainVM: MainViewModel
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @ObservedObject var viewModel = TravelDetailViewModel()
-    @State var selectedTravel: [Travel]?
-    @State var travelID: UUID = UUID()
-    @State var travelName: String
-    @State var startDate: Date
-    @State var endDate: Date?
-    @State var dayCnt: Int
-    @State var participantCnt: Int
-    @State var participantArr: [String]
-    @State var flagImageArr: [String] = []
-    @State var defaultImageString: String
-    @State var blurImageString: String
-    @State var koreanNM: [String]
-    
-    @State var isWarningOn = false
-    
-    let dateGapHandler = DateGapHandler.shared
-    
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                VStack(alignment: .leading, spacing: 20) {
-                    Spacer()
-                    // 1. 여행중 + Day 3
-                    dayCounter
-                    
-                    // 2. 시작일 + 종료일
-                    dateBox
-                    
-                    // 3. 여행 국가
-                    travelCountry
-                    
-                    // 4. 힘께하는 사람
-                    participantGroup
-                    
-                    Spacer()
-                    
-                    // 6. 버튼
-                    HStack {
-                        MediumButtonWhite(title: "예결산 보기", action: {
-                            // 선택값 초기화
-                            mainVM.selectedTravel = self.selectedTravel?.first
-                            travelID = mainVM.selectedTravel?.id ?? UUID()
-                            NavigationUtil.popToRootView()
-                            mainVM.navigationToExpenseView()
-                        })
-                        
-                        MediumButtonMain(title: "지출 기록하기", action: {
-                            mainVM.selectedTravel = self.selectedTravel?.first
-                            travelID = mainVM.selectedTravel?.id ?? UUID()
-                            NavigationUtil.popToRootView()
-                            mainVM.navigationToRecordView()
-                        })
-                    }
-                }
-            }
-            .ignoresSafeArea(edges: .bottom)
-            .background(
-                Image(blurImageString)
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-                    .overlay(
-                        LinearGradient(
-                            stops: [
-                                Gradient.Stop(color: .black.opacity(0), location: 0.00),
-                                Gradient.Stop(color: .black.opacity(0.75), location: 1.00)
-                            ],
-                            startPoint: UnitPoint(x: 0.5, y: 0),
-                            endPoint: UnitPoint(x: 0.5, y: 1)
-                        )
-                    )
-            )
-            .onAppear {
-                print("participantCnt \(participantArr.count)")
-                viewModel.fetchTravel()
-                self.selectedTravel = viewModel.filterByID(selectedTravelID: travelID)
-                
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    HStack {
-                        Button {
-                            isWarningOn = true
-                        } label: {
-                            Image("trashCan")
-                                .padding(.trailing, 10)
-                        }
-                        
-                        Button {
-                            NavigationUtil.popToRootView()
-                        } label: {
-                            Image("xmark_white")
-                                .frame(width: 20, height: 20)
-                                .padding(.trailing, 5)
-                        }
-                    }
-                }
-            }
-            .alert(isPresented: $isWarningOn) {
-                Alert(title: Text("여행 삭제하기"), 
-                      message: Text("현재 선택한 여행방에 저장된 지출 기록 및 관련 데이터를 모두 삭제할까요?"),
-                      primaryButton: .destructive(Text("삭제하기"), action: {
-                    
-                    let idToBeDeleted = self.selectedTravel?.first?.id
-                    PersistenceController().deleteItems(object: self.selectedTravel?.first)
-                    
-                    if let idToBeDeleted {
-                        if let selectedId = mainVM.selectedTravel?.id, let selectedInExpenseId = mainVM.selectedTravelInExpense?.id {
-                            if idToBeDeleted == selectedId || idToBeDeleted == selectedInExpenseId {
-                                mainVM.selectedTravelInExpense = findInitialTravelInExpense()
-                                mainVM.selectedTravel = findCurrentTravel() // defaultTravel이면 selectedTravelInExpense를 업데이트하지 않는다.
-                            }
-                        }
-                    }
-                    NavigationUtil.popToRootView()
-                }), secondaryButton: .cancel(Text("취소")))
-            }
-        }
-        .toolbar(.hidden, for: .tabBar)
-        .navigationBarBackButtonHidden()
-    }
-    
-    private var dayCounter: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                if Date() <= endDate ?? Date.distantFuture && startDate <= Date() {
-                    HStack(alignment: .center, spacing: 10) {
-                        Text("여행 중")
-                            .font(
-                                Font.custom("Pretendard", size: 14)
-                                    .weight(.medium)
-                            )
-                            .foregroundColor(Color.mainGreen)
-                    }
-                    .padding(.horizontal, 11)
-                    .padding(.vertical, 7)
-                    .background(.white)
-                    .cornerRadius(5)
-                    
-                    Group {
-                        Text("DAY ")
-                        +
-                        Text("\(dayCnt+1)")
-                    }
-                    .padding(.vertical, 7)
-                    .font(.subhead2_1)
-                    .foregroundStyle(Color.white)
-                }
-            }
-            
-            Text("\(travelName)")
-                .font(.display3)
-                .foregroundStyle(Color.white)
-                
-        }
-        .padding(.horizontal, 32)
-    }
-    
-    private var travelCountry: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("여행 국가")
-                .font(.subhead1)
-                .foregroundStyle(Color.white)
-            
-            if koreanNM.count > 0 {
-                HStack {
-                    
-                    ForEach(0..<koreanNM.count, id: \.self) { index in
-                        
-                        HStack {
-                            Image(flagImageArr[index])
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                            
-                            Text(koreanNM[index])
-                                .font(.body2)
-                                .foregroundStyle(Color.white)
-                        }
-                        
-                        .padding(.trailing, 18)
-                        
-                    }
-                    
-                    Spacer()
-                }
-                .padding(.vertical, 20)
-            } else {
-                HStack {
-                    Text("소비 기록을 남기면 자동으로 채워져요.")
-                        .font(.body2)
-                        .foregroundStyle(Color.gray200)
-                        .frame(height: 24)
-                    
-                    Spacer()
-                }
-                .padding(.vertical, 20)
-            }
-            
-            Rectangle()
-                .foregroundColor(.clear)
-                .frame(width: UIScreen.main.bounds.width - 64, height: 0.5)
-                .background(.white)
-        }
-        .padding(.horizontal, 32)
-    }
-    
-    private var dateBox: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .center) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("시작일")
-                        .font(.subhead1)
-                        .foregroundStyle(Color.white)
-                        .padding(.bottom, 8)
-                    
-                    ZStack(alignment: .leading) {
-                        Text("00.00.00 (수)")
-                            .font(.body4)
-                            .hidden()
-                        
-                        Text(dateGapHandler.convertBeforeShowing(date: startDate), formatter: TravelDetailViewModel.dateFormatter)
-                            .font(.body4)
-                            .foregroundStyle(Color.white)
-                    }
-                }
-                
-                Spacer()
-                
-                Rectangle()
-                .foregroundColor(.clear)
-                .frame(width: 1, height: 49)
-                .background(.white)
-                
-                Spacer()
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("종료일")
-                        .font(.subhead1)
-                        .foregroundStyle(Color.white)
-                        .padding(.bottom, 8)
-                    
-                    if let endDate = endDate {
-                        ZStack(alignment: .leading) {
-                            Text("00.00.00 (수)")
-                                .font(.body4)
-                                .hidden()
-                            
-                            Text(dateGapHandler.convertBeforeShowing(date: endDate), formatter: TravelDetailViewModel.dateFormatter)
-                                .font(.body4)
-                                .foregroundStyle(Color.white)
-                        }
-                    } else {
-                        ZStack(alignment: .leading) {
-                            Text("00.00.00 (수)")
-                                .font(.body4)
-                                .hidden()
-                            
-                            Text("미정")
-                                .font(.body4)
-                                .foregroundStyle(Color.white)
-                        }
-                    }
-                }
-                
-                Spacer()
-            }
-            .padding(.vertical, 22)
-            .frame(width: UIScreen.main.bounds.width - 64)
-            
-            Rectangle()
-                .foregroundColor(.clear)
-                .frame(width: UIScreen.main.bounds.width - 64, height: 0.5)
-                .background(.white)
-        }
-        .padding(.horizontal, 32)
-    }
-    
-    private var participantGroup: some View {
-        VStack(alignment: .leading) {
-            Text("함께하는 사람")
-                .font(.subhead1)
-                .foregroundStyle(Color.white)
-                .padding(.bottom, 5)
-            
-            if participantCnt < 1 {
-                
-                HStack(alignment: .center, spacing: 4) {
-                    Text("me")
-                        .font(.subhead2_1)
-                        .foregroundColor(Color.gray200)
-                    
-                    Text("나")
-                        .font(.subhead2_2)
-                        .foregroundColor(.white)
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .frame(height: 28, alignment: .center)
-                .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                .cornerRadius(6)
-                
-            } else if participantCnt <= 3 {
-                
-                HStack {
-                    HStack(alignment: .center, spacing: 4) {
-                        Text("me")
-                            .font(.subhead2_1)
-                            .foregroundColor(Color.gray200)
-                        
-                        Text("나")
-                            .font(.subhead2_2)
-                            .foregroundColor(.white)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .frame(height: 28, alignment: .center)
-                    .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                    .cornerRadius(6)
-                    
-                    ForEach(1..<participantCnt+1, id: \.self) { index in
-                        HStack(alignment: .center, spacing: 10) {
-                            Text("\(participantArr[index-1])")
-                                .font(.subhead2_2)
-                                .foregroundColor(.white)
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                        .cornerRadius(6)
-                    }
-                }
-            } else {
-                HStack {
-                    HStack(alignment: .center, spacing: 4) {
-                        Text("me")
-                            .font(.subhead2_1)
-                            .foregroundColor(Color.gray200)
-                        
-                        Text("나")
-                            .font(.subhead2_2)
-                            .foregroundColor(.white)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                    .cornerRadius(6)
-                    
-                    HStack {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(alignment: .center, spacing: 10) {
-                            ForEach(1..<participantCnt+1, id: \.self) { index in
-                                
-                                    Text("\(participantArr[index-1])")
-                                        .font(.subhead2_2)
-                                        .foregroundColor(.white)
-                                }
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                            .cornerRadius(6)
-                            }
-                        }
-                    }
-                }
-            }
-            
-            Spacer()
-            
-        }
-        .padding(.horizontal, 32)
-    }
-}
+    @Environment(\.dismiss) private var dismiss
 
-extension TravelDetailView {
+    private let budgetStore = BudgetStore()
 
-    // Travel 객체 하나로 여는 편의 이니셜라이저.
-    // 지도(TravelMapView)에서 여행 상세로 들어갈 때 쓴다.
-    // 국기·배경 이미지는 country 기반 계산이 필요해 여기서는 기본값으로 두고,
-    // travelCountry 섹션은 빈 배열이면 '자동으로 채워져요' 안내를 보여 준다.
+    let travel: Travel
+
+    @State private var cameraPosition: MapCameraPosition = .automatic
+    @State private var highlightedID: NSManagedObjectID?
+    @State private var isWarningOn = false
+    @State private var refreshToken = UUID()
+
     init(travel: Travel) {
-        let start = travel.startDate ?? Date()
-        let today = Calendar.current.startOfDay(for: Date())
-        let dayDiff = Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: start), to: today).day ?? 0
+        self.travel = travel
+    }
 
-        _travelID = State(initialValue: travel.id ?? UUID())
-        _travelName = State(initialValue: travel.name ?? "")
-        _startDate = State(initialValue: start)
-        _endDate = State(initialValue: travel.endDate)
-        _dayCnt = State(initialValue: max(dayDiff, 0))
-        _participantCnt = State(initialValue: travel.participantArray?.count ?? 0)
-        _participantArr = State(initialValue: travel.participantArray ?? [])
-        _flagImageArr = State(initialValue: [])
-        _defaultImageString = State(initialValue: "DefaultImage")
-        _blurImageString = State(initialValue: "BlurredDefaultImage")
-        _koreanNM = State(initialValue: [])
+    // MARK: - 파생 값
+
+    private var stops: [TravelExpenseStop] {
+        _ = refreshToken
+        return TravelExpenseStop.stops(from: budgetStore.expenses(for: travel))
+    }
+
+    private var summary: BudgetSummary {
+        _ = refreshToken
+        return budgetStore.summary(for: travel)
+    }
+
+    private var travelName: String {
+        let name = travel.name ?? ""
+        return name.isEmpty ? "이름 없는 여행" : name
+    }
+
+    private var isOngoing: Bool {
+        let now = Date()
+        return (travel.startDate ?? .distantFuture) <= now && now <= (travel.endDate ?? .distantFuture)
+    }
+
+    private var dayCount: Int {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: travel.startDate ?? Date())
+        let today = calendar.startOfDay(for: Date())
+        return max(calendar.dateComponents([.day], from: start, to: today).day ?? 0, 0) + 1
+    }
+
+    private var periodText: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "MM.dd"
+        guard let start = travel.startDate else { return "미정" }
+        guard let end = travel.endDate else { return "\(formatter.string(from: start)) ~ 미정" }
+        return "\(formatter.string(from: start)) ~ \(formatter.string(from: end))"
+    }
+
+    // 지출에 남은 국가 코드로 방문 국가를 만든다.
+    private var countries: [CountryInfo] {
+        _ = refreshToken
+        let indices = Set(budgetStore.expenses(for: travel).map { Int($0.country) })
+        return indices
+            .sorted()
+            .compactMap { CountryInfoModel.shared.countryResult[$0] }
+            .filter { $0.koreanNm != "알 수 없음" }
+    }
+
+    private var participants: [String] {
+        ["나"] + (travel.participantArray ?? [])
+    }
+
+    // MARK: - 본문
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 0) {
+                    header
+                    basicInfoStrip
+                        .padding(.horizontal, ReceiptLayout.gutter)
+                        .padding(.top, 16)
+
+                    mapSection
+                        .padding(.horizontal, ReceiptLayout.gutter)
+                        .padding(.top, 20)
+
+                    expenseListSection
+                        .padding(.horizontal, ReceiptLayout.gutter)
+                        .padding(.top, 24)
+
+                    // 하단 버튼에 가리지 않도록 여유를 둔다.
+                    Spacer(minLength: 120)
+                }
+            }
+
+            bottomButtons
+        }
+        .background(Color.white)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.black)
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isWarningOn = true
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundStyle(.black)
+                }
+            }
+        }
+        .alert("여행 삭제하기", isPresented: $isWarningOn) {
+            Button("삭제하기", role: .destructive, action: deleteTravel)
+            Button("취소", role: .cancel) { }
+        } message: {
+            Text("현재 선택한 여행방에 저장된 지출 기록 및 관련 데이터를 모두 삭제할까요?")
+        }
+        .onAppear {
+            refreshToken = UUID()
+            cameraPosition = TravelMapCamera.fitted(to: stops)
+        }
+    }
+
+    // MARK: - 머리말
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if isOngoing {
+                HStack(spacing: 6) {
+                    Text("여행 중")
+                        .font(.caption1_fixed)
+                        .foregroundStyle(Color.mainAccent)
+                    Text("DAY \(dayCount)")
+                        .font(.caption1_fixed)
+                        .foregroundStyle(.gray400)
+                        .monospacedDigit()
+                }
+            }
+
+            Text(travelName)
+                .font(.display2_fixed)
+                .foregroundStyle(.black)
+                .lineLimit(2)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, ReceiptLayout.gutter)
+        .padding(.top, 8)
+    }
+
+    // MARK: - 기본 정보 (기간 · 국가 · 인원)
+
+    private var basicInfoStrip: some View {
+        HStack(alignment: .top, spacing: 0) {
+            infoCell(title: "기간", value: periodText)
+
+            divider
+
+            infoCell(title: "국가",
+                     value: countries.isEmpty ? "기록 없음" : countries.map(\.koreanNm).joined(separator: ", "))
+
+            divider
+
+            infoCell(title: "인원", value: "\(participants.count)명")
+        }
+        .padding(.vertical, 12)
+        .background(Color.gray100)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func infoCell(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(title)
+                .font(.caption1_fixed)
+                .foregroundStyle(.gray300)
+            Text(value)
+                .font(.caption2_fixed)
+                .foregroundStyle(.black)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 12)
+    }
+
+    private var divider: some View {
+        Rectangle()
+            .fill(Color.gray200)
+            .frame(width: 0.5, height: 30)
+    }
+
+    // MARK: - 지도
+
+    private var mapSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 0) {
+                Text("지출한 곳")
+                    .font(.subhead1_fixed)
+                    .foregroundStyle(.gray400)
+                Spacer()
+                if !stops.isEmpty {
+                    Text("\(stops.count)곳 · 기록 순서")
+                        .font(.caption1_fixed)
+                        .foregroundStyle(.gray300)
+                }
+            }
+
+            TravelExpenseMap(
+                stops: stops,
+                cameraPosition: $cameraPosition,
+                height: 360,
+                highlightedID: highlightedID,
+                onSelect: focus(on:)
+            )
+        }
+    }
+
+    // MARK: - 지출 순서 목록
+
+    private var expenseListSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 0) {
+                Text("지출 순서")
+                    .font(.subhead1_fixed)
+                    .foregroundStyle(.gray400)
+                Spacer()
+                Text(ReceiptFormat.krw(summary.totalSpent))
+                    .font(.subhead1_fixed)
+                    .foregroundStyle(.gray400)
+                    .monospacedDigit()
+            }
+
+            if stops.isEmpty {
+                // 빈 화면은 다음에 할 일을 알려 준다.
+                Text("아직 위치가 남은 지출이 없습니다.\n기록할 때 위치를 함께 남기면 들른 순서가 지도에 그려집니다.")
+                    .font(.caption2_fixed)
+                    .foregroundStyle(.gray300)
+                    .multilineTextAlignment(.leading)
+                    .padding(.vertical, 20)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(stops.enumerated()), id: \.element.id) { index, stop in
+                        Button {
+                            focus(on: stop)
+                        } label: {
+                            TravelExpenseRow(
+                                stop: stop,
+                                isHighlighted: stop.id == highlightedID,
+                                isFirst: index == 0,
+                                isLast: index == stops.count - 1
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - 하단 버튼
+
+    private var bottomButtons: some View {
+        HStack {
+            MediumButtonWhite(title: "예결산 보기", action: {
+                mainVM.selectedTravel = travel
+                NavigationUtil.popToRootView()
+                mainVM.navigationToExpenseView()
+            })
+
+            MediumButtonMain(title: "지출 기록하기", action: {
+                mainVM.selectedTravel = travel
+                NavigationUtil.popToRootView()
+                mainVM.navigationToRecordView()
+            })
+        }
+        .padding(.horizontal, ReceiptLayout.gutter)
+        .padding(.top, 10)
+        .background(
+            LinearGradient(colors: [Color.white.opacity(0), Color.white, Color.white],
+                           startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+        )
+    }
+
+    // MARK: - 동작
+
+    // 목록이나 핀을 누르면 그 지점을 지도 가운데로 옮기고 강조한다.
+    private func focus(on stop: TravelExpenseStop) {
+        withAnimation(.snappy) {
+            highlightedID = stop.id
+            cameraPosition = TravelMapCamera.focused(on: stop)
+        }
+    }
+
+    private func deleteTravel() {
+        let deletedID = travel.id
+
+        // 화면이 사라진 뒤에 지워야, 삭제된 객체를 그리려다 죽지 않는다.
+        dismiss()
+
+        DispatchQueue.main.async {
+            PersistenceController.shared.deleteItems(object: travel)
+
+            if let deletedID,
+               deletedID == mainVM.selectedTravel?.id || deletedID == mainVM.selectedTravelInExpense?.id {
+                mainVM.selectedTravelInExpense = findInitialTravelInExpense()
+                mainVM.selectedTravel = findCurrentTravel()
+            }
+        }
     }
 }
-
-// #Preview {
-//     TravelDetailView()
-// }

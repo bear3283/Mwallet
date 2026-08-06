@@ -24,9 +24,7 @@ struct AddMemberView: View {
     @Binding var endDate: Date?
     @State private var isBackButton = false
     @State var isDisappear = false
-    
-    let dateGapHandler = DateGapHandler.shared
-    
+
     var body: some View {
         VStack {
             
@@ -94,7 +92,7 @@ struct AddMemberView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .inset(by: 1)
-                        .stroke(isSelectedAlone ? Color.mainGreen : Color.gray200, lineWidth: 1)
+                        .stroke(isSelectedAlone ? Color.mainAccent : Color.gray200, lineWidth: 1)
                         .frame(width: 350, height: 53)
                     
                     HStack(spacing: 0) {
@@ -120,7 +118,7 @@ struct AddMemberView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .inset(by: 1)
-                        .stroke(isSelectedTogether ? Color.mainGreen : Color.gray200, lineWidth: 1)
+                        .stroke(isSelectedTogether ? Color.mainAccent : Color.gray200, lineWidth: 1)
                         .frame(width: 350, height: 53)
                     
                     HStack(spacing: 0) {
@@ -278,8 +276,8 @@ struct AddMemberView: View {
                     isBackButton = false
                     if !isBackButton {
                         
-                        viewModel.startDate = startDate?.local000().convertBeforeSaving()
-                        viewModel.endDate = endDate?.local235959().convertBeforeSaving()
+                        viewModel.startDate = startDate?.local000()
+                        viewModel.endDate = endDate?.local235959()
                         
                         // 1. 빈칸 제거
                         participantArr = viewModel.filterEmptyStrings(participantArr)

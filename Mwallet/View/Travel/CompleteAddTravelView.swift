@@ -18,9 +18,7 @@ struct CompleteAddTravelView: View {
     @State var travelNM: String
     @State var participantArr: [String]
     @State var selectedTravel: [Travel]?
-    
-    let dateGapHandler = DateGapHandler.shared
-    
+
     var body: some View {
         VStack(spacing: 0) {
             
@@ -93,10 +91,10 @@ struct CompleteAddTravelView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             
-                            Text(viewModel.dateToString(in: dateGapHandler.convertBeforeShowing(date: selectedTravel?.first?.startDate ?? Date())) + " ~")
+                            Text(viewModel.dateToString(in: selectedTravel?.first?.startDate ?? Date()) + " ~")
                             
                             if let endDate = selectedTravel?.first?.endDate {
-                                Text(dateGapHandler.convertBeforeShowing(date: endDate), formatter: PreviousTravelViewModel.dateFormatter)
+                                Text(endDate, formatter: PreviousTravelViewModel.dateFormatter)
                             } else {
                                 Text("미정")
                             }

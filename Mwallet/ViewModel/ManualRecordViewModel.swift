@@ -27,18 +27,24 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
                 location = CLLocation(latitude: latitude, longitude: longitude)
             }
         }
-        if let location {
-            CLGeocoder().reverseGeocodeLocation(location) { placemarks, _  in
+
+        // 좌표가 없으면(권한 거부·첫 실행·실내) 국가를 정할 수 없다.
+        // 예전에는 여기서 completion 을 부르지 않고 끝나 통화 후보가 초기값에 묶였고,
+        // 그 초기값이 달러라 한국에서도 달러로만 기록할 수 있었다.
+        guard let location else {
+            completion()
+            return
+        }
+
+        CLGeocoder().reverseGeocodeLocation(location) { placemarks, _  in
+            // @Published 를 건드리므로 메인에서 처리한다.
+            DispatchQueue.main.async {
                 if let newPlacemark = placemarks?.first {
                     let code = newPlacemark.isoCountryCode ?? ""
-                    let countryKey = CountryInfoModel.shared.countryResult.filter { tuple in
-                        let pairCode = tuple.value.locationNm.components(separatedBy: "-")
-                        if pairCode.count == 2 {
-                            return pairCode[1] == code
-                        } else {
-                            return false
-                        }
-                    }.first?.key ?? -1
+                    let countryKey = CountryInfoModel.shared.countryResult.first { _, info in
+                        let pairCode = info.locationNm.components(separatedBy: "-")
+                        return pairCode.count == 2 && pairCode[1] == code
+                    }?.key ?? -1
                     self.currentCountry = countryKey
                     self.currentLocation = "\(newPlacemark.locality ?? "")"
                 }
@@ -46,24 +52,49 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
             }
         }
     }
-    
+
     // MARK: - 화폐
-    
+
+    // 통화 인덱스는 CurrencyList.csv 의 행 번호다. 숫자를 코드에 박아 두면
+    // CSV 순서가 바뀔 때 조용히 다른 통화가 선택되므로 ISO 코드로 찾는다.
+    static let krwIndex = Int(ExpenseCode.currencyIndex(for: "KRW"))
+    static let usdIndex = Int(ExpenseCode.currencyIndex(for: "USD"))
+
+    // 그 나라의 주요 통화를 앞에, 어디서나 통하는 원화·달러를 뒤에 붙인다.
+    // 국가를 모르면(-1) 원화가 첫 후보가 된다.
+    private func currencyCandidates(for country: Int) -> [Int] {
+        let codes = CountryInfoModel.shared.countryResult[country]?.relatedCurrencyArray ?? []
+        var candidates: [Int] = []
+
+        for code in codes {
+            let index = Int(ExpenseCode.currencyIndex(for: code))
+            // currencyIndex 는 못 찾으면 원화로 떨어진다. 코드가 실제로 일치할 때만
+            // 후보로 받아 "[Unknown]" 같은 값이 원화를 앞세우지 않게 한다.
+            guard CurrencyInfoModel.shared.currencyResult[index]?.isoCodeNm.uppercased() == code.uppercased(),
+                  !candidates.contains(index) else { continue }
+            candidates.append(index)
+        }
+
+        for fallback in [Self.krwIndex, Self.usdIndex] where !candidates.contains(fallback) {
+            candidates.append(fallback)
+        }
+        return candidates
+    }
+
+    // 위치 조회가 끝난 뒤 View 가 부른다.
+    // 국가를 알아냈다면 country 의 didSet 이 이미 후보를 맞춰 두었으므로,
+    // 여기서는 현재 선택이 후보에 없을 때만 바로잡는다.
     func setInitialCurrency() {
-        let stringCurrencyArray = CountryInfoModel.shared.countryResult[country]?.relatedCurrencyArray ?? []
-        var tempCurrencyCandidateArray: [Int] = []
-        for t in CurrencyInfoModel.shared.currencyResult where stringCurrencyArray.contains(t.value.isoCodeNm) {
-            tempCurrencyCandidateArray.append(t.key)
+        applyCurrencyCandidates(for: country, resetSelection: false)
+    }
+
+    private func applyCurrencyCandidates(for country: Int, resetSelection: Bool) {
+        let candidates = currencyCandidates(for: country)
+        currencyCandidateArray = candidates
+
+        if resetSelection || !candidates.contains(currency) {
+            currency = candidates.first ?? Self.krwIndex
         }
-        
-        if !tempCurrencyCandidateArray.contains(4) { // 미국 달러
-            tempCurrencyCandidateArray.append(4)
-        }
-        if !tempCurrencyCandidateArray.contains(0) { // 한국 원
-            tempCurrencyCandidateArray.append(0)
-        }
-        
-        currency = tempCurrencyCandidateArray.first ?? 4
     }
     
     // MARK: - combine
@@ -179,28 +210,14 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
 
     @Published var country: Int = -1 {
         didSet {
-            countryExpression = "\(CountryInfoModel.shared.countryResult[country]?.koreanNm ?? CountryInfoModel.shared.countryResult[-1]!.koreanNm)"
+            countryExpression = CountryInfoModel.shared.countryResult[country]?.koreanNm
+                ?? CountryInfoModel.shared.countryResult[-1]?.koreanNm
+                ?? "알 수 없음"
 
-            if country == 3 { // 미국
-                currencyCandidateArray = [4, 0] // 미국 달러, 한국 원
-            } else {
-                let stringCurrencyArray = CountryInfoModel.shared.countryResult[country]?.relatedCurrencyArray ?? []
-                var tempCurrencyCandidateArray: [Int] = []
-                for t in CurrencyInfoModel.shared.currencyResult where stringCurrencyArray.contains(t.value.isoCodeNm) {
-                    tempCurrencyCandidateArray.append(t.key)
-                }
-                
-                if !tempCurrencyCandidateArray.contains(4) { // 미국 달러
-                    tempCurrencyCandidateArray.append(4)
-                }
-                if !tempCurrencyCandidateArray.contains(0) { // 한국 원
-                    tempCurrencyCandidateArray.append(0)
-                }
-                
-                currencyCandidateArray = tempCurrencyCandidateArray
-            }
-            
-            currency = currencyCandidateArray.first ?? 4
+            // 국가가 바뀌면 그 나라 통화로 맞춘다.
+            // 미국을 따로 분기하던 코드가 있었는데, CountryList.csv 의 미국 행이
+            // [USD] 라 일반 경로와 결과가 같아 지웠다.
+            applyCurrencyCandidates(for: country, resetSelection: true)
         }
     }
     @Published var countryExpression: String = "" // passive
@@ -208,11 +225,14 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
 
     var currentCountry: Int = -1 {
         didSet {
-            country = currentCountry
-            
             if !otherCountryCandidateArray.contains(currentCountry) {
                 otherCountryCandidateArray.append(currentCountry)
             }
+
+            // 역지오코딩 응답은 네트워크 왕복이라 몇 초 뒤에 온다.
+            // 그 사이 사용자가 국가를 직접 골랐다면 그 선택을 덮어쓰지 않는다.
+            guard !countryIsModified else { return }
+            country = currentCountry
         }
     }
     var currentLocation: String = "" {
@@ -222,7 +242,8 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
     }
     var otherCountryCandidateArray: [Int] = [] // passive
     
-    @Published var currency: Int = 4 {
+    // 기본값은 원화. 위치를 못 잡아도 한국 사용자가 곧바로 기록할 수 있어야 한다.
+    @Published var currency: Int = ManualRecordViewModel.krwIndex {
         didSet {
             if payAmount == -1 || currency == -1 {
                 payAmountInWon = -1
@@ -235,7 +256,9 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
             }
         }
     }
-    var currencyCandidateArray: [Int] = [4]
+    // 화폐 Picker 가 이 배열을 순회한다. 비어 있거나 한 개뿐이면 사용자가
+    // 통화를 바꿀 수 없으므로, 위치를 못 잡았을 때도 최소 원화·달러는 남겨 둔다.
+    var currencyCandidateArray: [Int] = [ManualRecordViewModel.krwIndex, ManualRecordViewModel.usdIndex]
     
     var soundRecordFileName: URL?
     
@@ -304,7 +327,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
         expense.location = locationExpression
         expense.participantArray = participantTupleArray.filter { $0.1 == true }.map { $0.0 }
         expense.payAmount = payAmount
-        expense.payDate = DateGapHandler.shared.convertBeforeSaving(date: payDate)
+        expense.payDate = payDate
         expense.paymentMethod = Int64(paymentMethod.rawValue)
         
         if let soundRecordFileName, let soundData = try? Data(contentsOf: soundRecordFileName) {

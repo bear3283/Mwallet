@@ -149,7 +149,7 @@ struct ReceiptHomeView: View {
             TextField("상호명, 메모, 카테고리", text: $filter.searchText)
                 .font(.body1_fixed)
                 .foregroundStyle(.black)
-                .tint(.mainGreen)
+                .tint(.mainAccent)
                 .autocorrectionDisabled()
             if !filter.searchText.isEmpty {
                 Button {

@@ -5,6 +5,7 @@
 //  영수증 상세. 수정은 AddReceiptView 를 편집 모드로 재사용한다.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct ReceiptDetailView: View {
@@ -19,14 +20,14 @@ struct ReceiptDetailView: View {
     @State private var isViewingImage = false
     @State private var isConfirmingDeletion = false
     @State private var errorMessage: String?
+    @State private var pickedItem: PhotosPickerItem?
+    @State private var isAttaching = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
-                photo
-
                 amountBlock
-                    .padding(.top, 24)
+                    .padding(.top, 8)
 
                 Divider()
                     .padding(.top, 20)
@@ -39,12 +40,21 @@ struct ReceiptDetailView: View {
 
                 Divider()
 
+                ReceiptSectionTitle(text: "영수증")
+                    .padding(.top, 20)
+
+                receiptSection
+                    .padding(.top, 12)
+
+                Divider()
+                    .padding(.top, 20)
+
                 Button {
                     isConfirmingDeletion = true
                 } label: {
                     Text("영수증 삭제")
                         .font(.body1_fixed)
-                        .foregroundStyle(.mainGreen)
+                        .foregroundStyle(.mainAccent)
                         .padding(.vertical, 16)
                 }
 
@@ -66,6 +76,9 @@ struct ReceiptDetailView: View {
                     .font(.subhead2_2_fixed)
                     .foregroundStyle(.black)
             }
+        }
+        .onChange(of: pickedItem) { _, newItem in
+            attachPhoto(from: newItem)
         }
         .sheet(isPresented: $isEditing) {
             AddReceiptView(mode: .edit(expense))
@@ -90,10 +103,11 @@ struct ReceiptDetailView: View {
         }
     }
 
-    // MARK: - 사진
+    // MARK: - 영수증 사진
 
+    // 등록돼 있으면 사진을, 없으면 바로 첨부할 수 있는 버튼을 하단에 보여 준다.
     @ViewBuilder
-    private var photo: some View {
+    private var receiptSection: some View {
         if let data = expense.imageData, let image = UIImage(data: data) {
             Button {
                 isViewingImage = true
@@ -105,9 +119,27 @@ struct ReceiptDetailView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             .buttonStyle(.plain)
-            .padding(.top, 16)
 
             Text("사진을 누르면 크게 볼 수 있어요 · \(ReceiptImageProcessor.formattedSize(of: data))")
+                .font(.caption1_fixed)
+                .foregroundStyle(.gray300)
+                .padding(.top, 8)
+        } else {
+            PhotosPicker(selection: $pickedItem, matching: .images, photoLibrary: .shared()) {
+                HStack(spacing: 8) {
+                    Image(systemName: "camera")
+                    Text(isAttaching ? "불러오는 중…" : "영수증 사진 첨부")
+                }
+                .font(.body1_fixed)
+                .foregroundStyle(.gray400)
+                .padding(.vertical, 20)
+                .frame(maxWidth: .infinity)
+                .background(Color.gray100)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+            .disabled(isAttaching)
+
+            Text("사진은 장변 \(Int(ReceiptImageProcessor.maxDimension))px 로 줄여 저장합니다.")
                 .font(.caption1_fixed)
                 .foregroundStyle(.gray300)
                 .padding(.top, 8)
@@ -239,6 +271,28 @@ struct ReceiptDetailView: View {
             try store.applyCurrentExchangeRate(to: expense)
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    // 편집 폼을 열지 않고 상세에서 바로 사진만 붙인다.
+    private func attachPhoto(from item: PhotosPickerItem?) {
+        guard let item else { return }
+        isAttaching = true
+        Task {
+            defer { isAttaching = false }
+            do {
+                guard let original = try await item.loadTransferable(type: Data.self) else {
+                    errorMessage = "사진을 불러오지 못했습니다."
+                    return
+                }
+                guard let processed = ReceiptImageProcessor.process(original) else {
+                    errorMessage = "지원하지 않는 이미지 형식입니다."
+                    return
+                }
+                try store.attachPhoto(processed, to: expense)
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 

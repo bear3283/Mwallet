@@ -8,62 +8,72 @@
 import Foundation
 
 class CountryInfoModel {
-    
+
     static let shared = CountryInfoModel()
-    
+
     private init() {
-        
+
     }
-    
+
+    // 국가 목록을 못 읽어도 앱은 떠야 한다. 예전에는 여기서 fatalError 를 냈는데,
+    // 번들 리소스가 손상된 것뿐인데 앱 전체가 죽었다. 지금은 '알 수 없음' 한 건만
+    // 남긴 최소 사전으로 되돌아가고, 화면은 기본 국기·기본 이미지로 그려진다.
     lazy var countryResult: [Int: CountryInfo] = {
-            do {
-                let csvURL = Bundle.main.url(forResource: "CountryList", withExtension: "csv")!
-                return try createCountryInfoDictionary(from: csvURL)
-            } catch {
-                fatalError("Error parsing CSV file: \(error)")
-            }
-        }()
-    
-    // MARK: CSV파일 데이터 파싱
-    func parseCSV(contentsOf url: URL) throws -> [[String]] {
-        let data = try String(contentsOf: url)
-        var result: [[String]] = []
-        let rows = data.components(separatedBy: "\n")
-        for row in rows {
-            let columns = row.components(separatedBy: ",")
-            result.append(columns)
+        guard let csvURL = Bundle.main.url(forResource: "CountryList", withExtension: "csv") else {
+            print("CountryInfoModel | CountryList.csv 를 번들에서 찾지 못했습니다")
+            return Self.fallback
         }
-        return result
-    }
+        do {
+            let parsed = try createCountryInfoDictionary(from: csvURL)
+            return parsed.isEmpty ? Self.fallback : parsed
+        } catch {
+            print("CountryInfoModel | CountryList.csv 파싱 실패: \(error.localizedDescription)")
+            return Self.fallback
+        }
+    }()
+
+    // countryResult[-1] 은 여러 화면이 '알 수 없음' 표시에 쓰므로 항상 존재해야 한다.
+    private static let fallback: [Int: CountryInfo] = [
+        -1: CountryInfo(englishNm: "Unknown",
+                        koreanNm: "알 수 없음",
+                        locationNm: "-",
+                        flagString: "DefaultFlag",
+                        defaultImageString: "DefaultImage",
+                        relatedCurrencyArray: [ExpenseCode.baseCurrency],
+                        blurImageString: "BlurredDefaultImage")
+    ]
 
     // MARK: 인덱스(국가순서)와 CountryInfo 구조체를 딕셔너리 형태로 만들기
     func createCountryInfoDictionary(from csvURL: URL) throws -> [Int: CountryInfo] {
-        let csvData = try parseCSV(contentsOf: csvURL)
+        let csvData = try CSVParser.rows(contentsOf: csvURL)
         var countryInfoDict: [Int: CountryInfo] = [:]
-        
-        for columns in csvData where columns.count >= 7 {
-            let index = Int(columns[0]) ?? 0
-            let englishName = columns[1].trimmingCharacters(in: .whitespacesAndNewlines)
-            let koreanName = columns[2].trimmingCharacters(in: .whitespacesAndNewlines)
-            let locationName = columns[3].trimmingCharacters(in: .whitespacesAndNewlines)
-            let flagImageName = columns[4].trimmingCharacters(in: .whitespacesAndNewlines)
-            let defaultImageName = columns[5].trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // 8번째 열(블러 이미지)까지 읽으므로 그만큼 있는 행만 받는다.
+        // 예전 조건은 `>= 7` 인데 columns[7] 을 읽어 열이 7개인 행에서 범위를 벗어났다.
+        for columns in csvData where columns.count >= 8 {
+            // 헤더 줄("", "영어 국가명", ...)은 인덱스가 숫자가 아니라 여기서 걸러진다.
+            // 예전에는 `Int(columns[0]) ?? 0` 이라 헤더가 대한민국(0) 자리를 덮어썼다.
+            guard let index = Int(columns[0].trimmingCharacters(in: .whitespaces)) else { continue }
+
             let relatedCurrencyString = columns[6].trimmingCharacters(in: .whitespacesAndNewlines)
-            let blurImageName = columns[7].trimmingCharacters(in: .whitespacesAndNewlines)
-             let relatedCurrencyArray = relatedCurrencyString
-                 .trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
-                 .components(separatedBy: ", ")
-                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            
-            let countryInfo = CountryInfo(englishNm: englishName,
-                                          koreanNm: koreanName,
-                                          locationNm: locationName,
-                                          flagString: flagImageName,
-                                          defaultImageString: defaultImageName,
-                                          relatedCurrencyArray: relatedCurrencyArray, blurImageString: blurImageName
+
+            // "[HKD,USD]" 처럼 대괄호로 감싼 목록이다. 필드 안에 쉼표가 있어
+            // CSV 에서는 따옴표로 감싸 두었고, 파서가 한 필드로 넘겨준다.
+            let relatedCurrencyArray = relatedCurrencyString
+                .trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+                .components(separatedBy: ",")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+
+            countryInfoDict[index] = CountryInfo(
+                englishNm: columns[1].trimmingCharacters(in: .whitespacesAndNewlines),
+                koreanNm: columns[2].trimmingCharacters(in: .whitespacesAndNewlines),
+                locationNm: columns[3].trimmingCharacters(in: .whitespacesAndNewlines),
+                flagString: columns[4].trimmingCharacters(in: .whitespacesAndNewlines),
+                defaultImageString: columns[5].trimmingCharacters(in: .whitespacesAndNewlines),
+                relatedCurrencyArray: relatedCurrencyArray,
+                blurImageString: columns[7].trimmingCharacters(in: .whitespacesAndNewlines)
             )
-            
-            countryInfoDict[index] = countryInfo
         }
         return countryInfoDict
     }

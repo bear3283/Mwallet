@@ -12,8 +12,20 @@ import Speech
 import SwiftUI
 import Combine
 
+// 음성 기록 준비 단계에서 복구 가능한 실패. 화면은 녹음을 시작하지 않고 넘어간다.
+enum RecordError: LocalizedError {
+    case speechRequestUnavailable
+
+    var errorDescription: String? {
+        switch self {
+        case .speechRequestUnavailable:
+            return "음성 인식을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요."
+        }
+    }
+}
+
 final class RecordViewModel: ObservableObject {
-    
+
     let viewContext = PersistenceController.shared.container.viewContext
     var mlModel: MLModel?
     var infoPredictor: NLModel?
@@ -655,7 +667,13 @@ final class RecordViewModel: ObservableObject {
         try audioEngine.start()
         
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
+        // 예전에는 여기서 fatalError 를 냈다. 음성 인식 준비에 실패한 것뿐인데
+        // 앱이 죽었다. startSTT 는 throws 이고 호출부가 이미 catch 하므로 던진다.
+        guard let recognitionRequest else {
+            audioEngine.stop()
+            inputNode.removeTap(onBus: 0)
+            throw RecordError.speechRequestUnavailable
+        }
         recognitionRequest.shouldReportPartialResults = true
         
         if speechRecognizer?.supportsOnDeviceRecognition ?? false {

@@ -12,7 +12,17 @@
 //
 
 import CoreData
+import CoreLocation
 import Foundation
+
+private struct SampleExpense {
+    let merchant: String
+    let amount: Double
+    let category: ExpenseInfoCategory
+    let latitude: Double
+    let longitude: Double
+    let hoursAgo: Int
+}
 
 final class FirstLaunchSeeder {
 
@@ -20,6 +30,8 @@ final class FirstLaunchSeeder {
 
     // 키 이름은 바꾸지 않는다. 바꾸면 기존 설치에서 기본 여행이 하나 더 생긴다.
     private static let seededKey = "TempSave.isFirst"
+    // 둘러볼 수 있게 예시 여행 1개 + 지출 2건을 넣는다. 처음 한 번만.
+    private static let sampleSeededKey = "FirstLaunchSeeder.sampleSeeded"
 
     private let viewContext = PersistenceController.shared.container.viewContext
 
@@ -28,8 +40,16 @@ final class FirstLaunchSeeder {
         let needsSeeding = (UserDefaults.standard.object(forKey: Self.seededKey) as? Bool) ?? true
         UserDefaults.standard.set(false, forKey: Self.seededKey)
 
-        guard needsSeeding else { return }
-        addDefaultTravel()
+        if needsSeeding {
+            addDefaultTravel()
+        }
+
+        // 기본 여행 시딩과 별도 키로 관리한다. 기존 설치에도 예시를 한 번 넣어
+        // 지도·목록·예결산이 빈 화면이 아니라 채워진 상태로 보이게 한다.
+        if !UserDefaults.standard.bool(forKey: Self.sampleSeededKey) {
+            UserDefaults.standard.set(true, forKey: Self.sampleSeededKey)
+            addSampleTrip()
+        }
     }
 
     private func addDefaultTravel() {
@@ -41,10 +61,60 @@ final class FirstLaunchSeeder {
         travel.endDate = now
         travel.lastUpdate = now
 
+        save(context: "기본 여행")
+    }
+
+    // 앱을 처음 열었을 때 무엇을 하는 앱인지 한눈에 보이도록,
+    // 실제 흐름을 그대로 담은 예시 여행과 지출 2건을 넣는다.
+    private func addSampleTrip() {
+        let calendar = Calendar.current
+        let now = Date()
+
+        let travel = Travel(context: viewContext)
+        travel.id = UUID()
+        travel.name = "예시: 제주 워크숍"
+        travel.startDate = calendar.date(byAdding: .day, value: -2, to: now)
+        travel.endDate = calendar.date(byAdding: .day, value: 1, to: now)
+        travel.lastUpdate = now
+        travel.participantArray = ["나", "동료"]
+
+        let samples = [
+            SampleExpense(merchant: "제주 흑돼지집", amount: 48000, category: .food,
+                          latitude: 33.2496, longitude: 126.5600, hoursAgo: 5),
+            SampleExpense(merchant: "바다뷰 게스트하우스", amount: 90000, category: .room,
+                          latitude: 33.4586, longitude: 126.9425, hoursAgo: 20)
+        ]
+
+        for sample in samples {
+            let expense = Expense(context: viewContext)
+            expense.travel = travel
+            expense.info = sample.merchant
+            expense.payAmount = sample.amount
+            expense.category = Int64(sample.category.rawValue)
+            expense.currency = ExpenseCode.currencyIndex(for: "KRW")
+            expense.exchangeRate = 1
+            expense.payDate = calendar.date(byAdding: .hour, value: -sample.hoursAgo, to: now)
+            expense.timeZoneIdentifier = TimeZone.current.identifier
+            expense.location = sample.merchant
+            expense.setCoordinate(CLLocationCoordinate2D(latitude: sample.latitude, longitude: sample.longitude))
+        }
+
+        // 예결산도 채워지도록 카테고리별 예산을 세워 둔다.
+        for (category, amount) in [(ExpenseInfoCategory.food, 60000.0), (.room, 100000.0), (.transportation, 40000.0)] {
+            let budget = Budget(context: viewContext)
+            budget.travel = travel
+            budget.category = Int64(category.rawValue)
+            budget.amount = amount
+        }
+
+        save(context: "예시 여행")
+    }
+
+    private func save(context: String) {
         do {
             try viewContext.save()
         } catch {
-            print("FirstLaunchSeeder | 기본 여행 생성 실패: \(error.localizedDescription)")
+            print("FirstLaunchSeeder | \(context) 생성 실패: \(error.localizedDescription)")
         }
     }
 }

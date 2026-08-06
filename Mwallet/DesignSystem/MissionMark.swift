@@ -73,7 +73,7 @@ struct MissionMarkView: View {
 
 #Preview {
     ZStack {
-        Color.mainGreen.ignoresSafeArea()
+        Color.mainAccent.ignoresSafeArea()
         MissionMarkView()
             .frame(width: 200, height: 200)
     }

@@ -14,7 +14,6 @@ struct ManualRecordView: View {
     @Environment(\.dismiss) var dismiss
     let viewContext = PersistenceController.shared.container.viewContext
     let exchangeHandler = ExchangeRateHandler.shared
-    let dateGapHandler = DateGapHandler.shared
     
     let given_wantToActivateAutoSaveTimer: Bool
     let given_payAmount: Double
@@ -28,22 +27,25 @@ struct ManualRecordView: View {
             Color(.white)
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
+            // 입력 블록을 화면 세로 가운데에 둔다.
+            // 예전에는 위 50 / 아래 150 짜리 고정 여백이라 내용이 아래로 처져 보였다.
+            // 내용이 화면보다 길어지면 minHeight 를 넘겨 평소처럼 스크롤된다.
+            GeometryReader { geometry in
                 ScrollView {
-                    Spacer()
-//                        .frame(height: 107 - 9 + 45)
-                        .frame(height: 50)
-                    payAmountBlockView
-                    Spacer()
-                        .frame(height: 64)
-                    inSentencePropertyBlockView
-                    Divider()
-                        .foregroundStyle(.gray200)
-                        .padding(.vertical, 20)
-                        .padding(.horizontal, 20)
-                    notInSentencePropertyBlockView
-                    Spacer()
-                        .frame(height: 150)
+                    VStack(spacing: 0) {
+                        payAmountBlockView
+                        Spacer()
+                            .frame(height: 64)
+                        inSentencePropertyBlockView
+                        Divider()
+                            .foregroundStyle(.gray200)
+                            .padding(.vertical, 20)
+                            .padding(.horizontal, 20)
+                        notInSentencePropertyBlockView
+                    }
+                    // 하단 저장 버튼이 마지막 항목을 가리지 않도록 비워 둔다.
+                    .padding(.bottom, 120)
+                    .frame(minHeight: geometry.size.height, alignment: .center)
                 }
             }
             
@@ -182,6 +184,18 @@ struct ManualRecordView: View {
         }
     }
     
+    // 원화 환산은 참고값이다. 원화로 적고 있으면 같은 숫자라 보여 줄 이유가 없다.
+    private var convertedAmountText: String? {
+        let code = CurrencyInfoModel.shared.currencyResult[viewModel.currency]?.isoCodeNm
+        guard code != ExpenseCode.baseCurrency else { return nil }
+
+        guard viewModel.payAmount != -1,
+              let formatted = viewModel.payAmountInWon.getStringFraction0() else {
+            return "환산 전"
+        }
+        return "≈ \(formatted)원"
+    }
+
     private var payAmountBlockView: some View {
         HStack {
             Spacer()
@@ -202,7 +216,7 @@ struct ManualRecordView: View {
                                 .font(.display4)
                                 .keyboardType(.decimalPad)
                                 .layoutPriority(-1)
-                                .tint(.mainGreen)
+                                .tint(.mainAccent)
                                 .onTapGesture {
                                     viewModel.autoSaveTimer?.invalidate()
                                     viewModel.secondCounter = nil
@@ -224,30 +238,23 @@ struct ManualRecordView: View {
                                 RoundedRectangle(cornerRadius: 6)
                                     .foregroundStyle(.gray100)
                                     .layoutPriority(-1)
+                                // 통화는 금액을 읽는 단위일 뿐이라 조용히 둔다.
+                                // display2 로 두면 금액(display4)과 크기가 붙어 경쟁한다.
                                 Text((CurrencyInfoModel.shared.currencyResult[viewModel.currency]?.koreanNm ?? "알 수 없음") + " " + (CurrencyInfoModel.shared.currencyResult[viewModel.currency]?.symbol ?? "-"))
                                     .foregroundStyle(.gray400)
-                                    .font(.display2)
-                                    .padding(.vertical, 4)
-                                    .padding(.horizontal, 8)
+                                    .font(.subhead2_1)
+                                    .padding(.vertical, 6)
+                                    .padding(.horizontal, 10)
                             }
                             .allowsHitTesting(false)
                         }
                     }
                     
-                    if viewModel.payAmount == -1 {
-                        Text("( - 원)")
+                    if let convertedAmountText {
+                        Text(convertedAmountText)
                             .foregroundStyle(.gray300)
                             .font(.caption2)
-                    } else {
-                        if let formattedString = viewModel.payAmountInWon.getStringFraction0() {
-                            Text("(" + formattedString + "원" + ")")
-                                .foregroundStyle(.gray300)
-                                .font(.caption2)
-                        } else {
-                            Text("( - 원)")
-                                .foregroundStyle(.gray300)
-                                .font(.caption2)
-                        }
+                            .monospacedDigit()
                     }
                 }
                 Spacer()
@@ -372,7 +379,7 @@ struct ManualRecordView: View {
                             .lineLimit(nil)
                             .foregroundStyle(.black)
                             .font(.body3)
-                            .tint(.mainGreen)
+                            .tint(.mainAccent)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 6)
                             .onTapGesture {
@@ -543,7 +550,7 @@ struct ManualRecordView: View {
                             }
                             .hidden()
                             
-                            Text(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "임시 기록")
+                            Text(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? mainVM.chosenTravelInManualRecord?.name ?? "-" : "여행 선택")
                                 .lineLimit(nil)
                                 .foregroundStyle(mainVM.chosenTravelInManualRecord?.name != tempTravelName ? .black : .gray400)
                                 .font(.subhead2_1)
@@ -705,7 +712,7 @@ struct ManualRecordView: View {
                                     .lineLimit(nil)
                                     .foregroundStyle(.black)
                                     .font(.body3)
-                                    .tint(.mainGreen)
+                                    .tint(.mainAccent)
                                     .padding(.horizontal, 8)
                                     .padding(.vertical, 6)
                                     .onTapGesture {
@@ -905,26 +912,26 @@ struct PlayngRecordSoundView: View {
                 .onDisappear {
                     timer?.invalidate()
                 }
-                .shadow(color: .mainGreen, radius: 3)
+                .shadow(color: .mainAccent, radius: 3)
             
             Circle()
-                .strokeBorder(.mainGreen, lineWidth: 1)
+                .strokeBorder(.mainAccent, lineWidth: 1)
             
             HStack(spacing: 3) {
                 Capsule()
-                    .foregroundStyle(.mainGreen)
+                    .foregroundStyle(.mainAccent)
                     .frame(width: 1.5, height: level == 2 ? 10 : 7)
                 Capsule()
-                    .foregroundStyle(.mainGreen)
+                    .foregroundStyle(.mainAccent)
                     .frame(width: 1.5, height: level == 1 ? 15 : 12)
                 Capsule()
-                    .foregroundStyle(.mainGreen)
+                    .foregroundStyle(.mainAccent)
                     .frame(width: 1.5, height: level == 0 ? 20 : 17)
                 Capsule()
-                    .foregroundStyle(.mainGreen)
+                    .foregroundStyle(.mainAccent)
                     .frame(width: 1.5, height: level == 1 ? 15 : 12)
                 Capsule()
-                    .foregroundStyle(.mainGreen)
+                    .foregroundStyle(.mainAccent)
                     .frame(width: 1.5, height: level == 2 ? 10 : 7)
             }
             .animation(.bouncy(duration: stepLength * 1.25), value: level)

@@ -30,7 +30,11 @@ struct TravelChoiceInRecordModal: View {
         }
         .onAppear {
             do {
-                try travelArray = PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest()).sorted(by: travelModalSortRule)
+                // '임시 기록'은 여행을 안 고를 때 자동으로 저장되는 기본함이라
+                // 사용자에게는 보이지 않는다. 선택 목록에서 뺀다.
+                try travelArray = PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest())
+                    .filter { $0.name != tempTravelName }
+                    .sorted(by: travelModalSortRule)
             } catch {
                 print("error fetching travelArray: \(error.localizedDescription)")
             }
@@ -190,13 +194,13 @@ struct TravelBlockView: View {
                                 Group {
                                     if let startDate = travel.startDate {
                                         if let endDate = travel.endDate {
-                                            Text(DateGapHandler.shared.convertBeforeShowing(date: startDate).toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + DateGapHandler.shared.convertBeforeShowing(date: endDate).toString(dateFormat: "YY.MM.dd"))
+                                            Text(startDate.toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + endDate.toString(dateFormat: "YY.MM.dd"))
                                                 .foregroundStyle(.white)
                                                 .lineSpacing(2)
                                                 .font(.caption2)
                                                 .opacity(0.75)
                                         } else {
-                                            Text(DateGapHandler.shared.convertBeforeShowing(date: startDate).toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + "미정")
+                                            Text(startDate.toString(dateFormat: "YY.MM.dd") + " " + "~" + "\n" + "미정")
                                                 .foregroundStyle(.white)
                                                 .lineSpacing(2)
                                                 .font(.caption2)
@@ -279,13 +283,13 @@ struct TravelBlockView: View {
                 if travel.name == tempTravelName {
                     EmptyView()
                 } else {
-                    if DateGapHandler.shared.convertBeforeShowing(date: travel.startDate ?? Date.distantPast) < now && DateGapHandler.shared.convertBeforeShowing(date: travel.endDate ?? Date.distantFuture) > now {
+                    if (travel.startDate ?? Date.distantPast) < now && (travel.endDate ?? Date.distantFuture) > now {
                         Text("여행 중")
-                            .foregroundStyle(.mainGreen)
+                            .foregroundStyle(.mainAccent)
                             .font(.caption1)
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
-                    } else if DateGapHandler.shared.convertBeforeShowing(date: travel.startDate ?? Date.distantPast) > now {
+                    } else if (travel.startDate ?? Date.distantPast) > now {
                         Text("다가오는 여행")
                             .foregroundStyle(.black)
                             .font(.caption1)
@@ -311,7 +315,7 @@ struct CheckStickerView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(travel.id == (chosenTravel?.id ?? UUID()) ? Color(.mainGreen) : .black)
+                .fill(travel.id == (chosenTravel?.id ?? UUID()) ? Color(.mainAccent) : .black)
                 .frame(width: 20, height: 20)
                 .opacity(travel.id == (chosenTravel?.id ?? UUID()) ? 1.0 : 0.25)
                 .overlay(

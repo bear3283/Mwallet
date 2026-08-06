@@ -47,20 +47,30 @@ struct RecordView: View {
                     ZStack {
                         Color(.white)
                         
+                        // 말한 결과가 채워지는 곳(livePropertyView)이 이 화면의 주인공이라
+                        // 그 블록을 화면 세로 한가운데에 둔다. 위·아래 묶음이 남은 공간을
+                        // 똑같이 나눠 가지므로, 위쪽 항목 수가 늘어도 가운데가 밀리지 않는다.
                         VStack(spacing: 0) {
-                            Spacer()
-                                .frame(height: 35)
-                            travelChoiceView
-                            Spacer()
-                                .frame(height: 36)
-                            rawSentenceView
-                            Spacer()
-                                .frame(height: 36)
+                            VStack(spacing: 0) {
+                                Spacer(minLength: 24)
+                                travelChoiceView
+                                Spacer()
+                                    .frame(height: 36)
+                                rawSentenceView
+                                Spacer()
+                                    .frame(height: 36)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .bottom)
+
                             livePropertyView
-                            Spacer()
-                                .frame(height: 20)
-                            manualRecordButtonView
-                            Spacer()
+
+                            VStack(spacing: 0) {
+                                Spacer()
+                                    .frame(height: 20)
+                                manualRecordButtonView
+                                Spacer(minLength: 24)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .top)
                         }
                         
                         ZStack {
@@ -100,20 +110,31 @@ struct RecordView: View {
                     ZStack {
                         Color(.white)
                         
+                        // 말한 결과가 채워지는 곳(livePropertyView)이 이 화면의 주인공이라
+                        // 그 블록을 화면 세로 한가운데에 둔다. 위·아래 묶음이 남은 공간을
+                        // 똑같이 나눠 가지므로, 위쪽 항목 수가 늘어도 가운데가 밀리지 않는다.
+                        // (예전엔 네 항목 묶음 전체를 가운데 두어 3번째인 이 블록이 아래로 처졌다)
                         VStack(spacing: 0) {
-                            Spacer()
-                                .frame(height: 80)
-                            travelChoiceView
-                            Spacer()
-                                .frame(height: 36)
-                            rawSentenceView
-                            Spacer()
-                                .frame(height: 36)
+                            VStack(spacing: 0) {
+                                Spacer(minLength: 60)
+                                travelChoiceView
+                                Spacer()
+                                    .frame(height: 36)
+                                rawSentenceView
+                                Spacer()
+                                    .frame(height: 36)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .bottom)
+
                             livePropertyView
-                            Spacer()
-                                .frame(height: 40) // figma: 64
-                            manualRecordButtonView
-                            Spacer()
+
+                            VStack(spacing: 0) {
+                                Spacer()
+                                    .frame(height: 40) // figma: 64
+                                manualRecordButtonView
+                                Spacer(minLength: 40)
+                            }
+                            .frame(maxHeight: .infinity, alignment: .top)
                         }
                         
                         ZStack {
@@ -212,11 +233,11 @@ struct RecordView: View {
                     .layoutPriority(-1)
                 
                 Capsule()
-                    .strokeBorder(.mainGreen, lineWidth: 1.0)
+                    .strokeBorder(.mainAccent, lineWidth: 1.0)
                     .layoutPriority(-1)
                 
                 HStack(spacing: 12) {
-                    Text(mainVM.selectedTravel?.name != tempTravelName ? mainVM.selectedTravel?.name ?? "-" : "임시 기록")
+                    Text(mainVM.selectedTravel?.name != tempTravelName ? mainVM.selectedTravel?.name ?? "-" : "여행 선택")
                         .lineLimit(1)
                         .font(.subhead2_2_fixed)
                         .foregroundStyle(mainVM.selectedTravel?.name != tempTravelName ? .black : .gray400)
@@ -241,15 +262,15 @@ struct RecordView: View {
             
             Group {
                 if (!isDetectingPress && viewModel.voiceSentence == "") || (!viewModel.AreThereOtherTravels && !viewModel.isExplicitTempRecord) {
-                    VStack {
-                        Text("지출 내역을 말해주세요")
-                            .foregroundStyle(.gray300)
+                    VStack(spacing: 16) {
+                        Text("말하면 바로 기록돼요")
+                            .foregroundStyle(.gray400)
                             .font(.display3)
-                        Text("(ex. 빵집, 520엔, 현금으로)")
-                            .foregroundStyle(.gray300)
-                            .font(.display1)
+
+                        // 처음 쓰는 사람도 따라 할 수 있게 실제 말투를 예시 한 줄로 보여 준다.
+                        recordExampleRow(icon: "🍽", text: "점심 15000원 카드")
                     }
-                    
+
                 } else {
                     ZStack {
                         ThreeDotsView()
@@ -656,6 +677,21 @@ struct RecordView: View {
             .multilineTextAlignment(.center)
             .opacity(!isDetectingPress && !viewModel.alertView_emptyIsShown && !viewModel.alertView_shortIsShown ? 1 : 0.0000001)
             .allowsHitTesting(false)
+    }
+
+    // 무엇을·얼마·어떻게 순서로 말하면 된다는 걸 실제 예시로 보여 준다.
+    private func recordExampleRow(icon: String, text: String) -> some View {
+        HStack(spacing: 8) {
+            Text(icon)
+                .font(.body3)
+            Text("\"\(text)\"")
+                .font(.body2)
+                .foregroundStyle(.black)
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(Color.gray100)
+        .clipShape(Capsule())
     }
 }
 
