@@ -25,6 +25,7 @@
         <relationship name="travel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Travel" inverseName="expenseArray" inverseEntity="Travel"/>
     </entity>
     <entity name="Travel" representedClassName="Travel" syncable="YES" codeGenerationType="class">
+        <attribute name="coverImageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isDefault" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>

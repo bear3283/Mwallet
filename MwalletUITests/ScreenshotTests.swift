@@ -21,6 +21,12 @@ final class ScreenshotTests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launch()
+
+        // 스플래시가 지나가고 탭바가 올라올 때까지 기다린다.
+        // 기다리지 않으면 첫 장이 스플래시로 찍힌다.
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 15), "탭바가 나타나지 않았습니다")
+        Thread.sleep(forTimeInterval: 1)
     }
 
     private func capture(_ name: String) {

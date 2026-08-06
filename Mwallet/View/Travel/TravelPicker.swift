@@ -3,14 +3,13 @@
 //  Mwallet
 //
 //  '지금 어느 여행을 보고 있는가' 를 고르는 컨트롤.
-//
 //  여행 지도 탭과 예결산 탭이 같은 일을 하므로 같은 컨트롤을 쓴다.
-//  화면 제목이 곧 선택기다 — 두 화면 모두 '한 여행을 펼쳐 놓은 상태' 라
-//  그 여행 이름이 제목이어야 맞고, 그러면 선택기 밴드가 따로 필요 없어
-//  본문이 그만큼 위로 올라온다.
 //
-//  가로 스크롤 칩을 쓰던 시절에는 여행이 늘어나면 뒤쪽이 화면 밖으로 밀려
-//  보이지 않았고, 두 탭이 각자 칩을 그려 스타일이 갈라질 위험도 있었다.
+//  고르는 방식은 시트다. 처음에는 시스템 Menu 를 썼는데, 메뉴 항목이
+//  "이름 · 기간" 한 줄짜리 작은 글씨라 이름과 날짜가 서로 붙어 읽히지
+//  않았다. 시트는 한 줄에 두 층을 줄 수 있어 이름을 크게, 기간을 아래에
+//  따로 놓을 수 있고, 지금 여행 중인지도 함께 보여 줄 수 있다.
+//  (카테고리·국가 선택도 이미 같은 방식의 시트를 쓴다)
 //
 
 import CoreData
@@ -23,63 +22,138 @@ struct TravelPicker: View {
     /// 선택이 바뀐 뒤에 할 일(집계 갱신, 지도 카메라 맞추기 등)
     var onChange: () -> Void = { }
 
+    @State private var isChoosing = false
+
     var body: some View {
-        Menu {
-            Picker("여행", selection: binding) {
-                ForEach(travels, id: \.objectID) { travel in
-                    Text(menuLabel(travel)).tag(travel.objectID as NSManagedObjectID?)
-                }
-            }
+        Button {
+            isChoosing = true
         } label: {
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
+            HStack(alignment: .center, spacing: 10) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(selection?.displayName ?? "여행 선택")
                         .font(.display2_fixed)
                         .foregroundStyle(.black)
                         .lineLimit(1)
 
-                    // 고를 수 있다는 신호. 코발트는 누를 수 있는 것에만 쓴다.
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Color.mainAccent)
-
-                    Spacer(minLength: 0)
+                    Text(metaText)
+                        .font(.caption2_fixed)
+                        .foregroundStyle(.gray400)
+                        .lineLimit(1)
                 }
 
-                Text(metaText)
-                    .font(.caption1_fixed)
-                    .foregroundStyle(.gray300)
-                    .lineLimit(1)
+                Spacer(minLength: 0)
+
+                // 고를 수 있다는 신호. 코발트는 누를 수 있는 것에만 쓴다.
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.mainAccent)
+                    .padding(8)
+                    .background(Color.mainAccent.opacity(0.1), in: Circle())
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $isChoosing) {
+            TravelChoiceSheet(travels: travels, selection: $selection, onChange: onChange)
+                .presentationDetents([.medium, .large])
         }
     }
 
-    // MARK: - 값
-
-    // Travel 은 Hashable 비교가 번거로워 objectID 로 고른다.
-    private var binding: Binding<NSManagedObjectID?> {
-        Binding(
-            get: { selection?.objectID },
-            set: { newValue in
-                guard let newValue,
-                      let travel = travels.first(where: { $0.objectID == newValue }) else { return }
-                selection = travel
-                onChange()
-            }
-        )
-    }
-
-    // 제목 아래 한 줄. 기간과 인원은 확인용이라 작게 붙인다.
     private var metaText: String {
         guard let selection else { return "여행을 골라 주세요" }
         let people = (selection.participantArray?.count ?? 0) + 1
-        return "\(Self.periodText(selection)) · \(people)명"
+        return "\(TravelSchedule.periodText(selection)) · \(people)명"
+    }
+}
+
+// MARK: - 선택 시트
+
+private struct TravelChoiceSheet: View {
+
+    let travels: [Travel]
+    @Binding var selection: Travel?
+    var onChange: () -> Void
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List(travels, id: \.objectID) { travel in
+                Button {
+                    selection = travel
+                    onChange()
+                    dismiss()
+                } label: {
+                    row(travel)
+                }
+                .buttonStyle(.plain)
+            }
+            .listStyle(.plain)
+            .navigationTitle("여행 선택")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("닫기") { dismiss() }
+                        .foregroundStyle(.gray400)
+                }
+            }
+        }
     }
 
-    private func menuLabel(_ travel: Travel) -> String {
-        "\(travel.displayName)  ·  \(Self.periodText(travel))"
+    private func row(_ travel: Travel) -> some View {
+        let state = TravelSchedule.state(of: travel)
+        let isSelected = travel.objectID == selection?.objectID
+
+        return HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 5) {
+                HStack(spacing: 6) {
+                    Text(travel.displayName)
+                        .font(.subhead2_1_fixed)
+                        .foregroundStyle(.black)
+                        .lineLimit(1)
+
+                    // 지금 진행 중인 여행만 표시한다. 나머지는 굳이 이름표를 달지 않는다.
+                    if state == .current {
+                        Text("여행 중")
+                            .font(.caption1_fixed)
+                            .foregroundStyle(Color.mainAccent)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.mainAccent.opacity(0.1), in: Capsule())
+                    }
+                }
+
+                Text("\(TravelSchedule.periodText(travel)) · \((travel.participantArray?.count ?? 0) + 1)명")
+                    .font(.caption2_fixed)
+                    .foregroundStyle(.gray400)
+                    .lineLimit(1)
+            }
+
+            Spacer(minLength: 8)
+
+            Image(systemName: "checkmark")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(Color.mainAccent)
+                .opacity(isSelected ? 1 : 0)
+        }
+        .padding(.vertical, 8)
+        .contentShape(Rectangle())
+    }
+}
+
+// MARK: - 일정 표현
+
+enum TravelSchedule {
+
+    enum State {
+        case current, past, coming
+    }
+
+    static func state(of travel: Travel, now: Date = Date()) -> State {
+        let start = travel.startDate ?? .distantPast
+        let end = travel.endDate ?? .distantFuture
+        if start <= now && now <= end { return .current }
+        return start > now ? .coming : .past
     }
 
     static func periodText(_ travel: Travel) -> String {

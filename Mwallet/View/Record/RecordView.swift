@@ -260,7 +260,7 @@ struct RecordView: View {
             Group {
                 if (!isDetectingPress && viewModel.voiceSentence == "") || (!viewModel.AreThereOtherTravels && !viewModel.isExplicitTempRecord) {
                     VStack(spacing: 16) {
-                        Text("말하면 바로 기록돼요")
+                        Text("한 문장이면 충분합니다")
                             .foregroundStyle(.gray400)
                             .font(.display3)
 
@@ -347,7 +347,7 @@ struct RecordView: View {
                         .padding(.horizontal, 16)
                         .hidden()
                     
-                    Text("금액")
+                    Text("결제 금액")
                         .foregroundStyle(.gray400)
                         .font(.subhead2_2)
                         .padding(.vertical, 4)
