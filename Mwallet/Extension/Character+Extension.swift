@@ -34,30 +34,12 @@ extension Character {
         }
     }
     
+    /// 한글 수사를 아라비아 숫자로 바꾼다. 수사가 아니면 빈 문자열이다.
+    ///
+    /// 위 koreanNumericArray 가 이미 영·일·이··· 순서로 늘어서 있으므로
+    /// 자리 번호가 곧 숫자다. 목록을 한 벌만 두어 둘이 어긋날 일을 없앤다.
     func getCorrespondingArabicString() -> String {
-        switch self {
-        case "영":
-            return "0"
-        case "일":
-            return "1"
-        case "이":
-            return "2"
-        case "삼":
-            return "3"
-        case "사":
-            return "4"
-        case "오":
-            return "5"
-        case "육":
-            return "6"
-        case "칠":
-            return "7"
-        case "팔":
-            return "8"
-        case "구":
-            return "9"
-        default:
-            return ""
-        }
+        guard let digit = Character.koreanNumericArray.firstIndex(of: self) else { return "" }
+        return String(digit)
     }
 }
