@@ -165,24 +165,30 @@ final class VoiceSentenceParsingTests: XCTestCase {
         XCTAssertEqual(result.amount, -1, "금액 미확보는 -1 이어야 합계에서 빠진다")
     }
 
-    // MARK: - 알려진 결함
+    // MARK: - '점' 의 두 얼굴
     //
-    // '점' 은 소수점 표시라서 '점심' 의 첫 글자와 겹친다.
-    // 그래서 '점심' 으로 시작하면서 금액이 없는 문장은 내역이 통째로 사라지고
-    // 금액이 0 으로 잡힌다. 0 은 -1 이 아니므로 저장 대상이 되어,
-    // 0 원짜리 빈 기록이 남을 수 있다.
+    // '점' 은 소수점 표시이면서 낱말에도 흔히 쓰인다.
+    // 앞 글자가 숫자일 때만 소수점으로 읽는다.
 
-    func test_점으로_시작하는_낱말이_금액으로_오인되지_않아야_한다() {
-        XCTExpectFailure("'점'이 소수점 표시라 '점심'의 첫 글자를 숫자로 읽는다. 낱말 안의 '점'은 소수점으로 보지 않아야 한다.")
-
+    func test_낱말_안의_점은_소수점이_아니다() {
         let result = parse("점심 먹었다")
 
         XCTAssertEqual(result.info, "점심 먹었다")
-        XCTAssertEqual(result.amount, -1)
+        XCTAssertEqual(result.amount, -1, "금액을 말하지 않았는데 0원으로 잡히면 빈 기록이 저장된다")
     }
 
-    // 금액이 함께 오면 정상으로 읽힌다 — 위 결함이 모든 '점심' 문장을 깨뜨리지는 않는다.
-    func test_점심에_금액이_붙으면_정상으로_읽는다() {
+    func test_점으로_시작하는_다른_낱말들도_지킨다() {
+        XCTAssertEqual(parse("점검 비용 3000원").info, "점검 비용")
+        XCTAssertEqual(parse("지점 방문").info, "지점 방문")
+        XCTAssertEqual(parse("거점 이동 5000원").amount, 5_000)
+    }
+
+    func test_숫자_뒤의_점은_소수점으로_읽는다() {
+        XCTAssertEqual(parse("환율 이십사점오").amount, 24.5, accuracy: 0.001)
+        XCTAssertEqual(parse("환율 삼점일사").amount, 3.14, accuracy: 0.001)
+    }
+
+    func test_점심에_금액이_붙어도_정상으로_읽는다() {
         let result = parse("점심 15000원 카드")
 
         XCTAssertEqual(result.info, "점심")

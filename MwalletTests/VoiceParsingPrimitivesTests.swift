@@ -35,8 +35,9 @@ final class VoiceParsingPrimitivesTests: XCTestCase {
         }
     }
 
-    // ⚠️ '점' 은 소수점 표시다. '점심' 같은 낱말의 첫 글자와 겹친다.
-    func test_점은_소수점으로_읽는다() {
+    // 글자 하나만 놓고 보면 '점' 은 소수점 표시다.
+    // 낱말 안에서의 판정은 아래 getCharacterFormArray 가 문맥을 보고 정한다.
+    func test_점은_글자_하나로는_소수점이다() {
         XCTAssertEqual(Character("점").getCharacterForm(), .koreanDot)
     }
 
@@ -94,6 +95,27 @@ final class VoiceParsingPrimitivesTests: XCTestCase {
         XCTAssertEqual("1만".getCharacterFormArray(), [.arabicNumeric, .koreanFourPower])
         XCTAssertEqual("커피".getCharacterFormArray(), [.notNumeric, .notNumeric])
         XCTAssertEqual("".getCharacterFormArray(), [])
+    }
+
+    // MARK: - '점' 은 문맥을 본다
+
+    func test_숫자_뒤의_점만_소수점으로_읽는다() {
+        // 사 다음의 점 → 소수점
+        XCTAssertEqual("사점오".getCharacterFormArray(),
+                       [.koreanNumeric, .koreanDot, .koreanNumeric])
+        // 1 다음의 점 → 소수점
+        XCTAssertEqual("1점5".getCharacterFormArray(),
+                       [.arabicNumeric, .koreanDot, .arabicNumeric])
+    }
+
+    func test_낱말_안의_점은_숫자가_아니다() {
+        XCTAssertEqual("점심".getCharacterFormArray(), [.notNumeric, .notNumeric])
+        XCTAssertEqual("지점".getCharacterFormArray(), [.notNumeric, .notNumeric])
+    }
+
+    func test_낱말_안의_점이_들어간_조각은_숫자로_읽히지_않는다() {
+        XCTAssertEqual(variety("점심").0, .noNumericInterpretation)
+        XCTAssertEqual(variety("사점오").0, .allNumeric)
     }
 
     // MARK: - 조각 합치기
