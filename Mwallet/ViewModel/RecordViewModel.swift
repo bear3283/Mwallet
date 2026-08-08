@@ -568,6 +568,14 @@ final class RecordViewModel: ObservableObject {
         for mono in monoB {
             sumB += Int(mono) ?? 0
         }
+
+        // '만' 앞에 수사가 없으면 1만으로 읽는다.
+        // 앞의 9번에서 홀로 선 '십'·'백'·'천' 은 10·100·1000 으로 바꿔 주는데
+        // '만' 에는 같은 처리가 없어서, '만원' 이 0원으로 잡혔다.
+        // ('이만원' 처럼 수사가 붙으면 원래도 제대로 읽혔다)
+        if fourPowerIndex != nil && monoA.isEmpty {
+            sumA = 1
+        }
         
         // 12. C 앞에 "0." 더해주고 그것을 Double로 바꾸기: doubleC
         
