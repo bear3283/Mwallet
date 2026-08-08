@@ -73,7 +73,7 @@ struct ReceiptStatsView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("통계")
-                    .font(.subhead3_1_fixed)
+                    .font(.title1_fixed)
                     .foregroundStyle(.black)
             }
         }

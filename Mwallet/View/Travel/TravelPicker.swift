@@ -33,7 +33,7 @@ struct TravelPicker: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(selection?.displayName ?? "여행 선택")
-                        .font(.display2_fixed)
+                        .font(.title3_fixed)
                         .foregroundStyle(.black)
                         .lineLimit(1)
 

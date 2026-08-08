@@ -64,7 +64,7 @@ struct AddMemberView: View {
             
             HStack {
                 Text("이 여행은 누구와 함께하나요?")
-                    .font(.display2)
+                    .font(.title3)
                 
                 Spacer()
             }

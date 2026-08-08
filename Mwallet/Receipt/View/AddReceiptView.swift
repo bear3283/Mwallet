@@ -113,7 +113,7 @@ struct AddReceiptView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(isEditing ? "영수증 수정" : "영수증 추가")
-                        .font(.subhead3_1_fixed)
+                        .font(.title1_fixed)
                         .foregroundStyle(.black)
                 }
                 ToolbarItem(placement: .cancellationAction) {

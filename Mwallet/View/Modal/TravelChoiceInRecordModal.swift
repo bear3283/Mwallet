@@ -49,7 +49,7 @@ struct TravelChoiceInRecordModal: View {
                 .frame(width: 20)
             Text("여행 선택")
                 .foregroundStyle(.black)
-                .font(.display1)
+                .font(.title2)
             Spacer()
         }
     }

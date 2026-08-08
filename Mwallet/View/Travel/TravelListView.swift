@@ -77,7 +77,7 @@ struct TravelListView: View {
         TabHeaderRow {
             VStack(alignment: .leading, spacing: 4) {
                 Text("여행")
-                    .font(.display2_fixed)
+                    .font(.title3_fixed)
                     .foregroundStyle(.black)
                 Text(travels.isEmpty ? "여행을 만들어 시작하세요" : "\(travels.count)개의 여행")
                     .font(.caption2_fixed)
@@ -162,7 +162,7 @@ struct TravelCard: View {
     private var details: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(travel.displayName)
-                .font(.subhead3_1_fixed)
+                .font(.title1_fixed)
                 .foregroundStyle(.black)
                 .lineLimit(1)
 

@@ -31,7 +31,7 @@ struct CompleteAddTravelView: View {
             Spacer()
             
             Text("여행 생성 완료 !")
-                .font(.display2)
+                .font(.title3)
                 .padding(.bottom, 21)
             
             travelSquareView

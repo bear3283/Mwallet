@@ -53,7 +53,7 @@ struct BudgetEditView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(travel.name ?? "예산 편집")
-                        .font(.subhead3_1_fixed)
+                        .font(.title1_fixed)
                         .foregroundStyle(.black)
                         .lineLimit(1)
                 }

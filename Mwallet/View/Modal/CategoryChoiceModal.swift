@@ -34,7 +34,7 @@ struct CategoryChoiceModal: View {
                 .frame(width: 20)
             Text("카테고리 선택")
                 .foregroundStyle(.black)
-                .font(.display1)
+                .font(.title2)
             Spacer()
         }
     }

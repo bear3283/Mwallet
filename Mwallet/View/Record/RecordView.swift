@@ -254,7 +254,7 @@ struct RecordView: View {
         ZStack {
             Text("0000\n0000\n0000\n0000")
                 .foregroundStyle(.gray300)
-                .font(.display3)
+                .font(.title4)
                 .hidden()
             
             Group {
@@ -262,7 +262,7 @@ struct RecordView: View {
                     VStack(spacing: 16) {
                         Text("한 문장이면 충분합니다")
                             .foregroundStyle(.gray400)
-                            .font(.display3)
+                            .font(.title4)
 
                         // 처음 쓰는 사람도 따라 할 수 있게 실제 말투를 예시 한 줄로 보여 준다.
                         recordExampleRow(icon: "🍽", text: "점심 15000원 카드")
@@ -276,11 +276,11 @@ struct RecordView: View {
                         if viewModel.voiceSentence == "" {
                             Text("듣고 있어요")
                                 .foregroundStyle(.gray200)
-                                .font(.display3)
+                                .font(.title4)
                         } else {
                             Text(viewModel.voiceSentence)
                                 .foregroundStyle(.black)
-                                .font(.display3)
+                                .font(.title4)
                                 .lineLimit(4)
                         }
                     }
