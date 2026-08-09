@@ -35,7 +35,7 @@ struct CountryChoiceModal: View {
                     .frame(width: 20)
                 Text("지출 위치")
                     .foregroundStyle(.black)
-                    .font(.display1)
+                    .font(.title2)
                 Spacer()
             }
             Spacer()

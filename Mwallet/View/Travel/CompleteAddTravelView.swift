@@ -31,7 +31,7 @@ struct CompleteAddTravelView: View {
             Spacer()
             
             Text("여행 생성 완료 !")
-                .font(.display2)
+                .font(.title3)
                 .padding(.bottom, 21)
             
             travelSquareView
@@ -160,7 +160,7 @@ struct CompleteAddTravelView: View {
                                 Text("미정")
                             }
                         }
-                        .font(.custom(FontsManager.Pretendard.medium, size: 20))
+                        .font(.custom(FontsManager.WantedSans.medium, size: 20))
                         .padding(.top, 90)
                         .padding(.leading, 16)
                         .multilineTextAlignment(.center)

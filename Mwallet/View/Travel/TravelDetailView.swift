@@ -177,7 +177,7 @@ struct TravelDetailView: View {
             }
 
             Text(travelName)
-                .font(.display2_fixed)
+                .font(.title3_fixed)
                 .foregroundStyle(.black)
                 .lineLimit(2)
         }

@@ -42,7 +42,7 @@ struct SplashView: View {
                         .frame(width: 132, height: 132)
 
                     Text("Mwallet")
-                        .font(.custom(FontsManager.Pretendard.semiBold, fixedSize: 18))
+                        .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 18))
                         .foregroundStyle(.white)
                         .opacity(wordmarkOpacity)
                 }

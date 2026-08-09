@@ -27,7 +27,7 @@ struct AddTravelRequestModal: View {
     private var descriptionView: some View {
         Text("현재 생성된 여행이 없어요.\n여행을 생성할까요?")
             .foregroundStyle(.black)
-            .font(.display1)
+            .font(.title2)
             .multilineTextAlignment(.center)
             .opacity(0.8)
     }

@@ -2,18 +2,22 @@
 //  TravelListView.swift
 //  Mwallet
 //
-//  여행 탭. 지금까지의 사역을 한 장씩 늘어놓는다.
+//  여행 탭. 위에 지금까지의 지출 지도, 아래에 여행을 고르는 그리드.
 //
-//  예전에는 이 탭이 '고른 여행 하나의 지도' 였다. 지도는 한 여행 안에서
-//  어디를 들렀는지 보는 도구인데 탭 첫 화면을 차지하고 있었고, 정작
-//  '여러 여행을 다녔다' 는 사실은 선택기 한 줄로만 드러났다.
-//  지도는 여행 상세로 옮기고, 이 탭은 목록이 됐다.
+//  이 탭이 답해야 할 질문은 둘이다 — '어디를 다녔나' 와 '어느 여행을 볼까'.
+//  지도가 앞을 맡고 그리드가 뒤를 맡는다.
 //
-//  카드가 답해야 할 질문은 '언제, 어디를 몇 군데, 얼마 썼나' 다.
-//  그중 '몇 군데' 를 여정 레일의 축소판으로 보여 준다 — 상세의 지도·목록과
-//  같은 카테고리 색을 순서대로 이어, 카드만 봐도 동선이 읽힌다.
+//  둘을 잇는 것은 색이다. 여행마다 색 하나를 주어 지도의 점과 그리드 칸의
+//  테두리를 같은 색으로 묶는다. 범례를 따로 두지 않아도 어느 점이 어느
+//  여행인지 읽힌다.
+//
+//  칸을 4열로 좁게 두는 것은 이 그리드가 '보는 것' 이 아니라 '고르는 것'
+//  이기 때문이다. 화면의 주인공은 지도이고, 그리드는 그 아래에서 한 번에
+//  여러 여행을 훑을 수 있으면 된다. 자세한 것은 여행 상세에서 본다.
 //
 
+import CoreData
+import MapKit
 import SwiftUI
 
 struct TravelListView: View {
@@ -23,7 +27,11 @@ struct TravelListView: View {
     private let budgetStore = BudgetStore()
 
     @State private var travels: [Travel] = []
-    @State private var refreshToken = UUID()
+    @State private var traces: [TravelMapTrace] = []
+    @State private var cameraPosition: MapCameraPosition = .automatic
+
+    // 4열. 칸 하나가 82pt 남짓이라 사진 한 장과 이름 두 줄이 들어간다.
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 4)
 
     var body: some View {
         NavigationStack {
@@ -39,25 +47,11 @@ struct TravelListView: View {
                         detail: "오른쪽 위 + 로 여행을 만들면\n지출이 그 여행에 모입니다."
                     )
                 } else {
-                    ScrollView(showsIndicators: false) {
-                        LazyVStack(spacing: 14) {
-                            ForEach(travels, id: \.objectID) { travel in
-                                NavigationLink {
-                                    TravelDetailView(travel: travel)
-                                        .environmentObject(mainVM)
-                                } label: {
-                                    TravelCard(travel: travel,
-                                               stops: stops(for: travel),
-                                               summary: budgetStore.summary(for: travel))
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
+                    AllTravelsMap(traces: traces, cameraPosition: $cameraPosition)
                         .padding(.horizontal, ReceiptLayout.gutter)
-                        .padding(.top, 16)
-                        // 떠 있는 탭바가 마지막 카드를 가리지 않도록 비워 둔다.
-                        .padding(.bottom, 16)
-                    }
+                        .padding(.top, 12)
+
+                    grid
                 }
 
                 Spacer(minLength: 0)
@@ -77,7 +71,7 @@ struct TravelListView: View {
         TabHeaderRow {
             VStack(alignment: .leading, spacing: 4) {
                 Text("여행")
-                    .font(.display2_fixed)
+                    .font(.title3_fixed)
                     .foregroundStyle(.black)
                 Text(travels.isEmpty ? "여행을 만들어 시작하세요" : "\(travels.count)개의 여행")
                     .font(.caption2_fixed)
@@ -89,127 +83,99 @@ struct TravelListView: View {
         }
     }
 
-    // MARK: - 동작
+    // MARK: - 그리드
 
-    private func stops(for travel: Travel) -> [TravelExpenseStop] {
-        _ = refreshToken
-        return TravelExpenseStop.stops(from: budgetStore.expenses(for: travel))
+    private var grid: some View {
+        ScrollView(showsIndicators: false) {
+            LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
+                ForEach(Array(travels.enumerated()), id: \.element.objectID) { index, travel in
+                    NavigationLink {
+                        TravelDetailView(travel: travel)
+                            .environmentObject(mainVM)
+                    } label: {
+                        TravelGridCell(travel: travel, color: TravelPalette.color(at: index))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, ReceiptLayout.gutter)
+            .padding(.top, 18)
+            // 떠 있는 탭바가 마지막 줄을 가리지 않도록 비워 둔다.
+            .padding(.bottom, 24)
+        }
     }
+
+    // MARK: - 동작
 
     private func reload() {
         travels = budgetStore.availableTravels()
-        refreshToken = UUID()
+        traces = travels.enumerated().map { index, travel in
+            TravelMapTrace(id: travel.objectID,
+                           color: TravelPalette.color(at: index),
+                           stops: TravelExpenseStop.stops(from: budgetStore.expenses(for: travel)))
+        }
+        cameraPosition = TravelMapCamera.fitted(to: traces.flatMap(\.stops))
     }
 }
 
-// MARK: - 여행 한 장
+// MARK: - 여행 한 칸
 
-struct TravelCard: View {
+struct TravelGridCell: View {
 
     let travel: Travel
-    let stops: [TravelExpenseStop]
-    let summary: BudgetSummary
+    let color: Color
 
     private var isOngoing: Bool { TravelSchedule.state(of: travel) == .current }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(spacing: 6) {
             cover
-            details
+            name
         }
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.gray100, lineWidth: 1)
-        )
     }
 
-    // MARK: 사진
-
-    @ViewBuilder
+    // 테두리 색이 지도 위 점과 같다. 이 칸의 여행이 지도 어디에 있는지 알려 준다.
     private var cover: some View {
-        ZStack(alignment: .topTrailing) {
-            Group {
+        // 정사각 자리를 먼저 잡고 그 안을 사진으로 채운다. 사진에 곧바로
+        // scaledToFill 을 걸면 원본 비율대로 칸 밖까지 번져 그리드가 어긋난다.
+        Color.clear
+            .aspectRatio(1, contentMode: .fit)
+            .overlay {
                 if let data = travel.coverImageData, let image = UIImage(data: data) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
+                    Image(uiImage: image).resizable().scaledToFill()
                 } else {
-                    Image("DefaultImage")
-                        .resizable()
-                        .scaledToFill()
+                    Image("DefaultImage").resizable().scaledToFill()
                 }
             }
-            .frame(height: 132)
-            .frame(maxWidth: .infinity)
-            .clipped()
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(color, lineWidth: 3)
+            )
+            .overlay(alignment: .topTrailing) { ongoingMark }
+    }
 
-            if isOngoing {
-                Text("여행 중")
-                    .font(.caption1_fixed)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.mainAccent, in: Capsule())
-                    .padding(10)
-            }
+    // 여행 중이라는 표시. 지도의 점과 같은 생김새라 '지금 여기' 로 읽힌다.
+    // 이름에 색을 입히지 않는 것은, 테두리가 이미 '어느 여행인가' 를 맡고 있어
+    // 한 칸에 뜻이 다른 색이 둘이 되면 무엇을 가리키는지 흐려지기 때문이다.
+    @ViewBuilder
+    private var ongoingMark: some View {
+        if isOngoing {
+            Circle()
+                .fill(Color.mainAccent)
+                .frame(width: 12, height: 12)
+                .overlay(Circle().stroke(.white, lineWidth: 2))
+                .padding(5)
         }
     }
 
-    // MARK: 본문
-
-    private var details: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(travel.displayName)
-                .font(.subhead3_1_fixed)
-                .foregroundStyle(.black)
-                .lineLimit(1)
-
-            Text("\(TravelSchedule.periodText(travel)) · \((travel.participantArray?.count ?? 0) + 1)명")
-                .font(.caption1_fixed)
-                .foregroundStyle(.gray300)
-
-            HStack(alignment: .center, spacing: 0) {
-                stopRail
-                Spacer(minLength: 12)
-                Text(ReceiptFormat.krw(summary.totalSpent))
-                    .font(.subhead2_1_fixed)
-                    .foregroundStyle(.black)
-                    .monospacedDigit()
-            }
-        }
-        .padding(14)
-    }
-
-    // 지도의 번호 핀과 같은 카테고리 색을 순서대로 잇는다.
-    // 카드만 봐도 '몇 군데를, 어떤 성격의 지출로' 다녔는지 읽힌다.
-    private var stopRail: some View {
-        HStack(spacing: 5) {
-            if stops.isEmpty {
-                Text("기록된 장소 없음")
-                    .font(.caption1_fixed)
-                    .foregroundStyle(.gray300)
-            } else {
-                HStack(spacing: 0) {
-                    // 점이 너무 많으면 줄이 넘치므로 앞의 여섯 곳만 그린다.
-                    ForEach(Array(stops.prefix(6).enumerated()), id: \.element.id) { index, stop in
-                        if index > 0 {
-                            Rectangle()
-                                .fill(Color.gray200)
-                                .frame(width: 8, height: 1.5)
-                        }
-                        Circle()
-                            .fill(stop.category.color)
-                            .frame(width: 9, height: 9)
-                    }
-                }
-
-                Text("\(stops.count)곳")
-                    .font(.caption1_fixed)
-                    .foregroundStyle(.gray400)
-                    .padding(.leading, 3)
-            }
-        }
+    private var name: some View {
+        Text(travel.displayName)
+            .font(.caption1_fixed)
+            .foregroundStyle(.black)
+            .lineLimit(2)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
