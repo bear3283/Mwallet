@@ -52,7 +52,7 @@ ctx.drawLinearGradient(gradient,
 // MARK: - 구
 
 let center = CGPoint(x: size * 0.5, y: size * 0.495)
-let radius = size * 0.385
+let radius = size * 0.325
 
 func ellipsePath(rx: CGFloat, ry: CGFloat, at point: CGPoint) -> CGPath {
     CGPath(ellipseIn: CGRect(x: point.x - rx, y: point.y - ry, width: rx * 2, height: ry * 2),
@@ -92,26 +92,27 @@ ctx.strokePath()
 
 // MARK: - W
 
-// 바깥 두 획은 곧게 세우고 가운데만 솟게 한다. 예전 M 과 같은 짜임이다
-// (M 은 이것을 뒤집은 모양이다). 바깥을 기울이면 획이 서로 다가와
-// 속공간이 막히고, 작은 크기에서 덩어리로 뭉친다.
+// 바깥 두 획을 위로 갈수록 벌린다. 아래를 좁히고 위를 넓혀 팔을 벌린
+// 모양이 되는데, 획을 얇게 잡아야 속공간이 열린 채로 남는다.
+// 예전에는 바깥을 곧게 세웠지만 그러면 획 굵기에 기대게 되어 인상이
+// 무거웠다.
 //
 // 가운데 봉우리는 위까지 올리지 않는다. 끝까지 올리면 네 획이 고르게
 // 촘촘해져 W 가 아니라 지그재그로 읽힌다.
-let boxWidth = size * 0.493
-let boxHeight = size * 0.325
+let boxWidth = size * 0.555
+let boxHeight = size * 0.312
 let left = center.x - boxWidth / 2
 let top = center.y - boxHeight / 2
 
 let points = [
-    CGPoint(x: 0.0, y: 0.00),
-    CGPoint(x: 0.0, y: 1.00),
-    CGPoint(x: 0.5, y: 0.38),
-    CGPoint(x: 1.0, y: 1.00),
-    CGPoint(x: 1.0, y: 0.00)
+    CGPoint(x: 0.000, y: 0.00),
+    CGPoint(x: 0.215, y: 1.00),
+    CGPoint(x: 0.500, y: 0.34),
+    CGPoint(x: 0.785, y: 1.00),
+    CGPoint(x: 1.000, y: 0.00)
 ].map { CGPoint(x: left + $0.x * boxWidth, y: top + $0.y * boxHeight) }
 
-let stroke = size * 0.125
+let stroke = size * 0.104
 
 func addWPath(width: CGFloat) {
     ctx.setLineWidth(width)

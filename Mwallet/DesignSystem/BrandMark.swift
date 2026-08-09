@@ -21,19 +21,24 @@ enum BrandMarkGeometry {
 
     // 0~1 정규화 좌표. 어떤 크기로 그려도 비율이 유지된다.
     static let globeCenter = CGPoint(x: 0.5, y: 0.495)
-    static let globeRadius: CGFloat = 0.385
+    static let globeRadius: CGFloat = 0.325
 
-    /// W 의 다섯 꼭짓점. 가운데 봉우리는 위까지 올리지 않는다 —
-    /// 끝까지 올리면 네 획이 고르게 촘촘해져 W 가 아니라 지그재그로 읽힌다.
+    /// W 의 다섯 꼭짓점.
+    ///
+    /// 바깥 두 획은 위로 갈수록 벌어진다. 아래를 좁히고 위를 넓혀 팔을 벌린
+    /// 모양인데, 획을 얇게 잡아야 속공간이 열린 채로 남는다.
+    ///
+    /// 가운데 봉우리는 위까지 올리지 않는다 — 끝까지 올리면 네 획이 고르게
+    /// 촘촘해져 W 가 아니라 지그재그로 읽힌다.
     static let walletPoints: [CGPoint] = [
-        CGPoint(x: 0.2535, y: 0.3325),
-        CGPoint(x: 0.2535, y: 0.6575),
-        CGPoint(x: 0.5000, y: 0.4560),
-        CGPoint(x: 0.7465, y: 0.6575),
-        CGPoint(x: 0.7465, y: 0.3325)
+        CGPoint(x: 0.2225, y: 0.3390),
+        CGPoint(x: 0.3418, y: 0.6510),
+        CGPoint(x: 0.5000, y: 0.4451),
+        CGPoint(x: 0.6582, y: 0.6510),
+        CGPoint(x: 0.7775, y: 0.3390)
     ]
 
-    static let walletLineWidth: CGFloat = 0.125
+    static let walletLineWidth: CGFloat = 0.104
     static let globeOutlineWidth: CGFloat = 0.016
     static let globeGridWidth: CGFloat = 0.013
 
