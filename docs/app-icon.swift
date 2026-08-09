@@ -30,10 +30,24 @@ ctx.scaleBy(x: 1, y: -1)
 
 // MARK: - 바탕
 
-// 브랜드 색 #2F5BEA. 예전 아이콘과 같은 파랑을 그대로 쓴다.
-let brand = CGColor(red: 0.184, green: 0.357, blue: 0.918, alpha: 1)
-ctx.setFillColor(brand)
-ctx.fill(CGRect(x: 0, y: 0, width: size, height: size))
+// 스플래시와 같은 세로 그라데이션. 브랜드 코발트(#2F5BEA)에서 같은 계열의
+// 딥 코발트(#17307F)로 떨어진다.
+//
+// 아이콘을 누르면 스플래시가 뜨는데, 아이콘이 단색이면 그 순간 바탕이
+// 갈리며 다른 화면으로 넘어간 것처럼 보인다. 같은 색으로 이어 두면
+// 아이콘이 그대로 커져 화면이 된 것처럼 읽힌다.
+//
+// 값을 고칠 때는 SplashView 의 그라데이션도 함께 고쳐야 한다.
+let brand = CGColor(red: 0.184, green: 0.357, blue: 0.918, alpha: 1)     // #2F5BEA
+let deep = CGColor(red: 0.090, green: 0.188, blue: 0.498, alpha: 1)      // #17307F
+
+let gradient = CGGradient(colorsSpace: CGColorSpace(name: CGColorSpace.sRGB)!,
+                          colors: [brand, deep] as CFArray,
+                          locations: [0, 1])!
+ctx.drawLinearGradient(gradient,
+                       start: CGPoint(x: size / 2, y: 0),
+                       end: CGPoint(x: size / 2, y: size),
+                       options: [])
 
 // MARK: - 구
 
@@ -99,20 +113,32 @@ let points = [
 
 let stroke = size * 0.125
 
-func drawW(color: CGColor, width: CGFloat) {
-    ctx.setStrokeColor(color)
+func addWPath(width: CGFloat) {
     ctx.setLineWidth(width)
     ctx.setLineJoin(.round)
     ctx.setLineCap(.round)
     ctx.move(to: points[0])
     for point in points.dropFirst() { ctx.addLine(to: point) }
-    ctx.strokePath()
 }
 
 // 바탕색으로 한 번 두껍게 긋고 그 위에 흰 W 를 얹는다.
 // 구의 흰 선과 W 가 맞닿는 자리에서 서로 붙어 보이지 않도록 띄우는 것이다.
-drawW(color: brand, width: stroke + size * 0.022)
-drawW(color: CGColor(gray: 1, alpha: 1), width: stroke)
+//
+// 이 테두리를 단색으로 칠하면 그라데이션의 아래쪽에서 바탕과 어긋나 밝은
+// 자국이 남는다. 획을 면으로 바꿔 그 안에 같은 그라데이션을 다시 깐다.
+ctx.saveGState()
+addWPath(width: stroke + size * 0.022)
+ctx.replacePathWithStrokedPath()
+ctx.clip()
+ctx.drawLinearGradient(gradient,
+                       start: CGPoint(x: size / 2, y: 0),
+                       end: CGPoint(x: size / 2, y: size),
+                       options: [])
+ctx.restoreGState()
+
+ctx.setStrokeColor(CGColor(gray: 1, alpha: 1))
+addWPath(width: stroke)
+ctx.strokePath()
 
 // MARK: - 내보내기
 
