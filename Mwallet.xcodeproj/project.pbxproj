@@ -97,6 +97,8 @@
 		C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000BB1 /* TabActionBar.swift */; };
 		C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000CC1 /* TravelListView.swift */; };
 		C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */; };
+		C1A11EA70000000000000E22 /* VoiceSentenceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */; };
+		C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000E31 /* KoreanNumberReader.swift */; };
 		C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */; };
 		C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */; };
 		C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */; };
@@ -248,6 +250,8 @@
 		C1A11EA70000000000000BB1 /* TabActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabActionBar.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000CC1 /* TravelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelListView.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSampleSeeder.swift; sourceTree = "<group>"; };
+		C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSentenceParser.swift; sourceTree = "<group>"; };
+		C1A11EA70000000000000E31 /* KoreanNumberReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoreanNumberReader.swift; sourceTree = "<group>"; };
 		C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingHandler.swift; sourceTree = "<group>"; };
 		C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoModel.swift; sourceTree = "<group>"; };
 		C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Extension.swift"; sourceTree = "<group>"; };
@@ -393,6 +397,8 @@
 				C15760172AEE782C0089FFE5 /* CountryList.csv */,
 				57C41DFB2AD4F1EB00345253 /* Persistence.swift */,
 				C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */,
+				C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */,
+				C1A11EA70000000000000E31 /* KoreanNumberReader.swift */,
 				C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */,
 				5754FAB42AD3F94900A3FCE8 /* Mwallet.xcdatamodeld */,
 				57A65D062AD7D4BE00131266 /* Enumeration */,
@@ -910,6 +916,8 @@
 				C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */,
 				57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */,
 				C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */,
+				C1A11EA70000000000000E22 /* VoiceSentenceParser.swift in Sources */,
+				C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */,
 				C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */,
 				C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */,
 				C18168022AFDE07000130F79 /* SplashView.swift in Sources */,
