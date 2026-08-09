@@ -17,10 +17,9 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>MaruBuri-SemiBold.otf</string>
-		<string>Pretendard-Medium.otf</string>
-		<string>Pretendard-Regular.otf</string>
-		<string>Pretendard-SemiBold.otf</string>
+		<string>WantedSans-Regular.otf</string>
+		<string>WantedSans-Medium.otf</string>
+		<string>WantedSans-SemiBold.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

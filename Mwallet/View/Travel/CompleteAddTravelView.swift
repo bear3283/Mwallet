@@ -160,7 +160,7 @@ struct CompleteAddTravelView: View {
                                 Text("미정")
                             }
                         }
-                        .font(.custom(FontsManager.Pretendard.medium, size: 20))
+                        .font(.custom(FontsManager.WantedSans.medium, size: 20))
                         .padding(.top, 90)
                         .padding(.leading, 16)
                         .multilineTextAlignment(.center)

@@ -83,7 +83,7 @@ struct AddTravelView: View {
                 
                 HStack {
                     Text("기간을 선택해주세요")
-                        .font(.custom(FontsManager.Pretendard.semiBold, size: 24))
+                        .font(.custom(FontsManager.WantedSans.semiBold, size: 24))
                     
                     Spacer()
                 }
@@ -91,7 +91,7 @@ struct AddTravelView: View {
                 
                 HStack {
                     Text("여행의 시작일과 종료일을 설정해주세요.")
-                        .font(.custom(FontsManager.Pretendard.medium, size: 16))
+                        .font(.custom(FontsManager.WantedSans.medium, size: 16))
                         .foregroundStyle(Color.gray300)
                     
                     Spacer()
@@ -145,7 +145,7 @@ struct AddTravelView: View {
                             
                             HStack {
                                 Text(viewModel.startDateToString(in: viewModel.startDate))
-                                    .font(.custom(FontsManager.Pretendard.regular, size: 16))
+                                    .font(.custom(FontsManager.WantedSans.regular, size: 16))
                                     .foregroundStyle(Color.black)
                                     .padding(.leading, 20)
                                     .padding(.vertical, 6)
@@ -179,7 +179,7 @@ struct AddTravelView: View {
                             
                             HStack {
                                 Text(viewModel.endDateToString(in: viewModel.endDate))
-                                    .font(.custom(FontsManager.Pretendard.regular, size: 16))
+                                    .font(.custom(FontsManager.WantedSans.regular, size: 16))
                                     .foregroundStyle(viewModel.endDate == nil ? Color.gray300 : Color.black)
                                     .padding(.leading, 20)
                                     .padding(.vertical, 6)

@@ -2,34 +2,33 @@
 
 앱 바이너리에 함께 배포하는 글꼴이므로 출처와 허용 범위를 남겨 둔다.
 
-## 마루 부리 (MaruBuri) — 제목
+## Wanted Sans
 
 | | |
 |---|---|
-| 파일 | `MaruBuri-SemiBold.otf` |
-| PostScript 이름 | `MaruBuriot-SemiBold` |
-| 버전 | 2.000 |
-| 저작권 | © NAVER Corp. © NAVER Cultural Foundation Corp. |
-| 만든 곳 | AG 타이포그라피연구소 (노은유, 이노을, 구모아) |
-| 배포 | <https://hangeul.naver.com/font> |
+| 파일 | `WantedSans-SemiBold.otf`, `WantedSans-Medium.otf`, `WantedSans-Regular.otf` |
+| PostScript 이름 | `WantedSans-SemiBold` · `-Medium` · `-Regular` |
+| 버전 | 1.003 |
+| 만든 곳 | 원티드랩 (Wanted Lab) |
+| 배포 | <https://github.com/wanteddev/wanted-sans> |
 | 라이선스 | SIL Open Font License 1.1 |
 
-개인·기업 모두 무료로 쓸 수 있고, **소프트웨어에 넣어 함께 배포하는 것이 허용된다.**
-글꼴 자체를 파는 것만 안 된다. 고쳐 쓰는 것도 허용되지만 이 앱은 원본 그대로 쓴다.
+**소프트웨어에 넣어 함께 배포하는 것이 허용된다.** 글꼴 자체를 파는 것만 안 된다.
+라이선스 전문이 글꼴 파일 안(`name` 테이블 13번)에 들어 있어, 파일만으로도 조건을 확인할 수 있다.
 
 한글 11,172자(완성형 전체)를 갖췄다. 이 앱은 한국어 전용이라 이 조건이 필수다.
 
-## Pretendard — 본문·숫자
+### 이 글꼴을 고른 이유
 
-| | |
-|---|---|
-| 파일 | `Pretendard-SemiBold.otf`, `Pretendard-Medium.otf`, `Pretendard-Regular.otf` |
-| 라이선스 | SIL Open Font License 1.1 |
-| 배포 | <https://github.com/orioncactus/pretendard> |
+자간이 좁고 획 끝이 각져, 같은 크기에서도 글자가 크고 단단하게 읽힌다.
+이 앱은 화면마다 두 가지가 나온다.
+
+- **긴 여행 이름** — 자간이 좁아 4열 그리드처럼 폭이 좁은 자리에서 덜 잘린다
+- **금액** — 숫자의 대비가 강해 자릿수가 또렷하다. 대부분 `monospacedDigit()` 과 함께 쓰인다
 
 ### 굵기를 셋만 두는 이유
 
-예전에는 아홉 굵기 약 14MB를 모두 넣었지만 코드에서 부르는 것은 셋뿐이었다.
+예전에는 Pretendard 아홉 굵기 약 14MB 를 모두 넣었지만 코드가 부르는 것은 셋뿐이었다.
 쓰지 않는 여섯 개가 앱 용량만 9.4MB 차지했다.
 
 굵기를 새로 쓰려면 `.otf` 파일과 `Info.plist` 의 `UIAppFonts`, 그리고

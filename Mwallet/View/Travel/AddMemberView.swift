@@ -197,12 +197,12 @@ struct AddMemberView: View {
                 ForEach(0..<participantArr.count, id: \.self) { index in
                     ZStack {
                         Text(participantArr[index] == "" ? "이름 입력아아아" : participantArr[index] + "아아아")
-                            .font(.custom(FontsManager.Pretendard.medium, size: 16))
+                            .font(.custom(FontsManager.WantedSans.medium, size: 16))
                             .hidden()
                         
                         TextField("이름 입력", text: $participantArr[index])
                             .modifier(ClearTextFieldButton(text: $participantArr[index], participantArr: $participantArr, index: index))
-                            .font(.custom(FontsManager.Pretendard.medium, size: 16))
+                            .font(.custom(FontsManager.WantedSans.medium, size: 16))
                             .foregroundStyle(Color.black)
                             .textFieldStyle(CustomTextFieldStyle())
                             .onChange(of: participantArr[index]) { _, newValue in
