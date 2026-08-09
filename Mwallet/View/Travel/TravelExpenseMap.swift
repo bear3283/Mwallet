@@ -11,6 +11,7 @@
 
 import CoreData
 import CoreLocation
+import UIKit
 import MapKit
 import SwiftUI
 
@@ -28,27 +29,67 @@ struct TravelExpenseStop: Identifiable {
     let currencyCode: String
     let payAmount: Double
 
+    /// 지도의 핀과 목록의 번호에 쓰는 색.
+    ///
+    /// 카테고리 색을 그대로 쓰면 식비만 다섯 번 나오는 여행에서 다섯 점이
+    /// 모두 같은 색이 되어, 지도에서 몇 번 핀인지 색으로는 가릴 수 없었다.
+    /// 같은 카테고리가 거듭될 때마다 그 계열 안에서 밝기와 채도를 옮겨
+    /// 서로 다른 색이 되게 한다. 계열은 유지되므로 '식비 쪽' 이라는 것은
+    /// 그대로 읽힌다.
+    let tint: Color
+
     // 좌표가 있는 지출만 이른 순서대로 세워 번호를 매긴다.
     // BudgetStore 는 최신순으로 주므로 여기서 다시 정렬한다.
     static func stops(from expenses: [Expense]) -> [TravelExpenseStop] {
-        expenses
+        var seenPerCategory: [ExpenseInfoCategory: Int] = [:]
+
+        return expenses
             .filter { $0.coordinate != nil }
             .sorted { $0.paidDate < $1.paidDate }
             .enumerated()
             .compactMap { index, expense in
                 guard let coordinate = expense.coordinate else { return nil }
+                let category = ExpenseInfoCategory(rawValue: Int(expense.category)) ?? .unknown
+                let occurrence = seenPerCategory[category, default: 0]
+                seenPerCategory[category] = occurrence + 1
+
                 return TravelExpenseStop(
                     id: expense.objectID,
                     order: index + 1,
                     coordinate: coordinate,
                     merchantName: expense.merchantName,
-                    category: ExpenseInfoCategory(rawValue: Int(expense.category)) ?? .unknown,
+                    category: category,
                     paidDate: expense.paidDate,
                     amountInKRW: expense.amountInKRW,
                     currencyCode: expense.currencyCode,
-                    payAmount: expense.payAmount
+                    payAmount: expense.payAmount,
+                    tint: shade(category.color, occurrence: occurrence)
                 )
             }
+    }
+
+    /// 같은 계열 안에서 밝기·채도를 옮겨 다른 색을 만든다.
+    ///
+    /// 색상(hue)은 건드리지 않는다. 색상을 돌리면 식비가 교통 색이 되어
+    /// 카테고리 색이라는 약속이 깨진다. 밝기와 채도만 옮기면 '같은 계열의
+    /// 다른 색' 으로 남는다.
+    static func shade(_ color: Color, occurrence: Int) -> Color {
+        guard occurrence > 0 else { return color }
+
+        var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0, alpha: CGFloat = 0
+        guard UIColor(color).getHue(&hue, saturation: &saturation,
+                                    brightness: &brightness, alpha: &alpha) else { return color }
+
+        // 밝기·채도를 번갈아 반대쪽으로 옮겨, 이웃한 차례끼리 가장 많이 갈린다.
+        let steps: [(brightness: CGFloat, saturation: CGFloat)] = [
+            (0, 0), (0.17, -0.22), (-0.16, 0.12), (0.30, 0.08), (-0.26, -0.14), (0.09, 0.26)
+        ]
+        let step = steps[occurrence % steps.count]
+
+        // 너무 밝으면 흰 글씨가, 너무 어두우면 지도 바탕이 먹는다. 양쪽을 묶는다.
+        return Color(hue: Double(hue),
+                     saturation: Double(min(max(saturation + step.saturation, 0.30), 1)),
+                     brightness: Double(min(max(brightness + step.brightness, 0.42), 0.92)))
     }
 
     // 원화면 환산 표기를 겹쳐 쓰지 않는다.
@@ -80,6 +121,8 @@ struct TravelExpenseMap: View {
     var height: CGFloat? = 320
     var highlightedID: NSManagedObjectID?
     var onSelect: ((TravelExpenseStop) -> Void)?
+    /// 처음의 '모두 보이는' 화면으로 되돌린다. nil 이면 버튼을 두지 않는다.
+    var onResetCamera: (() -> Void)?
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -105,6 +148,7 @@ struct TravelExpenseMap: View {
             .frame(maxHeight: .infinity)
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(alignment: .topTrailing) { resetButton }
 
             if stops.isEmpty {
                 Text("위치를 남긴 지출이 아직 없어요")
@@ -115,6 +159,35 @@ struct TravelExpenseMap: View {
                     .background(.ultraThinMaterial, in: Capsule())
                     .padding(12)
             }
+        }
+    }
+
+    // 핀을 눌러 한 곳을 당겨 보거나 손으로 지도를 옮기고 나면, 처음의
+    // '모두 보이는' 화면으로 돌아갈 길이 없었다. 지도를 손으로 다시 맞추는
+    // 것은 어렵고, 화면을 나갔다 들어와야 제자리가 됐다.
+    //
+    // 지도를 움직였는지 가려내려면 카메라를 계속 지켜봐야 하는데, 처음
+    // 자리를 잡을 때도 같은 신호가 와서 눌렀는지 아닌지를 가릴 수 없다.
+    // 그래서 갈 곳이 둘 이상이면 늘 보여 준다 — 있는데 안 쓰는 편이,
+    // 필요할 때 없는 것보다 낫다.
+    @ViewBuilder
+    private var resetButton: some View {
+        if let onResetCamera, stops.count > 1 {
+            Button(action: onResetCamera) {
+                HStack(spacing: 5) {
+                    Image(systemName: "arrow.up.left.and.arrow.down.right")
+                        .font(.system(size: 11, weight: .semibold))
+                    Text("전체 보기")
+                        .font(.caption1_fixed)
+                }
+                .foregroundStyle(.black)
+                .padding(.vertical, 7)
+                .padding(.horizontal, 11)
+                .background(.regularMaterial, in: Capsule())
+                .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
+            }
+            .buttonStyle(.plain)
+            .padding(10)
         }
     }
 }
@@ -129,7 +202,7 @@ private struct OrderPin: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(stop.category.color)
+                .fill(stop.tint)
                 .frame(width: isHighlighted ? 34 : 28, height: isHighlighted ? 34 : 28)
                 .overlay(
                     Circle().stroke(isHighlighted ? Color.black : .white, lineWidth: isHighlighted ? 3 : 2)
@@ -231,7 +304,7 @@ struct TravelExpenseRow: View {
 
             ZStack {
                 Circle()
-                    .fill(stop.category.color)
+                    .fill(stop.tint)
                     .frame(width: 26, height: 26)
 
                 Text("\(stop.order)")

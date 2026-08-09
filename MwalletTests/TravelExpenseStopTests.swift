@@ -7,6 +7,8 @@
 //
 
 import CoreLocation
+import SwiftUI
+import UIKit
 import XCTest
 @testable import Mwallet
 
@@ -100,6 +102,89 @@ final class TravelExpenseStopTests: CoreDataTestCase {
         ])
 
         XCTAssertEqual(stops.first?.category, .room)
+    }
+
+    // MARK: - 색
+    //
+    // 카테고리 색을 그대로 쓰면 식비만 다섯 번인 여행에서 다섯 점이 모두
+    // 같은 색이 되어, 지도에서 몇 번 핀인지 색으로는 가릴 수 없었다.
+    // 같은 카테고리가 거듭될 때마다 그 계열 안에서 다른 색을 준다.
+
+    // 에셋에서 온 색은 화면 설정에 따라 값이 정해지는 동적 색이라, 같은 색을
+    // 두 번 집어도 == 로는 같지 않다. 성분을 꺼내 견준다.
+    private func components(_ color: Color) -> (hue: CGFloat, saturation: CGFloat, brightness: CGFloat) {
+        var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0, alpha: CGFloat = 0
+        UIColor(color).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        return (hue, saturation, brightness)
+    }
+
+    private func assertSameColor(_ lhs: Color, _ rhs: Color,
+                                 _ message: String = "", line: UInt = #line) {
+        let left = components(lhs), right = components(rhs)
+        XCTAssertEqual(left.hue, right.hue, accuracy: 0.001, message, line: line)
+        XCTAssertEqual(left.saturation, right.saturation, accuracy: 0.001, message, line: line)
+        XCTAssertEqual(left.brightness, right.brightness, accuracy: 0.001, message, line: line)
+    }
+
+    private func sameCategoryStops(_ count: Int) -> [TravelExpenseStop] {
+        let base = Date(timeIntervalSince1970: 1_700_000_000)
+        return TravelExpenseStop.stops(from: (0..<count).map { index in
+            makeExpense(category: .food,
+                        merchant: "식당 \(index)",
+                        paidAt: base.addingTimeInterval(Double(index) * 600),
+                        coordinate: seoul)
+        })
+    }
+
+    func test_첫_번째는_카테고리_색_그대로다() {
+        let stops = sameCategoryStops(1)
+
+        assertSameColor(stops[0].tint, ExpenseInfoCategory.food.color)
+    }
+
+    func test_같은_카테고리가_거듭되면_서로_다른_색을_준다() {
+        // 성분을 반올림해 묶는다. 색 자체는 동적 색이 섞여 == 로 셀 수 없다.
+        let keys = sameCategoryStops(5).map { stop -> String in
+            let value = components(stop.tint)
+            return String(format: "%.3f/%.3f/%.3f", value.hue, value.saturation, value.brightness)
+        }
+
+        XCTAssertEqual(Set(keys).count, 5, "같은 색이 겹치면 지도에서 핀을 가릴 수 없습니다")
+    }
+
+    // 색상(hue)까지 돌리면 식비가 교통 색이 되어 카테고리 색이라는 약속이 깨진다.
+    func test_색을_바꿔도_같은_계열에_남는다() {
+        let base = components(ExpenseInfoCategory.food.color)
+
+        for stop in sameCategoryStops(6) {
+            XCTAssertEqual(components(stop.tint).hue, base.hue, accuracy: 0.001,
+                           "\(stop.merchantName) 의 색상이 계열을 벗어났습니다")
+        }
+    }
+
+    // 너무 밝으면 위에 얹은 흰 번호가, 너무 어두우면 지도 바탕이 색을 먹는다.
+    func test_번호가_읽히는_밝기_안에_머문다() {
+        for stop in sameCategoryStops(6) {
+            let value = components(stop.tint)
+            // 경계값을 그대로 받도록 아주 작은 여유를 둔다. 0.92 로 묶은 값이
+            // 부동소수를 거치며 0.9200000167 로 돌아온다.
+            XCTAssertGreaterThan(value.brightness, 0.42 - 0.001, "\(stop.merchantName) 이 너무 어둡습니다")
+            XCTAssertLessThan(value.brightness, 0.92 + 0.001, "\(stop.merchantName) 이 너무 밝습니다")
+            XCTAssertGreaterThan(value.saturation, 0.30 - 0.001, "\(stop.merchantName) 이 너무 흐립니다")
+        }
+    }
+
+    // 카테고리가 다르면 차례와 상관없이 각자의 색에서 시작한다.
+    func test_카테고리마다_따로_센다() {
+        let base = Date(timeIntervalSince1970: 1_700_000_000)
+        let stops = TravelExpenseStop.stops(from: [
+            makeExpense(category: .food, merchant: "밥", paidAt: base, coordinate: seoul),
+            makeExpense(category: .room, merchant: "숙소",
+                        paidAt: base.addingTimeInterval(600), coordinate: seoul)
+        ])
+
+        assertSameColor(stops[0].tint, ExpenseInfoCategory.food.color)
+        assertSameColor(stops[1].tint, ExpenseInfoCategory.room.color)
     }
 
     // MARK: - 카메라
