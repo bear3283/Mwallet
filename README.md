@@ -160,7 +160,7 @@ Mwallet/
 - [x] SwiftLint 실제 동작 복구 (원본은 미설치 상태로 스킵되고 있었음)
 - [x] SwiftLint 위반 0건 달성
 - [x] 테스트 타깃 신설 (`MwalletTests`) — 120건. CSV 파서 · 국가/통화 표 · 환율 · 금액 환산 · CSV 인코딩 · 예산 집계 · 영수증 집계/필터 · 저장 규칙 · 지도 순서 · 위젯 큐
-- [x] CI(빌드 + 린트 + 테스트) 도입 — [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+- [x] CI(빌드 + 린트 + 테스트) 도입 — [`.github/workflows/ci.yml`](.github/workflows/ci.yml). **PR 에서만 돈다** — 비공개 저장소의 macos 러너는 분당 10배로 계산되어, push 까지 걸면 PR 한 건이 두 번 돌며 한도를 두 배로 쓴다. 머지 전에 `gh pr update-branch` 로 base 를 맞추면 검증한 것과 머지될 것이 같아진다
 - [x] `fatalError` 5곳 → 3곳을 복구 가능한 처리로 전환 (남은 2곳은 `Persistence` 의 저장소 개방 실패로, 앱이 할 수 있는 복구가 없음)
 - [x] 기존 `CSVArchive` 를 `ReceiptCSVEncoder` 로 교체 완료
 - [x] `print` → `OSLog` 전환 — 디버그 노이즈 16개는 삭제, 44개를 5개 카테고리로 이동
