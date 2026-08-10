@@ -29,6 +29,15 @@ enum RecordError: LocalizedError {
 // 클래스 전체를 메인 액터에 묶는다. 음성 인식과 오디오 콜백은 임의의 스레드로
 // 오므로, 그 경계에서 메인으로 넘긴다.
 @MainActor
+// 이 클래스는 아직 250줄을 넘는다. 남은 무게는 대부분 오디오다 —
+// AVAudioEngine 으로 소리를 받고, 음성 인식에 흘리고, 파일로 남기는
+// 125줄이 여기 있다. 따로 떼어 낼 자리는 분명히 보인다.
+//
+// 옮기지 않은 것은 확인할 방법이 없어서다. 이 경로는 실기기 마이크가
+// 있어야 돌고, 테스트도 화면 캡처도 그 길을 밟지 않는다. 옮겨서 무언가
+// 어긋나도 아무것도 알려 주지 않는다. 실기기로 눌러 보며 옮길 수 있을 때
+// 하기로 하고, 그때까지 이 한 줄로 예외를 눈에 보이게 남긴다.
+// swiftlint:disable:next type_body_length
 final class RecordViewModel: ObservableObject {
 
     let viewContext = PersistenceController.shared.container.viewContext
@@ -215,33 +224,12 @@ final class RecordViewModel: ObservableObject {
 
     func classifyVoiceSentenceInfo() {
         if let infoPredictor, let info, let label = infoPredictor.predictedLabel(for: info) {
-            infoCategory = getExpenseInfoCagetory(stringLabel: label)
+            infoCategory = ExpenseInfoCategory(modelLabel: label)
         } else {
             infoCategory = .unknown
         }
     }
-    
-    private func getExpenseInfoCagetory(stringLabel: String) -> ExpenseInfoCategory {
-        switch stringLabel {
-        case "plane":
-            return .plane
-        case "room":
-            return .room
-        case "transportation":
-            return .transportation
-        case "food":
-            return .food
-        case "tour":
-            return .tour
-        case "shopping":
-            return .shopping
-        case "gift":
-            return .gift
-        default:
-            return .unknown
-        }
-    }
-    
+
     func updateVoiceSentence(with transcribedString: String) {
         guard transcribedString.count > 0 else { // 새로운 문장이 공백인 경우
             return

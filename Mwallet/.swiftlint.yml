@@ -1,13 +1,12 @@
 # 아래 룰들은 옛 코드가 한꺼번에 걸려 꺼 두었다.
 # 걸리는 곳을 다 걷어낸 룰부터 하나씩 다시 켠다.
 #
-# 다시 켠 것: function_body_length, cyclomatic_complexity
-#   - divideVoiceSentence 386줄을 VoiceSentenceParser·KoreanNumberReader 로 옮겼다
-#   - getCorrespondingArabicString 의 11갈래 switch 를 자리 번호 조회로 바꿨다
+# 켠 것: function_body_length, cyclomatic_complexity, type_body_length
 #
-# 아직 남은 것: type_body_length 8곳
-#   ManualRecordView 707줄 · RecordView 587줄 · AddTravelView 393줄이 크다.
-#   화면 쪼개기가 끝나면 이 룰도 켠다.
+# type_body_length 를 켜면서 화면 일곱을 쪼갰다. 남은 예외는 두 뷰모델
+# 뿐이고, 그 자리에 왜 남겼는지를 코드에 한 줄로 적어 뒀다.
+# 룰을 통째로 끄면 새로 쓰는 코드까지 함께 풀리지만, 그 자리에만 적어
+# 두면 예외가 몇 개인지 눈에 보이고 지울 때도 그 줄만 지우면 된다.
 
 disabled_rules:
     - deployment_target
@@ -17,4 +16,3 @@ disabled_rules:
     - line_length
     - trailing_whitespace
     - identifier_name
-    - type_body_length

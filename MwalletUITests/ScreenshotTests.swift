@@ -141,7 +141,10 @@ final class ScreenshotTests: XCTestCase {
                           "여행을 실제로 만드는 흐름이라 CAPTURE_CREATE_FLOW=1 일 때만 돈다")
 
         tapTab("여행")
-        guard tapIfExists(app.navigationBars.buttons.element(boundBy: 1)) else {
+        // 탭 동작 버튼은 네비게이션 바가 아니라 본문 첫 줄에 있다.
+        // 예전에는 navigationBars.buttons 를 순서로 집었는데, 툴바를 숨기면서
+        // 아무것도 찾지 못하게 됐다. 이 테스트는 꺼 둔 채라 그 사실도 묻혔다.
+        guard tapIfExists(app.buttons["tabAction.plus"].firstMatch) else {
             XCTFail("여행 추가(+) 버튼을 찾지 못했습니다.")
             return
         }
