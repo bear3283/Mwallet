@@ -81,7 +81,8 @@ struct ReceiptHomeView: View {
                     Spacer()
                         .frame(height: 20)
 
-                    summaryBlock
+                    ReceiptSummaryBlock(summaryValue: summaryValue,
+                                        missionName: filter.missionName)
                         .padding(.horizontal, ReceiptLayout.gutter)
 
                     Spacer()
@@ -89,7 +90,11 @@ struct ReceiptHomeView: View {
 
                     Divider()
 
-                    receiptList
+                    ReceiptDayList(daySections: daySections,
+                                   isEmpty: filtered.isEmpty,
+                                   showsMission: filter.missionName == nil,
+                                   onAttachPhoto: { attachTarget = $0 },
+                                   onDelete: { deletionTarget = $0 })
                 }
 
                 Spacer(minLength: 0)
@@ -203,96 +208,7 @@ struct ReceiptHomeView: View {
 
     // MARK: - 합계
 
-    private var summaryBlock: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(filter.missionName ?? "전체 여행")
-                .font(.caption2_fixed)
-                .foregroundStyle(.gray300)
-
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(ReceiptFormat.krw(summaryValue.totalInKRW))
-                    .font(.display4_fixed)
-                    .foregroundStyle(.black)
-                    .monospacedDigit()
-                Text("\(summaryValue.totalCount)건")
-                    .font(.caption2_fixed)
-                    .foregroundStyle(.gray300)
-            }
-            .padding(.top, 6)
-
-            if summaryValue.hasMissingPhoto {
-                ReceiptNotice(text: "영수증 사진이 없는 항목이 \(summaryValue.missingPhotoCount)건 있습니다")
-                    .padding(.top, 8)
-            }
-
-            if summaryValue.hasUnconvertible {
-                ReceiptNotice(text: "환율을 받지 못한 \(summaryValue.unconvertibleCount)건은 합계에서 빠졌습니다")
-                    .padding(.top, 8)
-            }
-
-            if summaryValue.byCurrency.count > 1 {
-                HStack(spacing: 0) {
-                    ForEach(Array(summaryValue.byCurrency.enumerated()), id: \.element.id) { index, entry in
-                        Text("\(entry.currency) \(decimalText(entry.amount))")
-                            .font(.caption2_fixed)
-                            .foregroundStyle(.gray300)
-                        if index != summaryValue.byCurrency.count - 1 {
-                            Text("·")
-                                .font(.caption2_fixed)
-                                .foregroundStyle(.gray200)
-                                .padding(.horizontal, 6)
-                        }
-                    }
-                }
-                .padding(.top, 8)
-            }
-        }
-    }
-
     // MARK: - 목록
-
-    private var receiptList: some View {
-        ScrollView(showsIndicators: false) {
-            if filtered.isEmpty {
-                ReceiptEmptyState(message: "검색 결과가 없어요")
-            } else {
-                LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(daySections) { section in
-                        ReceiptSectionTitle(
-                            text: ReceiptFormat.dayTitle(section.day),
-                            trailing: ReceiptFormat.krwOrDash(section.dayTotal)
-                        )
-                        .padding(.top, 20)
-                        .padding(.bottom, 2)
-
-                        ForEach(section.expenses) { expense in
-                            // 썸네일과 본문의 목적지가 달라 한 링크로 묶지 않는다.
-                            HStack(spacing: 12) {
-                                ReceiptThumbnail(expense: expense) {
-                                    attachTarget = expense
-                                }
-                                NavigationLink {
-                                    ReceiptDetailView(expense: expense)
-                                } label: {
-                                    ReceiptRowContent(expense: expense, showsMission: filter.missionName == nil)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            .padding(.vertical, 12)
-                            .contextMenu {
-                                Button("삭제", role: .destructive) { deletionTarget = expense }
-                            }
-
-                            Divider()
-                        }
-                    }
-                }
-                .padding(.horizontal, ReceiptLayout.gutter)
-                // 떠 있는 탭바가 마지막 항목을 가리지 않도록 여유를 둔다.
-                .padding(.bottom, 90)
-            }
-        }
-    }
 
     // MARK: - 파생 값
 
@@ -324,13 +240,6 @@ struct ReceiptHomeView: View {
                 if !isPresented { errorMessage = nil }
             }
         )
-    }
-
-    private func decimalText(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        return formatter.string(from: NSNumber(value: value)) ?? "0"
     }
 
     // MARK: - 동작

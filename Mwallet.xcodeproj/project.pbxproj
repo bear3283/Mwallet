@@ -35,6 +35,7 @@
 		57A65D162AD7D6B000131266 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D152AD7D6B000131266 /* PaymentMethod.swift */; };
 		C1A11EA7000000000000B12 /* RecordLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B11 /* RecordLayout.swift */; };
 		C1A11EA7000000000000B22 /* RecordLiveFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B21 /* RecordLiveFields.swift */; };
+		C1A11EA7000000000000F02 /* RecordTopSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000F01 /* RecordTopSections.swift */; };
 		57A65D182AD7DDA700131266 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D172AD7DDA700131266 /* RecordView.swift */; };
 		57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C41DFB2AD4F1EB00345253 /* Persistence.swift */; };
 		57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */; };
@@ -56,8 +57,10 @@
 		C179660C2ADD68BC0036E866 /* FontsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C179660B2ADD68BC0036E866 /* FontsManager.swift */; };
 		C179660E2ADD6BF90036E866 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C179660D2ADD6BF90036E866 /* Color+Extension.swift */; };
 		C18168022AFDE07000130F79 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18168012AFDE07000130F79 /* SplashView.swift */; };
+		C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E11 /* AddMemberSections.swift */; };
 		C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */; };
 		C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */; };
+		C1A11EA7000000000000E02 /* TravelSummaryStrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */; };
 		C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */; };
 		C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */; };
 		C19AFAE12ADF709E0037A5F5 /* AddMemberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */; };
@@ -68,7 +71,9 @@
 		C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */; };
 		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
 		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
+		C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */; };
 		C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddReceiptView.swift */; };
+		C1A11EA7000000000000D12 /* ReceiptListSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D11 /* ReceiptListSections.swift */; };
 		C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* ReceiptHomeView.swift */; };
 		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
 		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
@@ -188,6 +193,7 @@
 		57A65D152AD7D6B000131266 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000B11 /* RecordLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLayout.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000B21 /* RecordLiveFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLiveFields.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000F01 /* RecordTopSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopSections.swift; sourceTree = "<group>"; };
 		57A65D172AD7DDA700131266 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		57C41DFB2AD4F1EB00345253 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateChoiceModal.swift; sourceTree = "<group>"; };
@@ -210,8 +216,10 @@
 		C179660B2ADD68BC0036E866 /* FontsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontsManager.swift; sourceTree = "<group>"; };
 		C179660D2ADD6BF90036E866 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		C18168012AFDE07000130F79 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000E11 /* AddMemberSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberSections.swift; sourceTree = "<group>"; };
 		C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberView.swift; sourceTree = "<group>"; };
 		C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTheme.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSummaryStrips.swift; sourceTree = "<group>"; };
 		C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailView.swift; sourceTree = "<group>"; };
 		C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAddTravelView.swift; sourceTree = "<group>"; };
 		C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberViewModel.swift; sourceTree = "<group>"; };
@@ -222,7 +230,9 @@
 		C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousTravelViewModel.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptEvidenceFields.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E1 /* AddReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptView.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000D11 /* ReceiptListSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptListSections.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E3 /* ReceiptHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHomeView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
@@ -450,8 +460,10 @@
 				C1A11EA7000000000000C01 /* TravelCalendar.swift */,
 				C1A11EA7000000000000C11 /* AddTravelHeader.swift */,
 				C17550532AD54FC900A61BE5 /* AddTravelView.swift */,
+				C1A11EA7000000000000E11 /* AddMemberSections.swift */,
 				C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */,
 				C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */,
+				C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */,
 				C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */,
 				C1A11EA70000000000000CC1 /* TravelListView.swift */,
 				C1A11EA7000000000000A01 /* TravelPalette.swift */,
@@ -469,6 +481,7 @@
 			children = (
 				C1A11EA7000000000000B11 /* RecordLayout.swift */,
 				C1A11EA7000000000000B21 /* RecordLiveFields.swift */,
+				C1A11EA7000000000000F01 /* RecordTopSections.swift */,
 				57A65D172AD7DDA700131266 /* RecordView.swift */,
 				C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */,
 				5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */,
@@ -583,6 +596,7 @@
 		C1A11EA700000000000000E0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */,
 				C1A11EA700000000000000E1 /* AddReceiptView.swift */,
 				C1A11EA700000000000003A1 /* ReceiptDesign.swift */,
 				C1A11EA70000000000000BB1 /* TabActionBar.swift */,
@@ -590,6 +604,7 @@
 				C1A11EA7000000000000010E /* ReceiptDetailView.swift */,
 				C1A11EA700000000000007A1 /* LocationPickerView.swift */,
 				C1A11EA7000000000000010C /* ReceiptRow.swift */,
+				C1A11EA7000000000000D11 /* ReceiptListSections.swift */,
 				C1A11EA700000000000000E3 /* ReceiptHomeView.swift */,
 			);
 			path = View;
@@ -877,6 +892,7 @@
 				57A65D122AD7D5D500131266 /* RecordViewModel.swift in Sources */,
 				C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */,
 				C1A11EA700000000000005A2 /* BrandMark.swift in Sources */,
+				C1A11EA7000000000000E02 /* TravelSummaryStrips.swift in Sources */,
 				C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */,
 				C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */,
 				C1A11EA7000000000000A02 /* TravelPalette.swift in Sources */,
@@ -899,6 +915,7 @@
 				C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */,
 				C1A11EA700000000000006D2 /* BudgetView.swift in Sources */,
 				C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */,
+				C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */,
 				C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */,
 				C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */,
 				C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */,
@@ -906,6 +923,7 @@
 				C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */,
 				C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */,
 				C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */,
+				C1A11EA7000000000000D12 /* ReceiptListSections.swift in Sources */,
 				C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */,
 				C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */,
 				C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */,
@@ -913,6 +931,7 @@
 				57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */,
 				C1A11EA7000000000000B12 /* RecordLayout.swift in Sources */,
 				C1A11EA7000000000000B22 /* RecordLiveFields.swift in Sources */,
+				C1A11EA7000000000000F02 /* RecordTopSections.swift in Sources */,
 				57A65D182AD7DDA700131266 /* RecordView.swift in Sources */,
 				C179660E2ADD6BF90036E866 /* Color+Extension.swift in Sources */,
 				C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */,
@@ -927,6 +946,7 @@
 				C1A11EA7000000000000C02 /* TravelCalendar.swift in Sources */,
 				C1A11EA7000000000000C12 /* AddTravelHeader.swift in Sources */,
 				C17550542AD54FC900A61BE5 /* AddTravelView.swift in Sources */,
+				C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */,
 				C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */,
 				5760066F2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift in Sources */,
 				57A65D0A2AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift in Sources */,

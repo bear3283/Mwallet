@@ -1,27 +1,12 @@
 # 아래 룰들은 옛 코드가 한꺼번에 걸려 꺼 두었다.
 # 걸리는 곳을 다 걷어낸 룰부터 하나씩 다시 켠다.
 #
-# 켠 것: function_body_length, cyclomatic_complexity
+# 켠 것: function_body_length, cyclomatic_complexity, type_body_length
 #
-# 아직 끈 것: type_body_length
-#
-#   기본값은 250줄에서 경고, 350줄에서 오류다. 350을 넘던 세 화면은
-#   걷어냈다 — ManualRecordView 707 → 156, RecordView 587 → 321,
-#   AddTravelView 393 → 91. 이제 오류 단계는 없다.
-#
-#   남은 일곱은 250~330 구간이다.
-#
-#     AddReceiptView          330
-#     RecordView              321
-#     RecordViewModel         315
-#     TravelDetailView        308
-#     ReceiptHomeView         302
-#     ManualRecordViewModel   297
-#     AddMemberView           257
-#
-#   이만큼을 250 아래로 내리려면 화면마다 한두 벌씩 더 떼어내야 한다.
-#   지금 켜면 경고 일곱이 늘 떠 있게 되는데, 늘 떠 있는 경고는 읽히지
-#   않고 읽히지 않는 신호는 없느니만 못하다. 일곱을 다 내린 뒤에 켠다.
+# type_body_length 를 켜면서 화면 일곱을 쪼갰다. 남은 예외는 두 뷰모델
+# 뿐이고, 그 자리에 왜 남겼는지를 코드에 한 줄로 적어 뒀다.
+# 룰을 통째로 끄면 새로 쓰는 코드까지 함께 풀리지만, 그 자리에만 적어
+# 두면 예외가 몇 개인지 눈에 보이고 지울 때도 그 줄만 지우면 된다.
 
 disabled_rules:
     - deployment_target
@@ -31,4 +16,3 @@ disabled_rules:
     - line_length
     - trailing_whitespace
     - identifier_name
-    - type_body_length

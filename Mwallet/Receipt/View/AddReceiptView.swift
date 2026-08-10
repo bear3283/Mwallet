@@ -23,9 +23,7 @@ struct AddReceiptView: View {
     private let mode: Mode
 
     @State private var draft: ReceiptDraft
-    @State private var pickedItem: PhotosPickerItem?
     @State private var isProcessingImage = false
-    @State private var isPickingLocation = false
     @State private var errorMessage: String?
 
     @FocusState private var focusedField: Field?
@@ -85,13 +83,15 @@ struct AddReceiptView: View {
 
                         ReceiptSectionTitle(text: "증빙")
                             .padding(.top, 20)
-                        photoBlock
+                        ReceiptPhotoField(draft: $draft,
+                                          errorMessage: $errorMessage,
+                                          isProcessingImage: $isProcessingImage)
 
                         Divider()
 
                         ReceiptSectionTitle(text: "위치")
                             .padding(.top, 20)
-                        locationBlock
+                        ReceiptLocationField(draft: $draft)
 
                         Spacer(minLength: 24)
                     }
@@ -124,15 +124,6 @@ struct AddReceiptView: View {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("완료") { focusedField = nil }
-                }
-            }
-            .onChange(of: pickedItem) { _, newItem in
-                loadImage(from: newItem)
-            }
-            .sheet(isPresented: $isPickingLocation) {
-                LocationPickerView(initial: draft.coordinate) { coordinate, name in
-                    draft.coordinate = coordinate
-                    draft.placeName = name
                 }
             }
             .alert("저장하지 못했습니다", isPresented: errorBinding) {
@@ -253,97 +244,6 @@ struct AddReceiptView: View {
 
     // MARK: - 위치
 
-    private var locationBlock: some View {
-        Button {
-            isPickingLocation = true
-        } label: {
-            HStack(spacing: 10) {
-                Image(systemName: draft.coordinate == nil ? "mappin.slash" : "mappin.circle.fill")
-                    .font(.system(size: 18))
-                    .foregroundStyle(draft.coordinate == nil ? Color.gray300 : Color.mainAccent)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    if let name = draft.placeName, draft.coordinate != nil {
-                        Text(name)
-                            .font(.body1_fixed)
-                            .foregroundStyle(.black)
-                            .lineLimit(1)
-                        Text("지도에서 다시 고르기")
-                            .font(.caption1_fixed)
-                            .foregroundStyle(.gray300)
-                    } else {
-                        Text("어디서 썼나요")
-                            .font(.body1_fixed)
-                            .foregroundStyle(.gray400)
-                        Text("지도로 위치를 남겨 두면 나중에 지출을 지도에서 볼 수 있어요")
-                            .font(.caption1_fixed)
-                            .foregroundStyle(.gray300)
-                            .lineLimit(1)
-                    }
-                }
-
-                Spacer(minLength: 8)
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.gray300)
-            }
-            .padding(.vertical, 14)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var photoBlock: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            if let data = draft.imageData, let image = UIImage(data: data) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxHeight: 220)
-                    .frame(maxWidth: .infinity)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-
-                HStack {
-                    Text(ReceiptImageProcessor.formattedSize(of: data))
-                        .font(.caption1_fixed)
-                        .foregroundStyle(.gray300)
-                    Spacer()
-                    Button {
-                        draft.imageData = nil
-                        pickedItem = nil
-                    } label: {
-                        Text("사진 삭제")
-                            .font(.caption2_fixed)
-                            .foregroundStyle(.mainAccent)
-                    }
-                }
-            } else {
-                // PhotosPicker 의 label 클로저는 메인 액터에 묶여 있지 않다.
-                // 화면 상태를 안에서 읽지 않도록 문자열을 미리 뽑아 둔다.
-                let title = isProcessingImage ? "불러오는 중…" : "영수증 사진 첨부"
-                PhotosPicker(selection: $pickedItem, matching: .images, photoLibrary: .shared()) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "camera")
-                        Text(title)
-                    }
-                    .font(.body1_fixed)
-                    .foregroundStyle(.gray400)
-                    .padding(.vertical, 20)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.gray100)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-                .disabled(isProcessingImage)
-
-                Text("사진은 장변 \(Int(ReceiptImageProcessor.maxDimension))px 로 줄여 저장합니다.")
-                    .font(.caption1_fixed)
-                    .foregroundStyle(.gray300)
-            }
-        }
-        .padding(.top, 12)
-    }
-
     // MARK: - 파생 값
 
     private var currentRate: Double? {
@@ -366,27 +266,6 @@ struct AddReceiptView: View {
     }
 
     // MARK: - 동작
-
-    private func loadImage(from item: PhotosPickerItem?) {
-        guard let item else { return }
-        isProcessingImage = true
-        Task {
-            defer { isProcessingImage = false }
-            do {
-                guard let original = try await item.loadTransferable(type: Data.self) else {
-                    errorMessage = "사진을 불러오지 못했습니다."
-                    return
-                }
-                guard let processed = ReceiptImageProcessor.process(original) else {
-                    errorMessage = "지원하지 않는 이미지 형식입니다."
-                    return
-                }
-                draft.imageData = processed
-            } catch {
-                errorMessage = error.localizedDescription
-            }
-        }
-    }
 
     private func save() {
         do {

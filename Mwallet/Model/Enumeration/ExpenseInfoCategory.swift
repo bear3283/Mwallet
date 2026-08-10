@@ -147,4 +147,21 @@ enum ExpenseInfoCategory: Int {
     static func from(description: String) -> ExpenseInfoCategory {
         selectable.first { $0.description == description } ?? .unknown
     }
+
+    /// 분류 모델이 돌려주는 영문 라벨을 카테고리로 옮긴다.
+    ///
+    /// 라벨 이름은 모델을 학습시킬 때 정해진 것이라 이 enum 과 짝을 이룬다.
+    /// 뷰모델에 두면 모델을 쓰는 화면이 늘 때마다 같은 표를 옮겨 적게 된다.
+    init(modelLabel: String) {
+        switch modelLabel {
+        case "plane": self = .plane
+        case "room": self = .room
+        case "transportation": self = .transportation
+        case "food": self = .food
+        case "tour": self = .tour
+        case "shopping": self = .shopping
+        case "gift": self = .gift
+        default: self = .unknown
+        }
+    }
 }
