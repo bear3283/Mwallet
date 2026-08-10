@@ -1,13 +1,27 @@
 # 아래 룰들은 옛 코드가 한꺼번에 걸려 꺼 두었다.
 # 걸리는 곳을 다 걷어낸 룰부터 하나씩 다시 켠다.
 #
-# 다시 켠 것: function_body_length, cyclomatic_complexity
-#   - divideVoiceSentence 386줄을 VoiceSentenceParser·KoreanNumberReader 로 옮겼다
-#   - getCorrespondingArabicString 의 11갈래 switch 를 자리 번호 조회로 바꿨다
+# 켠 것: function_body_length, cyclomatic_complexity
 #
-# 아직 남은 것: type_body_length 8곳
-#   ManualRecordView 707줄 · RecordView 587줄 · AddTravelView 393줄이 크다.
-#   화면 쪼개기가 끝나면 이 룰도 켠다.
+# 아직 끈 것: type_body_length
+#
+#   기본값은 250줄에서 경고, 350줄에서 오류다. 350을 넘던 세 화면은
+#   걷어냈다 — ManualRecordView 707 → 156, RecordView 587 → 321,
+#   AddTravelView 393 → 91. 이제 오류 단계는 없다.
+#
+#   남은 일곱은 250~330 구간이다.
+#
+#     AddReceiptView          330
+#     RecordView              321
+#     RecordViewModel         315
+#     TravelDetailView        308
+#     ReceiptHomeView         302
+#     ManualRecordViewModel   297
+#     AddMemberView           257
+#
+#   이만큼을 250 아래로 내리려면 화면마다 한두 벌씩 더 떼어내야 한다.
+#   지금 켜면 경고 일곱이 늘 떠 있게 되는데, 늘 떠 있는 경고는 읽히지
+#   않고 읽히지 않는 신호는 없느니만 못하다. 일곱을 다 내린 뒤에 켠다.
 
 disabled_rules:
     - deployment_target

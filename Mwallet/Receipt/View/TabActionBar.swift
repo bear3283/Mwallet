@@ -28,6 +28,9 @@ struct TabActionIcon: View {
             .foregroundStyle(isEnabled ? Color.black : Color.gray200)
             .frame(width: 34, height: 34)
             .contentShape(Rectangle())
+            // 화면 테스트가 이 버튼을 이름으로 찾는다. 툴바를 쓰지 않으므로
+            // 네비게이션 바에서 순서로 집을 수 없고, 그림에는 글자가 없다.
+            .accessibilityIdentifier("tabAction.\(systemName)")
     }
 }
 

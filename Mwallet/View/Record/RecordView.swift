@@ -37,141 +37,10 @@ struct RecordView: View {
             }
         }
     }
-    
-    let isSE3 = abs(UIScreen.main.bounds.width - 375.0) < 2.0 && abs(UIScreen.main.bounds.height - 667.0) < 2.0
-    
+
     var body: some View {
         NavigationStack {
-            Group {
-                if isSE3 {
-                    ZStack {
-                        Color(.white)
-                        
-                        // 말한 결과가 채워지는 곳(livePropertyView)이 이 화면의 주인공이라
-                        // 그 블록을 화면 세로 한가운데에 둔다. 위·아래 묶음이 남은 공간을
-                        // 똑같이 나눠 가지므로, 위쪽 항목 수가 늘어도 가운데가 밀리지 않는다.
-                        VStack(spacing: 0) {
-                            VStack(spacing: 0) {
-                                Spacer(minLength: 24)
-                                travelChoiceView
-                                Spacer()
-                                    .frame(height: 36)
-                                rawSentenceView
-                                Spacer()
-                                    .frame(height: 36)
-                            }
-                            .frame(maxHeight: .infinity, alignment: .bottom)
-
-                            livePropertyView
-
-                            VStack(spacing: 0) {
-                                Spacer()
-                                    .frame(height: 20)
-                                manualRecordButtonView
-                                Spacer(minLength: 24)
-                            }
-                            .frame(maxHeight: .infinity, alignment: .top)
-                        }
-                        
-                        ZStack {
-                            Color(.white)
-                                .opacity(0.0000001)
-                            
-                            VStack(spacing: 0) {
-                                Spacer()
-                                ZStack(alignment: .bottom) {
-                                    speakWhilePressingView
-                                    alertView_empty
-                                    alertView_short
-        //                            alertView_saved
-                                }
-                                Spacer()
-                                    .frame(height: 16)
-                                recordButtonView
-                                    .hidden()
-                                Spacer()
-                                    .frame(height: 18 + 43) // 탭바의 높이를 코드로 구할 수 있으면 83을 대체하기
-                            }
-                        }
-                        .allowsHitTesting(viewModel.alertView_emptyIsShown || viewModel.alertView_shortIsShown)
-                        .onTapGesture {
-                            viewModel.alertView_emptyIsShown = false
-                            viewModel.alertView_shortIsShown = false
-                        }
-                        
-                        VStack(spacing: 0) {
-                            Spacer()
-                            recordButtonView
-                            Spacer()
-                                .frame(height: 18 + 43) // 탭바의 높이를 코드로 구할 수 있으면 83을 대체하기
-                        }
-                    }
-                } else {
-                    ZStack {
-                        Color(.white)
-                        
-                        // 말한 결과가 채워지는 곳(livePropertyView)이 이 화면의 주인공이라
-                        // 그 블록을 화면 세로 한가운데에 둔다. 위·아래 묶음이 남은 공간을
-                        // 똑같이 나눠 가지므로, 위쪽 항목 수가 늘어도 가운데가 밀리지 않는다.
-                        // (예전엔 네 항목 묶음 전체를 가운데 두어 3번째인 이 블록이 아래로 처졌다)
-                        VStack(spacing: 0) {
-                            VStack(spacing: 0) {
-                                Spacer(minLength: 60)
-                                travelChoiceView
-                                Spacer()
-                                    .frame(height: 36)
-                                rawSentenceView
-                                Spacer()
-                                    .frame(height: 36)
-                            }
-                            .frame(maxHeight: .infinity, alignment: .bottom)
-
-                            livePropertyView
-
-                            VStack(spacing: 0) {
-                                Spacer()
-                                    .frame(height: 40) // figma: 64
-                                manualRecordButtonView
-                                Spacer(minLength: 40)
-                            }
-                            .frame(maxHeight: .infinity, alignment: .top)
-                        }
-                        
-                        ZStack {
-                            Color(.white)
-                                .opacity(0.0000001)
-                            
-                            VStack(spacing: 0) {
-                                Spacer()
-                                ZStack(alignment: .bottom) {
-                                    speakWhilePressingView
-                                    alertView_empty
-                                    alertView_short
-                                    //                            alertView_saved
-                                }
-                                Spacer()
-                                    .frame(height: 16)
-                                recordButtonView
-                                    .hidden()
-                                Spacer()
-                                    .frame(height: 18 + 83) // 탭바의 높이를 코드로 구할 수 있으면 83을 대체하기
-                            }
-                        }
-                        .allowsHitTesting(viewModel.alertView_emptyIsShown || viewModel.alertView_shortIsShown)
-                        .onTapGesture {
-                            viewModel.alertView_emptyIsShown = false
-                            viewModel.alertView_shortIsShown = false
-                        }
-                        
-                        VStack(spacing: 0) {
-                            Spacer()
-                            recordButtonView
-                            Spacer()
-                                .frame(height: 18 + 83) // 탭바의 높이를 코드로 구할 수 있으면 83을 대체하기
-                        }
-                    }
-                }
-            }
+            screen(RecordLayout.forCurrentScreen)
             .ignoresSafeArea()
             .onAppear {
                 viewModel.resetInStringProperties()
@@ -220,6 +89,90 @@ struct RecordView: View {
         }
     }
     
+    // MARK: - 화면 짜임
+    //
+    // SE 계열(4.7인치)은 세로가 짧아 넉넉한 여백으로는 아래가 잘린다.
+    // 예전에는 화면 전체를 두 벌 적어 두고 갈랐는데, 54줄 중 46줄이 같았고
+    // 다른 것은 여백 네 값뿐이었다. 한쪽만 고치면 작은 화면에서만 어긋나는
+    // 일이 생기므로, 짜임은 한 벌로 두고 값만 갈아 끼운다.
+
+    private func screen(_ metrics: RecordLayout) -> some View {
+        ZStack {
+            Color(.white)
+            mainColumn(metrics)
+            alertLayer(metrics)
+            recordButtonLayer(metrics)
+        }
+    }
+
+    // 말한 결과가 채워지는 곳(RecordLiveFields)이 이 화면의 주인공이라
+    // 그 블록을 화면 세로 한가운데에 둔다. 위·아래 묶음이 남은 공간을
+    // 똑같이 나눠 가지므로, 위쪽 항목 수가 늘어도 가운데가 밀리지 않는다.
+    private func mainColumn(_ metrics: RecordLayout) -> some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 0) {
+                Spacer(minLength: metrics.topInset)
+                travelChoiceView
+                Spacer()
+                    .frame(height: 36)
+                rawSentenceView
+                Spacer()
+                    .frame(height: 36)
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
+
+            RecordLiveFields(viewModel: viewModel)
+
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: metrics.manualTopGap)
+                manualRecordButtonView
+                Spacer(minLength: metrics.manualBottomInset)
+            }
+            .frame(maxHeight: .infinity, alignment: .top)
+        }
+    }
+
+    // 알림이 떠 있는 동안에는 이 층이 화면 전체의 탭을 받아 알림을 닫는다.
+    private func alertLayer(_ metrics: RecordLayout) -> some View {
+        ZStack {
+            Color(.white)
+                .opacity(0.0000001)
+
+            VStack(spacing: 0) {
+                Spacer()
+                ZStack(alignment: .bottom) {
+                    speakWhilePressingView
+                    RecordAlertBubble(message: "소비내역이나 금액 중 한 가지는\n반드시 기록해야 저장할 수 있어요",
+                                      isShown: viewModel.alertView_emptyIsShown)
+                    RecordAlertBubble(message: "길게 누른 채로 말해주세요",
+                                      isShown: viewModel.alertView_shortIsShown)
+                }
+                Spacer()
+                    .frame(height: 16)
+                // 녹음 버튼과 같은 자리를 차지해 위 묶음의 높이를 잡아 준다.
+                recordButtonView
+                    .hidden()
+                Spacer()
+                    .frame(height: metrics.tabBarInset)
+            }
+        }
+        .allowsHitTesting(viewModel.alertView_emptyIsShown || viewModel.alertView_shortIsShown)
+        .onTapGesture {
+            viewModel.alertView_emptyIsShown = false
+            viewModel.alertView_shortIsShown = false
+        }
+    }
+
+    private func recordButtonLayer(_ metrics: RecordLayout) -> some View {
+        VStack(spacing: 0) {
+            Spacer()
+            recordButtonView
+            Spacer()
+                .frame(height: metrics.tabBarInset)
+        }
+    }
+
     private var travelChoiceView: some View {
         Button {
             viewModel.travelChoiceModalIsShown = true
@@ -290,189 +243,7 @@ struct RecordView: View {
             .padding(.horizontal, 48)
         }
     }
-    
-    private var livePropertyView: some View {
-        VStack(spacing: 18) {
-            HStack(spacing: 0) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.gray100)
-                        .layoutPriority(-1)
-                    
-                    Text("결제 내역")
-                        .foregroundStyle(.gray400)
-                        .font(.subhead2_2)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 16)
-                }
-                Spacer()
-                    .frame(width: 12)
-                if viewModel.info != nil {
-                    Image("recordMainPinkCheck")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    Spacer()
-                        .frame(width: 12)
-                    Text(viewModel.info!)
-                        .foregroundStyle(.black)
-                        .font(.subhead3_2)
-                        .lineLimit(3)
-                } else {
-                    Image("recordGray100Check")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    Spacer()
-                        .frame(width: 12)
-                    Text("-")
-                        .foregroundStyle(.gray200)
-                        .font(.subhead3_2)
-                }
-                Spacer()
-                    .frame(minWidth: 0)
-                    .layoutPriority(-2)
-            }
-            HStack(spacing: 0) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.gray100)
-                        .layoutPriority(-1)
-                    
-                    // 뷰 크기 설정하기 위한 히든 뷰
-                    Text("결제 내역")
-                        .foregroundStyle(.gray400)
-                        .font(.subhead2_2)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 16)
-                        .hidden()
-                    
-                    Text("결제 금액")
-                        .foregroundStyle(.gray400)
-                        .font(.subhead2_2)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 16)
-                }
-                Spacer()
-                    .frame(width: 12)
-                if viewModel.payAmount != -1 {
-                    Image("recordMainPinkCheck")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    Spacer()
-                        .frame(width: 12)
-                    Group {
-                        if let formattedString = viewModel.payAmount.getStringFraction0To2() {
-                            Text(formattedString)
-                        } else {
-                            Text(" ")
-                        }
-                    }
-                    .foregroundStyle(.black)
-                    .font(.subhead3_2)
-                    .lineLimit(3)
-                } else {
-                    Image("recordGray100Check")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    Spacer()
-                        .frame(width: 12)
-                    Text("-")
-                        .foregroundStyle(.gray200)
-                        .font(.subhead3_2)
-                }
-                Spacer()
-                    .frame(minWidth: 0)
-                    .layoutPriority(-2)
-            }
-            HStack(spacing: 0) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.gray100)
-                        .layoutPriority(-1)
-                    
-                    // 뷰 크기 설정하기 위한 히든 뷰
-                    Text("결제 내역")
-                        .foregroundStyle(.gray400)
-                        .font(.subhead2_2)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 16)
-                        .hidden()
-                    
-                    Text("결제 방식")
-                        .foregroundStyle(.gray400)
-                        .font(.subhead2_2)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 16)
-                }
-                Spacer()
-                    .frame(width: 12)
-                switch viewModel.paymentMethod {
-                case .card:
-                    HStack(spacing: 0) {
-                        Image("recordMainPinkCheck")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                        Spacer()
-                            .frame(width: 12)
-                        Group {
-                            Text("현금")
-                                .foregroundStyle(.gray200)
-                            Text(" / ")
-                                .foregroundStyle(.gray200)
-                            Text("카드")
-                                .foregroundStyle(.black)
-                        }
-                        .font(.subhead3_2)
-                    }
-                case .cash:
-                    HStack(spacing: 0) {
-                        Image("recordMainPinkCheck")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                        Spacer()
-                            .frame(width: 12)
-                        Group {
-                            Text("현금")
-                                .foregroundStyle(.black)
-                            Text(" / ")
-                                .foregroundStyle(.gray200)
-                            Text("카드")
-                                .foregroundStyle(.gray200)
-                        }
-                        .font(.subhead3_2)
-                    }
-                default:
-                    HStack(spacing: 0) {
-                        Image("recordGray100Check")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                        Spacer()
-                            .frame(width: 12)
-                        Group {
-                            Text("현금")
-                                .foregroundStyle(.gray200)
-                            Text(" / ")
-                                .foregroundStyle(.gray200)
-                            Text("카드")
-                                .foregroundStyle(.gray200)
-                        }
-                        .font(.subhead3_2)
-                    }
-                }
-                Spacer()
-                    .frame(minWidth: 0)
-                    .layoutPriority(-2)
-            }
-        }
-        .padding(.horizontal, 63)
-    }
-    
+
     private var manualRecordButtonView: some View {
         Button {
             viewModel.wantToActivateAutoSaveTimer = false
@@ -588,58 +359,6 @@ struct RecordView: View {
             }
     }
 
-    private var alertView_empty: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 18)
-                .foregroundStyle(.white)
-                .opacity(viewModel.alertView_emptyIsShown ? 1 : 0.0000001)
-                .shadow(color: Color(0xCCCCCC), radius: 5)
-                .layoutPriority(-1)
-            
-            VStack(spacing: 8) {
-                Image("recordAlert")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                Text("소비내역이나 금액 중 한 가지는\n반드시 기록해야 저장할 수 있어요")
-                    .font(.subhead2_2)
-                    .foregroundStyle(.gray300)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 41)
-            }
-            .padding(.top, 12)
-            .padding(.bottom, 16)
-            .opacity(viewModel.alertView_emptyIsShown ? 1 : 0.0000001)
-        }
-        .padding(.horizontal, 30)
-    }
-    
-    private var alertView_short: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 18)
-                .foregroundStyle(.white)
-                .opacity(viewModel.alertView_shortIsShown ? 1 : 0.0000001)
-                .shadow(color: Color(0xCCCCCC), radius: 5)
-                .layoutPriority(-1)
-            
-            VStack(spacing: 8) {
-                Image("recordAlert")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                Text("길게 누른 채로 말해주세요")
-                    .font(.subhead2_2)
-                    .foregroundStyle(.gray300)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 41)
-            }
-            .padding(.top, 12)
-            .padding(.bottom, 16)
-            .opacity(viewModel.alertView_shortIsShown ? 1 : 0.0000001)
-        }
-        .padding(.horizontal, 30)
-    }
-    
 //    private var alertView_saved: some View {
 //        ZStack {
 //            RoundedRectangle(cornerRadius: 18)
