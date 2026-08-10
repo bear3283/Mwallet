@@ -22,6 +22,14 @@ struct TravelPicker: View {
     /// 선택이 바뀐 뒤에 할 일(집계 갱신, 지도 카메라 맞추기 등)
     var onChange: () -> Void = { }
 
+    /// 아무것도 고르지 않았을 때의 제목과 설명.
+    ///
+    /// 예결산은 여행이 정해져야 예산을 뽑을 수 있어 '골라 달라' 고 청하지만,
+    /// 영수증은 고르지 않은 것이 '모든 여행을 함께 본다' 는 뜻이라 청할 것이
+    /// 없다. 같은 자리에 같은 생김새로 두되 말은 화면에 맞춘다.
+    var emptyTitle = "여행 선택"
+    var emptyDescription = "여행을 골라 주세요"
+
     @State private var isChoosing = false
 
     var body: some View {
@@ -32,7 +40,7 @@ struct TravelPicker: View {
             // 거기에 두면 선택기와 동작 버튼이 뒤섞여 보인다.
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(selection?.displayName ?? "여행 선택")
+                    Text(selection?.displayName ?? emptyTitle)
                         .font(.title3_fixed)
                         .foregroundStyle(.black)
                         .lineLimit(1)
@@ -58,7 +66,7 @@ struct TravelPicker: View {
     }
 
     private var metaText: String {
-        guard let selection else { return "여행을 골라 주세요" }
+        guard let selection else { return emptyDescription }
         let people = (selection.participantArray?.count ?? 0) + 1
         return "\(TravelSchedule.periodText(selection)) · \(people)명"
     }

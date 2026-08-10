@@ -11,7 +11,6 @@ struct SplashView: View {
 
     @State private var isActive = false
     @State private var markProgress: CGFloat = 0
-    @State private var globeOpacity: Double = 0
     @State private var wordmarkOpacity: Double = 0
 
     var body: some View {
@@ -38,11 +37,10 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
                 VStack(spacing: 28) {
-                    // 구가 먼저 떠오르고 그 위에 W 가 그어진다.
-                    // '세상이 있고, 거기에 기록을 남긴다' 는 순서다.
-                    // 앱 아이콘과 같은 마크라 아이콘을 누른 손이 그대로 이어진다.
-                    BrandMarkView(progress: markProgress, globeOpacity: globeOpacity)
-                        .frame(width: 148, height: 148)
+                    // 획이 그어지며 W 가 완성된다. 기록을 남기는 동작을 그대로 옮긴 움직임이다.
+                    // 앱 아이콘과 같은 글자꼴이라 아이콘을 누른 손이 그대로 이어진다.
+                    BrandMarkView(progress: markProgress)
+                        .frame(width: 150, height: 150)
 
                     Text("Mwallet")
                         .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 18))
@@ -52,13 +50,10 @@ struct SplashView: View {
                 .padding(.bottom, 40)
             }
             .onAppear {
-                withAnimation(.easeOut(duration: 0.5)) {
-                    globeOpacity = 1
-                }
-                withAnimation(.easeInOut(duration: 0.7).delay(0.3)) {
+                withAnimation(.easeInOut(duration: 0.85)) {
                     markProgress = 1
                 }
-                withAnimation(.easeIn(duration: 0.4).delay(0.95)) {
+                withAnimation(.easeIn(duration: 0.4).delay(0.75)) {
                     wordmarkOpacity = 1
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {

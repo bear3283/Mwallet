@@ -20,6 +20,9 @@ struct ReceiptHomeView: View {
     private let store = ReceiptStore()
 
     @State private var filter = ReceiptFilter()
+    // 상단 여행 선택. nil 이면 모든 여행을 함께 본다.
+    @State private var selectedTravel: Travel?
+    @State private var travels: [Travel] = []
     @State private var isAddingExpense = false
     @State private var deletionTarget: Expense?
     @State private var errorMessage: String?
@@ -37,9 +40,14 @@ struct ReceiptHomeView: View {
                 Spacer()
                     .frame(height: 12)
 
-                // 검색창과 동작 버튼을 한 줄에 둔다. 다른 탭과 같은 자리다.
+                // 첫 줄은 '무엇을 볼지' 다. 예결산과 같은 자리·같은 방식으로
+                // 여행을 고른다. 검색은 고른 여행 안에서 좁히는 일이라 그 아래에 둔다.
                 TabHeaderRow {
-                    searchField
+                    TravelPicker(travels: travels,
+                                 selection: $selectedTravel,
+                                 onChange: { filter.missionName = selectedTravel?.name },
+                                 emptyTitle: "전체 여행",
+                                 emptyDescription: "모든 여행의 영수증을 함께 봅니다")
                 } actions: {
                     NavigationLink {
                         ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
@@ -61,8 +69,12 @@ struct ReceiptHomeView: View {
                         detail: "지출이 생기면 바로 남겨두세요.\n오프라인에서도 저장됩니다."
                     )
                 } else {
+                    searchField
+                        .padding(.horizontal, ReceiptLayout.gutter)
+                        .padding(.top, 12)
+
                     Spacer()
-                        .frame(height: 16)
+                        .frame(height: 12)
 
                     missionChips
 
@@ -85,6 +97,16 @@ struct ReceiptHomeView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .navigationBar)
+            // 다른 탭에서 여행을 만들거나 지우고 돌아올 수 있어 열 때마다 다시 읽는다.
+            // 고른 여행이 사라졌으면 전체로 되돌린다 — 지워진 이름으로 거르면
+            // 아무것도 안 나오는데 화면에는 그 이름이 그대로 남는다.
+            .onAppear {
+                travels = store.availableTravels()
+                if let selectedTravel, !travels.contains(selectedTravel) {
+                    self.selectedTravel = nil
+                    filter.missionName = nil
+                }
+            }
             .sheet(isPresented: $isAddingExpense) {
                 AddReceiptView()
             }
@@ -164,22 +186,15 @@ struct ReceiptHomeView: View {
 
     // MARK: - 사역 필터
 
+    // 여행 이름 칩은 뺐다. 위의 선택기와 같은 일을 두 곳에서 하게 되어,
+    // 한쪽으로 고르고 다른 쪽을 보면 무엇이 걸려 있는지 알 수 없었다.
+    // 사진이 없는 건만 모아 보는 것은 결이 다른 거르기라 여기 남는다.
+    @ViewBuilder
     private var missionChips: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+        if missingPhotoCount > 0 {
             HStack(spacing: 4) {
-                ReceiptChip(title: "전체", isSelected: filter.missionName == nil && !filter.onlyMissingPhoto) {
-                    filter.missionName = nil
-                    filter.onlyMissingPhoto = false
-                }
-                if missingPhotoCount > 0 {
-                    ReceiptChip(title: "영수증 없음 \(missingPhotoCount)", isSelected: filter.onlyMissingPhoto) {
-                        filter.onlyMissingPhoto.toggle()
-                    }
-                }
-                ForEach(missionNames, id: \.self) { name in
-                    ReceiptChip(title: name, isSelected: filter.missionName == name) {
-                        filter.missionName = name
-                    }
+                ReceiptChip(title: "영수증 없음 \(missingPhotoCount)", isSelected: filter.onlyMissingPhoto) {
+                    filter.onlyMissingPhoto.toggle()
                 }
             }
             .padding(.horizontal, ReceiptLayout.gutter)
@@ -291,10 +306,6 @@ struct ReceiptHomeView: View {
 
     private var summaryValue: ReceiptSummary {
         ReceiptSummary(expenses: filtered)
-    }
-
-    private var missionNames: [String] {
-        ReceiptGrouping.missionNames(in: Array(allReceipts))
     }
 
     private var deletionBinding: Binding<Bool> {
