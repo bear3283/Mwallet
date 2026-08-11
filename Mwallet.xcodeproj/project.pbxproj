@@ -21,7 +21,6 @@
 		5754FAB62AD3F94900A3FCE8 /* Mwallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5754FAB42AD3F94900A3FCE8 /* Mwallet.xcdatamodeld */; };
 		57597A8A2AF096C2000D46A9 /* CountryChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */; };
 		575F287F2AF38C0300F9484E /* AddTravelRequestModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */; };
-		C1A11EA7000000000000B02 /* RecordFieldBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */; };
 		5760066D2ADD42FA006CD8DF /* ManualRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */; };
 		5760066F2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066E2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift */; };
 		57A65D052AD7D4A900131266 /* Character+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D042AD7D4A900131266 /* Character+Extension.swift */; };
@@ -33,9 +32,6 @@
 		57A65D122AD7D5D500131266 /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D112AD7D5D500131266 /* RecordViewModel.swift */; };
 		57A65D142AD7D65600131266 /* ExpenseInfoCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D132AD7D65600131266 /* ExpenseInfoCategory.swift */; };
 		57A65D162AD7D6B000131266 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D152AD7D6B000131266 /* PaymentMethod.swift */; };
-		C1A11EA7000000000000B12 /* RecordLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B11 /* RecordLayout.swift */; };
-		C1A11EA7000000000000B22 /* RecordLiveFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B21 /* RecordLiveFields.swift */; };
-		C1A11EA7000000000000F02 /* RecordTopSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000F01 /* RecordTopSections.swift */; };
 		57A65D182AD7DDA700131266 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D172AD7DDA700131266 /* RecordView.swift */; };
 		57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C41DFB2AD4F1EB00345253 /* Persistence.swift */; };
 		57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */; };
@@ -47,8 +43,6 @@
 		C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */; };
 		C15760182AEE782C0089FFE5 /* CountryList.csv in Resources */ = {isa = PBXBuildFile; fileRef = C15760172AEE782C0089FFE5 /* CountryList.csv */; };
 		C157601E2AF1DD830089FFE5 /* CountryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157601D2AF1DD830089FFE5 /* CountryInfo.swift */; };
-		C1A11EA7000000000000C02 /* TravelCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C01 /* TravelCalendar.swift */; };
-		C1A11EA7000000000000C12 /* AddTravelHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C11 /* AddTravelHeader.swift */; };
 		C17550542AD54FC900A61BE5 /* AddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17550532AD54FC900A61BE5 /* AddTravelView.swift */; };
 		C17550592AD57B6500A61BE5 /* AddTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17550582AD57B6500A61BE5 /* AddTravelViewModel.swift */; };
 		C17966042ADD66F90036E866 /* WantedSans-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C17965FB2ADD66F90036E866 /* WantedSans-SemiBold.otf */; };
@@ -57,10 +51,8 @@
 		C179660C2ADD68BC0036E866 /* FontsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C179660B2ADD68BC0036E866 /* FontsManager.swift */; };
 		C179660E2ADD6BF90036E866 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C179660D2ADD6BF90036E866 /* Color+Extension.swift */; };
 		C18168022AFDE07000130F79 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18168012AFDE07000130F79 /* SplashView.swift */; };
-		C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E11 /* AddMemberSections.swift */; };
 		C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */; };
 		C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */; };
-		C1A11EA7000000000000E02 /* TravelSummaryStrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */; };
 		C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */; };
 		C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */; };
 		C19AFAE12ADF709E0037A5F5 /* AddMemberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */; };
@@ -71,9 +63,7 @@
 		C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */; };
 		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
 		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
-		C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */; };
 		C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddReceiptView.swift */; };
-		C1A11EA7000000000000D12 /* ReceiptListSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D11 /* ReceiptListSections.swift */; };
 		C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* ReceiptHomeView.swift */; };
 		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
 		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
@@ -86,6 +76,7 @@
 		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
 		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
 		C1A11EA700000000000005A2 /* BrandMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000005A1 /* BrandMark.swift */; };
+		C1A11EA71000000000000A02 /* SettlementSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000A01 /* SettlementSummary.swift */; };
 		C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006B1 /* BudgetSummary.swift */; };
 		C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006C1 /* BudgetStore.swift */; };
 		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
@@ -97,14 +88,25 @@
 		C1A11EA700000000000009D2 /* TravelEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009D1 /* TravelEditView.swift */; };
 		C1A11EA700000000000009E2 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009E1 /* Log.swift */; };
 		C1A11EA700000000000009F2 /* Travel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009F1 /* Travel+Extension.swift */; };
-		C1A11EA7000000000000A02 /* TravelPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A01 /* TravelPalette.swift */; };
-		C1A11EA7000000000000A12 /* AllTravelsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A11 /* AllTravelsMap.swift */; };
 		C1A11EA70000000000000AA2 /* TravelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000AA1 /* TravelPicker.swift */; };
 		C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000BB1 /* TabActionBar.swift */; };
 		C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000CC1 /* TravelListView.swift */; };
 		C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */; };
 		C1A11EA70000000000000E22 /* VoiceSentenceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */; };
 		C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000E31 /* KoreanNumberReader.swift */; };
+		C1A11EA7000000000000A02 /* TravelPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A01 /* TravelPalette.swift */; };
+		C1A11EA7000000000000A12 /* AllTravelsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A11 /* AllTravelsMap.swift */; };
+		C1A11EA7000000000000B02 /* RecordFieldBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */; };
+		C1A11EA7000000000000B12 /* RecordLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B11 /* RecordLayout.swift */; };
+		C1A11EA7000000000000B22 /* RecordLiveFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B21 /* RecordLiveFields.swift */; };
+		C1A11EA7000000000000C02 /* TravelCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C01 /* TravelCalendar.swift */; };
+		C1A11EA7000000000000C12 /* AddTravelHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C11 /* AddTravelHeader.swift */; };
+		C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */; };
+		C1A11EA7000000000000D12 /* ReceiptListSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D11 /* ReceiptListSections.swift */; };
+		C1A11EA71000000000000B02 /* TravelSettlementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000B01 /* TravelSettlementSection.swift */; };
+		C1A11EA7000000000000E02 /* TravelSummaryStrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */; };
+		C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E11 /* AddMemberSections.swift */; };
+		C1A11EA7000000000000F02 /* RecordTopSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000F01 /* RecordTopSections.swift */; };
 		C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */; };
 		C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */; };
 		C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */; };
@@ -178,7 +180,6 @@
 		5754FAB52AD3F94900A3FCE8 /* Mwallet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mwallet.xcdatamodel; sourceTree = "<group>"; };
 		57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryChoiceModal.swift; sourceTree = "<group>"; };
 		575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelRequestModal.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFieldBlocks.swift; sourceTree = "<group>"; };
 		5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualRecordView.swift; sourceTree = "<group>"; };
 		5760066E2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelChoiceInRecordModal.swift; sourceTree = "<group>"; };
 		57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -191,9 +192,6 @@
 		57A65D112AD7D5D500131266 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
 		57A65D132AD7D65600131266 /* ExpenseInfoCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseInfoCategory.swift; sourceTree = "<group>"; };
 		57A65D152AD7D6B000131266 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000B11 /* RecordLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLayout.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000B21 /* RecordLiveFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLiveFields.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000F01 /* RecordTopSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopSections.swift; sourceTree = "<group>"; };
 		57A65D172AD7DDA700131266 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		57C41DFB2AD4F1EB00345253 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateChoiceModal.swift; sourceTree = "<group>"; };
@@ -205,8 +203,6 @@
 		C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailViewModel.swift; sourceTree = "<group>"; };
 		C15760172AEE782C0089FFE5 /* CountryList.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryList.csv; sourceTree = "<group>"; };
 		C157601D2AF1DD830089FFE5 /* CountryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfo.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000C01 /* TravelCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCalendar.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000C11 /* AddTravelHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelHeader.swift; sourceTree = "<group>"; };
 		C17550532AD54FC900A61BE5 /* AddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelView.swift; sourceTree = "<group>"; };
 		C17550582AD57B6500A61BE5 /* AddTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelViewModel.swift; sourceTree = "<group>"; };
 		C17965FB2ADD66F90036E866 /* WantedSans-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WantedSans-SemiBold.otf"; sourceTree = "<group>"; };
@@ -216,10 +212,8 @@
 		C179660B2ADD68BC0036E866 /* FontsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontsManager.swift; sourceTree = "<group>"; };
 		C179660D2ADD6BF90036E866 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		C18168012AFDE07000130F79 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000E11 /* AddMemberSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberSections.swift; sourceTree = "<group>"; };
 		C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberView.swift; sourceTree = "<group>"; };
 		C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTheme.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSummaryStrips.swift; sourceTree = "<group>"; };
 		C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailView.swift; sourceTree = "<group>"; };
 		C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAddTravelView.swift; sourceTree = "<group>"; };
 		C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberViewModel.swift; sourceTree = "<group>"; };
@@ -230,9 +224,7 @@
 		C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousTravelViewModel.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptEvidenceFields.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E1 /* AddReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptView.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000D11 /* ReceiptListSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptListSections.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E3 /* ReceiptHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHomeView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
@@ -245,6 +237,7 @@
 		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000005A1 /* BrandMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandMark.swift; sourceTree = "<group>"; };
+		C1A11EA71000000000000A01 /* SettlementSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementSummary.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006B1 /* BudgetSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSummary.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006C1 /* BudgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStore.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
@@ -256,14 +249,25 @@
 		C1A11EA700000000000009D1 /* TravelEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelEditView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009E1 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009F1 /* Travel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Travel+Extension.swift"; sourceTree = "<group>"; };
-		C1A11EA7000000000000A01 /* TravelPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPalette.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000A11 /* AllTravelsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTravelsMap.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000AA1 /* TravelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPicker.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000BB1 /* TabActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabActionBar.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000CC1 /* TravelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelListView.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSampleSeeder.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSentenceParser.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000E31 /* KoreanNumberReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoreanNumberReader.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000A01 /* TravelPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPalette.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000A11 /* AllTravelsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTravelsMap.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFieldBlocks.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000B11 /* RecordLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLayout.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000B21 /* RecordLiveFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLiveFields.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000C01 /* TravelCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCalendar.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000C11 /* AddTravelHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelHeader.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptEvidenceFields.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000D11 /* ReceiptListSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptListSections.swift; sourceTree = "<group>"; };
+		C1A11EA71000000000000B01 /* TravelSettlementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSettlementSection.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSummaryStrips.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000E11 /* AddMemberSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberSections.swift; sourceTree = "<group>"; };
+		C1A11EA7000000000000F01 /* RecordTopSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopSections.swift; sourceTree = "<group>"; };
 		C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingHandler.swift; sourceTree = "<group>"; };
 		C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoModel.swift; sourceTree = "<group>"; };
 		C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Extension.swift"; sourceTree = "<group>"; };
@@ -463,6 +467,7 @@
 				C1A11EA7000000000000E11 /* AddMemberSections.swift */,
 				C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */,
 				C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */,
+				C1A11EA71000000000000B01 /* TravelSettlementSection.swift */,
 				C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */,
 				C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */,
 				C1A11EA70000000000000CC1 /* TravelListView.swift */,
@@ -633,6 +638,7 @@
 		C1A11EA700000000000006A1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C1A11EA71000000000000A01 /* SettlementSummary.swift */,
 				C1A11EA700000000000006B1 /* BudgetSummary.swift */,
 			);
 			path = Model;
@@ -892,6 +898,7 @@
 				57A65D122AD7D5D500131266 /* RecordViewModel.swift in Sources */,
 				C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */,
 				C1A11EA700000000000005A2 /* BrandMark.swift in Sources */,
+				C1A11EA71000000000000B02 /* TravelSettlementSection.swift in Sources */,
 				C1A11EA7000000000000E02 /* TravelSummaryStrips.swift in Sources */,
 				C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */,
 				C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */,
@@ -911,6 +918,7 @@
 				C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */,
 				C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */,
 				C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */,
+				C1A11EA71000000000000A02 /* SettlementSummary.swift in Sources */,
 				C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */,
 				C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */,
 				C1A11EA700000000000006D2 /* BudgetView.swift in Sources */,

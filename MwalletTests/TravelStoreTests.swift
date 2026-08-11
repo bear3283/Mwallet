@@ -247,4 +247,28 @@ final class TravelStoreTests: CoreDataTestCase {
         XCTAssertFalse(remaining.contains { $0.objectID == expense.objectID },
                        "여행을 지웠는데 지출이 남으면 어디에도 속하지 않은 채 떠돕니다")
     }
+
+    // MARK: - 참가자 이름 규칙
+    //
+    // '나' 는 목록에 넣지 않는다. 화면은 언제나 ["나"] 를 앞에 붙여 세므로,
+    // 목록에도 들어 있으면 두 번 세어진다 — 둘이 간 여행이 3명으로 보인다.
+    //
+    // 예전에는 이 규칙이 여행을 '고칠' 때만 걸렸다. 만들 때와 예시 데이터는
+    // 그냥 통과해서, 첫 실행의 예시 여행이 실제로 3명으로 보이고 있었다.
+
+    func test_나는_참가자_목록에_넣지_않는다() {
+        XCTAssertEqual(TravelParticipants.cleaned(["나", "동료"]), ["동료"])
+    }
+
+    func test_빈_칸과_중복을_걷어낸다() {
+        XCTAssertEqual(TravelParticipants.cleaned(["지훈", " ", "지훈", "예린"]), ["지훈", "예린"])
+    }
+
+    func test_앞뒤_공백을_다듬는다() {
+        XCTAssertEqual(TravelParticipants.cleaned(["  지훈  "]), ["지훈"])
+    }
+
+    func test_순서를_지킨다() {
+        XCTAssertEqual(TravelParticipants.cleaned(["예린", "지훈", "간사님"]), ["예린", "지훈", "간사님"])
+    }
 }

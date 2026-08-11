@@ -132,6 +132,12 @@ final class ScreenshotTests: XCTestCase {
         settle()
         capture("07-여행상세-아래")
 
+        // 맨 아래의 인원별 정산까지 내려가 한 장 남긴다.
+        start.press(forDuration: 0.05, thenDragTo: end)
+        start.press(forDuration: 0.05, thenDragTo: end)
+        settle()
+        capture("10-인원별정산")
+
         // 지출 한 줄을 누르면 그 지출의 상세로 간다.
         // 번호를 누르면 지도가 움직이고, 본문을 누르면 여기로 온다.
         let firstExpense = app.buttons["travelDetail.expenseRow"].firstMatch

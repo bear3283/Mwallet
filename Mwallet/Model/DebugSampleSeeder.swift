@@ -21,6 +21,12 @@ import CoreLocation
 import Foundation
 import OSLog
 
+/// 예시 여행에 함께 간 사람들. '나' 를 포함한다.
+///
+/// 타입 안의 static let 을 기본값으로 쓰면 Swift 6 에서 격리가 걸린다
+/// (main actor-isolated default value in a nonisolated context).
+private let everyone = ["나", "지훈", "예린", "간사님"]
+
 @MainActor
 enum DebugSampleSeeder {
 
@@ -37,6 +43,8 @@ enum DebugSampleSeeder {
         let longitude: Double
         let hoursAgo: Int
         let memo: String
+        /// 이 지출을 함께 쓴 사람. 적지 않으면 넷이 다 낀 것으로 둔다.
+        var sharedBy: [String] = everyone
     }
 
     /// 방콕 시내를 도는 사역 일정. 좌표가 서로 떨어져 있어 지도에 동선이 그려진다.
@@ -46,19 +54,19 @@ enum DebugSampleSeeder {
               memo: "공항 → 숙소"),
         .init(merchant: "반뜨랏 게스트하우스", amount: 3_200, currency: "THB", rate: 39.5,
               category: .room, latitude: 13.7563, longitude: 100.5018, hoursAgo: 74,
-              memo: "3박"),
+              memo: "3박", sharedBy: ["나", "지훈"]),
         .init(merchant: "쏨땀 콘반", amount: 480, currency: "THB", rate: 39.5,
               category: .food, latitude: 13.7460, longitude: 100.5340, hoursAgo: 70,
               memo: "팀 첫 식사"),
         .init(merchant: "현지 교회 헌금", amount: 2_000, currency: "THB", rate: 39.4,
               category: .offering, latitude: 13.7370, longitude: 100.5600, hoursAgo: 60,
-              memo: "주일 예배"),
+              memo: "주일 예배", sharedBy: ["나"]),
         .init(merchant: "아동센터 간식", amount: 850, currency: "THB", rate: 39.4,
               category: .ministry, latitude: 13.7220, longitude: 100.5250, hoursAgo: 58,
               memo: "40명분"),
         .init(merchant: "BTS 하루권", amount: 150, currency: "THB", rate: 39.4,
               category: .transportation, latitude: 13.7440, longitude: 100.5480, hoursAgo: 52,
-              memo: ""),
+              memo: "", sharedBy: ["나", "예린", "간사님"]),
         .init(merchant: "짜뚜짝 시장 물품", amount: 1_180, currency: "THB", rate: 39.2,
               category: .ministry, latitude: 13.7999, longitude: 100.5502, hoursAgo: 46,
               memo: "교구 준비물"),
@@ -74,7 +82,7 @@ enum DebugSampleSeeder {
               memo: "오프라인 기록"),
         .init(merchant: "선물 - 현지 간사", amount: 900, currency: "THB", rate: 39.0,
               category: .gift, latitude: 13.7300, longitude: 100.5400, hoursAgo: 12,
-              memo: ""),
+              memo: "", sharedBy: ["나", "지훈", "예린"]),
         .init(merchant: "귀국 공항철도", amount: 45, currency: "THB", rate: 39.0,
               category: .transportation, latitude: 13.6900, longitude: 100.7501, hoursAgo: 4,
               memo: "")
@@ -130,6 +138,9 @@ enum DebugSampleSeeder {
             expense.location = stop.merchant
             expense.setCoordinate(CLLocationCoordinate2D(latitude: stop.latitude,
                                                          longitude: stop.longitude))
+            // 함께 쓴 사람. 인원별 정산이 이 값으로 나뉜다.
+            // 넷이 다 낀 것도 있고 둘만 낀 것도 있어야 정산이 고르지 않게 나온다.
+            expense.participantArray = stop.sharedBy
         }
 
         do {
