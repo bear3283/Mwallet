@@ -1,8 +1,14 @@
-app_identifier("com.Mwallet.app") # The bundle identifier of your app
-apple_id("") # Your Apple Developer Portal username
+# 앱을 가리키는 값들. 실제 번들 ID 는 프로젝트 설정에서 가져왔다.
+app_identifier("com.bear3745.Mwallet.app")
 
-itc_team_id("") # App Store Connect Team ID
-team_id("")     # Developer Portal Team ID
-
-# For more information about the Appfile, see:
-#     https://docs.fastlane.tools/advanced/#appfile
+# 아래 셋은 사람마다 다른 값이라 비워 둔다. App Store Connect 에 올릴 때
+# 채우면 되고, 지금 있는 레인(test·screenshots·lint)은 이 값 없이도 돈다.
+#
+#   apple_id     Apple 개발자 계정 이메일
+#   itc_team_id  App Store Connect 팀 ID
+#   team_id      개발자 포털 팀 ID
+#
+# 개인 계정 정보이므로 저장소에 적지 말고 환경 변수로 넘기는 편이 낫다.
+#   FASTLANE_USER / FASTLANE_ITC_TEAM_ID / FASTLANE_TEAM_ID
+#
+# 자세한 것: https://docs.fastlane.tools/advanced/#appfile

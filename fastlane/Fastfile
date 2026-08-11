@@ -1,23 +1,122 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
+# 이 세션 동안 손으로 되풀이하던 것들을 레인으로 옮겼다.
 #
-# For a list of all available actions, check out
+#   bundle exec fastlane test         단위 테스트 200건
+#   bundle exec fastlane screenshots  네 탭·여행 상세를 찍어 파일로 꺼낸다
+#   bundle exec fastlane lint         SwiftLint 위반만 모아 본다
 #
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+# 세 레인 모두 계정 정보가 필요 없다. 시뮬레이터에서만 돈다.
 
 default_platform(:ios)
 
+# 프로젝트에 매번 넘기는 값들. 한 곳에 모아 둔다.
+PROJECT = "Mwallet.xcodeproj"
+SCHEME = "Mwallet"
+DEVICE = "iPhone 17"
+
 platform :ios do
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
+
+  desc "단위 테스트를 돌린다 (화면 테스트는 뺀다)"
+  lane :test do
+    run_tests(
+      project: PROJECT,
+      scheme: SCHEME,
+      devices: [DEVICE],
+      # 화면 테스트는 시뮬레이터를 띄우고 눌러 보느라 1분 넘게 걸린다.
+      # 빨리 돌려 보는 것이 목적이라 여기서는 뺀다.
+      skip_testing: ["MwalletUITests"],
+      # CI 도, 이 레인도 서명 없이 돈다.
+      xcargs: "CODE_SIGNING_ALLOWED=NO",
+      result_bundle: true,
+      output_directory: "fastlane/test_output"
+    )
+  end
+
+  desc "화면을 찍어 fastlane/screenshots 로 꺼낸다"
+  lane :screenshots do
+    # 화면 테스트는 서명이 있어야 한다. CloudKit 이 엔타이틀먼트 없이 뜨면
+    # 앱이 뜨자마자 죽어 아무것도 찍히지 않는다.
+    run_tests(
+      project: PROJECT,
+      scheme: SCHEME,
+      devices: [DEVICE],
+      only_testing: ["MwalletUITests/ScreenshotTests"],
+      result_bundle: true,
+      output_directory: "fastlane/test_output"
+    )
+    export_screenshots
+  end
+
+  desc "SwiftLint 위반만 모아 본다"
+  lane :lint do
+    # SwiftLint 는 빌드 플러그인으로 함께 도므로 빌드 로그에서 걸러 낸다.
+    output = sh(
+      "cd .. && xcodebuild build -project #{PROJECT} -scheme #{SCHEME} " \
+      "-destination 'platform=iOS Simulator,name=#{DEVICE}' " \
+      "CODE_SIGNING_ALLOWED=NO 2>&1 | grep -E 'warning: [A-Z].*\\(' || true",
+      log: false
+    )
+    if output.strip.empty?
+      UI.success("SwiftLint 위반 없음")
+    else
+      UI.important(output)
+      UI.user_error!("SwiftLint 위반이 있습니다")
+    end
+  end
+end
+
+# 화면 테스트는 XCTAttachment 로 그림을 남긴다. 결과 묶음 안에 들어 있어
+# 그대로는 볼 수 없으므로 파일로 꺼내 이름을 붙여 준다.
+#
+# 세션 내내 이 작업을 손으로 되풀이했다 — xcresulttool 로 꺼내고, 매니페스트를
+# 읽어 사람이 붙인 이름을 찾고, UUID 파일명을 그 이름으로 바꾸는 일이다.
+#
+# 경로는 모두 절대 경로로 만든다. fastlane 은 레인을 fastlane 폴더 안에서
+# 돌리는데 run_tests 의 output_directory 는 프로젝트 뿌리를 기준으로 잡아,
+# 상대 경로로 적으면 둘이 어긋난다.
+def export_screenshots
+  require "json"
+  require "fileutils"
+
+  root = File.expand_path("..", __dir__)
+  bundle = Dir[File.join(root, "fastlane/test_output/*.xcresult")].max_by { |path| File.mtime(path) }
+  return UI.important("결과 묶음을 찾지 못했습니다") if bundle.nil?
+
+  raw = File.join(root, "fastlane/test_output/attachments")
+  FileUtils.rm_rf(raw)
+  sh("xcrun xcresulttool export attachments --path '#{bundle}' --output-path '#{raw}'", log: false)
+
+  manifest = File.join(raw, "manifest.json")
+  return UI.important("매니페스트가 없습니다") unless File.exist?(manifest)
+
+  out = File.join(root, "fastlane/screenshots")
+  FileUtils.rm_rf(out)
+  FileUtils.mkdir_p(out)
+
+  count = 0
+  walk(JSON.parse(File.read(manifest))) do |item|
+    name = item["suggestedHumanReadableName"] || item["exportedFileName"]
+    # 화면 테스트가 붙인 이름은 '01-기록' 처럼 숫자로 시작한다.
+    # 그 밖의 것(시스템이 남긴 스냅숏·녹화)은 건너뛴다.
+    next unless name =~ /\A\d/
+    source = File.join(raw, item["exportedFileName"])
+    next unless File.exist?(source)
+    # 이름 뒤에 '_0_<UUID>' 가 붙어 온다. 같은 이름이 여러 번 찍힐 때를
+    # 가르려는 꼬리인데, 우리는 한 번씩만 찍으므로 떼어 낸다.
+    clean = name.sub(/\.png\z/, "").sub(/_\d+_[0-9A-F-]{36}\z/i, "")
+    FileUtils.cp(source, File.join(out, "#{clean}.png"))
+    count += 1
+  end
+
+  UI.success("화면 #{count}장을 fastlane/screenshots 에 꺼냈습니다")
+end
+
+# 매니페스트의 짜임이 판마다 달라, 파일 이름을 든 마디를 찾아 훑는다.
+def walk(node, &block)
+  case node
+  when Hash
+    block.call(node) if node.key?("exportedFileName")
+    node.each_value { |value| walk(value, &block) }
+  when Array
+    node.each { |value| walk(value, &block) }
   end
 end
