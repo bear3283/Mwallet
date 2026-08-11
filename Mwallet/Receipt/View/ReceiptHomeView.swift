@@ -47,7 +47,8 @@ struct ReceiptHomeView: View {
                                  selection: $selectedTravel,
                                  onChange: { filter.missionName = selectedTravel?.name },
                                  emptyTitle: "전체 여행",
-                                 emptyDescription: "모든 여행의 영수증을 함께 봅니다")
+                                 emptyDescription: "모든 여행의 영수증을 함께 봅니다",
+                                 allowsAll: true)
                 } actions: {
                     NavigationLink {
                         ReceiptStatsView(expenses: filtered, missionName: filter.missionName)

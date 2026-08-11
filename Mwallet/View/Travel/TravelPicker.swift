@@ -2,14 +2,15 @@
 //  TravelPicker.swift
 //  Mwallet
 //
-//  '지금 어느 여행을 보고 있는가' 를 고르는 컨트롤.
-//  여행 지도 탭과 예결산 탭이 같은 일을 하므로 같은 컨트롤을 쓴다.
+//  '지금 어느 여행을 보고 있는가' 를 고르는 자리. 예결산과 영수증이 쓴다.
+//
+//  여기 있는 것은 누르는 자리(고른 여행의 이름과 기간)뿐이고, 고르는 일
+//  자체는 TravelChoiceSheet 이 맡는다. 기록 탭은 이 자리가 화면 안에
+//  따로 있어 시트만 바로 띄운다.
 //
 //  고르는 방식은 시트다. 처음에는 시스템 Menu 를 썼는데, 메뉴 항목이
 //  "이름 · 기간" 한 줄짜리 작은 글씨라 이름과 날짜가 서로 붙어 읽히지
-//  않았다. 시트는 한 줄에 두 층을 줄 수 있어 이름을 크게, 기간을 아래에
-//  따로 놓을 수 있고, 지금 여행 중인지도 함께 보여 줄 수 있다.
-//  (카테고리·국가 선택도 이미 같은 방식의 시트를 쓴다)
+//  않았다.
 //
 
 import CoreData
@@ -29,6 +30,9 @@ struct TravelPicker: View {
     /// 없다. 같은 자리에 같은 생김새로 두되 말은 화면에 맞춘다.
     var emptyTitle = "여행 선택"
     var emptyDescription = "여행을 골라 주세요"
+
+    /// 영수증처럼 '고르지 않음' 이 '모두 본다' 는 뜻인 화면에서 켠다.
+    var allowsAll = false
 
     @State private var isChoosing = false
 
@@ -60,8 +64,12 @@ struct TravelPicker: View {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $isChoosing) {
-            TravelChoiceSheet(travels: travels, selection: $selection, onChange: onChange)
-                .presentationDetents([.medium, .large])
+            // 높이(두 단)와 짜임은 시트가 스스로 안다. 부르는 쪽이 정하면
+            // 화면마다 조금씩 달라져 다시 갈라진다.
+            TravelChoiceSheet(travels: travels,
+                              selection: $selection,
+                              allowsAll: allowsAll,
+                              onChange: onChange)
         }
     }
 
@@ -69,81 +77,6 @@ struct TravelPicker: View {
         guard let selection else { return emptyDescription }
         let people = selection.participants.count + 1
         return "\(TravelSchedule.periodText(selection)) · \(people)명"
-    }
-}
-
-// MARK: - 선택 시트
-
-private struct TravelChoiceSheet: View {
-
-    let travels: [Travel]
-    @Binding var selection: Travel?
-    var onChange: () -> Void
-
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            List(travels, id: \.objectID) { travel in
-                Button {
-                    selection = travel
-                    onChange()
-                    dismiss()
-                } label: {
-                    row(travel)
-                }
-                .buttonStyle(.plain)
-            }
-            .listStyle(.plain)
-            .navigationTitle("여행 선택")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("닫기") { dismiss() }
-                        .foregroundStyle(.gray400)
-                }
-            }
-        }
-    }
-
-    private func row(_ travel: Travel) -> some View {
-        let state = TravelSchedule.state(of: travel)
-        let isSelected = travel.objectID == selection?.objectID
-
-        return HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(spacing: 6) {
-                    Text(travel.displayName)
-                        .font(.subhead2_1_fixed)
-                        .foregroundStyle(.black)
-                        .lineLimit(1)
-
-                    // 지금 진행 중인 여행만 표시한다. 나머지는 굳이 이름표를 달지 않는다.
-                    if state == .current {
-                        Text("여행 중")
-                            .font(.caption1_fixed)
-                            .foregroundStyle(Color.mainAccent)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.mainAccent.opacity(0.1), in: Capsule())
-                    }
-                }
-
-                Text("\(TravelSchedule.periodText(travel)) · \(travel.participants.count + 1)명")
-                    .font(.caption2_fixed)
-                    .foregroundStyle(.gray400)
-                    .lineLimit(1)
-            }
-
-            Spacer(minLength: 8)
-
-            Image(systemName: "checkmark")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(Color.mainAccent)
-                .opacity(isSelected ? 1 : 0)
-        }
-        .padding(.vertical, 8)
-        .contentShape(Rectangle())
     }
 }
 
@@ -169,5 +102,21 @@ enum TravelSchedule {
         guard let start = travel.startDate else { return "기간 미정" }
         guard let end = travel.endDate else { return "\(formatter.string(from: start)) ~ 미정" }
         return "\(formatter.string(from: start)) ~ \(formatter.string(from: end))"
+    }
+
+    /// 연도를 뺀 기간. 선택 시트의 카드에 쓴다.
+    ///
+    /// 카드는 110pt 남짓이라 'yy.MM.dd ~ yy.MM.dd' 가 들어가지 않는다.
+    /// 해는 묶음 머리글이 이미 말하고 있어 카드에서는 덜어 낼 수 있다.
+    static func dayRangeText(_ travel: Travel) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "MM.dd"
+        guard let start = travel.startDate else { return "날짜 미정" }
+        let from = formatter.string(from: start)
+        guard let end = travel.endDate else { return "\(from) ~" }
+        // 하루짜리는 물결표 뒤가 같은 말이라 한 번만 적는다.
+        let to = formatter.string(from: end)
+        return from == to ? from : "\(from) – \(to)"
     }
 }

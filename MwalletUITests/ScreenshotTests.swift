@@ -101,7 +101,6 @@ final class ScreenshotTests: XCTestCase {
     }
 
     func test_02_여행_선택_시트를_캡처한다() throws {
-        // 여행 탭이 목록이 되면서 선택기는 예결산 탭에만 남았다.
         tapTab("예결산")
 
         // 여는 버튼은 여행 이름 + 기간을 담은 큰 버튼이다.
@@ -110,10 +109,62 @@ final class ScreenshotTests: XCTestCase {
             XCTFail("여행 선택 버튼을 찾지 못했습니다. 화면 구조가 바뀌었는지 확인해 주세요.")
             return
         }
-        capture("05-여행선택시트")
+        capture("05-여행선택시트-처음")
 
-        // 시트를 닫아 다음 테스트에 영향을 주지 않는다.
+        // 끌어올린 자리. 여기서 나머지 여행이 드러나야 한다.
+        raiseSheet()
+        capture("06-여행선택시트-올림")
+
+        // 오른쪽 위 달력. 해가 여럿일 때 한 해만 보는 길이다.
+        if tapIfExists(app.buttons.matching(
+            NSPredicate(format: "label BEGINSWITH %@", "연도 고르기")).firstMatch) {
+            capture("07-여행선택시트-연도메뉴")
+            // 메뉴를 눌러 두면 다음 캡처를 덮으므로 물러난다.
+            app.tap()
+            settle()
+        }
+
         tapIfExists(app.buttons["닫기"])
+    }
+
+    /// 영수증 탭에는 '전체 여행' 칸이 하나 더 붙는다.
+    func test_06_영수증의_여행_선택을_캡처한다() throws {
+        tapTab("영수증")
+
+        let picker = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS %@ OR label CONTAINS %@", "~", "전체 여행")).firstMatch
+        guard tapIfExists(picker) else {
+            XCTFail("영수증의 여행 선택 버튼을 찾지 못했습니다.")
+            return
+        }
+        raiseSheet()
+        capture("08-영수증-여행선택")
+
+        tapIfExists(app.buttons["닫기"])
+    }
+
+    /// 기록 탭도 같은 시트를 쓴다. 세 탭이 정말 한 벌인지 눈으로 견준다.
+    func test_07_기록의_여행_선택을_캡처한다() throws {
+        tapTab("기록")
+
+        guard tapIfExists(app.buttons["record.travelChoice"]) else {
+            XCTFail("기록 탭의 여행 선택 버튼을 찾지 못했습니다.")
+            return
+        }
+        capture("09-기록-여행선택-처음")
+
+        raiseSheet()
+        capture("10-기록-여행선택-올림")
+
+        tapIfExists(app.buttons["닫기"])
+    }
+
+    /// 시트를 맨 위까지 끌어올린다. 낮은 자리에서는 한 줄밖에 보이지 않는다.
+    private func raiseSheet() {
+        let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.66))
+        let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.06))
+        from.press(forDuration: 0.05, thenDragTo: to)
+        settle()
     }
 
     // MARK: - 여행 상세 · 편집

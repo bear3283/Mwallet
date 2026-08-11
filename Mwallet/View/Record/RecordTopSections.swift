@@ -48,6 +48,8 @@ struct RecordTravelChoice: View {
                 .padding(.trailing, 12)
             }
         }
+        // 이름이 데이터에 따라 달라져 글자로는 집을 수 없다. 캡처 테스트가 쓴다.
+        .accessibilityIdentifier("record.travelChoice")
     }
 }
 
