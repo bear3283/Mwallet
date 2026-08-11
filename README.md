@@ -191,7 +191,7 @@ Mwallet/
 - [x] `ManualRecord*` 통합 진척 — 중복 심하던 `ManualRecordWithExpenseView` 쌍 제거, 현재 `ManualRecordView` + VM 2파일만 잔존
 - [x] App Group 공유 계약 중복 제거 — 위젯이 `Shared/MwalletShared.swift` 를 함께 컴파일한다 (약 100줄 사본 삭제)
 - [x] `Travel.isDefault` 도입 → `tempTravelName` 매직 문자열 제거 (21곳)
-- [ ] Repository 레이어 도입, View의 Core Data 직접 참조 제거 (13곳 → 현재 4곳)
+- [x] View 의 Core Data 직접 참조 제거 — 남아 있던 네 곳을 스토어로 보냈다. 여행 조회·기본함·삭제는 `TravelStore` 가 맡고, 세 곳에 흩어져 있던 `availableTravels()` 도 한 곳으로 모았다
 - [x] SwiftLint 길이·복잡도 룰 재활성화 — `function_body_length` · `cyclomatic_complexity` · `type_body_length`. 화면 여덟을 쪼개고 복사본 넷을 걷어냈다. 남은 예외는 두 뷰모델의 오디오 뿐이고 그 자리에 이유를 적어 뒀다
 
 **P3 — 확장**

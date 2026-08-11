@@ -175,4 +175,76 @@ final class TravelStoreTests: CoreDataTestCase {
         XCTAssertEqual(budgetStore.summary(for: travel).totalPlanned, 60_000)
         XCTAssertEqual(budgetStore.summary(for: travel).totalSpent, 48_000)
     }
+
+    // MARK: - 목록
+    //
+    // 예전에는 이 규칙이 세 곳에 흩어져 있었다 — 영수증 스토어, 예결산 스토어,
+    // 여행 선택 모달. 한 곳으로 모았으니 여기서 한 번만 지킨다.
+
+    func test_기본함은_목록에서_뺀다() {
+        _ = makeTravel(name: "방콕 단기사역")
+        _ = makeTravel(isDefault: true)
+        try? context.save()
+
+        let travels = store.availableTravels()
+
+        XCTAssertEqual(travels.map(\.name), ["방콕 단기사역"],
+                       "기본함이 목록에 오르면 고를 수 있게 되어 버립니다")
+    }
+
+    func test_여행_중인_것이_먼저_온다() {
+        let now = Date()
+        _ = makeTravel(name: "지난 여행",
+                       start: now.addingTimeInterval(-30 * 86_400),
+                       end: now.addingTimeInterval(-20 * 86_400))
+        _ = makeTravel(name: "다가오는 여행",
+                       start: now.addingTimeInterval(20 * 86_400),
+                       end: now.addingTimeInterval(30 * 86_400))
+        _ = makeTravel(name: "여행 중",
+                       start: now.addingTimeInterval(-86_400),
+                       end: now.addingTimeInterval(86_400))
+        try? context.save()
+
+        XCTAssertEqual(store.availableTravels().first?.name, "여행 중",
+                       "화면을 열었을 때 지금 진행 중인 여행이 먼저 보여야 합니다")
+    }
+
+    func test_여행이_없으면_빈_목록이다() {
+        XCTAssertTrue(store.availableTravels().isEmpty)
+    }
+
+    // MARK: - 기본함
+
+    func test_기본함을_찾는다() {
+        let fallback = makeTravel(isDefault: true)
+        try? context.save()
+
+        XCTAssertEqual(store.defaultTravel()?.objectID, fallback.objectID)
+    }
+
+    // MARK: - 삭제
+
+    func test_여행을_지운다() throws {
+        let travel = makeTravel(name: "지울 여행")
+        try context.save()
+
+        try store.delete(travel)
+
+        XCTAssertTrue(store.availableTravels().isEmpty)
+        XCTAssertTrue(travel.isDeleted || travel.managedObjectContext == nil)
+    }
+
+    // 여행을 지우면 그 안의 지출도 함께 사라져야 한다.
+    // 남으면 어느 여행에도 속하지 않은 지출이 되어 합계에서 떠돈다.
+    func test_여행을_지우면_딸린_지출도_사라진다() throws {
+        let travel = makeTravel(name: "지울 여행")
+        let expense = makeExpense(travel: travel)
+        try context.save()
+
+        try store.delete(travel)
+
+        let remaining = try context.fetch(Expense.fetchRequest())
+        XCTAssertFalse(remaining.contains { $0.objectID == expense.objectID },
+                       "여행을 지웠는데 지출이 남으면 어디에도 속하지 않은 채 떠돕니다")
+    }
 }

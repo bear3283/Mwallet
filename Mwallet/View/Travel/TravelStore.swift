@@ -10,6 +10,7 @@
 
 import CoreData
 import Foundation
+import OSLog
 
 // 화면이 편집 중에 들고 있는 값.
 // NSManagedObject 를 직접 고치면 취소했을 때 되돌리기가 번거롭다.
@@ -92,6 +93,51 @@ final class TravelStore {
         travel.participantArray = draft.cleanedParticipants
         travel.lastUpdate = Date()
 
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
+    }
+
+    // MARK: - 조회
+
+    /// 화면에 올릴 여행 목록.
+    ///
+    /// '임시 기록' 기본함은 뺀다. 여행을 고르지 않은 지출이 담기는 자리라
+    /// 사용자가 만든 일정이 아니고, 목록에 올리면 고를 수 있게 되어 버린다.
+    ///
+    /// 차례는 시작일 내림차순이 아니라 '여행 중 → 지난 → 다가오는' 이다.
+    /// 화면을 열었을 때 지금 진행 중인 여행이 먼저 보여야 한다.
+    ///
+    /// 예전에는 이 열두 줄이 세 곳에 있었다 — 영수증 스토어, 예결산 스토어,
+    /// 그리고 여행 선택 모달 안. 로그 문구만 다르고 나머지가 같았다.
+    func availableTravels() -> [Travel] {
+        do {
+            return try context.fetch(Travel.fetchRequest())
+                .filter { $0.isUserCreated }
+                .sorted(by: travelModalSortRule)
+        } catch {
+            Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
+            return []
+        }
+    }
+
+    /// 여행을 고르지 않은 지출이 담기는 기본함.
+    func defaultTravel() -> Travel? {
+        Travel.fetchDefault(in: context)
+    }
+
+    // MARK: - 삭제
+
+    /// 여행을 지운다. 딸린 지출도 함께 사라진다.
+    ///
+    /// 예전에는 이 일을 PersistenceController 가 했는데, 이미 손에 쥔 여행을
+    /// 찾으려고 전체 목록을 다시 훑고 id 로 견줬다. 같은 컨텍스트의 객체라
+    /// 그대로 지우면 된다. 실패를 try? 로 삼키던 것도 밖으로 넘긴다.
+    func delete(_ travel: Travel) throws {
+        context.delete(travel)
         do {
             try context.save()
         } catch {
