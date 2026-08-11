@@ -181,7 +181,6 @@ final class RecordViewModel: ObservableObject {
     var endRecordTime = CFAbsoluteTimeGetCurrent()
     
     private var cancellables = Set<AnyCancellable>()
-    private var hapticCounter = 0
     
     // MARK: - timer
     var recordButtonResetTimer: Timer?
@@ -398,11 +397,17 @@ final class RecordViewModel: ObservableObject {
     }
     
     // MARK: - 햅틱
+
+    /// 금액이 잡혔다는 것을 손끝으로 알린다.
+    ///
+    /// 예전에는 부를 때마다 100ms 씩 늦춰 내보냈다. 여러 번이 겹칠 때 서로
+    /// 뭉치지 않게 하려던 것으로 보이는데, 세는 값이 되돌아가는 곳이 없어
+    /// 늘기만 했다 — 열 번째는 0.9초, 백 번째는 9.9초 뒤에 울린다. 앱을
+    /// 오래 켜 둘수록 손끝의 반응이 뒤로 밀리다 사라진다.
+    ///
+    /// 부르는 곳은 payAmount 를 0.5초 묶어 두는 sink 하나뿐이라 겹쳐 올
+    /// 일이 없다. 늦출 이유가 없어 바로 울린다.
     private func generateHapticFeedback() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(hapticCounter * 100)) {
-            let hapticEngine = UIImpactFeedbackGenerator(style: .medium)
-            hapticEngine.impactOccurred()
-        }
-        hapticCounter += 1
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
 }
