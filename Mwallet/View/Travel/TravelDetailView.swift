@@ -33,9 +33,18 @@ struct TravelDetailView: View {
 
     // MARK: - 파생 값
 
-    private var stops: [TravelExpenseStop] {
+    private var expenses: [Expense] {
         _ = refreshToken
-        return TravelExpenseStop.stops(from: budgetStore.expenses(for: travel))
+        return budgetStore.expenses(for: travel)
+    }
+
+    private var stops: [TravelExpenseStop] {
+        TravelExpenseStop.stops(from: expenses)
+    }
+
+    /// 목록의 한 줄에서 그 지출로 돌아가는 길. 상세에서 고치고 지운다.
+    private func expense(for stop: TravelExpenseStop) -> Expense? {
+        expenses.first { $0.objectID == stop.id }
     }
 
     private var summary: BudgetSummary {
@@ -134,6 +143,9 @@ struct TravelDetailView: View {
                         Image(systemName: "square.and.pencil")
                             .foregroundStyle(.black)
                     }
+                    // 화면 테스트가 이름으로 찾는다. 순서로 집으면 버튼이
+                    // 하나 늘거나 줄 때 조용히 다른 것을 누른다.
+                    .accessibilityIdentifier("travelDetail.edit")
 
                     Button {
                         isWarningOn = true
@@ -141,6 +153,7 @@ struct TravelDetailView: View {
                         Image(systemName: "trash")
                             .foregroundStyle(.black)
                     }
+                    .accessibilityIdentifier("travelDetail.delete")
                 }
             }
         }
@@ -252,17 +265,24 @@ struct TravelDetailView: View {
             } else {
                 VStack(spacing: 0) {
                     ForEach(Array(stops.enumerated()), id: \.element.id) { index, stop in
-                        Button {
-                            focus(on: stop)
-                        } label: {
-                            TravelExpenseRow(
-                                stop: stop,
-                                isHighlighted: stop.id == highlightedID,
-                                isFirst: index == 0,
-                                isLast: index == stops.count - 1
-                            )
+                        let row = TravelExpenseRow(
+                            stop: stop,
+                            isHighlighted: stop.id == highlightedID,
+                            isFirst: index == 0,
+                            isLast: index == stops.count - 1,
+                            onFocus: { focus(on: stop) }
+                        )
+
+                        if let expense = expense(for: stop) {
+                            NavigationLink {
+                                ReceiptDetailView(expense: expense)
+                            } label: {
+                                row
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            row
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }
