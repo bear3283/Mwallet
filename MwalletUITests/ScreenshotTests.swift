@@ -134,8 +134,7 @@ final class ScreenshotTests: XCTestCase {
 
         // 지출 한 줄을 누르면 그 지출의 상세로 간다.
         // 번호를 누르면 지도가 움직이고, 본문을 누르면 여기로 온다.
-        let firstExpense = app.buttons.matching(
-            NSPredicate(format: "label CONTAINS %@", "수완나품")).firstMatch
+        let firstExpense = app.buttons["travelDetail.expenseRow"].firstMatch
         if tapIfExists(firstExpense) {
             settle()
             capture("09-지출상세")

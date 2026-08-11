@@ -280,6 +280,9 @@ struct TravelDetailView: View {
                                 row
                             }
                             .buttonStyle(.plain)
+                            // 화면 테스트가 이름으로 첫 줄을 집는다. 상호명으로
+                            // 집으면 어느 여행이 먼저 오느냐에 따라 못 찾는다.
+                            .accessibilityIdentifier("travelDetail.expenseRow")
                         } else {
                             row
                         }

@@ -57,7 +57,7 @@ open Mwallet.xcodeproj
 
 SwiftLint는 **빌드 플러그인으로 자동 실행**됩니다. 별도 설치(`brew install swiftlint`)가 필요 없고 버전이 0.65.0으로 고정됩니다.
 
-규칙은 [`Mwallet/.swiftlint.yml`](Mwallet/.swiftlint.yml)에서 관리합니다. 현재 원본 프로젝트에서 비활성화해 둔 길이·복잡도 규칙 10개가 그대로 꺼져 있으며, 단계적으로 되살리는 것이 로드맵 P2 항목입니다.
+규칙은 [`Mwallet/.swiftlint.yml`](Mwallet/.swiftlint.yml)에서 관리합니다. 원본에서 꺼져 있던 길이·복잡도 규칙 중 `function_body_length`·`cyclomatic_complexity`·`type_body_length`를 되살렸습니다. 남은 예외 두 곳은 그 자리에 `swiftlint:disable:next`와 이유를 적어 뒀습니다.
 
 CLI 빌드 시에는 플러그인 검증 우회 플래그가 필요합니다.
 
@@ -66,6 +66,24 @@ xcodebuild -project Mwallet.xcodeproj -scheme Mwallet \
   -destination 'generic/platform=iOS Simulator' \
   -skipPackagePluginValidation build
 ```
+
+### 4. fastlane
+
+되풀이하는 일을 레인으로 묶어 뒀습니다. 세 레인 모두 **시뮬레이터에서만 돌고 계정 정보가 필요 없습니다.**
+
+```bash
+bundle install                      # 처음 한 번
+
+bundle exec fastlane test           # 단위 테스트 200건
+bundle exec fastlane screenshots    # 아홉 화면을 찍어 fastlane/screenshots 로 꺼낸다
+bundle exec fastlane lint           # SwiftLint 위반만 모아 본다
+```
+
+`screenshots`는 화면 테스트를 돌린 뒤 결과 묶음에서 그림을 꺼내 `01-기록.png`처럼 이름을 붙여 놓습니다. 손으로 하려면 `xcresulttool export attachments`로 꺼내고 매니페스트를 읽어 UUID 파일명을 사람이 붙인 이름으로 바꿔야 하는 일입니다. 찍힌 그림은 커밋하지 않습니다(`.gitignore`).
+
+**Ruby 4에서는 fastlane 2.228 이상이 필요합니다.** 그 아래 버전은 시작하자마자 `uninitialized constant FastlaneCore::UpdateChecker`로 죽습니다. `Gemfile`에 하한을 걸어 뒀습니다.
+
+App Store Connect에 올리는 레인은 아직 없습니다. [`fastlane/Appfile`](fastlane/Appfile)의 계정 항목은 사람마다 다른 값이라 비워 두었고, 환경 변수로 넘기는 편을 권합니다.
 
 <br>
 
