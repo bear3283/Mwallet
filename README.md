@@ -74,10 +74,19 @@ xcodebuild -project Mwallet.xcodeproj -scheme Mwallet \
 ```bash
 bundle install                      # 처음 한 번
 
-bundle exec fastlane test           # 단위 테스트 200건
-bundle exec fastlane screenshots    # 아홉 화면을 찍어 fastlane/screenshots 로 꺼낸다
+bundle exec fastlane test           # 단위 테스트
+bundle exec fastlane screenshots    # 화면을 찍어 fastlane/screenshots 로 꺼낸다
 bundle exec fastlane lint           # SwiftLint 위반만 모아 본다
 ```
+
+배포 쪽은 App Store Connect 열쇠가 있어야 합니다. [`fastlane/.env.example`](fastlane/.env.example)을 `fastlane/.env` 로 복사해 채우세요.
+
+```bash
+bundle exec fastlane check_key      # 열쇠가 통하는지 (읽기만 한다)
+bundle exec fastlane beta           # TestFlight 에 올린다
+```
+
+`.p8` 개인키는 **저장소 밖**에 두고 경로만 넘깁니다. 한 번만 내려받을 수 있는 파일이고, 들어오면 계정 전체를 만질 수 있습니다. `*.p8` 은 `.gitignore` 로도 막아 뒀습니다.
 
 `screenshots`는 화면 테스트를 돌린 뒤 결과 묶음에서 그림을 꺼내 `01-기록.png`처럼 이름을 붙여 놓습니다. 손으로 하려면 `xcresulttool export attachments`로 꺼내고 매니페스트를 읽어 UUID 파일명을 사람이 붙인 이름으로 바꿔야 하는 일입니다. 찍힌 그림은 커밋하지 않습니다(`.gitignore`).
 

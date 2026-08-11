@@ -31,6 +31,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 화면을 찍어 fastlane/screenshots 로 꺼낸다
 
+### ios check_key
+
+```sh
+[bundle exec] fastlane ios check_key
+```
+
+App Store Connect 열쇠가 통하는지 본다 (읽기만 한다)
+
+### ios beta
+
+```sh
+[bundle exec] fastlane ios beta
+```
+
+TestFlight 에 올린다
+
 ### ios lint
 
 ```sh
