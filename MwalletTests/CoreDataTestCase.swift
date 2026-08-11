@@ -67,7 +67,8 @@ class CoreDataTestCase: XCTestCase {
                      memo: String = "",
                      paidAt: Date = Date(timeIntervalSince1970: 1_700_000_000),
                      coordinate: CLLocationCoordinate2D? = nil,
-                     hasPhoto: Bool = false) -> Expense {
+                     hasPhoto: Bool = false,
+                     participants: [String] = []) -> Expense {
         let expense = Expense(context: context)
         expense.travel = travel
         expense.payAmount = amount
@@ -80,6 +81,8 @@ class CoreDataTestCase: XCTestCase {
         expense.timeZoneIdentifier = "Asia/Seoul"
         expense.setCoordinate(coordinate)
         if hasPhoto { expense.imageData = Data([0x01]) }
+        // 함께 쓴 사람. 비워 두면 나눌 수 없는 지출이 된다.
+        expense.participantArray = participants
         return expense
     }
 

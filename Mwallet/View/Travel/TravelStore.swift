@@ -46,8 +46,22 @@ struct TravelDraft {
     // 저장 직전에 다듬는다. 빈 칸·중복·'나' 를 걷어낸다.
     // '나' 는 화면이 항상 앞에 붙여 보여 주므로 저장 목록에 두면 두 번 나온다.
     var cleanedParticipants: [String] {
+        TravelParticipants.cleaned(participants)
+    }
+}
+
+/// 참가자 이름을 다듬는 규칙.
+///
+/// '나' 는 목록에 넣지 않는다. 화면은 언제나 ["나"] 를 앞에 붙여 세므로,
+/// 목록에도 들어 있으면 두 번 세어진다 — 둘이 간 여행이 3명으로 보인다.
+///
+/// 예전에는 이 규칙이 여행을 고칠 때만 걸렸다. 만들 때와 예시 데이터는
+/// 그냥 통과해서, 첫 실행의 예시 여행이 실제로 3명으로 보이고 있었다.
+enum TravelParticipants {
+
+    static func cleaned(_ names: [String]) -> [String] {
         var seen = Set<String>()
-        return participants
+        return names
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty && $0 != "나" }
             .filter { seen.insert($0).inserted }

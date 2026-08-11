@@ -99,7 +99,10 @@ struct TravelDetailView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    header
+                    TravelDetailHeader(travel: travel,
+                                       travelName: travelName,
+                                       isOngoing: isOngoing,
+                                       dayCount: dayCount)
                     TravelBasicInfoStrip(
                         periodText: periodText,
                         countryText: countries.isEmpty ? "기록 없음" : countries.map(\.koreanNm).joined(separator: ", "),
@@ -118,6 +121,10 @@ struct TravelDetailView: View {
                     expenseListSection
                         .padding(.horizontal, ReceiptLayout.gutter)
                         .padding(.top, 24)
+
+                    TravelSettlementSection(summary: SettlementSummary(expenses: expenses))
+                        .padding(.horizontal, ReceiptLayout.gutter)
+                        .padding(.top, 28)
 
                     // 떠 있는 탭바가 마지막 항목을 가리지 않도록 비워 둔다.
                     Spacer(minLength: 110)
@@ -173,40 +180,6 @@ struct TravelDetailView: View {
     }
 
     // MARK: - 머리말
-
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            // 여행을 만들 때 고른 대표 사진. 없으면 자리를 차지하지 않는다.
-            if let data = travel.coverImageData, let image = UIImage(data: data) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 140)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .padding(.bottom, 10)
-            }
-
-            if isOngoing {
-                HStack(spacing: 6) {
-                    Text("여행 중")
-                        .font(.caption1_fixed)
-                        .foregroundStyle(Color.mainAccent)
-                    Text("DAY \(dayCount)")
-                        .font(.caption1_fixed)
-                        .foregroundStyle(.gray400)
-                        .monospacedDigit()
-                }
-            }
-
-            Text(travelName)
-                .font(.title3_fixed)
-                .foregroundStyle(.black)
-                .lineLimit(2)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, ReceiptLayout.gutter)
-        .padding(.top, 8)
-    }
 
     // MARK: - 기본 정보 (기간 · 국가 · 인원)
 
