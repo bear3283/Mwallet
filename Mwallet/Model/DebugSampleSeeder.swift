@@ -110,7 +110,7 @@ enum DebugSampleSeeder {
         travel.startDate = calendar.date(byAdding: .day, value: -4, to: now)
         travel.endDate = calendar.date(byAdding: .day, value: 1, to: now)
         travel.lastUpdate = now
-        travel.participantArray = ["지훈", "예린", "간사님"]
+        travel.participants = ["지훈", "예린", "간사님"]
 
         for (category, amount) in budgets {
             let budget = Budget(context: context)
@@ -140,7 +140,7 @@ enum DebugSampleSeeder {
                                                          longitude: stop.longitude))
             // 함께 쓴 사람. 인원별 정산이 이 값으로 나뉜다.
             // 넷이 다 낀 것도 있고 둘만 낀 것도 있어야 정산이 고르지 않게 나온다.
-            expense.participantArray = stop.sharedBy
+            expense.participants = stop.sharedBy
         }
 
         do {

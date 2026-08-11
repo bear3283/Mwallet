@@ -26,7 +26,7 @@ struct TravelDraft {
         self.name = travel.name ?? ""
         self.startDate = travel.startDate ?? Date()
         self.endDate = travel.endDate
-        self.participants = travel.participantArray ?? []
+        self.participants = travel.participants
     }
 
     var trimmedName: String {
@@ -104,7 +104,7 @@ final class TravelStore {
         travel.name = draft.trimmedName
         travel.startDate = draft.startDate
         travel.endDate = draft.endDate
-        travel.participantArray = draft.cleanedParticipants
+        travel.participants = draft.cleanedParticipants
         travel.lastUpdate = Date()
 
         do {

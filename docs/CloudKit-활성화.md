@@ -142,18 +142,18 @@ Thread: com.apple.coredata.cloudkit.queue
 
 CloudKit 을 실제로 켜 본 적이 없으므로 아래 두 가지는 확인이 필요합니다.
 
-1. **`participantArray` 의 Transformable 선언**
-   `Travel`·`Expense` 의 `participantArray` 는 `customClassName="[String]"` 으로 선언되어 있는데,
-   `[String]` 은 유효한 Objective-C 타입명이 아니라 실행 중 아래 경고가 남습니다.
+1. ~~**`participantArray` 의 Transformable 선언**~~ — 정리했습니다.
+   `customClassName` 이 `"[String]"` 이었는데 그것은 유효한 Objective-C 타입명이 아니라
+   앱을 열 때마다 아래 오류가 4건씩 남았습니다.
    ```
-   CoreData: Declared Objective-C type "[String]" for attribute
+   CoreData: fault: Declared Objective-C type "[String]" for attribute
              named participantArray is not valid
    ```
-   Transformable 자체는 CloudKit 미러링이 지원하고 현재도 값은 정상 저장·조회되지만,
-   `initializeCloudKitSchema()` 단계에서 문제가 될 소지가 있습니다.
-   `NSArray` 로 바꾸면 경고는 사라지지만 생성되는 프로퍼티 타입이 `NSArray?` 가 되어
-   **사용처 20곳을 모두 고쳐야 하므로** 지금은 손대지 않았습니다.
-   CloudKit 을 켠 뒤 실제로 문제가 생기면 그때 함께 정리하는 편이 안전합니다.
+   `NSArray` 로 바꾸고, 쓰는 쪽은 `travel.participants` / `expense.participants`
+   (`[String]`) 로 받도록 접근자를 뒀습니다. **저장 형식은 그대로**라 이미 쌓인
+   기록을 그대로 읽습니다 — 옛 모델로 만든 저장소(여행 3건·지출 14건)를 지우지 않고
+   새 빌드로 덮어 열리는 것과 참가자가 그대로 읽히는 것을 확인했고, 오류는 4건 → 0건이
+   됐습니다.
 
 2. **바이너리 데이터 용량**
    `imageData` 와 `voiceRecordFile` 은 External Storage 로 설정되어 CKAsset 으로 올라갑니다.

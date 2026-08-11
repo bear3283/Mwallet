@@ -110,7 +110,7 @@ final class FirstLaunchSeeder {
         travel.endDate = calendar.date(byAdding: .day, value: 1, to: now)
         travel.lastUpdate = now
         // '나' 는 넣지 않는다. 화면이 늘 앞에 붙여 세므로 넣으면 3명이 된다.
-        travel.participantArray = ["동료"]
+        travel.participants = ["동료"]
 
         let samples = [
             SampleExpense(merchant: "제주 흑돼지집", amount: 48000, category: .food,
@@ -136,7 +136,7 @@ final class FirstLaunchSeeder {
             expense.timeZoneIdentifier = TimeZone.current.identifier
             expense.location = sample.merchant
             expense.setCoordinate(CLLocationCoordinate2D(latitude: sample.latitude, longitude: sample.longitude))
-            expense.participantArray = sample.sharedBy
+            expense.participants = sample.sharedBy
         }
 
         // 예결산도 채워지도록 카테고리별 예산을 세워 둔다.

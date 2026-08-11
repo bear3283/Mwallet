@@ -67,7 +67,7 @@ struct TravelPicker: View {
 
     private var metaText: String {
         guard let selection else { return emptyDescription }
-        let people = (selection.participantArray?.count ?? 0) + 1
+        let people = selection.participants.count + 1
         return "\(TravelSchedule.periodText(selection)) · \(people)명"
     }
 }
@@ -129,7 +129,7 @@ private struct TravelChoiceSheet: View {
                     }
                 }
 
-                Text("\(TravelSchedule.periodText(travel)) · \((travel.participantArray?.count ?? 0) + 1)명")
+                Text("\(TravelSchedule.periodText(travel)) · \(travel.participants.count + 1)명")
                     .font(.caption2_fixed)
                     .foregroundStyle(.gray400)
                     .lineLimit(1)

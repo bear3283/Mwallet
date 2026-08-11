@@ -306,11 +306,8 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
         // MainViewModel의 chosenTravelInManualRecord가 변화할 때 자동으로 이루어질 일을 sink로 처리
         travelStream = travelPublisher.sink { chosenTravel in
             if let chosenTravel {
-                if let participantArrayInChosenTravel = chosenTravel.participantArray {
-                    self.participantTupleArray = [("나", true)] + participantArrayInChosenTravel.map { ($0, true) }
-                } else {
-                    self.participantTupleArray = [("나", true)]
-                }
+                // 참가자가 없으면 빈 배열이라 '나' 만 남는다. 갈래를 나눌 것이 없다.
+                self.participantTupleArray = [("나", true)] + chosenTravel.participants.map { ($0, true) }
                 var expenseArray: [Expense] = []
                 if let expenseArrayOfChosenTravel = chosenTravel.expenseArray {
                     expenseArray = expenseArrayOfChosenTravel.allObjects as? [Expense] ?? []
@@ -338,7 +335,7 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
         expense.exchangeRate = exchangeHandler.getExchangeRateFromKRW(currencyCode: code) ?? Expense.unknownExchangeRate
         expense.info = info
         expense.location = locationExpression
-        expense.participantArray = participantTupleArray.filter { $0.1 == true }.map { $0.0 }
+        expense.participants = participantTupleArray.filter { $0.1 == true }.map { $0.0 }
         expense.payAmount = payAmount
         expense.payDate = payDate
         expense.paymentMethod = Int64(paymentMethod.rawValue)

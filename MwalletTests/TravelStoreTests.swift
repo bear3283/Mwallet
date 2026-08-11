@@ -33,7 +33,7 @@ final class TravelStoreTests: CoreDataTestCase {
         XCTAssertEqual(travel.name, "제주 사역")
         XCTAssertEqual(travel.startDate, Date(timeIntervalSince1970: 1_700_000_000))
         XCTAssertEqual(travel.endDate, Date(timeIntervalSince1970: 1_700_500_000))
-        XCTAssertEqual(travel.participantArray, ["동료", "간사"])
+        XCTAssertEqual(travel.participants, ["동료", "간사"])
     }
 
     func test_이름_앞뒤_공백을_다듬는다() throws {
@@ -121,7 +121,7 @@ final class TravelStoreTests: CoreDataTestCase {
 
         try store.update(travel, with: draft)
 
-        XCTAssertEqual(travel.participantArray, ["동료", "간사"], "'나' 는 화면이 항상 앞에 붙이므로 저장하면 두 번 나옵니다")
+        XCTAssertEqual(travel.participants, ["동료", "간사"], "'나' 는 화면이 항상 앞에 붙이므로 저장하면 두 번 나옵니다")
     }
 
     func test_인원_순서를_보존한다() throws {
@@ -132,7 +132,7 @@ final class TravelStoreTests: CoreDataTestCase {
 
         try store.update(travel, with: draft)
 
-        XCTAssertEqual(travel.participantArray, ["지훈", "民수", "예린"],
+        XCTAssertEqual(travel.participants, ["지훈", "民수", "예린"],
                        "Set 으로 중복을 지우면 순서가 흐트러집니다")
     }
 
@@ -145,7 +145,7 @@ final class TravelStoreTests: CoreDataTestCase {
 
         try store.update(travel, with: draft)
 
-        XCTAssertEqual(travel.participantArray, ["지훈"])
+        XCTAssertEqual(travel.participants, ["지훈"])
     }
 
     func test_인원_이름의_공백을_다듬는다() throws {
@@ -155,7 +155,7 @@ final class TravelStoreTests: CoreDataTestCase {
 
         try store.update(travel, with: draft)
 
-        XCTAssertEqual(travel.participantArray, ["동료"])
+        XCTAssertEqual(travel.participants, ["동료"])
     }
 
     // MARK: - 딸린 기록
