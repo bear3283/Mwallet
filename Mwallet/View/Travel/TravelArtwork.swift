@@ -2,7 +2,7 @@
 //  TravelArtwork.swift
 //  Mwallet
 //
-//  여행 카드에 무엇을 그릴지 고른다 — 사진 한 장과 국기 몇 개.
+//  여행 카드에 무엇을 그릴지 고른다 — 바탕 하나와 국기 몇 개.
 //
 //  이 규칙은 기록 탭의 선택 모달 안에 박혀 있었다. 예결산·영수증도 같은
 //  카드를 쓰게 되면서 꺼냈다. 화면이 아니라 값이라 눈으로 보지 않고도
@@ -12,18 +12,36 @@
 //  나라를 최근에 쓴 것부터 모으되 넉이면 그친다. 그보다 많이 겹쳐 놓으면
 //  서로 가려서 어느 나라인지 알아볼 수 없다.
 //
+//  바탕은 나라를 알 때만 사진이다. 예전에는 나라를 모르면 'DefaultImage'
+//  (구름 속 비행기 한 장)를 깔았는데, 세로 목록일 때는 한 번에 한둘만
+//  보여서 티가 안 났다. 격자가 되면서 같은 사진이 대여섯 장 늘어서게 됐고,
+//  그러면 카드가 서로 구별되지 않아 이름을 하나씩 읽어야 한다. 나라를 모르면
+//  사진 대신 이름 첫 글자를 크게 적는다.
+//
 
 import Foundation
 
 struct TravelArtwork: Equatable {
 
+    /// 카드 바탕.
+    enum Cover: Equatable {
+        /// 나라를 알 때. 그 나라의 사진을 깐다.
+        case photo(String)
+        /// 나라를 모를 때. 이름 첫 글자를 크게 적는다.
+        case monogram(String)
+    }
+
     /// 겹쳐 놓을 국기 이미지 이름. 최근에 쓴 나라가 앞이다.
     let flagNames: [String]
-    /// 대표 사진이 없을 때 깔 나라별 기본 사진.
-    let placeholderName: String
+    let cover: Cover
 
     static let fallbackFlag = "DefaultFlag"
-    static let fallbackPlaceholder = "DefaultImage"
+
+    /// 나라 표가 '이 나라 사진은 없다' 는 뜻으로 적어 둔 이름.
+    ///
+    /// CountryList.csv 의 29개 나라가 이 한 장을 함께 가리킨다. 사진이 아니라
+    /// 빈자리 표시라, 그대로 깔면 서로 다른 여행이 같은 카드로 보인다.
+    static let noPhoto = "DefaultImage"
 
     /// 한 카드에 겹쳐 놓을 국기의 수.
     static let flagLimit = 4
@@ -32,16 +50,29 @@ struct TravelArtwork: Equatable {
 enum TravelArtworkBuilder {
 
     static func artwork(for travel: Travel) -> TravelArtwork {
-        artwork(countries: countries(in: travel))
+        artwork(countries: countries(in: travel), name: travel.displayName)
     }
 
     /// 나라 번호에서 그림 이름으로. 나라 표를 타지 않고 확인하려고 갈라 둔다.
-    static func artwork(countries: [Int]) -> TravelArtwork {
+    static func artwork(countries: [Int], name: String) -> TravelArtwork {
         let table = CountryInfoModel.shared.countryResult
-        return TravelArtwork(
-            flagNames: countries.map { table[$0]?.flagString ?? TravelArtwork.fallbackFlag },
-            placeholderName: countries.first.flatMap { table[$0]?.defaultImageString }
-                ?? TravelArtwork.fallbackPlaceholder)
+        let flags = countries.map { table[$0]?.flagString ?? TravelArtwork.fallbackFlag }
+
+        // 나라를 알아도 그 나라의 사진이 없을 수 있다. 그때도 글자로 간다.
+        guard let photo = countries.first.flatMap({ table[$0]?.defaultImageString }),
+              photo != TravelArtwork.noPhoto else {
+            return TravelArtwork(flagNames: flags, cover: .monogram(monogram(from: name)))
+        }
+        return TravelArtwork(flagNames: flags, cover: .photo(photo))
+    }
+
+    /// 카드에 크게 적을 한 글자.
+    ///
+    /// 글자와 숫자가 아닌 것은 건너뛴다. '· 방콕' 처럼 꾸밈으로 시작하는
+    /// 이름에서 점 하나만 덩그러니 남는 것을 막는다.
+    static func monogram(from name: String) -> String {
+        guard let letter = name.first(where: { $0.isLetter || $0.isNumber }) else { return "여" }
+        return String(letter).uppercased()
     }
 
     /// 지출이 적힌 나라를, 최근에 쓴 것부터 겹치지 않게.

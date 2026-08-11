@@ -46,12 +46,7 @@ struct TravelCard: View {
     private var cover: some View {
         Color.clear
             .aspectRatio(4.0 / 3.0, contentMode: .fit)
-            .overlay { coverImage }
-            // 아래쪽만 어둡게 깐다. 사진이 밝으면 흰 날짜가 사라진다.
-            .overlay {
-                LinearGradient(colors: [.clear, .black.opacity(0.7)],
-                               startPoint: .center, endPoint: .bottom)
-            }
+            .overlay { background }
             .overlay { flags }
             .overlay { dateText }
             .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -64,18 +59,50 @@ struct TravelCard: View {
             }
     }
 
+    /// 손수 고른 대표 사진이 먼저고, 없으면 나라 사진, 그것도 없으면 글자다.
     @ViewBuilder
-    private var coverImage: some View {
-        // 손수 고른 대표 사진이 있으면 그것이 먼저다. 없으면 나라별 기본 사진.
+    private var background: some View {
         if let data = travel.coverImageData, let image = UIImage(data: data) {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-        } else {
-            Image(artwork.placeholderName)
-                .resizable()
-                .scaledToFill()
+            photo(Image(uiImage: image))
+        } else if case .photo(let name) = artwork.cover {
+            photo(Image(name))
+        } else if case .monogram(let letter) = artwork.cover {
+            monogram(letter)
         }
+    }
+
+    /// 사진은 아래쪽만 어둡게 깐다. 밝은 사진 위에서 흰 날짜가 사라진다.
+    private func photo(_ image: Image) -> some View {
+        image
+            .resizable()
+            .scaledToFill()
+            .overlay {
+                LinearGradient(colors: [.clear, .black.opacity(0.7)],
+                               startPoint: .center, endPoint: .bottom)
+            }
+    }
+
+    /// 사진이 없는 카드. 여행 색을 옅게 깔고 이름 첫 글자를 얹는다.
+    ///
+    /// 여기에는 어둡게 까는 층이 없다. 바탕이 이미 옅어서 날짜를 진하게
+    /// 적으면 읽히고, 옅은 바탕에 검은 그늘을 얹으면 때가 탄 것처럼 보인다.
+    private func monogram(_ letter: String) -> some View {
+        ZStack {
+            tint.opacity(0.16)
+            Text(letter)
+                .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 30))
+                .foregroundStyle(tint)
+                // 날짜가 아래에 앉으므로 글자를 조금 올려 겹치지 않게 한다.
+                .offset(y: -6)
+        }
+    }
+
+    /// 카드마다 다른 색. 서로 구별되기만 하면 되는 자리라 이름에서 뽑는다.
+    private var tint: Color { TravelPalette.color(for: travel.displayName) }
+
+    private var isMonogram: Bool {
+        if case .monogram = artwork.cover, travel.coverImageData == nil { return true }
+        return false
     }
 
     private var flags: some View {
@@ -97,7 +124,7 @@ struct TravelCard: View {
     private var dateText: some View {
         Text(TravelSchedule.dayRangeText(travel))
             .font(.caption1_fixed)
-            .foregroundStyle(.white.opacity(0.9))
+            .foregroundStyle(isMonogram ? tint : .white.opacity(0.9))
             .monospacedDigit()
             .lineLimit(1)
             .minimumScaleFactor(0.8)
