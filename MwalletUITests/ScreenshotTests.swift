@@ -117,12 +117,36 @@ final class ScreenshotTests: XCTestCase {
         capture("06-여행상세")
 
         // 목록 아래쪽까지 보이도록 한 번 스크롤한 장도 남긴다.
-        app.swipeUp()
+        //
+        // 화면 전체를 쓸어 올리면 지도가 손가락을 먼저 받아 지도만 움직이고
+        // 화면은 그대로 있는다. 지도는 조작할 수 있는 것이라 그게 맞는 동작이다.
+        // 지도를 피해 아래쪽에서 끌어올린다.
+        // 지도 위쪽(예산 줄 언저리)에서 끌어올린다.
+        //
+        // 지도가 화면 중간을 넓게 차지해 그 위에서 쓸면 지도만 움직인다.
+        // 지도 아래는 떠 있는 탭바가 덮고 있어 잡을 자리가 거의 없다.
+        // 화면을 내리려면 지도를 피해 위쪽에서 끄는 수밖에 없다.
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.30))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.04))
+        start.press(forDuration: 0.05, thenDragTo: end)
         settle()
         capture("07-여행상세-아래")
 
+        // 지출 한 줄을 누르면 그 지출의 상세로 간다.
+        // 번호를 누르면 지도가 움직이고, 본문을 누르면 여기로 온다.
+        let firstExpense = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS %@", "수완나품")).firstMatch
+        if tapIfExists(firstExpense) {
+            settle()
+            capture("09-지출상세")
+            app.navigationBars.buttons.element(boundBy: 0).tap()
+            settle()
+        } else {
+            XCTFail("지출 줄을 찾지 못했습니다.")
+        }
+
         // 우상단 연필 → 여행 편집
-        let edit = app.navigationBars.buttons.element(boundBy: 1)
+        let edit = app.buttons["travelDetail.edit"].firstMatch
         guard tapIfExists(edit) else {
             XCTFail("편집 버튼을 찾지 못했습니다.")
             return

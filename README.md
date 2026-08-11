@@ -174,7 +174,7 @@ Mwallet/
 - [x] App Group 공유 계약 중복 제거 — 위젯이 `Shared/MwalletShared.swift` 를 함께 컴파일한다 (약 100줄 사본 삭제)
 - [x] `Travel.isDefault` 도입 → `tempTravelName` 매직 문자열 제거 (21곳)
 - [ ] Repository 레이어 도입, View의 Core Data 직접 참조 제거 (13곳 → 현재 4곳)
-- [ ] SwiftLint 길이·복잡도 룰 10개 재활성화 — `ManualRecordView` 946줄 · `RecordViewModel` 798줄 · `RecordView` 743줄 분해가 선행돼야 한다
+- [x] SwiftLint 길이·복잡도 룰 재활성화 — `function_body_length` · `cyclomatic_complexity` · `type_body_length`. 화면 여덟을 쪼개고 복사본 넷을 걷어냈다. 남은 예외는 두 뷰모델의 오디오 뿐이고 그 자리에 이유를 적어 뒀다
 
 **P3 — 확장**
 - [x] `@MainActor` 적용 — ViewModel 8개 + 핸들러 3개. `SWIFT_STRICT_CONCURRENCY=complete` 로 경고 0건
@@ -186,4 +186,4 @@ Mwallet/
 **기능 공백 (코드 리뷰에서 발견 — 로드맵 미등록분)**
 - [x] **여행 편집 화면** — 여행 상세 우상단 연필. 쓰기 규칙은 `TravelStore` 로 분리
 - [x] **`Budget` 엔티티 정합** — 삭제 목록에 `Budget` 추가, CloudKit 안전한 삭제 방식으로 전환
-- [ ] **지출 → 편집 연결** — 여행 상세의 지출 순서 목록에서 항목을 눌러도 지도만 이동한다. 편집은 여전히 영수증 탭에서만 가능
+- [x] **지출 → 편집 연결** — 여행 상세의 지출 줄을 누르면 그 지출 상세로 간다. 번호를 누르면 지도가 그 지점으로 옮겨 간다

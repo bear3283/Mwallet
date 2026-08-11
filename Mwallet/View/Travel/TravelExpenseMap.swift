@@ -254,6 +254,12 @@ enum TravelMapCamera {
 // 지도 위 점선 경로와 같은 여정을 목록에서 한 번 더 그린다.
 // 번호를 잇는 세로 레일이 그 역할을 하고, 번호와 색은 지도의 핀과 정확히 같다.
 // 지도에서 ③번 핀을 본 사람이 목록에서 ③을 그대로 찾을 수 있어야 한다.
+//
+// 한 줄 안에 목적지가 둘이라 링크로 묶지 않는다 — 영수증 탭에서 썸네일과
+// 본문을 나눠 둔 것과 같은 짜임이다.
+//
+//   번호  지도의 그 지점으로  (번호가 곧 지도의 이름표다)
+//   본문  그 지출의 상세로    (거기서 고치고 지운다)
 
 struct TravelExpenseRow: View {
 
@@ -261,10 +267,14 @@ struct TravelExpenseRow: View {
     let isHighlighted: Bool
     var isFirst = false
     var isLast = false
+    /// 번호를 눌렀을 때. 지도를 그 지점으로 옮긴다.
+    var onFocus: () -> Void = { }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            rail
+            Button(action: onFocus) { rail }
+                .buttonStyle(.plain)
+                .accessibilityLabel("\(stop.order)번 지점을 지도에서 보기")
 
             VStack(alignment: .leading, spacing: 3) {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -286,6 +296,7 @@ struct TravelExpenseRow: View {
                     .foregroundStyle(.gray300)
                     .lineLimit(1)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 10)
             .padding(.horizontal, 12)
             .background(isHighlighted ? Color.gray100 : Color.clear)
