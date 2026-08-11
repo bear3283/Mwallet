@@ -9,6 +9,8 @@ import OSLog
 import SwiftUI
 
 struct TravelChoiceInRecordModal: View {
+
+    private let travelStore = TravelStore()
     @Binding var chosenTravel: Travel?
     @State private var travelArray = [Travel]()
     @State private var flagNameArrayDict: [UUID: [String]] = [:]
@@ -30,15 +32,9 @@ struct TravelChoiceInRecordModal: View {
             }
         }
         .onAppear {
-            do {
-                // '임시 기록'은 여행을 안 고를 때 자동으로 저장되는 기본함이라
-                // 사용자에게는 보이지 않는다. 선택 목록에서 뺀다.
-                try travelArray = PersistenceController.shared.container.viewContext.fetch(Travel.fetchRequest())
-                    .filter { $0.isUserCreated }
-                    .sorted(by: travelModalSortRule)
-            } catch {
-                Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
-            }
+            // 목록을 고르는 규칙('임시 기록' 제외, 여행 중이 먼저)은
+            // TravelStore 가 들고 있다. 화면은 결과만 받는다.
+            travelArray = travelStore.availableTravels()
             updateFlagNameArrayDictAndDefaultImageStringDict()
         }
     }

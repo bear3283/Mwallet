@@ -11,6 +11,7 @@
 
 import CoreData
 import MapKit
+import OSLog
 import SwiftUI
 
 struct TravelDetailView: View {
@@ -19,6 +20,7 @@ struct TravelDetailView: View {
     @Environment(\.dismiss) private var dismiss
 
     private let budgetStore = BudgetStore()
+    private let travelStore = TravelStore()
 
     let travel: Travel
 
@@ -318,7 +320,11 @@ struct TravelDetailView: View {
         dismiss()
 
         DispatchQueue.main.async {
-            PersistenceController.shared.deleteItems(object: travel)
+            do {
+                try travelStore.delete(travel)
+            } catch {
+                Logger.data.error("여행 삭제 실패: \(error.localizedDescription, privacy: .public)")
+            }
 
             if let deletedID,
                deletedID == mainVM.selectedTravel?.id || deletedID == mainVM.selectedTravelInExpense?.id {

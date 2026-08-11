@@ -100,40 +100,4 @@ struct PersistenceController {
             : nil
     }
 
-    func deleteItems(object: Travel?) {
-
-        var travelToBeDeleted: Travel?
-        do {
-            travelToBeDeleted = try self.container.viewContext.fetch(Travel.fetchRequest()).filter { travel in
-                if let object {
-                    return object.id == travel.id
-                }
-                return false
-            }.first
-        } catch {
-            Logger.data.error("여행 조회 실패: \(error.localizedDescription, privacy: .public)")
-        }
-        
-        if travelToBeDeleted != nil {
-            self.container.viewContext.delete(travelToBeDeleted!)
-        }
-
-        try? self.container.viewContext.save()
-    }
-    
-    func deleteExpenseFromTravel(travel: Travel?, expenseId: ObjectIdentifier) {
-        guard let travel = travel,
-              let expenses = travel.expenseArray as? Set<Expense>,
-              let expenseToDelete = expenses.first(where: { $0.id == expenseId }) else { return }
-
-        do {
-            let object = try self.container.viewContext.existingObject(with: expenseToDelete.objectID)
-            self.container.viewContext.delete(object)
-            try self.container.viewContext.save()
-            
-        } catch {
-            let nsError = error as NSError
-            Logger.data.error("지출 삭제 실패: \(nsError.localizedDescription, privacy: .public)")
-        }
-    }
 }

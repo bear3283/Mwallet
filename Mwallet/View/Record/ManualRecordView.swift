@@ -13,7 +13,7 @@ struct ManualRecordView: View {
     @StateObject var viewModel = ManualRecordViewModel()
     @EnvironmentObject var mainVM: MainViewModel
     @Environment(\.dismiss) var dismiss
-    let viewContext = PersistenceController.shared.container.viewContext
+    private let travelStore = TravelStore()
     let exchangeHandler = ExchangeRateHandler.shared
     
     let given_wantToActivateAutoSaveTimer: Bool
@@ -246,7 +246,7 @@ struct ManualRecordView: View {
                 viewModel.save()
                 // 여행을 고르지 않았으면 기본함으로 돌려 둔다.
                 mainVM.selectedTravel = mainVM.chosenTravelInManualRecord
-                    ?? Travel.fetchDefault(in: viewContext)
+                    ?? travelStore.defaultTravel()
                 viewModel.deleteUselessAudioFiles()
                 viewModel.savingIsDone = true
                 viewModel.afterSavingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
