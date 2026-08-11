@@ -189,17 +189,32 @@ struct ReceiptHomeView: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 
-    // MARK: - 사역 필터
+    // MARK: - 거르기 칩
 
     // 여행 이름 칩은 뺐다. 위의 선택기와 같은 일을 두 곳에서 하게 되어,
     // 한쪽으로 고르고 다른 쪽을 보면 무엇이 걸려 있는지 알 수 없었다.
-    // 사진이 없는 건만 모아 보는 것은 결이 다른 거르기라 여기 남는다.
-    @ViewBuilder
+    //
+    // 여기 남는 둘은 결이 다르다 — 기간은 '언제 쓴 것', 영수증 없음은
+    // '무엇이 빠진 것' 이라 여행 선택과 함께 걸 수 있다.
     private var missionChips: some View {
-        if missingPhotoCount > 0 {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 4) {
-                ReceiptChip(title: "영수증 없음 \(missingPhotoCount)", isSelected: filter.onlyMissingPhoto) {
-                    filter.onlyMissingPhoto.toggle()
+                ForEach(ReceiptPeriod.allCases) { period in
+                    ReceiptChip(title: period.title, isSelected: filter.period == period) {
+                        filter.period = period
+                    }
+                }
+
+                if missingPhotoCount > 0 {
+                    // 기간과 다른 축이라 사이를 띄워 묶음을 나눈다.
+                    Rectangle()
+                        .fill(Color.gray200)
+                        .frame(width: 0.5, height: 18)
+                        .padding(.horizontal, 4)
+
+                    ReceiptChip(title: "영수증 없음 \(missingPhotoCount)", isSelected: filter.onlyMissingPhoto) {
+                        filter.onlyMissingPhoto.toggle()
+                    }
                 }
             }
             .padding(.horizontal, ReceiptLayout.gutter)

@@ -76,7 +76,6 @@
 		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
 		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
 		C1A11EA700000000000005A2 /* BrandMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000005A1 /* BrandMark.swift */; };
-		C1A11EA71000000000000A02 /* SettlementSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000A01 /* SettlementSummary.swift */; };
 		C1A11EA700000000000006B2 /* BudgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006B1 /* BudgetSummary.swift */; };
 		C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006C1 /* BudgetStore.swift */; };
 		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
@@ -103,10 +102,11 @@
 		C1A11EA7000000000000C12 /* AddTravelHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C11 /* AddTravelHeader.swift */; };
 		C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */; };
 		C1A11EA7000000000000D12 /* ReceiptListSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D11 /* ReceiptListSections.swift */; };
-		C1A11EA71000000000000B02 /* TravelSettlementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000B01 /* TravelSettlementSection.swift */; };
 		C1A11EA7000000000000E02 /* TravelSummaryStrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */; };
 		C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E11 /* AddMemberSections.swift */; };
 		C1A11EA7000000000000F02 /* RecordTopSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000F01 /* RecordTopSections.swift */; };
+		C1A11EA71000000000000A02 /* SettlementSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000A01 /* SettlementSummary.swift */; };
+		C1A11EA71000000000000B02 /* TravelSettlementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000B01 /* TravelSettlementSection.swift */; };
 		C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */; };
 		C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */; };
 		C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */; };
@@ -237,7 +237,6 @@
 		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000005A1 /* BrandMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandMark.swift; sourceTree = "<group>"; };
-		C1A11EA71000000000000A01 /* SettlementSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementSummary.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006B1 /* BudgetSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSummary.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006C1 /* BudgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStore.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
@@ -264,10 +263,11 @@
 		C1A11EA7000000000000C11 /* AddTravelHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelHeader.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptEvidenceFields.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000D11 /* ReceiptListSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptListSections.swift; sourceTree = "<group>"; };
-		C1A11EA71000000000000B01 /* TravelSettlementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSettlementSection.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSummaryStrips.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000E11 /* AddMemberSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberSections.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000F01 /* RecordTopSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopSections.swift; sourceTree = "<group>"; };
+		C1A11EA71000000000000A01 /* SettlementSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementSummary.swift; sourceTree = "<group>"; };
+		C1A11EA71000000000000B01 /* TravelSettlementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSettlementSection.swift; sourceTree = "<group>"; };
 		C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingHandler.swift; sourceTree = "<group>"; };
 		C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoModel.swift; sourceTree = "<group>"; };
 		C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Extension.swift"; sourceTree = "<group>"; };

@@ -9,6 +9,57 @@
 
 import Foundation
 
+// MARK: - 기간
+
+/// 언제 쓴 것만 볼지.
+///
+/// 여행으로 좁히는 것과는 결이 다르다. 여행은 '어느 일정' 이고 기간은
+/// '그중 언제' 라, 둘을 함께 걸 수 있다.
+///
+/// 기준은 기기의 달력이다. 지출마다 기록된 시간대(timeZoneIdentifier)로
+/// 따지지 않는 것은, 보는 사람이 지금 있는 곳에서 '오늘' 을 묻기 때문이다.
+/// 방콕에서 쓴 것을 서울에서 볼 때 서울의 오늘로 세는 편이 덜 놀랍다.
+enum ReceiptPeriod: String, CaseIterable, Identifiable {
+    case all
+    case today
+    case lastWeek
+    case thisMonth
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .all: return "전체 기간"
+        case .today: return "오늘"
+        case .lastWeek: return "최근 7일"
+        case .thisMonth: return "이번 달"
+        }
+    }
+
+    /// 이 기간의 시작. nil 이면 끝이 없다(전체).
+    func start(from now: Date = Date(), calendar: Calendar = .current) -> Date? {
+        switch self {
+        case .all:
+            return nil
+        case .today:
+            return calendar.startOfDay(for: now)
+        case .lastWeek:
+            // 오늘을 포함해 7일. 6일 전의 0시부터 센다.
+            let sixDaysAgo = calendar.date(byAdding: .day, value: -6, to: now) ?? now
+            return calendar.startOfDay(for: sixDaysAgo)
+        case .thisMonth:
+            return calendar.date(from: calendar.dateComponents([.year, .month], from: now))
+        }
+    }
+
+    func contains(_ date: Date, now: Date = Date(), calendar: Calendar = .current) -> Bool {
+        guard let start = start(from: now, calendar: calendar) else { return true }
+        // 끝은 묶지 않는다. 앞날에 적힌 지출(시간대 차이로 생길 수 있다)을
+        // 걸러 내면 '왜 안 보이지' 가 된다.
+        return date >= start
+    }
+}
+
 // MARK: - 필터
 
 struct ReceiptFilter {
@@ -17,10 +68,14 @@ struct ReceiptFilter {
     var searchText: String = ""
     // 영수증 사진이 없는 것만 모아 보기
     var onlyMissingPhoto = false
+    var period: ReceiptPeriod = .all
 
-    func matches(_ expense: Expense) -> Bool {
+    /// - Parameter now: '오늘' 의 기준. 테스트에서 못 박기 위해 받는다.
+    ///   자정 언저리에 돌 때 결과가 달라지지 않게 한다.
+    func matches(_ expense: Expense, now: Date = Date()) -> Bool {
         if onlyMissingPhoto && !expense.needsPhoto { return false }
         if let missionName, expense.missionTitle != missionName { return false }
+        if !period.contains(expense.paidDate, now: now) { return false }
 
         let keyword = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !keyword.isEmpty else { return true }
