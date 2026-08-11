@@ -17,11 +17,18 @@ struct SettingView: View {
     @State private var isConfirmingDelete = false
     @State private var isConfirmingDeleteAgain = false
 
+    #if DEBUG
+    @State private var schemaState = CloudKitSchemaState.idle
+    #endif
+
     var body: some View {
         List {
             defaultSetting
             feedbackAndQuestion
             appVersionCheck
+            #if DEBUG
+            cloudKitSchema
+            #endif
             deleteAll
         }
         .alert("모든 데이터를 삭제할까요?", isPresented: $isConfirmingDelete) {
@@ -92,6 +99,57 @@ struct SettingView: View {
         }
     }
     
+    #if DEBUG
+    // 개발 빌드에만 둔다. CloudKit 은 스키마를 스스로 만들지 않아, 모델에 적힌
+    // 것을 한 번 올려 두지 않으면 쓰지 않은 필드가 영영 만들어지지 않는다.
+    // 그 상태로 운영에 올리면 다른 기기에서 그 필드만 조용히 비어 온다.
+    private var cloudKitSchema: some View {
+        Section {
+            Button {
+                deploySchema()
+            } label: {
+                HStack {
+                    Text("CloudKit 스키마 올리기")
+                        .font(.caption3)
+                        .foregroundStyle(schemaState.isRunning ? .gray300 : .black)
+                    Spacer()
+                    if schemaState.isRunning {
+                        ProgressView()
+                    }
+                }
+            }
+            .disabled(schemaState.isRunning)
+
+            if let message = schemaState.message {
+                Text(message)
+                    .font(.caption2)
+                    .foregroundStyle(schemaState.isFailure ? .red : Color.mainAccent)
+            }
+        } header: {
+            Text("개발용")
+        } footer: {
+            Text("모델에 적힌 엔티티·속성을 CloudKit 개발 환경에 올립니다. 유료 개발자 계정으로 서명하고 iCloud 에 로그인한 기기에서만 됩니다.\n\n올린 뒤 CloudKit Dashboard 에서 개발 → 운영으로 승격해야 실제 사용자에게 적용됩니다. 승격은 되돌릴 수 없어 여기서 하지 않습니다.")
+                .font(.caption2)
+                .foregroundStyle(.gray400)
+        }
+    }
+
+    private func deploySchema() {
+        schemaState = .running
+        // 모델 전체를 올리느라 몇 초 걸린다. 메인을 붙잡지 않는다.
+        Task {
+            do {
+                try await Task.detached(priority: .userInitiated) {
+                    try PersistenceController.shared.deployCloudKitSchema()
+                }.value
+                schemaState = .succeeded
+            } catch {
+                schemaState = .failed(error.localizedDescription)
+            }
+        }
+    }
+    #endif
+
     private var deleteAll: some View {
         Section {
             Button(role: .destructive) {
@@ -159,3 +217,29 @@ struct SettingView: View {
 #Preview {
     SettingView()
 }
+
+#if DEBUG
+/// CloudKit 스키마 올리기의 진행 상태.
+enum CloudKitSchemaState {
+    case idle
+    case running
+    case succeeded
+    case failed(String)
+
+    var isRunning: Bool { if case .running = self { return true } else { return false } }
+    var isFailure: Bool { if case .failed = self { return true } else { return false } }
+
+    var message: String? {
+        switch self {
+        case .idle:
+            return nil
+        case .running:
+            return "올리는 중입니다. 모델 전체를 올리므로 몇 초 걸립니다."
+        case .succeeded:
+            return "올렸습니다. CloudKit Dashboard 에서 개발 → 운영으로 승격하세요."
+        case .failed(let reason):
+            return "실패: \(reason)"
+        }
+    }
+}
+#endif

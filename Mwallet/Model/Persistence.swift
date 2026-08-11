@@ -100,4 +100,56 @@ struct PersistenceController {
             : nil
     }
 
+    // MARK: - CloudKit 스키마 배포
+
+    /// Core Data 모델을 CloudKit 의 **개발 환경** 레코드 타입으로 올린다.
+    ///
+    /// CloudKit 은 스키마를 스스로 만들지 않는다. 앱이 처음 저장할 때 없는
+    /// 레코드 타입을 만들어 주기는 하지만, 그러려면 그 타입의 데이터가 실제로
+    /// 한 번은 올라가야 한다. 쓰지 않은 필드는 영영 만들어지지 않고, 그 상태로
+    /// 운영 환경에 올리면 다른 기기에서 그 필드만 조용히 비어 온다.
+    ///
+    /// 이 함수는 모델에 적힌 모든 엔티티·속성·관계를 한 번에 올려 그 구멍을 막는다.
+    ///
+    /// ## 쓰는 법
+    ///
+    /// 1. 유료 개발자 계정으로 서명한 빌드를 실기기나 시뮬레이터에 올린다
+    /// 2. 기기가 iCloud 에 로그인되어 있어야 한다
+    /// 3. 설정 화면의 'CloudKit 스키마 올리기' 를 누른다
+    /// 4. CloudKit Dashboard 에서 개발 → 운영으로 승격한다
+    ///
+    /// 4번은 여기서 할 수 없다. 되돌릴 수 없는 일이라 Apple 이 대시보드에서만
+    /// 허용한다. 승격한 뒤에는 필드를 지울 수 없으므로, 모델이 굳은 뒤에 한다.
+    ///
+    /// ## 왜 디버그 빌드에서만인가
+    ///
+    /// 이 호출은 개발 환경에만 쓴다. App Store 로 나간 앱은 운영 환경을 보는데,
+    /// 거기서는 스키마를 바꿀 수 없어 실패한다. 게다가 모델 전체를 올리느라
+    /// 느리고 무겁다. 사용자의 기기에서 돌 이유가 없다.
+    #if DEBUG
+    func deployCloudKitSchema() throws {
+        guard Self.isCloudKitSyncEnabled else {
+            throw CloudKitSchemaError.syncDisabled
+        }
+        guard container.persistentStoreDescriptions.first?.cloudKitContainerOptions != nil else {
+            throw CloudKitSchemaError.storeNotUsingCloudKit
+        }
+        // 실제로 레코드를 남기지는 않는다. 타입만 만들고 지운다.
+        try container.initializeCloudKitSchema(options: [])
+    }
+    #endif
+}
+
+enum CloudKitSchemaError: LocalizedError {
+    case syncDisabled
+    case storeNotUsingCloudKit
+
+    var errorDescription: String? {
+        switch self {
+        case .syncDisabled:
+            return "CloudKit 동기화가 꺼져 있습니다."
+        case .storeNotUsingCloudKit:
+            return "저장소가 CloudKit 없이 열렸습니다. iCloud 권한(entitlement)과 로그인 상태를 확인하세요."
+        }
+    }
 }

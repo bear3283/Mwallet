@@ -86,6 +86,20 @@ final class ScreenshotTests: XCTestCase {
 
     // MARK: - 여행 선택 시트
 
+    // 개발용 CloudKit 스키마 배포 버튼이 설정 화면에 있다.
+    func test_05_설정을_캡처한다() throws {
+        tapTab("여행")
+        guard tapIfExists(app.buttons["tabAction.gearshape"].firstMatch) else {
+            XCTFail("설정 버튼을 찾지 못했습니다.")
+            return
+        }
+        settle()
+        // 목록 아래쪽의 개발용 절까지 보이도록 한 번 내린다.
+        app.swipeUp()
+        settle()
+        capture("11-설정")
+    }
+
     func test_02_여행_선택_시트를_캡처한다() throws {
         // 여행 탭이 목록이 되면서 선택기는 예결산 탭에만 남았다.
         tapTab("예결산")

@@ -8,6 +8,33 @@
 
 default_platform(:ios)
 
+# App Store Connect 에 말을 걸 때 쓰는 열쇠.
+#
+# 세 값은 fastlane/.env 에서 읽는다. 개인키(.p8)는 저장소 밖에 두고 경로만
+# 넘긴다 — 한 번만 내려받을 수 있는 파일이고, 들어오면 계정 전체를 만질 수
+# 있어 저장소에 두면 안 된다.
+#
+# 세팅은 fastlane/.env.example 을 복사해 채운다.
+def connect_api_key
+  missing = %w[ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_PATH].reject { |name| ENV[name].to_s.strip != "" }
+  unless missing.empty?
+    UI.user_error!("fastlane/.env 에 #{missing.join(', ')} 가 없습니다. " \
+                   "fastlane/.env.example 을 복사해 채우세요.")
+  end
+
+  path = File.expand_path(ENV["ASC_KEY_PATH"])
+  UI.user_error!("개인키를 찾지 못했습니다: #{path}") unless File.exist?(path)
+
+  app_store_connect_api_key(
+    key_id: ENV["ASC_KEY_ID"],
+    issuer_id: ENV["ASC_ISSUER_ID"],
+    key_filepath: path,
+    # 키를 오래 살려 두지 않는다. 올리는 데 걸리는 시간이면 넉넉하다.
+    duration: 1200,
+    in_house: false
+  )
+end
+
 # 프로젝트에 매번 넘기는 값들. 한 곳에 모아 둔다.
 PROJECT = "Mwallet.xcodeproj"
 SCHEME = "Mwallet"
@@ -46,6 +73,57 @@ platform :ios do
     export_screenshots
   end
 
+  desc "App Store Connect 열쇠가 통하는지 본다 (읽기만 한다)"
+  lane :check_key do
+    api_key = connect_api_key
+    Spaceship::ConnectAPI.auth(**api_key.slice(:key_id, :issuer_id, :key, :duration, :in_house))
+
+    apps = Spaceship::ConnectAPI::App.all
+    if apps.empty?
+      UI.important("열쇠는 통하는데 볼 수 있는 앱이 없습니다. 키의 권한(역할)을 확인하세요.")
+    else
+      UI.success("열쇠가 통합니다. 볼 수 있는 앱 #{apps.count}개:")
+      apps.each { |app| UI.message("  #{app.name}  (#{app.bundle_id})") }
+    end
+
+    mine = apps.find { |app| app.bundle_id == "com.bear3745.Mwallet.app" }
+    if mine
+      UI.success("Mwallet 을 찾았습니다: #{mine.name}")
+    else
+      UI.important("이 열쇠로는 com.bear3745.Mwallet.app 이 보이지 않습니다. " \
+                   "App Store Connect 에 앱을 먼저 만들어야 올릴 수 있습니다.")
+    end
+  end
+
+  desc "TestFlight 에 올린다"
+  lane :beta do
+    api_key = connect_api_key
+    ensure_app_exists(api_key)
+
+    # 올리기 전에 한 번 더 돌린다. 깨진 것을 올려 놓고 알아채면 늦다.
+    test
+    lint
+
+    increment_build_number(
+      xcodeproj: PROJECT,
+      build_number: latest_testflight_build_number(api_key: api_key, initial_build_number: 0) + 1
+    )
+
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      export_method: "app-store",
+      # 프로비저닝 프로파일이 없으면 열쇠로 만들어 온다.
+      xcargs: "-allowProvisioningUpdates"
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      # 심사 대기 없이 내부 테스터에게만 먼저 간다.
+      skip_waiting_for_build_processing: true
+    )
+  end
+
   desc "SwiftLint 위반만 모아 본다"
   lane :lint do
     # SwiftLint 는 빌드 플러그인으로 함께 도므로 빌드 로그에서 걸러 낸다.
@@ -62,6 +140,24 @@ platform :ios do
       UI.user_error!("SwiftLint 위반이 있습니다")
     end
   end
+end
+
+# 올릴 앱이 App Store Connect 에 있는지 먼저 본다.
+#
+# 없는 채로 올리면 한참 빌드한 뒤에야 알아보기 어려운 오류로 끝난다.
+# 앱을 만드는 것은 여기서 하지 않는다 — 이름·SKU·번들 ID 를 정하는 일이고
+# 한 번 정하면 되돌리기 번거로워 사람이 대시보드에서 할 몫이다.
+def ensure_app_exists(api_key)
+  Spaceship::ConnectAPI.auth(**api_key.slice(:key_id, :issuer_id, :key, :duration, :in_house))
+  bundle_id = "com.bear3745.Mwallet.app"
+
+  return if Spaceship::ConnectAPI::App.all.any? { |app| app.bundle_id == bundle_id }
+
+  UI.user_error!(
+    "App Store Connect 에 #{bundle_id} 가 없습니다.\n" \
+    "먼저 https://appstoreconnect.apple.com 에서 앱을 만드세요.\n" \
+    "(이름·SKU·번들 ID 를 정하는 일이라 여기서 대신 하지 않습니다)"
+  )
 end
 
 # 화면 테스트는 XCTAttachment 로 그림을 남긴다. 결과 묶음 안에 들어 있어

@@ -102,5 +102,10 @@ Mwallet/View/Config.xcconfig
 !*.xcconfig.example
 !.env.example
 
+# App Store Connect API 개인키. 저장소 밖(예: iCloud)에 두고 경로만 .env 로 넘긴다.
+# 실수로 안에 복사해도 올라가지 않도록 막아 둔다.
+*.p8
+AuthKey_*.p8
+
 # --- macOS ---
 .DS_Store
