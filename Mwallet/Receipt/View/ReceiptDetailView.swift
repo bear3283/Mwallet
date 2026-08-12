@@ -55,7 +55,7 @@ struct ReceiptDetailView: View {
                     isConfirmingDeletion = true
                 } label: {
                     Text("영수증 삭제")
-                        .font(.body1_fixed)
+                        .font(.body1)
                         .foregroundStyle(.mainAccent)
                         .padding(.vertical, 16)
                 }
@@ -69,13 +69,13 @@ struct ReceiptDetailView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text(expense.merchantName)
-                    .font(.title1_fixed)
+                    .font(.title1)
                     .foregroundStyle(.black)
                     .lineLimit(1)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("편집") { isEditing = true }
-                    .font(.subhead2_2_fixed)
+                    .font(.subhead2_2)
                     .foregroundStyle(.black)
             }
         }
@@ -147,7 +147,7 @@ struct ReceiptDetailView: View {
             .frame(height: 320)
 
             Text(photoCaption)
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
                 .padding(.top, 8)
         } else {
@@ -158,7 +158,7 @@ struct ReceiptDetailView: View {
                     Image(systemName: "camera")
                     Text(title)
                 }
-                .font(.body1_fixed)
+                .font(.body1)
                 .foregroundStyle(.gray400)
                 .padding(.vertical, 20)
                 .frame(maxWidth: .infinity)
@@ -168,7 +168,7 @@ struct ReceiptDetailView: View {
             .disabled(isAttaching)
 
             Text("사진은 장변 \(Int(ReceiptImageProcessor.maxDimension))px 로 줄여 저장합니다.")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
                 .padding(.top, 8)
         }
@@ -179,14 +179,14 @@ struct ReceiptDetailView: View {
     private var amountBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(expense.formattedAmount)
-                .font(.display4_fixed)
+                .font(.display4)
                 .foregroundStyle(.black)
                 .monospacedDigit()
 
             if expense.currencyCode != ExpenseCode.baseCurrency {
                 if let rate = expense.validExchangeRate {
                     Text("\(expense.formattedAmountInKRW) · 1 \(expense.currencyCode) = \(ReceiptFormat.exchangeRate(rate))")
-                        .font(.caption2_fixed)
+                        .font(.caption2)
                         .foregroundStyle(.gray300)
                         .padding(.top, 6)
                 } else {
@@ -207,7 +207,7 @@ struct ReceiptDetailView: View {
                 applyCurrentRate()
             } label: {
                 Text("현재 환율 적용")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.black)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 14)
@@ -216,7 +216,7 @@ struct ReceiptDetailView: View {
             }
 
             Text("지출 당일이 아닌 오늘 기준 환율이 적용됩니다.")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
         }
     }
@@ -240,10 +240,10 @@ struct ReceiptDetailView: View {
                 Divider()
                 VStack(alignment: .leading, spacing: 6) {
                     Text("메모")
-                        .font(.body1_fixed)
+                        .font(.body1)
                         .foregroundStyle(.gray400)
                     Text(expense.memoText)
-                        .font(.body1_fixed)
+                        .font(.body1)
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }

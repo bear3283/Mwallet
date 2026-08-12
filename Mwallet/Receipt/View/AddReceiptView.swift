@@ -113,12 +113,12 @@ struct AddReceiptView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(isEditing ? "영수증 수정" : "영수증 추가")
-                        .font(.title1_fixed)
+                        .font(.title1)
                         .foregroundStyle(.black)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("취소") { dismiss() }
-                        .font(.subhead2_2_fixed)
+                        .font(.subhead2_2)
                         .foregroundStyle(.gray400)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
@@ -140,7 +140,7 @@ struct AddReceiptView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 TextField("0", text: $draft.amountText)
-                    .font(.display4_fixed)
+                    .font(.display4)
                     .foregroundStyle(.black)
                     .keyboardType(.decimalPad)
                     .focused($focusedField, equals: .amount)
@@ -164,7 +164,7 @@ struct AddReceiptView: View {
                     ReceiptNotice(text: "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다")
                 } else {
                     Text("원화 환산 \(convertedPreview)")
-                        .font(.caption2_fixed)
+                        .font(.caption2)
                         .foregroundStyle(.gray300)
                 }
             }
@@ -178,7 +178,7 @@ struct AddReceiptView: View {
             ReceiptFieldRow(label: "여행") {
                 if travels.isEmpty {
                     Text("여행 탭에서 일정을 먼저 만들어 주세요")
-                        .font(.caption2_fixed)
+                        .font(.caption2)
                         .foregroundStyle(.gray300)
                 } else {
                     ScrollView(.horizontal, showsIndicators: false) {

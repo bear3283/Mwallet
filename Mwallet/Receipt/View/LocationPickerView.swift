@@ -65,7 +65,7 @@ struct LocationPickerView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("취소") { dismiss() }
-                        .font(.subhead2_2_fixed)
+                        .font(.subhead2_2)
                         .foregroundStyle(.gray400)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
@@ -112,11 +112,11 @@ struct LocationPickerView: View {
                     .foregroundStyle(.gray400)
                 if isResolving {
                     Text("위치를 확인하는 중…")
-                        .font(.body1_fixed)
+                        .font(.body1)
                         .foregroundStyle(.gray300)
                 } else {
                     Text(placeName ?? "이름을 찾지 못한 곳")
-                        .font(.body1_fixed)
+                        .font(.body1)
                         .foregroundStyle(.black)
                         .lineLimit(1)
                 }

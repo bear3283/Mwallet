@@ -114,16 +114,16 @@ struct BudgetView: View {
     private var overview: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("예산 \(ReceiptFormat.krw(summary.totalPlanned))")
-                .font(.caption2_fixed)
+                .font(.caption2)
                 .foregroundStyle(.gray300)
 
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(ReceiptFormat.krw(summary.totalSpent))
-                    .font(.display4_fixed)
+                    .font(.display4)
                     .foregroundStyle(.black)
                     .monospacedDigit()
                 Text("집행")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray300)
             }
             .padding(.top, 6)
@@ -133,11 +133,11 @@ struct BudgetView: View {
 
             HStack(spacing: 0) {
                 Text(BudgetFormat.remaining(summary.remaining))
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(summary.isOverspent ? Color.mainOrange : Color.gray400)
                 Spacer()
                 Text(BudgetFormat.percent(summary.ratio))
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray400)
                     .monospacedDigit()
             }
@@ -244,7 +244,7 @@ struct BudgetChartSection: View {
                     withAnimation(.easeInOut(duration: 0.15)) { mode = chartMode }
                 } label: {
                     Text(chartMode.rawValue)
-                        .font(.subhead2_2_fixed)
+                        .font(.subhead2_2)
                         .foregroundStyle(mode == chartMode ? Color.white : Color.gray400)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -276,19 +276,19 @@ struct BudgetChartSection: View {
                         .frame(width: 10, height: 10)
 
                     Text(line.category.description)
-                        .font(.body1_fixed)
+                        .font(.body1)
                         .foregroundStyle(.black)
 
                     if line.spentCount > 0 {
                         Text("\(line.spentCount)건")
-                            .font(.caption1_fixed)
+                            .font(.caption1)
                             .foregroundStyle(.gray300)
                     }
 
                     Spacer(minLength: 8)
 
                     Text(BudgetFormat.percent(line.ratio))
-                        .font(.subhead2_1_fixed)
+                        .font(.subhead2_1)
                         .foregroundStyle(line.isOverspent ? Color.mainOrange : Color.black)
                         .monospacedDigit()
                 }
@@ -297,12 +297,12 @@ struct BudgetChartSection: View {
 
                 HStack(spacing: 0) {
                     Text("\(ReceiptFormat.krw(line.spent)) / \(ReceiptFormat.krw(line.planned))")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .foregroundStyle(.gray400)
                         .monospacedDigit()
                     Spacer()
                     Text(BudgetFormat.remaining(line.remaining))
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .foregroundStyle(line.isOverspent ? Color.mainOrange : Color.gray300)
                         .monospacedDigit()
                 }
@@ -362,7 +362,7 @@ struct BudgetChartSection: View {
                     AxisValueLabel {
                         if let amount = value.as(Double.self) {
                             Text(compactWon(amount))
-                                .font(.caption2_fixed)
+                                .font(.caption2)
                                 .foregroundStyle(.gray300)
                         }
                     }
@@ -373,7 +373,7 @@ struct BudgetChartSection: View {
                     AxisValueLabel {
                         if let name = value.as(String.self) {
                             Text(name)
-                                .font(.caption1_fixed)
+                                .font(.caption1)
                                 .foregroundStyle(.gray400)
                         }
                     }
@@ -382,7 +382,7 @@ struct BudgetChartSection: View {
             .frame(height: max(CGFloat(summary.lines.count) * 54 + 24, 140))
 
             Text("막대가 회색(예산)보다 길면 초과입니다.")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
         }
     }
@@ -405,7 +405,7 @@ struct BudgetChartSection: View {
         let slices = shareSlices
         if slices.isEmpty {
             Text("아직 집행 내역이 없어요. 지출을 기록하면 비중이 채워집니다.")
-                .font(.body1_fixed)
+                .font(.body1)
                 .foregroundStyle(.gray300)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 24)
@@ -426,10 +426,10 @@ struct BudgetChartSection: View {
                 .overlay {
                     VStack(spacing: 2) {
                         Text("총 집행")
-                            .font(.caption1_fixed)
+                            .font(.caption1)
                             .foregroundStyle(.gray300)
                         Text(ReceiptFormat.krw(summary.totalSpent))
-                            .font(.subhead3_1_fixed)
+                            .font(.subhead3_1)
                             .foregroundStyle(.black)
                             .monospacedDigit()
                     }
@@ -442,15 +442,15 @@ struct BudgetChartSection: View {
                             .fill(ReceiptCategoryPalette.color(for: slice.category))
                             .frame(width: 10, height: 10)
                         Text(slice.category)
-                            .font(.body1_fixed)
+                            .font(.body1)
                             .foregroundStyle(.black)
                         Spacer(minLength: 8)
                         Text(ReceiptFormat.krw(slice.amount))
-                            .font(.subhead2_1_fixed)
+                            .font(.subhead2_1)
                             .foregroundStyle(.black)
                             .monospacedDigit()
                         Text(sharePercent(slice.amount))
-                            .font(.caption1_fixed)
+                            .font(.caption1)
                             .foregroundStyle(.gray300)
                             .monospacedDigit()
                             .frame(width: 46, alignment: .trailing)

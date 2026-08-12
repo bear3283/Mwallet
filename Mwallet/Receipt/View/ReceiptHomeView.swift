@@ -170,7 +170,7 @@ struct ReceiptHomeView: View {
                 .font(.system(size: 15))
                 .foregroundStyle(.gray300)
             TextField("상호명, 메모, 카테고리", text: $filter.searchText)
-                .font(.body1_fixed)
+                .font(.body1)
                 .foregroundStyle(.black)
                 .tint(.mainAccent)
                 .autocorrectionDisabled()

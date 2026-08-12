@@ -36,7 +36,7 @@ struct RecordTravelChoice: View {
                 HStack(spacing: 12) {
                     Text(mainVM.selectedTravel?.isUserCreated == true ? mainVM.selectedTravel?.name ?? "-" : "여행 선택")
                         .lineLimit(1)
-                        .font(.subhead2_2_fixed)
+                        .font(.subhead2_2)
                         .foregroundStyle(mainVM.selectedTravel?.isUserCreated == true ? .black : .gray400)
                     Image("recordTravelChoiceDownChevron")
                         .resizable()

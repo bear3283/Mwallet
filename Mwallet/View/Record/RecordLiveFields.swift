@@ -18,6 +18,8 @@ import SwiftUI
 struct RecordLiveFields: View {
 
     @ObservedObject var viewModel: RecordViewModel
+    /// 사용자가 고른 글자 크기. 여백을 여기에 맞춘다.
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(spacing: 18) {
@@ -165,6 +167,9 @@ struct RecordLiveFields: View {
                                 .foregroundStyle(.black)
                         }
                         .font(.subhead3_2)
+                        // 글자를 키우면 이 세 낱말이 한 글자씩 세로로 쪼개져
+                        // 읽을 수 없었다. 제 너비를 지키게 한다.
+                        .fixedSize()
                     }
                 case .cash:
                     HStack(spacing: 0) {
@@ -185,6 +190,9 @@ struct RecordLiveFields: View {
                                 .foregroundStyle(.gray200)
                         }
                         .font(.subhead3_2)
+                        // 글자를 키우면 이 세 낱말이 한 글자씩 세로로 쪼개져
+                        // 읽을 수 없었다. 제 너비를 지키게 한다.
+                        .fixedSize()
                     }
                 default:
                     HStack(spacing: 0) {
@@ -205,6 +213,9 @@ struct RecordLiveFields: View {
                                 .foregroundStyle(.gray200)
                         }
                         .font(.subhead3_2)
+                        // 글자를 키우면 이 세 낱말이 한 글자씩 세로로 쪼개져
+                        // 읽을 수 없었다. 제 너비를 지키게 한다.
+                        .fixedSize()
                     }
                 }
                 Spacer()
@@ -212,7 +223,9 @@ struct RecordLiveFields: View {
                     .layoutPriority(-2)
             }
         }
-        .padding(.horizontal, 63)
+        // 큰 글자에서는 좌우 여백을 줄인다. 63pt 를 그대로 두면 남는 폭이
+        // 모자라 글자가 눌린다.
+        .padding(.horizontal, dynamicTypeSize.isAccessibilitySize ? 20 : 63)
     }
 }
 

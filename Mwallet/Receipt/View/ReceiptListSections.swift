@@ -21,16 +21,16 @@ struct ReceiptSummaryBlock: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(missionName ?? "전체 여행")
-                .font(.caption2_fixed)
+                .font(.caption2)
                 .foregroundStyle(.gray300)
 
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(ReceiptFormat.krw(summaryValue.totalInKRW))
-                    .font(.display4_fixed)
+                    .font(.display4)
                     .foregroundStyle(.black)
                     .monospacedDigit()
                 Text("\(summaryValue.totalCount)건")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray300)
             }
             .padding(.top, 6)
@@ -49,11 +49,11 @@ struct ReceiptSummaryBlock: View {
                 HStack(spacing: 0) {
                     ForEach(Array(summaryValue.byCurrency.enumerated()), id: \.element.id) { index, entry in
                         Text("\(entry.currency) \(decimalText(entry.amount))")
-                            .font(.caption2_fixed)
+                            .font(.caption2)
                             .foregroundStyle(.gray300)
                         if index != summaryValue.byCurrency.count - 1 {
                             Text("·")
-                                .font(.caption2_fixed)
+                                .font(.caption2)
                                 .foregroundStyle(.gray200)
                                 .padding(.horizontal, 6)
                         }

@@ -51,7 +51,7 @@ struct AllTravelsMap: View {
 
             if isEmpty {
                 Text("위치를 남긴 지출이 아직 없어요")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray400)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)

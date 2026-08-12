@@ -37,15 +37,15 @@ private var monthHeader: some View {
             Spacer()
             
             Text(viewModel.year, formatter: AddTravelViewModel.dateYearFormatter)
-                .font(.calendar1_fixed)
+                .font(.calendar1)
                 .foregroundStyle(Color(0x333333))
             +
             Text(".")
-                .font(.calendar1_fixed)
+                .font(.calendar1)
                 .foregroundStyle(Color(0x333333))
             +
             Text(viewModel.month, formatter: AddTravelViewModel.dateFormatter)
-                .font(.calendar1_fixed)
+                .font(.calendar1)
                 .foregroundStyle(Color(0x333333))
             
             Spacer()

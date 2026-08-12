@@ -311,6 +311,44 @@ final class ScreenshotTests: XCTestCase {
     }
 }
 
+// MARK: - 큰 글자
+
+/// 사용자가 글자 크기를 키웠을 때 화면이 견디는지 본다.
+///
+/// 기본 크기에서만 보면 Dynamic Type 을 켠 값이 없다. 실제로 무너지는
+/// 자리는 접근성 크기에서만 드러난다.
+@MainActor
+final class LargeTextScreenshotTests: XCTestCase {
+
+    private var app: XCUIApplication!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        continueAfterFailure = false
+        app = XCUIApplication()
+        // 접근성 크기 중 하나. 여기서 버티면 그 아래는 대체로 버틴다.
+        app.launchArguments += ["-UIPreferredContentSizeCategoryName",
+                                "UICTContentSizeCategoryAccessibilityL"]
+        app.launch()
+        XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 15))
+        try await Task.sleep(for: .seconds(1.2))
+    }
+
+    func test_큰_글자로_탭을_캡처한다() throws {
+        for tab in ["여행", "예결산", "기록", "영수증"] {
+            let button = app.tabBars.buttons[tab]
+            guard button.waitForExistence(timeout: 5) else { continue }
+            button.tap()
+            Thread.sleep(forTimeInterval: 1.5)
+
+            let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            shot.name = "큰글자-\(tab)"
+            shot.lifetime = .keepAlways
+            add(shot)
+        }
+    }
+}
+
 // MARK: - 접근성 점검
 
 /// VoiceOver 가 화면을 어떻게 읽는지 그대로 뽑아 본다.

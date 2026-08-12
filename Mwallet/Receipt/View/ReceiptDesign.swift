@@ -8,9 +8,9 @@
 //
 //    거터        .padding(.horizontal, 20)
 //    수직 리듬    spacing 0 스택 + 명시적 Spacer().frame(height:)
-//    금액        display4_fixed / display3_fixed
-//    제목        display1_fixed, 항목 제목 subhead3_1_fixed
-//    보조 텍스트  caption2_fixed + gray300
+//    금액        display4 / display3
+//    제목        display1, 항목 제목 subhead3_1
+//    보조 텍스트  caption2 + gray300
 //    구분        Divider()
 //    강조        mainAccent
 //
@@ -30,12 +30,12 @@ struct ReceiptSectionTitle: View {
     var body: some View {
         HStack(spacing: 0) {
             Text(text)
-                .font(.subhead1_fixed)
+                .font(.subhead1)
                 .foregroundStyle(.gray400)
             Spacer()
             if let trailing {
                 Text(trailing)
-                    .font(.subhead1_fixed)
+                    .font(.subhead1)
                     .foregroundStyle(.gray400)
             }
         }
@@ -56,7 +56,7 @@ struct ReceiptChip: View {
                 .lineLimit(1)
                 .padding(.vertical, 7)
                 .padding(.horizontal, 14)
-                .font(.caption2_fixed)
+                .font(.caption2)
                 // 선택 시 형광 초록 배경 + 검정 글씨. 초록 위 흰 글씨는 대비가 부족하다.
                 .foregroundStyle(isSelected ? Color.black : Color.gray400)
                 .background(isSelected ? Color.mainAccent : Color.gray100)
@@ -76,7 +76,7 @@ struct ReceiptValueRow: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(label)
-                .font(.body1_fixed)
+                .font(.body1)
                 .foregroundStyle(.gray400)
             Spacer(minLength: 8)
             Group {
@@ -86,7 +86,7 @@ struct ReceiptValueRow: View {
                     Text(value)
                 }
             }
-            .font(.subhead2_1_fixed)
+            .font(.subhead2_1)
             .foregroundStyle(valueColor)
             .multilineTextAlignment(.trailing)
         }
@@ -104,7 +104,7 @@ struct ReceiptFieldRow<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(label)
-                .font(.caption2_fixed)
+                .font(.caption2)
                 .foregroundStyle(.gray400)
             content
         }
@@ -115,7 +115,7 @@ struct ReceiptFieldRow<Content: View>: View {
 struct ReceiptTextFieldStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.body1_fixed)
+            .font(.body1)
             .foregroundStyle(.black)
             .tint(.mainAccent)
             .padding(.vertical, 11)
@@ -140,7 +140,7 @@ struct ReceiptPrimaryButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.subhead2_1_fixed)
+                .font(.subhead2_1)
                 // 형광 초록 버튼 위에는 검정 글씨를 얹는다.
                 .foregroundStyle(isEnabled ? Color.black : Color.gray300)
                 .padding(.vertical, 14.5)
@@ -161,11 +161,11 @@ struct ReceiptEmptyState: View {
     var body: some View {
         VStack(spacing: 8) {
             Text(message)
-                .font(.subhead3_2_fixed)
+                .font(.subhead3_2)
                 .foregroundStyle(.gray300)
             if let detail {
                 Text(detail)
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray300)
                     .multilineTextAlignment(.center)
             }
@@ -189,7 +189,7 @@ struct ReceiptNotice: View {
                 // 'Exclamation Mark In A Filled Circle' 이 붙어 읽힌다.
                 .accessibilityHidden(true)
             Text(text)
-                .font(.caption1_fixed)
+                .font(.caption1)
             Spacer(minLength: 0)
         }
         .foregroundStyle(.mainOrange)

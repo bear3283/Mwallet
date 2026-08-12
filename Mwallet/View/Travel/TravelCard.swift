@@ -130,7 +130,7 @@ struct TravelCard: View {
             }
 
             Text(TravelSchedule.dayRangeText(travel))
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(isMonogram ? tint : .white.opacity(0.9))
                 .monospacedDigit()
                 .lineLimit(1)
@@ -158,7 +158,7 @@ struct TravelCard: View {
 
     private var name: some View {
         Text(travel.displayName)
-            .font(.subhead1_fixed)
+            .font(.subhead1)
             .foregroundStyle(isSelected ? Color.mainAccent : .black)
             .lineLimit(1)
             .truncationMode(.tail)
@@ -169,7 +169,7 @@ struct TravelCard: View {
     private var badge: some View {
         if isOngoing {
             Text("여행 중")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(Color.mainAccent)
                 .padding(.horizontal, 6)
                 .padding(.vertical, 2)
@@ -212,7 +212,7 @@ struct TravelAllCard: View {
             }
 
             Text("전체 여행")
-                .font(.subhead1_fixed)
+                .font(.subhead1)
                 .foregroundStyle(isSelected ? Color.mainAccent : .black)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)

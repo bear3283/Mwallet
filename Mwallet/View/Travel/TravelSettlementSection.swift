@@ -24,7 +24,7 @@ struct TravelSettlementSection: View {
 
             if summary.isEmpty {
                 Text("아직 나눌 지출이 없습니다.\n기록할 때 함께 쓴 사람을 고르면 여기에 나뉩니다.")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray300)
                     .padding(.vertical, 20)
             } else {
@@ -42,12 +42,12 @@ struct TravelSettlementSection: View {
     private var header: some View {
         HStack(spacing: 0) {
             Text("인원별 정산")
-                .font(.subhead1_fixed)
+                .font(.subhead1)
                 .foregroundStyle(.gray400)
             Spacer()
             if !summary.isEmpty {
                 Text("\(summary.shares.count)명 · \(ReceiptFormat.krw(summary.totalSettled))")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
                     .monospacedDigit()
             }
@@ -58,19 +58,19 @@ struct TravelSettlementSection: View {
         VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(share.name)
-                    .font(.subhead2_1_fixed)
+                    .font(.subhead2_1)
                     .foregroundStyle(.black)
                     .lineLimit(1)
 
                 Text("\(share.expenseCount)건")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
                     .monospacedDigit()
 
                 Spacer(minLength: 8)
 
                 Text(ReceiptFormat.krw(share.amount))
-                    .font(.subhead2_1_fixed)
+                    .font(.subhead2_1)
                     .foregroundStyle(.black)
                     .monospacedDigit()
             }
@@ -103,12 +103,12 @@ struct TravelSettlementSection: View {
     private var notices: some View {
         if summary.hasUnassigned {
             Text("함께 쓴 사람이 적히지 않은 \(summary.unassignedCount)건(\(ReceiptFormat.krw(summary.unassigned)))은 나누지 못했습니다")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(Color.mainOrange)
         }
         if summary.hasUnconvertible {
             Text("환율을 받지 못한 \(summary.unconvertibleCount)건은 정산에서 빠졌습니다")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(Color.mainOrange)
         }
     }
