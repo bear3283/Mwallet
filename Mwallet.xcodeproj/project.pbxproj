@@ -22,7 +22,6 @@
 		57597A8A2AF096C2000D46A9 /* CountryChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */; };
 		575F287F2AF38C0300F9484E /* AddTravelRequestModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */; };
 		5760066D2ADD42FA006CD8DF /* ManualRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */; };
-		5760066F2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066E2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift */; };
 		57A65D052AD7D4A900131266 /* Character+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D042AD7D4A900131266 /* Character+Extension.swift */; };
 		57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D072AD7D4D100131266 /* CharacterForm.swift */; };
 		57A65D0A2AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D092AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift */; };
@@ -107,6 +106,10 @@
 		C1A11EA7000000000000F02 /* RecordTopSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000F01 /* RecordTopSections.swift */; };
 		C1A11EA71000000000000A02 /* SettlementSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000A01 /* SettlementSummary.swift */; };
 		C1A11EA71000000000000B02 /* TravelSettlementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000B01 /* TravelSettlementSection.swift */; };
+		C1B00D100000000000AA2 /* TravelGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B00D100000000000AA1 /* TravelGrouping.swift */; };
+		C1B00D110000000000AA2 /* TravelArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B00D110000000000AA1 /* TravelArtwork.swift */; };
+		C1B00D120000000000AA2 /* TravelCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B00D120000000000AA1 /* TravelCard.swift */; };
+		C1B00D130000000000AA2 /* TravelChoiceSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B00D130000000000AA1 /* TravelChoiceSheet.swift */; };
 		C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */; };
 		C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */; };
 		C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */; };
@@ -181,7 +184,6 @@
 		57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryChoiceModal.swift; sourceTree = "<group>"; };
 		575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelRequestModal.swift; sourceTree = "<group>"; };
 		5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualRecordView.swift; sourceTree = "<group>"; };
-		5760066E2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelChoiceInRecordModal.swift; sourceTree = "<group>"; };
 		57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		57A65D042AD7D4A900131266 /* Character+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Character+Extension.swift"; sourceTree = "<group>"; };
 		57A65D072AD7D4D100131266 /* CharacterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterForm.swift; sourceTree = "<group>"; };
@@ -268,6 +270,10 @@
 		C1A11EA7000000000000F01 /* RecordTopSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopSections.swift; sourceTree = "<group>"; };
 		C1A11EA71000000000000A01 /* SettlementSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementSummary.swift; sourceTree = "<group>"; };
 		C1A11EA71000000000000B01 /* TravelSettlementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSettlementSection.swift; sourceTree = "<group>"; };
+		C1B00D100000000000AA1 /* TravelGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGrouping.swift; sourceTree = "<group>"; };
+		C1B00D110000000000AA1 /* TravelArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelArtwork.swift; sourceTree = "<group>"; };
+		C1B00D120000000000AA1 /* TravelCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCard.swift; sourceTree = "<group>"; };
+		C1B00D130000000000AA1 /* TravelChoiceSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelChoiceSheet.swift; sourceTree = "<group>"; };
 		C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingHandler.swift; sourceTree = "<group>"; };
 		C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoModel.swift; sourceTree = "<group>"; };
 		C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Extension.swift"; sourceTree = "<group>"; };
@@ -396,7 +402,6 @@
 		571C52CC2AE49ACB00C10377 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
-				5760066E2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift */,
 				572BE1E92AE4BB3A005933E7 /* CategoryChoiceModal.swift */,
 				57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */,
 				575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */,
@@ -474,6 +479,10 @@
 				C1A11EA7000000000000A01 /* TravelPalette.swift */,
 				C1A11EA7000000000000A11 /* AllTravelsMap.swift */,
 				C1A11EA70000000000000AA1 /* TravelPicker.swift */,
+				C1B00D100000000000AA1 /* TravelGrouping.swift */,
+				C1B00D110000000000AA1 /* TravelArtwork.swift */,
+				C1B00D120000000000AA1 /* TravelCard.swift */,
+				C1B00D130000000000AA1 /* TravelChoiceSheet.swift */,
 				C1A11EA700000000000009D1 /* TravelEditView.swift */,
 				C1A11EA700000000000009C1 /* TravelStore.swift */,
 				C1A11EA700000000000009B1 /* TravelExpenseMap.swift */,
@@ -905,6 +914,10 @@
 				C1A11EA7000000000000A02 /* TravelPalette.swift in Sources */,
 				C1A11EA7000000000000A12 /* AllTravelsMap.swift in Sources */,
 				C1A11EA70000000000000AA2 /* TravelPicker.swift in Sources */,
+				C1B00D100000000000AA2 /* TravelGrouping.swift in Sources */,
+				C1B00D110000000000AA2 /* TravelArtwork.swift in Sources */,
+				C1B00D120000000000AA2 /* TravelCard.swift in Sources */,
+				C1B00D130000000000AA2 /* TravelChoiceSheet.swift in Sources */,
 				C1A11EA700000000000009D2 /* TravelEditView.swift in Sources */,
 				C1A11EA700000000000009C2 /* TravelStore.swift in Sources */,
 				C1A11EA700000000000009B2 /* TravelExpenseMap.swift in Sources */,
@@ -956,7 +969,6 @@
 				C17550542AD54FC900A61BE5 /* AddTravelView.swift in Sources */,
 				C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */,
 				C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */,
-				5760066F2ADD4355006CD8DF /* TravelChoiceInRecordModal.swift in Sources */,
 				57A65D0A2AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift in Sources */,
 				57597A8A2AF096C2000D46A9 /* CountryChoiceModal.swift in Sources */,
 				C19AFAE72ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift in Sources */,

@@ -18,6 +18,10 @@ struct RecordView: View {
     @StateObject var viewModel = RecordViewModel()
     @EnvironmentObject var mainVM: MainViewModel
     
+    /// 여행 선택 시트에 건네줄 목록. 예결산·영수증과 같은 규칙으로 뽑는다.
+    @State private var travelChoices: [Travel] = []
+    private let travelStore = TravelStore()
+
     @GestureState private var isDetectingPress = false
     @State private var isDetectingPress_showOnButton = false {
         didSet {
@@ -43,6 +47,7 @@ struct RecordView: View {
             screen(RecordLayout.forCurrentScreen)
             .ignoresSafeArea()
             .onAppear {
+                travelChoices = travelStore.availableTravels()
                 viewModel.resetInStringProperties()
                 viewModel.wantToActivateAutoSaveTimer = true
                 viewModel.recordButtonResetTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
@@ -64,12 +69,7 @@ struct RecordView: View {
                 viewModel.recordButtonResetTimer?.invalidate()
             }
             .sheet(isPresented: $viewModel.travelChoiceModalIsShown) {
-                if viewModel.travelChoiceModalIsShown {
-                    TravelChoiceInRecordModal(chosenTravel: $mainVM.selectedTravel, updateIsSameDataStateClosure: { return true }, isSameData: .constant(true))
-                        .presentationDetents([.height(289 - 34)])
-                } else {
-                    EmptyView()
-                }
+                TravelChoiceSheet(travels: travelChoices, selection: $mainVM.selectedTravel)
             }
             .sheet(isPresented: $viewModel.addTravelRequestModalIsShown) {
                 AddTravelRequestModal(viewModel: viewModel)

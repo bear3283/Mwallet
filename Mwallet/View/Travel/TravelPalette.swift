@@ -36,4 +36,21 @@ enum TravelPalette {
     static func color(at index: Int) -> Color {
         colors[index % colors.count]
     }
+
+    /// 글자에서 색을 고른다. 목록 차례를 모르는 자리가 쓴다.
+    ///
+    /// 지도는 차례대로 색을 주어 둘이 겹치지 않게 하지만, 선택 시트의 빈
+    /// 카드는 색이 이름표가 아니라 서로 구별만 되면 되는 자리라 겹쳐도
+    /// 괜찮다. 대신 시트를 다시 열거나 앱을 껐다 켤 때 색이 바뀌지 않아야
+    /// 해서, 자리 대신 이름에서 뽑는다.
+    ///
+    /// Swift 의 hashValue 는 실행할 때마다 달라져 쓸 수 없다. 그래서 셈을
+    /// 직접 한다.
+    static func color(for key: String) -> Color {
+        var hash = 5381
+        for scalar in key.unicodeScalars {
+            hash = (hash &* 33) &+ Int(scalar.value)
+        }
+        return colors[(hash & 0x7FFF_FFFF) % colors.count]
+    }
 }

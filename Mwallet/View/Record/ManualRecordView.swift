@@ -12,6 +12,9 @@ import CoreLocation
 struct ManualRecordView: View {
     @StateObject var viewModel = ManualRecordViewModel()
     @EnvironmentObject var mainVM: MainViewModel
+
+    /// 여행 선택 시트에 건네줄 목록.
+    @State private var travelChoices: [Travel] = []
     @Environment(\.dismiss) var dismiss
     private let travelStore = TravelStore()
     let exchangeHandler = ExchangeRateHandler.shared
@@ -70,8 +73,8 @@ struct ManualRecordView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: backButtonView)
         .sheet(isPresented: $viewModel.travelChoiceModalIsShown) {
-            TravelChoiceInRecordModal(chosenTravel: $mainVM.chosenTravelInManualRecord, updateIsSameDataStateClosure: { return true }, isSameData: .constant(true))
-                .presentationDetents([.height(289 - 34)])
+            TravelChoiceSheet(travels: travelChoices,
+                              selection: $mainVM.chosenTravelInManualRecord)
         }
         .sheet(isPresented: $viewModel.categoryChoiceModalIsShown) {
             CategoryChoiceModal(chosenCategory: $viewModel.category)
@@ -101,6 +104,7 @@ struct ManualRecordView: View {
             Text("현재 화면의 정보를 모두 초기화하고 이전 화면으로 돌아갈까요?")
         }
         .onAppear {
+            travelChoices = travelStore.availableTravels()
             // 수기 입력에도 결제 위치가 저장되므로 이 화면에서 위치 권한을 요청한다.
             DateGapHandler.shared.requestAuthorization()
 
