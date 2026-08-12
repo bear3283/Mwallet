@@ -45,6 +45,11 @@ enum ReceiptImageProcessor {
 
     // 목록에서 용량을 보여줄 때 쓴다.
     static func formattedSize(of data: Data) -> String {
-        ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file)
+        formattedSize(bytes: data.count)
+    }
+
+    /// 여러 장을 합친 크기처럼, 손에 쥔 데이터가 없을 때.
+    static func formattedSize(bytes: Int) -> String {
+        ByteCountFormatter.string(fromByteCount: Int64(bytes), countStyle: .file)
     }
 }

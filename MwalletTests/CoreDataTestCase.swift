@@ -80,7 +80,7 @@ class CoreDataTestCase: XCTestCase {
         expense.payDate = paidAt
         expense.timeZoneIdentifier = "Asia/Seoul"
         expense.setCoordinate(coordinate)
-        if hasPhoto { expense.imageData = Data([0x01]) }
+        if hasPhoto { expense.replacePhotos(with: [Data([0x01])], in: context) }
         // 함께 쓴 사람. 비워 두면 나눌 수 없는 지출이 된다.
         expense.participants = participants
         return expense

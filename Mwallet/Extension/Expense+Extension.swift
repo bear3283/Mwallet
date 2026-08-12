@@ -3,6 +3,7 @@
 //  Mwallet
 //
 
+import CoreData
 import CoreLocation
 import Foundation
 
@@ -75,10 +76,42 @@ extension Expense {
         currencyCode != "KRW" && validExchangeRate == nil
     }
 
+    // MARK: - 영수증 사진
+
+    /// 붙은 사진을 붙인 차례대로.
+    ///
+    /// Core Data 의 to-many 는 Set 이라 차례를 지켜 주지 않는다. 영수증은
+    /// '앞면·뒷면·카드전표' 처럼 순서에 뜻이 있는 일이 많아 order 로 세운다.
+    var photos: [ReceiptPhoto] {
+        ((photoArray as? Set<ReceiptPhoto>) ?? [])
+            .sorted { ($0.order, $0.id?.uuidString ?? "") < ($1.order, $1.id?.uuidString ?? "") }
+    }
+
+    /// 사진의 내용만. 화면은 대개 이것만 있으면 된다.
+    var photoDataList: [Data] {
+        photos.compactMap(\.data).filter { !$0.isEmpty }
+    }
+
+    /// 사진을 통째로 갈아 끼운다. 편집 화면이 초안을 저장할 때 쓴다.
+    ///
+    /// 남은 것을 골라 지우고 새것만 더하는 대신 다 지우고 다시 넣는다.
+    /// 사진은 몇 장뿐이고, 차례가 바뀌는 경우까지 맞추려면 짝을 지어야 해서
+    /// 오히려 어긋나기 쉽다.
+    func replacePhotos(with list: [Data], in context: NSManagedObjectContext) {
+        for photo in photos { context.delete(photo) }
+        for (index, data) in list.enumerated() where !data.isEmpty {
+            let photo = ReceiptPhoto(context: context)
+            photo.id = UUID()
+            photo.data = data
+            photo.order = Int16(index)
+            photo.expense = self
+        }
+    }
+
     // 영수증 사진이 아직 없는 기록인지.
     // 현장에서 금액만 먼저 남기고 사진은 나중에 붙이는 흐름을 위해 따로 센다.
     var needsPhoto: Bool {
-        imageData?.isEmpty ?? true
+        photoDataList.isEmpty
     }
 
     // 지출한 위치의 좌표. 둘 다 있어야 유효하다.

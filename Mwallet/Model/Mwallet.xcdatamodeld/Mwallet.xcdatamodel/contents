@@ -22,7 +22,14 @@
         <attribute name="paymentMethod" optional="YES" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES"/>
         <attribute name="timeZoneIdentifier" optional="YES" attributeType="String"/>
         <attribute name="voiceRecordFile" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" valueTransformerName=""/>
+        <relationship name="photoArray" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReceiptPhoto" inverseName="expense" inverseEntity="ReceiptPhoto"/>
         <relationship name="travel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Travel" inverseName="expenseArray" inverseEntity="Travel"/>
+    </entity>
+    <entity name="ReceiptPhoto" representedClassName="ReceiptPhoto" syncable="YES" codeGenerationType="class">
+        <attribute name="data" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="expense" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="photoArray" inverseEntity="Expense"/>
     </entity>
     <entity name="Travel" representedClassName="Travel" syncable="YES" codeGenerationType="class">
         <attribute name="coverImageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>

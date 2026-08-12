@@ -45,6 +45,9 @@ final class FirstLaunchSeeder {
         // 새로 만드는 것보다 먼저 해야 기본함이 두 개가 되지 않는다.
         migrateLegacyDefaultTravel()
 
+        // 한 장만 담던 사진을 여러 장 담는 곳으로 옮긴다. 한 번만 돈다.
+        ReceiptPhotoMigrator.migrateIfNeeded(in: viewContext)
+
         // 값이 없으면 첫 실행이고, true 로 남아 있어도 아직 시딩 전으로 본다.
         let needsSeeding = (UserDefaults.standard.object(forKey: Self.seededKey) as? Bool) ?? true
         UserDefaults.standard.set(false, forKey: Self.seededKey)
