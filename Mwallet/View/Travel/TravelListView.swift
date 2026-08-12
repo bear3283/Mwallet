@@ -147,6 +147,7 @@ struct TravelGridCell: View {
                     .stroke(color, lineWidth: 3)
             )
             .overlay(alignment: .topTrailing) { ongoingMark }
+            .overlay(alignment: .bottomLeading) { monogramMark }
     }
 
     /// 손수 고른 대표 사진이 먼저고, 없으면 지출이 적힌 나라의 사진,
@@ -169,6 +170,32 @@ struct TravelGridCell: View {
                                tint: color,
                                glyphSize: 34)
         }
+    }
+
+    /// 사진 위에 얹는 첫 글자.
+    ///
+    /// 나라 사진은 나라당 한 장뿐이라, 대표 사진을 고르지 않은 한국 여행이
+    /// 둘이면 같은 경복궁을 받는다. 테두리 색이 다르긴 하지만 색만으로는
+    /// 나란히 놓였을 때 얼른 갈리지 않는다.
+    ///
+    /// 바탕이 이미 글자 타일이면 얹지 않는다 — 같은 글자가 둘이 된다.
+    @ViewBuilder
+    private var monogramMark: some View {
+        if hasPhoto {
+            Text(TravelArtworkBuilder.monogram(from: travel.displayName))
+                .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 22))
+                .foregroundStyle(.white)
+                .shadow(color: .black.opacity(0.45), radius: 3, y: 1)
+                .padding(.leading, 10)
+                .padding(.bottom, 8)
+        }
+    }
+
+    /// 바탕이 사진인지. 글자 타일이면 거짓이다.
+    private var hasPhoto: Bool {
+        if travel.coverImageData != nil { return true }
+        if case .photo = TravelArtworkBuilder.artwork(for: travel).cover { return true }
+        return false
     }
 
     // 여행 중이라는 표시. 지도의 점과 같은 생김새라 '지금 여기' 로 읽힌다.
