@@ -140,19 +140,35 @@ struct TravelGridCell: View {
         // scaledToFill 을 걸면 원본 비율대로 칸 밖까지 번져 그리드가 어긋난다.
         Color.clear
             .aspectRatio(1, contentMode: .fit)
-            .overlay {
-                if let data = travel.coverImageData, let image = UIImage(data: data) {
-                    Image(uiImage: image).resizable().scaledToFill()
-                } else {
-                    Image("DefaultImage").resizable().scaledToFill()
-                }
-            }
+            .overlay { background }
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(color, lineWidth: 3)
             )
             .overlay(alignment: .topTrailing) { ongoingMark }
+    }
+
+    /// 손수 고른 대표 사진이 먼저고, 없으면 지출이 적힌 나라의 사진,
+    /// 그것도 없으면 이름 첫 글자다.
+    ///
+    /// 예전에는 곧바로 'DefaultImage' 로 떨어졌는데, 대표 사진을 고르지 않은
+    /// 여행이 여럿이면 같은 비행기 사진이 격자에 늘어서 어느 칸이 어느
+    /// 여행인지 이름을 하나씩 읽어야 했다.
+    ///
+    /// 글자 색은 이 칸의 테두리 색을 그대로 쓴다. 테두리가 지도 위 점과
+    /// 짝이라, 다른 색을 들이면 한 칸에 뜻이 다른 색이 둘이 된다.
+    @ViewBuilder
+    private var background: some View {
+        if let data = travel.coverImageData, let image = UIImage(data: data) {
+            Image(uiImage: image).resizable().scaledToFill()
+        } else if case .photo(let name) = TravelArtworkBuilder.artwork(for: travel).cover {
+            Image(name).resizable().scaledToFill()
+        } else {
+            TravelMonogramTile(letter: TravelArtworkBuilder.monogram(from: travel.displayName),
+                               tint: color,
+                               glyphSize: 34)
+        }
     }
 
     // 여행 중이라는 표시. 지도의 점과 같은 생김새라 '지금 여기' 로 읽힌다.
