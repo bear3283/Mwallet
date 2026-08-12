@@ -42,9 +42,22 @@ struct SplashView: View {
                     BrandMarkView(progress: markProgress)
                         .frame(width: 150, height: 150)
 
-                    Text("Mwallet")
+                    // 마크는 W 인데 이름은 'Mission Wallet' 이다. 어긋난 것이 아니라
+                    // 읽는 사람이 둘이기 때문이다.
+                    //
+                    // 단기사역을 가는 사람에게 Mission 은 그대로 '선교' 다.
+                    // 그렇지 않은 사람에게는 퀘스트에 가깝다 — 이 앱이 건네는
+                    // 미션(오늘 쓴 것을 남겨라)을 해내는 지갑이다. 한 낱말이
+                    // 두 사람에게 각각 맞는 뜻으로 읽힌다.
+                    //
+                    // 마크에 M 이 아니라 W 를 앞세운 것도 같은 이유다. 그림은
+                    // 설명 없이 '지갑' 만 전하고, 뜻은 이름이 진다.
+                    Text("Mission Wallet")
                         .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 18))
                         .foregroundStyle(.white)
+                        // 낱말이 둘로 늘면서 글자가 붙어 보인다. 살짝 벌려
+                        // 마크 아래의 이름표답게 둔다.
+                        .tracking(0.6)
                         .opacity(wordmarkOpacity)
                 }
                 .padding(.bottom, 40)

@@ -311,6 +311,27 @@ final class ScreenshotTests: XCTestCase {
     }
 }
 
+// MARK: - 스플래시
+
+/// 여는 화면은 1.6초 뒤 사라진다. 탭바를 기다리면 이미 지나간 뒤라,
+/// 뜨자마자 여러 시점에 찍어 이름이 떠오른 장을 남긴다.
+@MainActor
+final class SplashScreenshotTests: XCTestCase {
+
+    func test_여는_화면을_캡처한다() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        for (index, wait) in [0.0, 0.45, 0.55].enumerated() {
+            if wait > 0 { Thread.sleep(forTimeInterval: wait) }
+            let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            shot.name = "splash-\(index)"
+            shot.lifetime = .keepAlways
+            add(shot)
+        }
+    }
+}
+
 // MARK: - 큰 글자
 
 /// 사용자가 글자 크기를 키웠을 때 화면이 견디는지 본다.
