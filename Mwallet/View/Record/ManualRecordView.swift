@@ -227,6 +227,8 @@ struct ManualRecordView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
+                        // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                        .accessibilityHidden(true)
                     
                     Text("저장되었습니다")
                         .foregroundStyle(.gray300)

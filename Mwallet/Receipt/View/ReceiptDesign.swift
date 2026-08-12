@@ -185,6 +185,9 @@ struct ReceiptNotice: View {
         HStack(alignment: .top, spacing: 6) {
             Image(systemName: "exclamationmark.circle.fill")
                 .font(.system(size: 13))
+                // 뜻은 글이 다 지고 있다. 숨기지 않으면 문장 앞에
+                // 'Exclamation Mark In A Filled Circle' 이 붙어 읽힌다.
+                .accessibilityHidden(true)
             Text(text)
                 .font(.caption1_fixed)
             Spacer(minLength: 0)

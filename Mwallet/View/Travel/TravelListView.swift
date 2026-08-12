@@ -78,8 +78,8 @@ struct TravelListView: View {
                     .foregroundStyle(.gray400)
             }
         } actions: {
-            NavigationLink { SettingView() } label: { TabActionIcon(systemName: "gearshape") }
-            NavigationLink { AddTravelView() } label: { TabActionIcon(systemName: "plus") }
+            NavigationLink { SettingView() } label: { TabActionIcon(systemName: "gearshape", label: "설정") }
+            NavigationLink { AddTravelView() } label: { TabActionIcon(systemName: "plus", label: "여행 추가") }
         }
     }
 
@@ -162,9 +162,9 @@ struct TravelGridCell: View {
     @ViewBuilder
     private var background: some View {
         if let data = travel.coverImageData, let image = UIImage(data: data) {
-            Image(uiImage: image).resizable().scaledToFill()
+            photo(Image(uiImage: image))
         } else if case .photo(let name) = TravelArtworkBuilder.artwork(for: travel).cover {
-            Image(name).resizable().scaledToFill()
+            photo(Image(name))
         } else {
             TravelMonogramTile(letter: TravelArtworkBuilder.monogram(from: travel.displayName),
                                tint: color,
@@ -189,6 +189,22 @@ struct TravelGridCell: View {
                 .padding(.leading, 10)
                 .padding(.bottom, 8)
         }
+    }
+
+    /// 사진 아래쪽을 어둡게 깐다.
+    ///
+    /// 흰 첫 글자가 밝은 사진 위에서 묻힌다. 접근성 감사도 이 자리를
+    /// 대비 미달로 짚었다(경복궁 하늘 위의 '제'·'부'). 그림자만으로는
+    /// 모자라서 글자가 앉는 자리를 아예 어둡게 만든다.
+    private func photo(_ image: Image) -> some View {
+        image
+            .resizable()
+            .scaledToFill()
+            .overlay {
+                LinearGradient(colors: [.clear, .black.opacity(0.7)],
+                               startPoint: .center, endPoint: .bottom)
+            }
+            .accessibilityHidden(true)
     }
 
     /// 바탕이 사진인지. 글자 타일이면 거짓이다.

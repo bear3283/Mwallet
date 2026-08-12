@@ -40,6 +40,8 @@ struct RecordLiveFields: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
+                        // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                        .accessibilityHidden(true)
                     Spacer()
                         .frame(width: 12)
                     Text(viewModel.info!)
@@ -51,6 +53,8 @@ struct RecordLiveFields: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
+                        // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                        .accessibilityHidden(true)
                     Spacer()
                         .frame(width: 12)
                     Text("-")
@@ -88,6 +92,8 @@ struct RecordLiveFields: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
+                        // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                        .accessibilityHidden(true)
                     Spacer()
                         .frame(width: 12)
                     Group {
@@ -105,6 +111,8 @@ struct RecordLiveFields: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
+                        // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                        .accessibilityHidden(true)
                     Spacer()
                         .frame(width: 12)
                     Text("-")
@@ -144,6 +152,8 @@ struct RecordLiveFields: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                            .accessibilityHidden(true)
                         Spacer()
                             .frame(width: 12)
                         Group {
@@ -162,6 +172,8 @@ struct RecordLiveFields: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                            .accessibilityHidden(true)
                         Spacer()
                             .frame(width: 12)
                         Group {
@@ -180,6 +192,8 @@ struct RecordLiveFields: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                            .accessibilityHidden(true)
                         Spacer()
                             .frame(width: 12)
                         Group {
@@ -229,6 +243,8 @@ struct RecordAlertBubble: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
+                    // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                    .accessibilityHidden(true)
                 Text(message)
                     .font(.subhead2_2)
                     .foregroundStyle(.gray300)

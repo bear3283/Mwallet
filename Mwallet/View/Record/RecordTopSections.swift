@@ -42,6 +42,8 @@ struct RecordTravelChoice: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 16, height: 16)
+                        // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                        .accessibilityHidden(true)
                 }
                 .padding(.vertical, 6)
                 .padding(.leading, 16)

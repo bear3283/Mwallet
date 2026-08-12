@@ -53,14 +53,14 @@ struct ReceiptHomeView: View {
                     NavigationLink {
                         ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
                     } label: {
-                        TabActionIcon(systemName: "chart.pie", isEnabled: !allReceipts.isEmpty)
+                        TabActionIcon(systemName: "chart.pie", label: "지출 통계", isEnabled: !allReceipts.isEmpty)
                     }
                     .disabled(allReceipts.isEmpty)
 
                     Button {
                         isAddingExpense = true
                     } label: {
-                        TabActionIcon(systemName: "plus")
+                        TabActionIcon(systemName: "plus", label: "영수증 추가")
                     }
                 }
 

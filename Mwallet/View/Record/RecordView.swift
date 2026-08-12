@@ -174,33 +174,22 @@ struct RecordView: View {
     }
 
     private var manualRecordButtonView: some View {
-        Button {
+        ManualRecordLink(isHidden: isDetectingPress
+                         && (viewModel.AreThereOtherTravels || viewModel.isExplicitTempRecord)) {
             viewModel.wantToActivateAutoSaveTimer = false
             viewModel.manualRecordViewIsShown = true
-        } label: {
-                HStack(spacing: 4) {
-                    Image("recordGrayPencil")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 16, height: 16)
-                    Text("직접 기록")
-                        .foregroundStyle(.gray300)
-                        .font(.caption2)
-                        .underline()
-                }
-                .padding(.vertical, 9.5)
-                .padding(.horizontal, 16)
         }
-        .opacity(!isDetectingPress || (!viewModel.AreThereOtherTravels && !viewModel.isExplicitTempRecord) ? 1 : 0.0000001)
         .disabled(isDetectingPress)
     }
-    
+
     private var recordButtonView: some View {
         ZStack {
             Image("recordButtonOff")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 84, height: 84)
+                // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                .accessibilityHidden(true)
             Image("recordButtonOn")
                 .resizable()
                 .scaledToFit()
@@ -209,8 +198,17 @@ struct RecordView: View {
                 .scaleEffect(isDetectingPress_letButtonBigger ? 1 : (28.0 / 84.0))
                 .animation(.easeInOut(duration: recordButtonAnimationLength), value: isDetectingPress_letButtonBigger)
                 .opacity(isDetectingPress_showOnButton ? 1 : 0.0000001)
+                // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                .accessibilityHidden(true)
         }
         .gesture(continuousPress)
+        // 이 앱의 핵심 동작인데 VoiceOver 에는 아무것도 없는 자리였다.
+        // 그림 셋을 장식으로 숨기고 나면 남는 것이 없으므로 요소를 직접 세운다.
+        // (누른 채로 있는 동작 자체는 실기기에서 확인해야 한다)
+        .accessibilityElement()
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("녹음")
+        .accessibilityHint("두 번 누른 채로 있으면 말한 내용을 받아 적습니다")
         .onChange(of: isDetectingPress) { oldValue, newValue in
             if !oldValue && newValue {
                 // 녹음 시작 (지점 1: 녹음 끝과 순서 뒤집히는 오류 발생 가능)
@@ -391,4 +389,36 @@ struct ThreeDotsView: View {
 
 #Preview {
     RecordView()
+}
+
+// MARK: - 직접 기록으로 가는 길
+
+/// '직접 기록' 버튼. 말로 적기 어려울 때 손으로 넣는 화면으로 간다.
+///
+/// 녹음하는 동안에는 자리만 지키고 사라진다. 완전히 지우지 않는 것은
+/// 위 묶음의 높이가 흔들려 화면이 들썩이기 때문이다.
+struct ManualRecordLink: View {
+
+    let isHidden: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Image("recordGrayPencil")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 16, height: 16)
+                    // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
+                    .accessibilityHidden(true)
+                Text("직접 기록")
+                    .foregroundStyle(.gray300)
+                    .font(.caption2)
+                    .underline()
+            }
+            .padding(.vertical, 9.5)
+            .padding(.horizontal, 16)
+        }
+        .opacity(isHidden ? 0.0000001 : 1)
+    }
 }

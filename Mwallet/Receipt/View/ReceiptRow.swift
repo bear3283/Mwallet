@@ -55,7 +55,16 @@ struct ReceiptThumbnail: View {
                             .padding(3)
                     }
                 }
+                // 줄 전체가 이미 상호명·금액을 읽어 준다. 사진에 이름이
+                // 없으면 소리로는 정체 모를 '이미지' 하나가 끼어든다.
+                .accessibilityLabel(photoLabel)
         }
+    }
+
+    /// 사진 자리를 소리로 읽는 말. 장수까지 알려 준다.
+    private var photoLabel: String {
+        let count = expense.photoDataList.count
+        return count > 1 ? "영수증 사진 \(count)장" : "영수증 사진"
     }
 }
 
