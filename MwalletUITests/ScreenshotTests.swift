@@ -310,3 +310,87 @@ final class ScreenshotTests: XCTestCase {
         capture("11-여행생성-완료")
     }
 }
+
+// MARK: - 접근성 점검
+
+/// VoiceOver 가 화면을 어떻게 읽는지 그대로 뽑아 본다.
+///
+/// 눈으로 보면 뜻이 분명한 아이콘도, 이름을 달아 두지 않으면 소리로는
+/// 'button' 한 마디로 읽힌다. 어느 자리가 그러한지는 짐작하지 말고
+/// 요소 트리를 받아서 봐야 한다.
+@MainActor
+final class AccessibilityAuditTests: XCTestCase {
+
+    private var app: XCUIApplication!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        continueAfterFailure = true
+        app = XCUIApplication()
+        app.launch()
+        XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 15))
+        try await Task.sleep(for: .seconds(1.2))
+    }
+
+    /// 화면이 자리를 잡기를 기다린다. 전환 중에 트리를 받으면 절반만 담긴다.
+    private func settle() {
+        Thread.sleep(forTimeInterval: 1.5)
+    }
+
+    /// 이름이 없거나 뜻이 통하지 않는 요소가 다시 생기면 실패한다.
+    ///
+    /// 대비와 Dynamic Type 은 일부러 뺐다. 둘 다 앱 전체의 색과 글자 크기를
+    /// 손봐야 하는 일이라, 여기에 묶어 두면 이 테스트가 늘 빨간 채로 남아
+    /// 아무도 보지 않게 된다. 이름은 지금 0건이므로 이 자리를 지킨다.
+    func test_이름_없는_요소가_없다() throws {
+        for tab in ["여행", "예결산", "기록", "영수증"] {
+            let button = app.tabBars.buttons[tab]
+            guard button.waitForExistence(timeout: 5) else { continue }
+            button.tap()
+            settle()
+
+            var problems: [String] = []
+            try app.performAccessibilityAudit(for: [.elementDetection,
+                                                    .sufficientElementDescription]) { issue in
+                problems.append("\(issue.compactDescription) — '\(issue.element?.label ?? "")'")
+                return true
+            }
+
+            XCTAssertTrue(problems.isEmpty,
+                          "\(tab) 탭에서 소리로 뜻이 통하지 않는 요소: \n" + problems.joined(separator: "\n"))
+        }
+    }
+
+    /// Apple 의 접근성 감사를 탭마다 돌린다.
+    ///
+    /// 처음에는 XCUITest 의 요소 트리를 받아 이름 없는 것을 세었는데, 그
+    /// 트리는 자동화용이라 accessibilityHidden 을 건 것도 그대로 나온다.
+    /// 고쳐 놓고도 고쳐지지 않은 것처럼 보였다. 무엇이 잘못됐는지는 이
+    /// 감사가 답한다.
+    func test_탭마다_접근성_감사를_돌린다() throws {
+        for tab in ["여행", "예결산", "기록", "영수증"] {
+            let button = app.tabBars.buttons[tab]
+            guard button.waitForExistence(timeout: 5) else { continue }
+            button.tap()
+            settle()
+
+            var found: [String] = []
+            try app.performAccessibilityAudit { issue in
+                // 어느 요소인지 함께 적는다. 종류만 알면 고칠 자리를 찾을 수 없다.
+                let element = issue.element
+                let name = element?.label ?? ""
+                let kind = element.map { "\($0.elementType)" } ?? "?"
+                let frame = element.map { "\(Int($0.frame.width))×\(Int($0.frame.height))" } ?? "-"
+                found.append("\(issue.compactDescription) | \(kind) \(frame) '\(name)'")
+                // 여기서 실패시키지 않는다. 무엇이 나왔는지 다 받아 적는 것이 먼저다.
+                return true
+            }
+
+            let report = XCTAttachment(
+                string: found.isEmpty ? "지적 없음" : found.joined(separator: "\n"))
+            report.name = "audit-\(tab)"
+            report.lifetime = .keepAlways
+            add(report)
+        }
+    }
+}

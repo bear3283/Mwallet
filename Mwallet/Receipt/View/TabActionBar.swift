@@ -20,6 +20,12 @@ import SwiftUI
 struct TabActionIcon: View {
 
     let systemName: String
+    /// 소리로 읽을 이름.
+    ///
+    /// 붙이지 않으면 VoiceOver 가 기호의 영어 이름을 읽는다 — 설정 버튼이
+    /// 'Gear Shape' 로, 통계 버튼이 '파이 차트' 로 읽혔다. 그림에 글자가
+    /// 없는 버튼이라 여기서 말해 주지 않으면 뜻이 전해지지 않는다.
+    let label: String
     var isEnabled = true
 
     var body: some View {
@@ -31,6 +37,7 @@ struct TabActionIcon: View {
             // 화면 테스트가 이 버튼을 이름으로 찾는다. 툴바를 쓰지 않으므로
             // 네비게이션 바에서 순서로 집을 수 없고, 그림에는 글자가 없다.
             .accessibilityIdentifier("tabAction.\(systemName)")
+            .accessibilityLabel(label)
     }
 }
 
