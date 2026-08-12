@@ -23,7 +23,8 @@ struct ReceiptDraft {
     var currency: String = ExpenseCode.baseCurrency
     var category: String = ExpenseInfoCategory.food.description
     var memo: String = ""
-    var imageData: Data?
+    /// 붙인 사진들. 앞에서부터 차례가 그대로 저장된다.
+    var photos: [Data] = []
     var coordinate: CLLocationCoordinate2D?
     var placeName: String?
 
@@ -38,7 +39,7 @@ struct ReceiptDraft {
         self.currency = expense.currencyCode
         self.category = expense.categoryName
         self.memo = expense.memoText
-        self.imageData = expense.imageData
+        self.photos = expense.photoDataList
         self.coordinate = expense.coordinate
         self.placeName = expense.location
     }
@@ -118,7 +119,9 @@ final class ReceiptStore {
     // 목록에서 사진만 바로 붙인다. 편집 폼을 열지 않으므로
     // 기록 시점 환율과 시간대 같은 스냅샷 값은 건드리지 않는다.
     func attachPhoto(_ data: Data, to expense: Expense) throws {
-        expense.imageData = data
+        // 이미 붙은 것 뒤에 더한다. 목록에서 바로 붙이는 길이라 갈아 끼우면
+        // 앞서 붙여 둔 사진이 말없이 사라진다.
+        expense.replacePhotos(with: expense.photoDataList + [data], in: context)
         try context.save()
     }
 
@@ -156,7 +159,7 @@ final class ReceiptStore {
         expense.currency = ExpenseCode.currencyIndex(for: draft.currency)
         expense.category = ExpenseCode.categoryIndex(for: draft.category)
         expense.memo = draft.memo.trimmingCharacters(in: .whitespacesAndNewlines)
-        expense.imageData = draft.imageData
+        expense.replacePhotos(with: draft.photos, in: context)
         expense.setCoordinate(draft.coordinate)
         expense.location = draft.placeName
     }

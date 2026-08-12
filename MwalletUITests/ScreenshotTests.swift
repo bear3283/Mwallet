@@ -159,6 +159,60 @@ final class ScreenshotTests: XCTestCase {
         tapIfExists(app.buttons["닫기"])
     }
 
+    /// 영수증 사진 여러 장 — 목록의 장수 표시와 상세의 넘겨 보기.
+    func test_08_영수증_사진을_캡처한다() throws {
+        tapTab("영수증")
+        capture("12-영수증목록")
+
+        // 사진이 여러 장 붙은 건으로 들어간다.
+        let row = app.staticTexts["바다뷰 게스트하우스"].firstMatch
+        guard tapIfExists(row) else {
+            XCTFail("사진이 붙은 영수증을 찾지 못했습니다.")
+            return
+        }
+        settle()
+        capture("13-영수증상세-사진")
+
+        // 편집으로 들어가 사진을 여러 장 붙인다.
+        guard tapIfExists(app.buttons["편집"].firstMatch) else {
+            XCTFail("편집 버튼을 찾지 못했습니다.")
+            return
+        }
+
+        guard tapIfExists(app.buttons["영수증 사진 첨부"].firstMatch, timeout: 6) else {
+            XCTFail("사진 첨부 버튼을 찾지 못했습니다.")
+            return
+        }
+
+        // 시스템 사진 선택기. 다른 프로세스가 그리므로 넉넉히 기다린다.
+        let photos = app.scrollViews.firstMatch.images
+        guard photos.element(boundBy: 0).waitForExistence(timeout: 15) else {
+            XCTFail("사진 선택기가 열리지 않았습니다.")
+            return
+        }
+        photos.element(boundBy: 0).tap()
+        photos.element(boundBy: 1).tap()
+        capture("14-사진선택기")
+
+        for label in ["추가", "Add", "완료", "Done"] where tapIfExists(app.buttons[label].firstMatch, timeout: 2) {
+            break
+        }
+        settle(2.5)
+        capture("15-편집-사진여러장")
+
+        guard tapIfExists(app.buttons["수정 완료"].firstMatch, timeout: 6) else {
+            XCTFail("수정 완료 버튼을 찾지 못했습니다.")
+            return
+        }
+        settle(2)
+        capture("16-상세-사진넘겨보기")
+
+        // 목록으로 돌아가면 줄에 장수가 붙어 있어야 한다.
+        tapIfExists(app.buttons.matching(identifier: "뒤로").firstMatch, timeout: 2)
+        tapTab("영수증")
+        capture("17-목록-장수표시")
+    }
+
     /// 시트를 맨 위까지 끌어올린다. 낮은 자리에서는 한 줄밖에 보이지 않는다.
     private func raiseSheet() {
         let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.66))

@@ -36,12 +36,25 @@ struct ReceiptThumbnail: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel("영수증 사진 첨부")
-        } else if let data = expense.imageData, let image = UIImage(data: data) {
+        } else if let data = expense.photoDataList.first, let image = UIImage(data: data) {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
                 .frame(width: side, height: side)
                 .clipShape(RoundedRectangle(cornerRadius: 6))
+                // 여러 장이면 몇 장인지 겹쳐 둔다. 줄에서 열지 않고도
+                // 뒷면·전표까지 붙어 있는지 알 수 있다.
+                .overlay(alignment: .bottomTrailing) {
+                    if expense.photoDataList.count > 1 {
+                        Text("\(expense.photoDataList.count)")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1)
+                            .background(.black.opacity(0.6), in: Capsule())
+                            .padding(3)
+                    }
+                }
         }
     }
 }

@@ -113,7 +113,7 @@ final class ExpenseAmountTests: CoreDataTestCase {
 
         XCTAssertTrue(expense.needsPhoto)
 
-        expense.imageData = Data([0x01, 0x02])
+        expense.replacePhotos(with: [Data([0x01, 0x02])], in: context)
         XCTAssertFalse(expense.needsPhoto)
     }
 

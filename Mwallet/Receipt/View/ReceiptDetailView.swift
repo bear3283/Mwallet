@@ -18,6 +18,8 @@ struct ReceiptDetailView: View {
 
     @State private var isEditing = false
     @State private var isViewingImage = false
+    /// 지금 보고 있는 사진의 차례. 상세와 전체 화면이 같은 자리를 가리키도록 함께 쓴다.
+    @State private var viewingIndex = 0
     @State private var isConfirmingDeletion = false
     @State private var errorMessage: String?
     @State private var pickedItem: PhotosPickerItem?
@@ -84,7 +86,8 @@ struct ReceiptDetailView: View {
             AddReceiptView(mode: .edit(expense))
         }
         .fullScreenCover(isPresented: $isViewingImage) {
-            imageViewer
+            ReceiptPhotoViewer(photos: photos, index: $viewingIndex,
+                              onClose: { isViewingImage = false })
         }
         .confirmationDialog(
             "이 영수증을 삭제할까요?",
@@ -105,22 +108,45 @@ struct ReceiptDetailView: View {
 
     // MARK: - 영수증 사진
 
+    private var photos: [Data] { expense.photoDataList }
+
+    /// 사진 아래 한 줄. 여러 장일 때는 지금 몇 번째인지도 알린다.
+    private var photoCaption: String {
+        let size = ReceiptImageProcessor.formattedSize(
+            bytes: photos.reduce(0) { $0 + $1.count })
+        guard photos.count > 1 else { return "사진을 누르면 크게 볼 수 있어요 · \(size)" }
+        return "\(viewingIndex + 1)/\(photos.count)장 · 누르면 크게 볼 수 있어요 · \(size)"
+    }
+
     // 등록돼 있으면 사진을, 없으면 바로 첨부할 수 있는 버튼을 하단에 보여 준다.
     @ViewBuilder
     private var receiptSection: some View {
-        if let data = expense.imageData, let image = UIImage(data: data) {
-            Button {
-                isViewingImage = true
-            } label: {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+        if !photos.isEmpty {
+            // 여러 장이면 옆으로 넘긴다. 세로로 쌓으면 영수증 한 건을 보는데
+            // 화면을 몇 번씩 굴려야 해서 다른 항목이 눈에서 사라진다.
+            TabView(selection: $viewingIndex) {
+                ForEach(Array(photos.enumerated()), id: \.offset) { index, data in
+                    if let image = UIImage(data: data) {
+                        Button {
+                            isViewingImage = true
+                        } label: {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: .infinity)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                        .buttonStyle(.plain)
+                        .tag(index)
+                    }
+                }
             }
-            .buttonStyle(.plain)
+            // 점을 띄우지 않는다. 흰 점이라 밝은 영수증 위에서는 보이지 않고,
+            // 아래 한 줄이 이미 '1/2장' 이라 몇 번째인지 말해 준다.
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: 320)
 
-            Text("사진을 누르면 크게 볼 수 있어요 · \(ReceiptImageProcessor.formattedSize(of: data))")
+            Text(photoCaption)
                 .font(.caption1_fixed)
                 .foregroundStyle(.gray300)
                 .padding(.top, 8)
@@ -222,37 +248,6 @@ struct ReceiptDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.vertical, 12)
-            }
-        }
-    }
-
-    // MARK: - 사진 전체 화면
-
-    private var imageViewer: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-
-            if let data = expense.imageData, let image = UIImage(data: data) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .ignoresSafeArea()
-            }
-
-            VStack {
-                HStack {
-                    Spacer()
-                    Button {
-                        isViewingImage = false
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title)
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.white)
-                    }
-                    .padding()
-                }
-                Spacer()
             }
         }
     }
