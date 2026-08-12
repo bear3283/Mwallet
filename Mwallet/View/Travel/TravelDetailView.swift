@@ -91,7 +91,7 @@ struct TravelDetailView: View {
     }
 
     private var participants: [String] {
-        ["나"] + (travel.participantArray ?? [])
+        ["나"] + travel.participants
     }
 
     // MARK: - 본문

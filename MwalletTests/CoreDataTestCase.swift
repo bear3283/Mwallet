@@ -53,7 +53,7 @@ class CoreDataTestCase: XCTestCase {
         travel.name = isDefault ? Travel.defaultTravelName : name
         travel.startDate = start
         travel.endDate = end ?? start.addingTimeInterval(3 * 86_400)
-        travel.participantArray = participants
+        travel.participants = participants
         return travel
     }
 
@@ -82,7 +82,7 @@ class CoreDataTestCase: XCTestCase {
         expense.setCoordinate(coordinate)
         if hasPhoto { expense.imageData = Data([0x01]) }
         // 함께 쓴 사람. 비워 두면 나눌 수 없는 지출이 된다.
-        expense.participantArray = participants
+        expense.participants = participants
         return expense
     }
 

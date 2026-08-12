@@ -6,7 +6,7 @@
 //
 //  단기사역은 여럿이 함께 다니고 한 사람이 몰아서 내는 일이 잦다. 돌아와서
 //  나누려면 '이 지출을 누가 같이 썼나' 를 알아야 하는데, 그 값은 기록할 때
-//  이미 받아 두고 있다(Expense.participantArray). 새로 받을 것은 없고
+//  이미 받아 두고 있다(Expense.participants). 새로 받을 것은 없고
 //  나누기만 하면 된다.
 //
 //  나누는 규칙은 하나다 — 한 지출은 그것을 함께 쓴 사람 수로 똑같이 나눈다.
@@ -70,7 +70,7 @@ struct SettlementSummary {
                 continue
             }
 
-            let people = expense.participantArray?.filter { !$0.isEmpty } ?? []
+            let people = expense.participants.filter { !$0.isEmpty }
             guard !people.isEmpty else {
                 unassigned += amount
                 unassignedCount += 1

@@ -41,4 +41,19 @@ extension Travel {
         request.fetchLimit = 1
         return (try? context.fetch(request))?.first
     }
+
+    /// 이 여행에 함께 가는 사람들. '나' 는 넣지 않는다 — 화면이 늘 앞에 붙여 센다.
+    ///
+    /// 저장은 NSArray 로 한다. Core Data 의 Transformable 은 Objective-C 타입만
+    /// 받는데 `[String]` 은 그것이 아니어서, 예전에는 열 때마다 아래 경고가 났다.
+    ///
+    ///     CoreData: Declared Objective-C type "[String]" for attribute
+    ///               named participantArray is not valid
+    ///
+    /// 값은 예전과 똑같이 담긴다(NSSecureUnarchiveFromData 로 감싼 문자열 배열).
+    /// 바뀐 것은 선언뿐이라 이미 저장된 기록을 그대로 읽는다.
+    var participants: [String] {
+        get { (participantArray as? [String]) ?? [] }
+        set { participantArray = newValue as NSArray }
+    }
 }

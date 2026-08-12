@@ -210,7 +210,7 @@ Mwallet/
 - [ ] 환율 프록시 서버 (클라이언트 키 임베딩 해소) — 코드가 아니라 인프라 결정이 먼저다
 - [ ] `asyncAfter` 남은 2곳(`RecordView`)의 타이밍 의존 제거 — 손을 뗀 뒤 0.4초를 기다려 인식 결과가 도착하기를 바라고 있다. 시간이 아니라 `result.isFinal` 을 기다려야 하고, 그러려면 `stopSTT` 가 작업을 취소하는 대신 `endAudio` 로 마지막 결과를 받아야 한다. 실기기 마이크가 있어야 확인할 수 있다 (스플래시 1.6초는 연출이라 그대로, 햅틱 지연은 제거됨)
 - [x] `SWIFT_VERSION` 5.0 → 6.0 — `SWIFT_STRICT_CONCURRENCY = complete` 를 먼저 통과시켜 둔 덕에 고칠 코드가 없었다
-- [ ] `participantArray` 의 `customClassName` 정리
+- [x] `participantArray` 의 `customClassName` 정리 — `"[String]"` 은 유효한 Objective-C 타입명이 아니라 앱을 열 때마다 오류가 4건씩 남았다. `NSArray` 로 바꾸고 쓰는 쪽은 `participants`(`[String]`)로 받는다. 저장 형식은 그대로라 마이그레이션이 없다
 
 **기능 공백 (코드 리뷰에서 발견 — 로드맵 미등록분)**
 - [x] **여행 편집 화면** — 여행 상세 우상단 연필. 쓰기 규칙은 `TravelStore` 로 분리

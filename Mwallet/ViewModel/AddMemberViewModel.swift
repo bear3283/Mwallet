@@ -25,7 +25,7 @@ class AddMemberViewModel: ObservableObject {
     func addTravel() {
         let travel = Travel(context: viewContext)
         // 고칠 때와 같은 규칙을 만들 때도 건다.
-        travel.participantArray = TravelParticipants.cleaned(participantArr ?? [])
+        travel.participants = TravelParticipants.cleaned(participantArr ?? [])
         travel.startDate = startDate
         travel.endDate = endDate
         travel.name = travelName

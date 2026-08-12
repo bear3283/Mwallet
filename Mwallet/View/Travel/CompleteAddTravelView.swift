@@ -73,7 +73,7 @@ struct CompleteAddTravelView: View {
     // 고른 값을 여행에 옮긴다. 두 버튼이 같은 일을 하므로 한곳에 모은다.
     private func applyEdits() {
         selectedTravel?.first?.name = travelNM
-        selectedTravel?.first?.participantArray = participantArr
+        selectedTravel?.first?.participants = participantArr
         selectedTravel?.first?.coverImageData = coverImageData
         mainVM.selectedTravel = selectedTravel?.first
     }
