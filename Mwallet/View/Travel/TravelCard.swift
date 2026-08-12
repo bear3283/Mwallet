@@ -82,19 +82,9 @@ struct TravelCard: View {
             }
     }
 
-    /// 사진이 없는 카드. 여행 색을 옅게 깔고 이름 첫 글자를 얹는다.
-    ///
-    /// 여기에는 어둡게 까는 층이 없다. 바탕이 이미 옅어서 날짜를 진하게
-    /// 적으면 읽히고, 옅은 바탕에 검은 그늘을 얹으면 때가 탄 것처럼 보인다.
+    /// 사진이 없는 카드. 날짜가 아래에 앉으므로 글자를 조금 올려 둔다.
     private func monogram(_ letter: String) -> some View {
-        ZStack {
-            tint.opacity(0.16)
-            Text(letter)
-                .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 30))
-                .foregroundStyle(tint)
-                // 날짜가 아래에 앉으므로 글자를 조금 올려 겹치지 않게 한다.
-                .offset(y: -6)
-        }
+        TravelMonogramTile(letter: letter, tint: tint, glyphSize: 30, offsetY: -6)
     }
 
     /// 카드마다 다른 색. 서로 구별되기만 하면 되는 자리라 이름에서 뽑는다.
@@ -213,5 +203,34 @@ struct TravelAllCard: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel("전체 여행")
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+    }
+}
+
+// MARK: - 사진이 없을 때
+
+/// 사진 대신 이름 첫 글자를 크게 적는 바탕.
+///
+/// 예전에는 나라를 모르면 'DefaultImage'(구름 속 비행기 한 장)를 깔았다.
+/// 한 번에 하나만 보일 때는 티가 안 났지만, 격자가 되면서 같은 사진이
+/// 대여섯 장 늘어서 칸이 서로 구별되지 않았다.
+///
+/// 색을 안에서 정하지 않고 받는다. 여행 목록의 칸은 테두리 색이 지도 위
+/// 점과 짝이라 그 색을 그대로 써야 하고, 선택 시트는 지도가 없어 이름에서
+/// 뽑는다. 안에서 하나로 정하면 목록 칸에 뜻이 다른 색이 둘이 된다.
+struct TravelMonogramTile: View {
+
+    let letter: String
+    let tint: Color
+    var glyphSize: CGFloat = 30
+    var offsetY: CGFloat = 0
+
+    var body: some View {
+        ZStack {
+            tint.opacity(0.16)
+            Text(letter)
+                .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: glyphSize))
+                .foregroundStyle(tint)
+                .offset(y: offsetY)
+        }
     }
 }
