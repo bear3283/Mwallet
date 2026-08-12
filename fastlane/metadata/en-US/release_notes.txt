@@ -1,0 +1,7 @@
+First release.
+
+• Log expenses by voice
+• Attach multiple receipt photos
+• Split by person, budget by category
+• Spending map and CSV export
+• VoiceOver and Dynamic Type support

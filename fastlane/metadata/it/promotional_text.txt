@@ -1,0 +1,1 @@
+Fino a cinque foto di scontrino per spesa e divisione per persona. Luogo e foto vengono salvati insieme.

@@ -1,0 +1,7 @@
+Première version.
+
+• Enregistrer ses dépenses à la voix
+• Plusieurs photos de reçu par dépense
+• Partage par personne et budget par catégorie
+• Carte des dépenses et export CSV
+• Compatible VoiceOver et texte dynamique

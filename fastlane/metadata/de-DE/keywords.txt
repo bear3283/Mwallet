@@ -1,0 +1,1 @@
+reisekosten,haushaltsbuch,ausgaben,wechselkurs,abrechnung,beleg,reise,urlaub,kasse,teilen

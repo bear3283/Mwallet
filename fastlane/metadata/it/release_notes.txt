@@ -1,0 +1,7 @@
+Prima versione.
+
+• Registra le spese parlando
+• Più foto di scontrino per spesa
+• Divisione per persona e budget per categoria
+• Mappa delle spese ed esportazione CSV
+• Supporto VoiceOver e testo dinamico

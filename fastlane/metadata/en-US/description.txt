@@ -1,0 +1,26 @@
+Opening an app, picking a category and typing numbers every time you pay is a chore on the road. Mission Wallet cuts that down to a single spoken sentence.
+
+Hold the button and say "lunch 15 dollars card". The item, the amount and the payment method each find their place. Let go, and it's saved.
+
+■ Speak instead of type
+Just talk while holding the button. The app separates the amount and the payment method for you, and only asks about what it isn't sure of.
+
+■ Foreign currency, handled
+Enter the local currency and see the converted amount alongside it, using that day's rate. Entries where the rate couldn't be fetched are flagged rather than hidden, so your total never quietly drifts.
+
+■ Receipts, front and back
+Attach up to five photos to a single expense — receipt, reverse side, card slip. You can also filter for entries that still have no photo.
+
+■ Split by person
+Pick who shared each expense, and see who spent how much once the trip is over.
+
+■ Budget and settlement
+Set a budget per category and watch what's left. Categories that go over are called out first.
+
+■ A map of your spending
+Every expense lands on the map in order. When the trip ends, the route is already drawn.
+
+■ Your records stay yours
+Everything lives on your device and in your own iCloud. There is no server the developer can read, and no ads or analytics SDKs. Export to CSV whenever you want.
+
+Built as a travel ledger for travellers, and as a settlement book for short-term mission teams.

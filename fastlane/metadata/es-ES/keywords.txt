@@ -1,0 +1,1 @@
+gastos viaje,control gastos,presupuesto,divisas,dividir cuenta,recibo,viaje,contabilidad,tipo cambio
