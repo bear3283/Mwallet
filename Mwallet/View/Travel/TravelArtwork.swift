@@ -68,11 +68,25 @@ enum TravelArtworkBuilder {
 
     /// 카드에 크게 적을 한 글자.
     ///
-    /// 글자와 숫자가 아닌 것은 건너뛴다. '· 방콕' 처럼 꾸밈으로 시작하는
-    /// 이름에서 점 하나만 덩그러니 남는 것을 막는다.
+    /// 그냥 맨 앞 글자를 쓰면 이름이 겹치는 여행끼리 같은 글자를 받는다.
+    /// '예시: 방콕' 과 '예시: 부산' 이 둘 다 '예' 가 되어, 구별하라고 넣은
+    /// 글자가 도리어 다 같아진다. 사람들이 여행 이름 앞에 표를 붙이는 일이
+    /// 잦아서(2026 방콕, 출장: 도쿄) 흔한 일이다.
+    ///
+    /// 그래서 두 가지를 건너뛴다 — 쌍점 앞의 표와, 앞머리의 숫자·기호.
+    /// 숫자는 글자가 하나도 없을 때만 쓴다.
     static func monogram(from name: String) -> String {
-        guard let letter = name.first(where: { $0.isLetter || $0.isNumber }) else { return "여" }
-        return String(letter).uppercased()
+        // '예시: 방콕 단기사역' → '방콕 단기사역'
+        let body = name.split(separator: ":", omittingEmptySubsequences: false).last.map(String.init) ?? name
+
+        if let letter = body.first(where: \.isLetter) ?? name.first(where: \.isLetter) {
+            return String(letter).uppercased()
+        }
+        // '2026' 처럼 글자가 없는 이름.
+        if let digit = name.first(where: \.isNumber) {
+            return String(digit)
+        }
+        return "여"
     }
 
     /// 지출이 적힌 나라를, 최근에 쓴 것부터 겹치지 않게.

@@ -20,7 +20,25 @@ final class TravelArtworkTests: CoreDataTestCase {
     // '· 방콕' 처럼 꾸밈으로 시작하면 점 하나만 덩그러니 남는다.
     func test_글자가_아닌_것으로_시작하면_건너뛴다() {
         XCTAssertEqual(TravelArtworkBuilder.monogram(from: "· 방콕"), "방")
-        XCTAssertEqual(TravelArtworkBuilder.monogram(from: "  2026 캠프"), "2")
+    }
+
+    // 이름 앞에 표를 붙이는 일이 잦다. 그대로 첫 글자를 따면 '예시: 방콕' 과
+    // '예시: 부산' 이 둘 다 '예' 가 되어, 구별하라고 넣은 글자가 다 같아진다.
+    func test_쌍점_앞의_표는_건너뛴다() {
+        XCTAssertEqual(TravelArtworkBuilder.monogram(from: "예시: 방콕 단기사역"), "방")
+        XCTAssertEqual(TravelArtworkBuilder.monogram(from: "예시: 부산 수련회"), "부")
+        XCTAssertEqual(TravelArtworkBuilder.monogram(from: "출장: 도쿄"), "도")
+    }
+
+    // 연도로 시작하는 이름도 마찬가지다.
+    func test_앞머리_숫자보다_글자를_먼저_쓴다() {
+        XCTAssertEqual(TravelArtworkBuilder.monogram(from: "2026 캠프"), "캠")
+        XCTAssertEqual(TravelArtworkBuilder.monogram(from: "  2026 방콕"), "방")
+    }
+
+    // 글자가 하나도 없으면 그때는 숫자를 쓴다.
+    func test_글자가_없으면_숫자를_쓴다() {
+        XCTAssertEqual(TravelArtworkBuilder.monogram(from: "2026"), "2")
     }
 
     func test_영문은_대문자로_세운다() {

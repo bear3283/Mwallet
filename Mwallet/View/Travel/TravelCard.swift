@@ -48,7 +48,7 @@ struct TravelCard: View {
             .aspectRatio(4.0 / 3.0, contentMode: .fit)
             .overlay { background }
             .overlay { flags }
-            .overlay { dateText }
+            .overlay { caption }
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay {
                 RoundedRectangle(cornerRadius: 12)
@@ -111,16 +111,34 @@ struct TravelCard: View {
         .padding(6)
     }
 
-    private var dateText: some View {
-        Text(TravelSchedule.dayRangeText(travel))
-            .font(.caption1_fixed)
-            .foregroundStyle(isMonogram ? tint : .white.opacity(0.9))
-            .monospacedDigit()
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-            .padding(.horizontal, 7)
-            .padding(.bottom, 6)
+    /// 왼쪽 아래의 한 덩어리 — 첫 글자와 날짜.
+    ///
+    /// 사진 위에 첫 글자를 얹는 것은 같은 나라를 다녀온 여행끼리 같은 사진을
+    /// 받기 때문이다(나라 사진은 나라당 한 장뿐이다). 이름을 읽지 않아도
+    /// 어느 여행인지 갈린다.
+    ///
+    /// 모서리마다 흩뜨리지 않고 한 덩어리로 쌓는다. 칸이 110pt 남짓이라
+    /// 글자와 날짜를 좌우로 늘어놓으면 날짜가 줄어들어 읽히지 않는다.
+    /// 바탕이 이미 글자 타일이면 얹지 않는다 — 같은 글자가 둘이 된다.
+    private var caption: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            if !isMonogram {
+                Text(TravelArtworkBuilder.monogram(from: travel.displayName))
+                    .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 19))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
+            }
+
+            Text(TravelSchedule.dayRangeText(travel))
+                .font(.caption1_fixed)
+                .foregroundStyle(isMonogram ? tint : .white.opacity(0.9))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+        .padding(.horizontal, 7)
+        .padding(.bottom, 6)
     }
 
     private var check: some View {
