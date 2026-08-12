@@ -45,7 +45,7 @@ struct TravelPicker: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(selection?.displayName ?? emptyTitle)
-                        .font(.title3_fixed)
+                        .font(.title3)
                         .foregroundStyle(.black)
                         .lineLimit(1)
 
@@ -56,7 +56,7 @@ struct TravelPicker: View {
                 }
 
                 Text(metaText)
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray400)
                     .lineLimit(1)
             }

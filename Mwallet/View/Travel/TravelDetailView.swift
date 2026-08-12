@@ -194,12 +194,12 @@ struct TravelDetailView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 0) {
                 Text("지출한 곳")
-                    .font(.subhead1_fixed)
+                    .font(.subhead1)
                     .foregroundStyle(.gray400)
                 Spacer()
                 if !stops.isEmpty {
                     Text("\(stops.count)곳 · 기록 순서")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .foregroundStyle(.gray300)
                 }
             }
@@ -221,11 +221,11 @@ struct TravelDetailView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 0) {
                 Text("지출 순서")
-                    .font(.subhead1_fixed)
+                    .font(.subhead1)
                     .foregroundStyle(.gray400)
                 Spacer()
                 Text(ReceiptFormat.krw(summary.totalSpent))
-                    .font(.subhead1_fixed)
+                    .font(.subhead1)
                     .foregroundStyle(.gray400)
                     .monospacedDigit()
             }
@@ -233,7 +233,7 @@ struct TravelDetailView: View {
             if stops.isEmpty {
                 // 빈 화면은 다음에 할 일을 알려 준다.
                 Text("아직 위치가 남은 지출이 없습니다.\n기록할 때 위치를 함께 남기면 들른 순서가 지도에 그려집니다.")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray300)
                     .multilineTextAlignment(.leading)
                     .padding(.vertical, 20)

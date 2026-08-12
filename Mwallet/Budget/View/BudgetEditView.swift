@@ -53,13 +53,13 @@ struct BudgetEditView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(travel.name ?? "예산 편집")
-                        .font(.title1_fixed)
+                        .font(.title1)
                         .foregroundStyle(.black)
                         .lineLimit(1)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("취소") { dismiss() }
-                        .font(.subhead2_2_fixed)
+                        .font(.subhead2_2)
                         .foregroundStyle(.gray400)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
@@ -81,14 +81,14 @@ struct BudgetEditView: View {
     private var totalBlock: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("총 예산")
-                .font(.caption2_fixed)
+                .font(.caption2)
                 .foregroundStyle(.gray300)
             Text(ReceiptFormat.krw(total))
-                .font(.display4_fixed)
+                .font(.display4)
                 .foregroundStyle(.black)
                 .monospacedDigit()
             Text("비워 두면 예산을 잡지 않은 항목으로 둡니다.")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
         }
     }
@@ -103,13 +103,13 @@ struct BudgetEditView: View {
                     .frame(width: 10, height: 10)
 
                 Text(category.description)
-                    .font(.body1_fixed)
+                    .font(.body1)
                     .foregroundStyle(.black)
 
                 Spacer(minLength: 8)
 
                 TextField("0", text: binding(for: category))
-                    .font(.subhead2_1_fixed)
+                    .font(.subhead2_1)
                     .foregroundStyle(.black)
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.trailing)
@@ -118,7 +118,7 @@ struct BudgetEditView: View {
                     .frame(maxWidth: 140)
 
                 Text("원")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray400)
             }
             .padding(.vertical, 14)

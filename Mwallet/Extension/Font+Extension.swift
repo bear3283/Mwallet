@@ -19,6 +19,11 @@
 //  지금은 두 갈래가 같은 얼굴로 풀린다. 그래도 표시를 남겨 두는 것은
 //  '이 글자가 제목인지' 가 코드에 적혀 있어야 다음에 갈라낼 수 있어서다.
 //
+//  크기는 모두 사용자의 글자 크기 설정을 따른다(relativeTo). 예전에는
+//  fixedSize 라 설정을 키워도 이 앱만 그대로였다 — 눈이 어두운 분에게는
+//  앱이 통째로 닫힌 것이나 같다. 붙인 스타일은 크기가 가장 가까운 것이고,
+//  큰 스타일일수록 접근성 크기에서 덜 커진다(제목이 본문보다 덜 불어난다).
+//
 
 import Foundation
 import SwiftUI
@@ -27,73 +32,38 @@ import SwiftUI
 
 extension Font {
     /// 내비게이션 제목·항목 제목·여행 이름
-    static let title1 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 18)
+    static let title1 = Font.custom(FontsManager.WantedSans.semiBold, size: 18, relativeTo: .headline)
     /// 모달 제목
-    static let title2 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 20)
+    static let title2 = Font.custom(FontsManager.WantedSans.semiBold, size: 20, relativeTo: .title3)
     /// 탭·화면 제목
-    static let title3 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 24)
+    static let title3 = Font.custom(FontsManager.WantedSans.semiBold, size: 24, relativeTo: .title2)
     /// 기록 화면의 안내 문구와 받아 적은 문장
-    static let title4 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 28)
+    static let title4 = Font.custom(FontsManager.WantedSans.semiBold, size: 28, relativeTo: .title)
 }
 
 // MARK: - 크기로 이름 붙은 것들
 
 extension Font {
-    static let display1 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 20)
-    static let display2 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 24)
-    static let display3 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 28)
-    static let display4 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 32)
+    static let display1 = Font.custom(FontsManager.WantedSans.semiBold, size: 20, relativeTo: .title3)
+    static let display2 = Font.custom(FontsManager.WantedSans.semiBold, size: 24, relativeTo: .title2)
+    static let display3 = Font.custom(FontsManager.WantedSans.semiBold, size: 28, relativeTo: .title)
+    static let display4 = Font.custom(FontsManager.WantedSans.semiBold, size: 32, relativeTo: .largeTitle)
 
-    static let subhead1 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 14)
-    static let subhead2_1 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 16)
-    static let subhead2_2 = Font.custom(FontsManager.WantedSans.medium, fixedSize: 16)
-    static let subhead3_1 = Font.custom(FontsManager.WantedSans.semiBold, fixedSize: 18)
-    static let subhead3_2 = Font.custom(FontsManager.WantedSans.medium, fixedSize: 18)
+    static let subhead1 = Font.custom(FontsManager.WantedSans.semiBold, size: 14, relativeTo: .footnote)
+    static let subhead2_1 = Font.custom(FontsManager.WantedSans.semiBold, size: 16, relativeTo: .callout)
+    static let subhead2_2 = Font.custom(FontsManager.WantedSans.medium, size: 16, relativeTo: .callout)
+    static let subhead3_1 = Font.custom(FontsManager.WantedSans.semiBold, size: 18, relativeTo: .headline)
+    static let subhead3_2 = Font.custom(FontsManager.WantedSans.medium, size: 18, relativeTo: .headline)
 
-    static let body1 = Font.custom(FontsManager.WantedSans.regular, fixedSize: 16)
-    static let body2 = Font.custom(FontsManager.WantedSans.medium, fixedSize: 16)
-    static let body3 = Font.custom(FontsManager.WantedSans.medium, fixedSize: 18)
-    static let body4 = Font.custom(FontsManager.WantedSans.regular, fixedSize: 24)
+    static let body1 = Font.custom(FontsManager.WantedSans.regular, size: 16, relativeTo: .callout)
+    static let body2 = Font.custom(FontsManager.WantedSans.medium, size: 16, relativeTo: .callout)
+    static let body3 = Font.custom(FontsManager.WantedSans.medium, size: 18, relativeTo: .headline)
+    static let body4 = Font.custom(FontsManager.WantedSans.regular, size: 24, relativeTo: .title2)
 
-    static let caption1 = Font.custom(FontsManager.WantedSans.medium, fixedSize: 12)
-    static let caption2 = Font.custom(FontsManager.WantedSans.medium, fixedSize: 14)
-    static let caption3 = Font.custom(FontsManager.WantedSans.regular, fixedSize: 16)
+    static let caption1 = Font.custom(FontsManager.WantedSans.medium, size: 12, relativeTo: .caption)
+    static let caption2 = Font.custom(FontsManager.WantedSans.medium, size: 14, relativeTo: .footnote)
+    static let caption3 = Font.custom(FontsManager.WantedSans.regular, size: 16, relativeTo: .callout)
 
-    static let calendar1 = Font.custom(FontsManager.WantedSans.medium, fixedSize: 20)
-    static let calendar2 = Font.custom(FontsManager.WantedSans.regular, fixedSize: 20)
-}
-
-// MARK: - _fixed 이름
-
-// 두 갈래 모두 fixedSize 라 값이 똑같다. 예전에는 같은 정의를 두 번 적어 두어,
-// 한쪽만 고치면 화면마다 크기가 어긋날 수 있었다. 이름만 남기고 값을 잇는다.
-
-extension Font {
-    static let title1_fixed = title1
-    static let title2_fixed = title2
-    static let title3_fixed = title3
-    static let title4_fixed = title4
-
-    static let display1_fixed = display1
-    static let display2_fixed = display2
-    static let display3_fixed = display3
-    static let display4_fixed = display4
-
-    static let subhead1_fixed = subhead1
-    static let subhead2_1_fixed = subhead2_1
-    static let subhead2_2_fixed = subhead2_2
-    static let subhead3_1_fixed = subhead3_1
-    static let subhead3_2_fixed = subhead3_2
-
-    static let body1_fixed = body1
-    static let body2_fixed = body2
-    static let body3_fixed = body3
-    static let body4_fixed = body4
-
-    static let caption1_fixed = caption1
-    static let caption2_fixed = caption2
-    static let caption3_fixed = caption3
-
-    static let calendar1_fixed = calendar1
-    static let calendar2_fixed = calendar2
+    static let calendar1 = Font.custom(FontsManager.WantedSans.medium, size: 20, relativeTo: .title3)
+    static let calendar2 = Font.custom(FontsManager.WantedSans.regular, size: 20, relativeTo: .title3)
 }

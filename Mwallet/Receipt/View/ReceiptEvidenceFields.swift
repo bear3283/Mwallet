@@ -61,7 +61,7 @@ struct ReceiptPhotoField: View {
                     Image(systemName: "camera")
                     Text(title)
                 }
-                .font(.body1_fixed)
+                .font(.body1)
                 .foregroundStyle(.gray400)
                 .padding(.vertical, 20)
                 .frame(maxWidth: .infinity)
@@ -71,7 +71,7 @@ struct ReceiptPhotoField: View {
             .disabled(isProcessingImage)
 
             Text("최대 \(Self.limit)장까지, 장변 \(Int(ReceiptImageProcessor.maxDimension))px 로 줄여 저장합니다.")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
         }
     }
@@ -123,15 +123,17 @@ struct ReceiptPhotoField: View {
     }
 
     private var addTile: some View {
-        PhotosPicker(selection: $pickedItems,
-                     maxSelectionCount: Self.limit - draft.photos.count,
-                     matching: .images,
-                     photoLibrary: .shared()) {
+        // 위와 같은 이유로 화면 상태를 라벨 클로저 안에서 읽지 않는다.
+        let icon = isProcessingImage ? "ellipsis" : "plus"
+        return PhotosPicker(selection: $pickedItems,
+                            maxSelectionCount: Self.limit - draft.photos.count,
+                            matching: .images,
+                            photoLibrary: .shared()) {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.gray100)
                 .frame(width: 92, height: 92)
                 .overlay {
-                    Image(systemName: isProcessingImage ? "ellipsis" : "plus")
+                    Image(systemName: icon)
                         .font(.system(size: 20, weight: .light))
                         .foregroundStyle(.gray400)
                 }
@@ -143,7 +145,7 @@ struct ReceiptPhotoField: View {
     private var footer: some View {
         HStack {
             Text("\(draft.photos.count)장 · \(ReceiptImageProcessor.formattedSize(bytes: totalBytes))")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
             Spacer()
             Button {
@@ -151,7 +153,7 @@ struct ReceiptPhotoField: View {
                 pickedItems = []
             } label: {
                 Text("모두 삭제")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.mainAccent)
             }
         }
@@ -223,18 +225,18 @@ struct ReceiptLocationField: View {
                 VStack(alignment: .leading, spacing: 2) {
                     if let name = draft.placeName, draft.coordinate != nil {
                         Text(name)
-                            .font(.body1_fixed)
+                            .font(.body1)
                             .foregroundStyle(.black)
                             .lineLimit(1)
                         Text("지도에서 다시 고르기")
-                            .font(.caption1_fixed)
+                            .font(.caption1)
                             .foregroundStyle(.gray300)
                     } else {
                         Text("어디서 썼나요")
-                            .font(.body1_fixed)
+                            .font(.body1)
                             .foregroundStyle(.gray400)
                         Text("지도로 위치를 남겨 두면 나중에 지출을 지도에서 볼 수 있어요")
-                            .font(.caption1_fixed)
+                            .font(.caption1)
                             .foregroundStyle(.gray300)
                             .lineLimit(1)
                     }

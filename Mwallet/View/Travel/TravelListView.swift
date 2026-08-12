@@ -71,10 +71,10 @@ struct TravelListView: View {
         TabHeaderRow {
             VStack(alignment: .leading, spacing: 4) {
                 Text("여행")
-                    .font(.title3_fixed)
+                    .font(.title3)
                     .foregroundStyle(.black)
                 Text(travels.isEmpty ? "여행을 만들어 시작하세요" : "\(travels.count)개의 여행")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray400)
             }
         } actions: {
@@ -230,7 +230,7 @@ struct TravelGridCell: View {
 
     private var name: some View {
         Text(travel.displayName)
-            .font(.caption1_fixed)
+            .font(.caption1)
             .foregroundStyle(.black)
             .lineLimit(2)
             .multilineTextAlignment(.center)

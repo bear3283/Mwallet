@@ -79,12 +79,12 @@ struct ReceiptRowContent: View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
                 Text(expense.merchantName)
-                    .font(.subhead2_2_fixed)
+                    .font(.subhead2_2)
                     .foregroundStyle(.black)
                     .lineLimit(1)
 
                 Text(metaLine)
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
                     .lineLimit(1)
             }
@@ -93,7 +93,7 @@ struct ReceiptRowContent: View {
 
             VStack(alignment: .trailing, spacing: 3) {
                 Text(expense.formattedAmount)
-                    .font(.subhead2_1_fixed)
+                    .font(.subhead2_1)
                     .foregroundStyle(.black)
                     .monospacedDigit()
 
@@ -108,17 +108,17 @@ struct ReceiptRowContent: View {
         if expense.currencyCode != ExpenseCode.baseCurrency {
             if expense.needsExchangeRate {
                 Text("환율 없음")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.mainOrange)
             } else {
                 Text(expense.formattedAmountInKRW)
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
                     .monospacedDigit()
             }
         } else {
             Text(expense.formattedTimeOnly)
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
         }
     }

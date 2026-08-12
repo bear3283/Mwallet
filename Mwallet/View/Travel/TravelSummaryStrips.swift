@@ -41,10 +41,10 @@ struct TravelBasicInfoStrip: View {
     private func infoCell(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(title)
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
             Text(value)
-                .font(.caption2_fixed)
+                .font(.caption2)
                 .foregroundStyle(.black)
                 .lineLimit(2)
                 .minimumScaleFactor(0.8)
@@ -70,19 +70,19 @@ struct TravelBudgetStrip: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(summary.hasBudget ? "예산 \(ReceiptFormat.krw(summary.totalPlanned))" : "집행")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
 
                 Spacer(minLength: 8)
 
                 Text(ReceiptFormat.krw(summary.totalSpent))
-                    .font(.subhead2_1_fixed)
+                    .font(.subhead2_1)
                     .foregroundStyle(.black)
                     .monospacedDigit()
 
                 if let ratio = summary.ratio {
                     Text("\(Int((ratio * 100).rounded()))%")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .foregroundStyle(summary.isOverspent ? Color.mainOrange : .gray400)
                         .monospacedDigit()
                 }
@@ -94,7 +94,7 @@ struct TravelBudgetStrip: View {
                 Text(summary.isOverspent
                      ? "\(ReceiptFormat.krw(-summary.remaining)) 초과"
                      : "\(ReceiptFormat.krw(summary.remaining)) 남음")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(summary.isOverspent ? Color.mainOrange : .gray400)
                     .monospacedDigit()
             }
@@ -103,7 +103,7 @@ struct TravelBudgetStrip: View {
             // 작게 보이므로 그 사실을 숨기지 않는다.
             if summary.hasUnconvertible {
                 Text("환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(Color.mainOrange)
             }
         }
@@ -154,17 +154,17 @@ struct TravelDetailHeader: View {
             if isOngoing {
                 HStack(spacing: 6) {
                     Text("여행 중")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .foregroundStyle(Color.mainAccent)
                     Text("DAY \(dayCount)")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .foregroundStyle(.gray400)
                         .monospacedDigit()
                 }
             }
 
             Text(travelName)
-                .font(.title3_fixed)
+                .font(.title3)
                 .foregroundStyle(.black)
                 .lineLimit(2)
         }

@@ -66,7 +66,7 @@ struct TravelChoiceSheet: View {
     private var header: some View {
         HStack(spacing: 12) {
             Text("여행 선택")
-                .font(.title3_fixed)
+                .font(.title3)
                 .foregroundStyle(.black)
 
             Spacer(minLength: 0)
@@ -74,7 +74,7 @@ struct TravelChoiceSheet: View {
             yearMenu
 
             Button("닫기") { dismiss() }
-                .font(.subhead1_fixed)
+                .font(.subhead1)
                 .foregroundStyle(.gray400)
         }
         .padding(.horizontal, 20)
@@ -97,7 +97,7 @@ struct TravelChoiceSheet: View {
                     .font(.system(size: 15, weight: .semibold))
                 if let year {
                     Text("\(String(year))년")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .monospacedDigit()
                 }
             }
@@ -157,12 +157,12 @@ struct TravelChoiceSheet: View {
     private func sectionHeader(_ group: TravelYearGroup) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
             Text(group.title)
-                .font(.subhead2_1_fixed)
+                .font(.subhead2_1)
                 .foregroundStyle(.black)
                 .monospacedDigit()
 
             Text("\(group.travels.count)")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
                 .monospacedDigit()
 
@@ -177,10 +177,10 @@ struct TravelChoiceSheet: View {
     private var emptyNotice: some View {
         VStack(spacing: 6) {
             Text("아직 여행이 없습니다")
-                .font(.subhead1_fixed)
+                .font(.subhead1)
                 .foregroundStyle(.gray400)
             Text("여행 탭에서 먼저 여행을 만들어 주세요")
-                .font(.caption2_fixed)
+                .font(.caption2)
                 .foregroundStyle(.gray300)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

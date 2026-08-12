@@ -49,7 +49,7 @@ struct TabActionLabel: View {
 
     var body: some View {
         Text(text)
-            .font(.subhead2_2_fixed)
+            .font(.subhead2_2)
             .foregroundStyle(isEnabled ? Color.mainAccent : Color.gray200)
             .frame(height: 34)
             .contentShape(Rectangle())

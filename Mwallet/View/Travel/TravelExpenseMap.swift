@@ -152,7 +152,7 @@ struct TravelExpenseMap: View {
 
             if stops.isEmpty {
                 Text("위치를 남긴 지출이 아직 없어요")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray400)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)
@@ -178,7 +178,7 @@ struct TravelExpenseMap: View {
                     Image(systemName: "arrow.up.left.and.arrow.down.right")
                         .font(.system(size: 11, weight: .semibold))
                     Text("전체 보기")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                 }
                 .foregroundStyle(.black)
                 .padding(.vertical, 7)
@@ -279,20 +279,20 @@ struct TravelExpenseRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(stop.merchantName)
-                        .font(.subhead2_1_fixed)
+                        .font(.subhead2_1)
                         .foregroundStyle(.black)
                         .lineLimit(1)
 
                     Spacer(minLength: 4)
 
                     Text(stop.amountText)
-                        .font(.subhead2_1_fixed)
+                        .font(.subhead2_1)
                         .foregroundStyle(.black)
                         .monospacedDigit()
                 }
 
                 Text("\(stop.category.description) · \(stop.timeText)")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
                     .lineLimit(1)
             }

@@ -73,7 +73,7 @@ struct ReceiptStatsView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("통계")
-                    .font(.title1_fixed)
+                    .font(.title1)
                     .foregroundStyle(.black)
             }
         }
@@ -84,16 +84,16 @@ struct ReceiptStatsView: View {
     private var totalBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(missionName ?? "전체 여행")
-                .font(.caption2_fixed)
+                .font(.caption2)
                 .foregroundStyle(.gray300)
 
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(ReceiptFormat.krw(summary.totalInKRW))
-                    .font(.display4_fixed)
+                    .font(.display4)
                     .foregroundStyle(.black)
                     .monospacedDigit()
                 Text("\(summary.totalCount)건")
-                    .font(.caption2_fixed)
+                    .font(.caption2)
                     .foregroundStyle(.gray300)
             }
             .padding(.top, 6)
@@ -123,10 +123,10 @@ struct ReceiptStatsView: View {
         .overlay {
             VStack(spacing: 2) {
                 Text("총 지출")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
                 Text(ReceiptFormat.krw(summary.totalInKRW))
-                    .font(.subhead3_1_fixed)
+                    .font(.subhead3_1)
                     .foregroundStyle(.black)
                     .monospacedDigit()
             }
@@ -147,18 +147,18 @@ struct ReceiptStatsView: View {
                         .frame(width: 10, height: 10)
 
                     Text(slice.category)
-                        .font(.body1_fixed)
+                        .font(.body1)
                         .foregroundStyle(.black)
 
                     Spacer(minLength: 8)
 
                     Text(ReceiptFormat.krw(slice.amountInKRW))
-                        .font(.subhead2_1_fixed)
+                        .font(.subhead2_1)
                         .foregroundStyle(.black)
                         .monospacedDigit()
 
                     Text("\(percentText(slice.amountInKRW))")
-                        .font(.caption1_fixed)
+                        .font(.caption1)
                         .foregroundStyle(.gray300)
                         .monospacedDigit()
                         .frame(width: 46, alignment: .trailing)
@@ -168,7 +168,7 @@ struct ReceiptStatsView: View {
 
             if hasFoldedCategories {
                 Text("기본 목록에 없는 카테고리는 '기타' 에 합산했습니다.")
-                    .font(.caption1_fixed)
+                    .font(.caption1)
                     .foregroundStyle(.gray300)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 8)
@@ -185,7 +185,7 @@ struct ReceiptStatsView: View {
                     Image(systemName: "square.and.arrow.up")
                     Text("CSV 내보내기")
                 }
-                .font(.subhead2_1_fixed)
+                .font(.subhead2_1)
                 .foregroundStyle(expenses.isEmpty ? Color.gray300 : Color.black)
                 .padding(.vertical, 14.5)
                 .frame(maxWidth: .infinity)
@@ -195,7 +195,7 @@ struct ReceiptStatsView: View {
             .disabled(expenses.isEmpty)
 
             Text("영수증 \(expenses.count)건을 표로 내보냅니다. 통화가 섞여 있어도 현지 금액과 적용 환율, 원화 환산액이 각각 들어갑니다.")
-                .font(.caption1_fixed)
+                .font(.caption1)
                 .foregroundStyle(.gray300)
         }
     }
