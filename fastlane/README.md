@@ -47,6 +47,14 @@ App Store Connect 열쇠가 통하는지 본다 (읽기만 한다)
 
 TestFlight 에 올린다
 
+### ios metadata
+
+```sh
+[bundle exec] fastlane ios metadata
+```
+
+App Store 정보만 올린다 (빌드는 건드리지 않는다)
+
 ### ios lint
 
 ```sh
