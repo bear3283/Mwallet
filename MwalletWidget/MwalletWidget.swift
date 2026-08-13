@@ -92,6 +92,52 @@ struct LogExpenseIntent: AppIntent {
     }
 }
 
+/// 방금 담은 것을 도로 뺀다.
+///
+/// 홈 화면의 위젯은 한 번 누르면 그대로 담기는 자리라 잘못 누르기 쉽다.
+/// 앱을 열어 지우게 하면 '빠른 기록' 이라는 말이 무색해진다.
+struct UndoLastLogIntent: AppIntent {
+    static let title: LocalizedStringResource = "방금 담은 것 되돌리기"
+    static let isDiscoverable = false
+
+    func perform() async throws -> some IntentResult {
+        MwalletShared.undoLast()
+        WidgetCenter.shared.reloadAllTimelines()
+        return .result()
+    }
+}
+
+// MARK: - 빠른 기록 타임라인
+
+/// 위젯이 화면에 적을 것 — 담길 곳과, 아직 큐에 남아 있는 마지막 기록.
+struct QuickLogEntry: TimelineEntry {
+    let date: Date
+    /// 이 위젯으로 담으면 들어갈 여행의 이름. 앱이 정해서 넘겨 준다.
+    let destination: String?
+    /// 앱이 아직 가져가지 않은 마지막 기록. 있으면 되돌릴 수 있다.
+    let lastPending: PendingExpense?
+}
+
+struct QuickLogProvider: TimelineProvider {
+    private func read() -> QuickLogEntry {
+        QuickLogEntry(date: Date(),
+                      destination: MwalletShared.destinationName,
+                      lastPending: MwalletShared.lastPending)
+    }
+
+    func placeholder(in context: Context) -> QuickLogEntry {
+        QuickLogEntry(date: Date(), destination: nil, lastPending: nil)
+    }
+    func getSnapshot(in context: Context, completion: @escaping (QuickLogEntry) -> Void) {
+        completion(read())
+    }
+    func getTimeline(in context: Context, completion: @escaping (Timeline<QuickLogEntry>) -> Void) {
+        // 버튼을 누르면 인텐트가 reloadAllTimelines() 로 곧장 갱신한다.
+        // 그와 별개로 한 시간에 한 번 다시 읽는다(앱이 큐를 가져갔을 수 있다).
+        completion(Timeline(entries: [read()], policy: .after(Date().addingTimeInterval(3600))))
+    }
+}
+
 // 기록 위젯 중형의 프리셋. 자주 쓰는 지출을 한 번에 담는다. (자유롭게 수정 가능)
 private struct QuickPreset: Identifiable {
     let id = UUID()
@@ -277,7 +323,7 @@ struct SettlementWidget: Widget {
 
 struct RecordWidgetView: View {
     @Environment(\.widgetFamily) private var family
-    let entry: StaticEntry
+    let entry: QuickLogEntry
 
     var body: some View {
         switch family {
@@ -313,18 +359,8 @@ struct RecordWidgetView: View {
     }
 
     private var presetGrid: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("빠른 기록").font(.subheadline).fontWeight(.bold)
-                Spacer()
-                Link(destination: URL(string: "mwallet://record")!) {
-                    HStack(spacing: 3) {
-                        Image(systemName: "mic.fill").font(.caption2)
-                        Text("직접").font(.caption2)
-                    }
-                    .foregroundStyle(brandCobalt)
-                }
-            }
+        VStack(alignment: .leading, spacing: 7) {
+            header
             HStack(spacing: 8) {
                 ForEach(quickPresets) { preset in
                     Button(intent: LogExpenseIntent(amount: preset.amount,
@@ -343,15 +379,66 @@ struct RecordWidgetView: View {
                     .buttonStyle(.plain)
                 }
             }
+            footer
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .containerBackground(.background, for: .widget)
+    }
+
+    /// 첫 줄 — 무엇을 하는 자리인지와, 담기면 어디로 가는지.
+    ///
+    /// 담길 곳을 적지 않으면 누른 사람은 지금 다니는 여행에 붙는 줄 안다.
+    /// 앱을 열고 나서야 딴 곳에 쌓인 것을 알게 된다.
+    private var header: some View {
+        HStack(spacing: 4) {
+            Text("빠른 기록").font(.subheadline).fontWeight(.bold)
+            if let destination = entry.destination {
+                Text("→ \(destination)")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 4)
+            Link(destination: URL(string: "mwallet://record")!) {
+                HStack(spacing: 3) {
+                    Image(systemName: "mic.fill").font(.caption2)
+                    Text("직접").font(.caption2)
+                }
+                .foregroundStyle(brandCobalt)
+            }
+        }
+    }
+
+    /// 끝 줄 — 방금 담은 것과 되돌리기.
+    ///
+    /// 누르면 화면이 그대로라 담겼는지 알 수 없었다. 앱이 큐를 가져간 뒤에는
+    /// 되돌릴 것이 없으므로 그때는 안내만 남는다.
+    @ViewBuilder
+    private var footer: some View {
+        if let last = entry.lastPending {
+            HStack(spacing: 6) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.caption2).foregroundStyle(brandCobalt)
+                Text("\(last.info) \(MwalletSharedFormat.krw(last.amount))")
+                    .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+                Spacer(minLength: 4)
+                Button(intent: UndoLastLogIntent()) {
+                    Text("되돌리기").font(.caption2).foregroundStyle(brandCobalt)
+                }
+                .buttonStyle(.plain)
+            }
+        } else {
+            Text("눌러서 바로 담기 · 앱을 열면 기록에 들어갑니다")
+                .font(.system(size: 10))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
     }
 }
 
 struct RecordWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "MwalletRecord", provider: StaticProvider()) { entry in
+        StaticConfiguration(kind: "MwalletRecord", provider: QuickLogProvider()) { entry in
             RecordWidgetView(entry: entry)
         }
         .configurationDisplayName("지출 기록")

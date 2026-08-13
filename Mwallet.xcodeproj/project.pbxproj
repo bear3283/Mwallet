@@ -68,7 +68,6 @@
 		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
 		C1A11EA7000000000000010D /* ReceiptRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010C /* ReceiptRow.swift */; };
 		C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010E /* ReceiptDetailView.swift */; };
-		C1C00002000000000000AA2 /* ReceiptPhotoViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C00002000000000000AA1 /* ReceiptPhotoViewer.swift */; };
 		C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */; };
 		C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */; };
 		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
@@ -113,6 +112,7 @@
 		C1B00D130000000000AA2 /* TravelChoiceSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B00D130000000000AA1 /* TravelChoiceSheet.swift */; };
 		C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */; };
 		C1C00001000000000000AA2 /* ReceiptPhotoMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C00001000000000000AA1 /* ReceiptPhotoMigrator.swift */; };
+		C1C00002000000000000AA2 /* ReceiptPhotoViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C00002000000000000AA1 /* ReceiptPhotoViewer.swift */; };
 		C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */; };
 		C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */; };
 		C1DC9A4B2AF3EFAD00CB6298 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A4A2AF3EFAD00CB6298 /* MainViewModel.swift */; };
@@ -234,7 +234,6 @@
 		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010C /* ReceiptRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptRow.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010E /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
-		C1C00002000000000000AA1 /* ReceiptPhotoViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptPhotoViewer.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCategoryPalette.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCSVEncoder.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
@@ -279,6 +278,7 @@
 		C1B00D130000000000AA1 /* TravelChoiceSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelChoiceSheet.swift; sourceTree = "<group>"; };
 		C1B2D2AB2AFCF51700E5C2B2 /* SortingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingHandler.swift; sourceTree = "<group>"; };
 		C1C00001000000000000AA1 /* ReceiptPhotoMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptPhotoMigrator.swift; sourceTree = "<group>"; };
+		C1C00002000000000000AA1 /* ReceiptPhotoViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptPhotoViewer.swift; sourceTree = "<group>"; };
 		C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoModel.swift; sourceTree = "<group>"; };
 		C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Extension.swift"; sourceTree = "<group>"; };
 		C1DC9A4A2AF3EFAD00CB6298 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };

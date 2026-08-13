@@ -199,7 +199,8 @@ struct BudgetView: View {
         MwalletBridge.publish(
             summary: store.summary(for: selectedTravel),
             travelName: selectedTravel?.name ?? "여행",
-            pendingReceiptCount: pending
+            pendingReceiptCount: pending,
+            in: store.context
         )
     }
 }
