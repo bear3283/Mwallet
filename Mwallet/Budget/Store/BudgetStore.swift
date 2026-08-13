@@ -54,7 +54,11 @@ final class BudgetStore {
 
     // 카테고리별 예산을 통째로 맞춘다.
     // 0 원은 '배정하지 않음' 이므로 레코드를 남기지 않고 지운다.
-    func save(_ amounts: [ExpenseInfoCategory: Double], for travel: Travel) throws {
+    /// 분류 번호로 받는다.
+    ///
+    /// 예전에는 열거형으로 받았는데, 사용자가 만든 분류는 열거형에 없어서
+    /// 저장할 길이 없었다. 지출·예산에 실제로 박히는 것도 번호라 번호가 맞다.
+    func save(_ amounts: [Int64: Double], for travel: Travel) throws {
         let existing = budgets(for: travel)
         var byCategory: [Int64: Budget] = [:]
         for budget in existing {
@@ -67,9 +71,14 @@ final class BudgetStore {
             }
         }
 
-        for category in ExpenseInfoCategory.selectable {
-            let key = Int64(category.rawValue)
-            let amount = amounts[category] ?? 0
+        // 화면에 올라온 분류와 이미 저장된 분류를 함께 훑는다. 감춘 분류에
+        // 예산이 남아 있을 수 있는데, 훑지 않으면 지울 기회가 없다.
+        let codes = Set(CategoryCatalog.all(in: context).map(\.code))
+            .union(byCategory.keys)
+            .union(amounts.keys)
+
+        for key in codes.sorted() {
+            let amount = amounts[key] ?? 0
 
             if amount > 0 {
                 let budget = byCategory[key] ?? Budget(context: context)

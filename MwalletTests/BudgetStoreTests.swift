@@ -20,7 +20,7 @@ final class BudgetStoreTests: CoreDataTestCase {
     func test_카테고리별_금액을_저장한다() throws {
         let travel = makeTravel()
 
-        try store.save([.food: 60_000, .room: 100_000], for: travel)
+        try store.save([3: 60_000, 1: 100_000], for: travel)
 
         let saved = store.budgets(for: travel)
         XCTAssertEqual(saved.count, 2)
@@ -31,7 +31,7 @@ final class BudgetStoreTests: CoreDataTestCase {
     func test_0원은_레코드를_남기지_않는다() throws {
         let travel = makeTravel()
 
-        try store.save([.food: 60_000, .room: 0], for: travel)
+        try store.save([3: 60_000, 1: 0], for: travel)
 
         let categories = store.budgets(for: travel).map { ExpenseInfoCategory(rawValue: Int($0.category)) }
         XCTAssertEqual(categories, [.food])
@@ -39,10 +39,10 @@ final class BudgetStoreTests: CoreDataTestCase {
 
     func test_금액을_0으로_바꾸면_기존_예산을_지운다() throws {
         let travel = makeTravel()
-        try store.save([.food: 60_000], for: travel)
+        try store.save([3: 60_000], for: travel)
         XCTAssertEqual(store.budgets(for: travel).count, 1)
 
-        try store.save([.food: 0], for: travel)
+        try store.save([3: 0], for: travel)
 
         XCTAssertTrue(store.budgets(for: travel).isEmpty)
         XCTAssertEqual(store.summary(for: travel).totalPlanned, 0)
@@ -50,9 +50,9 @@ final class BudgetStoreTests: CoreDataTestCase {
 
     func test_다시_저장하면_레코드를_늘리지_않고_금액만_바꾼다() throws {
         let travel = makeTravel()
-        try store.save([.food: 60_000], for: travel)
+        try store.save([3: 60_000], for: travel)
 
-        try store.save([.food: 80_000], for: travel)
+        try store.save([3: 80_000], for: travel)
 
         XCTAssertEqual(store.budgets(for: travel).count, 1, "저장할 때마다 레코드가 쌓이면 합계가 부풀어 오릅니다")
         XCTAssertEqual(store.summary(for: travel).totalPlanned, 80_000)
@@ -66,7 +66,7 @@ final class BudgetStoreTests: CoreDataTestCase {
         try context.save()
         XCTAssertEqual(store.budgets(for: travel).count, 2)
 
-        try store.save([.food: 50_000], for: travel)
+        try store.save([3: 50_000], for: travel)
 
         XCTAssertEqual(store.budgets(for: travel).count, 1)
         XCTAssertEqual(store.summary(for: travel).totalPlanned, 50_000)
@@ -75,9 +75,9 @@ final class BudgetStoreTests: CoreDataTestCase {
     func test_다른_여행의_예산은_건드리지_않는다() throws {
         let mine = makeTravel(name: "제주 워크숍")
         let other = makeTravel(name: "부산 워크숍")
-        try store.save([.food: 10_000], for: other)
+        try store.save([3: 10_000], for: other)
 
-        try store.save([.food: 60_000], for: mine)
+        try store.save([3: 60_000], for: mine)
 
         XCTAssertEqual(store.summary(for: other).totalPlanned, 10_000)
         XCTAssertEqual(store.summary(for: mine).totalPlanned, 60_000)

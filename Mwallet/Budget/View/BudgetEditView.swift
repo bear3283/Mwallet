@@ -16,7 +16,9 @@ struct BudgetEditView: View {
 
     private let store = BudgetStore()
 
-    @State private var amounts: [ExpenseInfoCategory: String] = [:]
+    @State private var amounts: [Int64: String] = [:]
+    @State private var categories: [ExpenseCategory] = []
+    @State private var isEditingCategories = false
     @State private var errorMessage: String?
     @FocusState private var focused: Int?
 
@@ -34,9 +36,11 @@ struct BudgetEditView: View {
                         ReceiptSectionTitle(text: "카테고리별 예산")
                             .padding(.top, 20)
 
-                        ForEach(ExpenseInfoCategory.selectable, id: \.rawValue) { category in
+                        ForEach(categories, id: \.objectID) { category in
                             categoryField(category)
                         }
+
+                        categoryEditLink
 
                         Spacer(minLength: 24)
                     }
@@ -73,6 +77,9 @@ struct BudgetEditView: View {
                 Text(errorMessage ?? "")
             }
             .onAppear(perform: load)
+            .sheet(isPresented: $isEditingCategories, onDismiss: load) {
+                CategoryEditView(context: store.context)
+            }
         }
     }
 
@@ -95,25 +102,46 @@ struct BudgetEditView: View {
 
     // MARK: - 카테고리 입력
 
-    private func categoryField(_ category: ExpenseInfoCategory) -> some View {
+    /// 분류를 만들고 지우고 색을 고르는 자리로 간다.
+    ///
+    /// 금액과 분류 정의는 성격이 다르다. 한 화면에 섞으면 예산을 적으러 왔다가
+    /// 분류를 지우는 일이 생긴다.
+    private var categoryEditLink: some View {
+        Button {
+            isEditingCategories = true
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: "slider.horizontal.3").font(.caption1)
+                Text("분류 만들기 · 색 바꾸기").font(.body1)
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right").font(.caption1)
+            }
+            .foregroundStyle(Color.mainAccent)
+            .padding(.vertical, 16)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func categoryField(_ category: ExpenseCategory) -> some View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {
                 RoundedRectangle(cornerRadius: 3)
-                    .fill(ReceiptCategoryPalette.color(for: category.description))
+                    .fill(category.color.swiftUIColor)
                     .frame(width: 10, height: 10)
 
-                Text(category.description)
+                Text(category.displayName)
                     .font(.body1)
                     .foregroundStyle(.black)
 
                 Spacer(minLength: 8)
 
-                TextField("0", text: binding(for: category))
+                TextField("0", text: binding(for: category.code))
                     .font(.subhead2_1)
                     .foregroundStyle(.black)
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.trailing)
-                    .focused($focused, equals: category.rawValue)
+                    .focused($focused, equals: Int(category.code))
                     .tint(.mainAccent)
                     .frame(maxWidth: 140)
 
@@ -133,10 +161,10 @@ struct BudgetEditView: View {
         amounts.values.reduce(0) { $0 + (parse($1) ?? 0) }
     }
 
-    private func binding(for category: ExpenseInfoCategory) -> Binding<String> {
+    private func binding(for code: Int64) -> Binding<String> {
         Binding(
-            get: { amounts[category] ?? "" },
-            set: { amounts[category] = $0 }
+            get: { amounts[code] ?? "" },
+            set: { amounts[code] = $0 }
         )
     }
 
@@ -158,18 +186,18 @@ struct BudgetEditView: View {
     // MARK: - 동작
 
     private func load() {
-        var loaded: [ExpenseInfoCategory: String] = [:]
+        categories = CategoryCatalog.visible(in: store.context)
+        var loaded: [Int64: String] = [:]
         for budget in store.budgets(for: travel) where budget.amount > 0 {
-            guard let category = ExpenseInfoCategory(rawValue: Int(budget.category)) else { continue }
-            loaded[category] = String(Int(budget.amount))
+            loaded[budget.category] = String(Int(budget.amount))
         }
         amounts = loaded
     }
 
     private func save() {
-        var parsed: [ExpenseInfoCategory: Double] = [:]
-        for (category, text) in amounts {
-            if let value = parse(text) { parsed[category] = value }
+        var parsed: [Int64: Double] = [:]
+        for (code, text) in amounts {
+            if let value = parse(text) { parsed[code] = value }
         }
         do {
             try store.save(parsed, for: travel)
