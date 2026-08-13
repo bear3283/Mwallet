@@ -68,9 +68,6 @@ struct RecordView: View {
             .onDisappear {
                 viewModel.recordButtonResetTimer?.invalidate()
             }
-            .sheet(isPresented: $viewModel.travelChoiceModalIsShown) {
-                TravelChoiceSheet(travels: travelChoices, selection: $mainVM.selectedTravel)
-            }
             .sheet(isPresented: $viewModel.addTravelRequestModalIsShown) {
                 AddTravelRequestModal(viewModel: viewModel)
                     .presentationDetents([.height(247 - 34)])
@@ -112,7 +109,14 @@ struct RecordView: View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
                 Spacer(minLength: metrics.topInset)
-                RecordTravelChoice(viewModel: viewModel)
+                // 예결산·영수증과 같은 컨트롤을 쓴다. 세 탭이 같은 것을 묻는
+                // 자리라 생김새도 하나여야 한다.
+                TravelPicker(travels: travelChoices,
+                             selection: $mainVM.selectedTravel,
+                             emptyTitle: "여행 선택",
+                             emptyDescription: "눌러서 여행을 고르세요",
+                             alignment: .center)
+                    .accessibilityIdentifier("record.travelChoice")
                 Spacer()
                     .frame(height: 36)
                 RecordSentenceArea(viewModel: viewModel, isPressing: isDetectingPress)

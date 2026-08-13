@@ -13,48 +13,6 @@
 
 import SwiftUI
 
-// MARK: - 여행 선택
-
-struct RecordTravelChoice: View {
-
-    @ObservedObject var viewModel: RecordViewModel
-    @EnvironmentObject var mainVM: MainViewModel
-
-    var body: some View {
-        Button {
-            viewModel.travelChoiceModalIsShown = true
-        } label: {
-            ZStack {
-                Capsule()
-                    .foregroundStyle(.white)
-                    .layoutPriority(-1)
-                
-                Capsule()
-                    .strokeBorder(.mainAccent, lineWidth: 1.0)
-                    .layoutPriority(-1)
-                
-                HStack(spacing: 12) {
-                    Text(mainVM.selectedTravel?.isUserCreated == true ? mainVM.selectedTravel?.name ?? "-" : "여행 선택")
-                        .lineLimit(1)
-                        .font(.subhead2_2)
-                        .foregroundStyle(mainVM.selectedTravel?.isUserCreated == true ? .black : .gray400)
-                    Image("recordTravelChoiceDownChevron")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 16, height: 16)
-                        // 장식이라 소리로는 건너뛴다. 숨기지 않으면 자산 이름이 그대로 읽힌다.
-                        .accessibilityHidden(true)
-                }
-                .padding(.vertical, 6)
-                .padding(.leading, 16)
-                .padding(.trailing, 12)
-            }
-        }
-        // 이름이 데이터에 따라 달라져 글자로는 집을 수 없다. 캡처 테스트가 쓴다.
-        .accessibilityIdentifier("record.travelChoice")
-    }
-}
-
 // MARK: - 문장 영역
 
 struct RecordSentenceArea: View {
