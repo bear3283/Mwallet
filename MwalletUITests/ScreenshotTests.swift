@@ -311,6 +311,48 @@ final class ScreenshotTests: XCTestCase {
     }
 }
 
+// MARK: - 예산 항목 내역
+
+/// 예결산의 분류 줄을 눌러 내역으로 들어간다.
+@MainActor
+final class BudgetCategoryDetailScreenshotTests: XCTestCase {
+
+    private var app: XCUIApplication!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        continueAfterFailure = false
+        app = XCUIApplication()
+        app.launch()
+        XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 15))
+        try await Task.sleep(for: .seconds(1.2))
+    }
+
+    private func capture(_ name: String) {
+        let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        shot.name = name
+        shot.lifetime = .keepAlways
+        add(shot)
+    }
+
+    func test_분류_내역을_캡처한다() throws {
+        app.tabBars.buttons["예결산"].tap()
+        Thread.sleep(forTimeInterval: 1.6)
+        capture("30-예결산")
+
+        // 분류 줄은 '식비 3건 48%' 처럼 읽힌다. 이름으로 집는다.
+        let row = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS %@", "식비")).firstMatch
+        guard row.waitForExistence(timeout: 6) else {
+            XCTFail("분류 줄을 찾지 못했습니다.")
+            return
+        }
+        row.tap()
+        Thread.sleep(forTimeInterval: 1.8)
+        capture("31-분류내역")
+    }
+}
+
 // MARK: - 분류 편집
 
 /// 예산 편집 → 분류 편집 → 색 고르기까지 들어가 본다.

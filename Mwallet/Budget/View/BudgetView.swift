@@ -98,7 +98,7 @@ struct BudgetView: View {
                     Divider()
                         .padding(.top, 20)
 
-                    BudgetChartSection(summary: summary)
+                    BudgetChartSection(summary: summary, travel: selectedTravel)
                         .padding(.horizontal, ReceiptLayout.gutter)
                         .padding(.top, 20)
 
@@ -219,6 +219,8 @@ enum BudgetChartMode: String, CaseIterable, Identifiable {
 struct BudgetChartSection: View {
 
     let summary: BudgetSummary
+    /// 분류를 눌러 내역으로 들어갈 때 어느 여행의 것인지 알아야 한다.
+    let travel: Travel?
     @State private var mode: BudgetChartMode = .progress
 
     var body: some View {
@@ -268,7 +270,26 @@ struct BudgetChartSection: View {
         }
     }
 
+    /// 분류 한 줄. 누르면 그 분류가 언제 얼마씩 쌓였는지 본다.
+    ///
+    /// 여기서 멈추면 '식비 43,264원' 이 한 번에 나간 것인지 열 번에 걸친
+    /// 것인지 알 수 없어, 영수증 탭으로 건너가 분류로 걸러야 했다.
+    @ViewBuilder
     private func categoryRow(_ line: BudgetLine) -> some View {
+        if let travel {
+            NavigationLink {
+                BudgetCategoryDetailView(travel: travel, line: line)
+            } label: {
+                categoryRowLabel(line)
+            }
+            .buttonStyle(.plain)
+        } else {
+            // 여행을 고르지 않았으면 들어갈 곳이 없다. 줄만 그린다.
+            categoryRowLabel(line)
+        }
+    }
+
+    private func categoryRowLabel(_ line: BudgetLine) -> some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 8) {
@@ -292,6 +313,12 @@ struct BudgetChartSection: View {
                         .font(.subhead2_1)
                         .foregroundStyle(line.isOverspent ? Color.mainOrange : Color.black)
                         .monospacedDigit()
+
+                    // 누를 수 있다는 신호. 없으면 눌러 볼 생각을 하지 않는다.
+                    Image(systemName: "chevron.right")
+                        .font(.caption1)
+                        .foregroundStyle(.gray300)
+                        .accessibilityHidden(true)
                 }
 
                 progressBar(ratio: line.barRatio, isOver: line.isOverspent, tint: line.category.color)

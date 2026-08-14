@@ -79,6 +79,7 @@
 		C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006C1 /* BudgetStore.swift */; };
 		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
 		C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006E1 /* BudgetEditView.swift */; };
+		C200000A000000000000AA2 /* BudgetCategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */; };
 		C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000007A1 /* LocationPickerView.swift */; };
 		C1A11EA700000000000009A2 /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009A1 /* CSVParser.swift */; };
 		C1A11EA700000000000009B2 /* TravelExpenseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009B1 /* TravelExpenseMap.swift */; };
@@ -251,6 +252,7 @@
 		C1A11EA700000000000006C1 /* BudgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStore.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006E1 /* BudgetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEditView.swift; sourceTree = "<group>"; };
+		C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "BudgetCategoryDetailView.swift"; path = "Mwallet/Budget/View/BudgetCategoryDetailView.swift"; sourceTree = SOURCE_ROOT; };
 		C1A11EA700000000000007A1 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009A1 /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009B1 /* TravelExpenseMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelExpenseMap.swift; sourceTree = "<group>"; };
@@ -690,6 +692,7 @@
 			children = (
 				C1A11EA700000000000006D1 /* BudgetView.swift */,
 				C1A11EA700000000000006E1 /* BudgetEditView.swift */,
+				C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -963,6 +966,7 @@
 				C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */,
 				C1A11EA700000000000006D2 /* BudgetView.swift in Sources */,
 				C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */,
+				C200000A000000000000AA2 /* BudgetCategoryDetailView.swift in Sources */,
 				C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */,
 				C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */,
 				C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */,
