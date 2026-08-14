@@ -34,6 +34,12 @@ struct TravelPicker: View {
     /// 영수증처럼 '고르지 않음' 이 '모두 본다' 는 뜻인 화면에서 켠다.
     var allowsAll = false
 
+    /// 글을 어느 쪽으로 붙일지.
+    ///
+    /// 예결산·영수증은 머리줄 왼쪽에 앉아 왼쪽 정렬이고, 기록 탭은 화면
+    /// 한가운데 놓이는 초점이라 가운데 정렬이다. 짜임은 같고 정렬만 다르다.
+    var alignment: HorizontalAlignment = .leading
+
     @State private var isChoosing = false
 
     var body: some View {
@@ -42,9 +48,9 @@ struct TravelPicker: View {
         } label: {
             // chevron 을 이름 바로 옆에 붙인다. 오른쪽 끝은 탭 동작 버튼 자리라
             // 거기에 두면 선택기와 동작 버튼이 뒤섞여 보인다.
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: alignment, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(selection?.displayName ?? emptyTitle)
+                    Text(chosen?.displayName ?? emptyTitle)
                         .font(.title3)
                         .foregroundStyle(.black)
                         .lineLimit(1)
@@ -73,10 +79,20 @@ struct TravelPicker: View {
         }
     }
 
+    /// 화면에 이름을 적을 여행.
+    ///
+    /// 기본함('임시 기록')은 고르지 않은 것으로 본다. 사용자가 만든 일정이
+    /// 아니라 여행을 안 고른 지출이 담기는 자리라, 이름과 기간을 그대로
+    /// 적으면 오늘 하루짜리 여행을 다니는 것처럼 읽힌다.
+    private var chosen: Travel? {
+        guard let selection, selection.isUserCreated else { return nil }
+        return selection
+    }
+
     private var metaText: String {
-        guard let selection else { return emptyDescription }
-        let people = selection.participants.count + 1
-        return "\(TravelSchedule.periodText(selection)) · \(people)명"
+        guard let chosen else { return emptyDescription }
+        let people = chosen.participants.count + 1
+        return "\(TravelSchedule.periodText(chosen)) · \(people)명"
     }
 }
 
