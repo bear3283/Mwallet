@@ -1,0 +1,7 @@
+Erste Version.
+
+• Ausgaben per Sprache erfassen
+• Mehrere Belegfotos pro Ausgabe
+• Abrechnung pro Person, Budget je Kategorie
+• Ausgabenkarte und CSV-Export
+• VoiceOver und dynamische Schrift unterstützt

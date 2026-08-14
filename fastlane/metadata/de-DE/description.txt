@@ -1,0 +1,26 @@
+Unterwegs bei jeder Zahlung die App öffnen, eine Kategorie wählen und Zahlen tippen – das hält auf. Mission Wallet macht daraus einen einzigen gesprochenen Satz.
+
+Taste gedrückt halten und „Mittagessen 15 Euro Karte“ sagen. Posten, Betrag und Zahlungsart finden jeweils ihren Platz. Loslassen – gespeichert.
+
+■ Sprechen statt tippen
+Einfach sprechen, solange die Taste gedrückt ist. Betrag und Zahlungsart werden automatisch getrennt, gefragt wird nur, was unklar ist.
+
+■ Fremdwährung inklusive
+In Landeswährung erfassen und den umgerechneten Betrag gleich daneben sehen – zum Kurs des Tages. Einträge ohne abrufbaren Kurs werden gemeldet statt versteckt, damit die Summe nicht still und leise abweicht.
+
+■ Belege, Vorder- und Rückseite
+Bis zu fünf Fotos pro Ausgabe: Beleg, Rückseite, Kartenzettel. Einträge ohne Foto lassen sich separat herausfiltern.
+
+■ Abrechnung pro Person
+Wählen Sie aus, wer eine Ausgabe mitgetragen hat, und sehen Sie nach der Reise, wer wie viel ausgegeben hat.
+
+■ Budget und Abschluss
+Budget je Kategorie festlegen und den Rest im Blick behalten. Überschrittene Kategorien werden zuerst gemeldet.
+
+■ Eine Karte Ihrer Ausgaben
+Jede Ausgabe landet der Reihe nach auf der Karte. Am Ende der Reise ist die Route bereits gezeichnet.
+
+■ Ihre Daten bleiben bei Ihnen
+Alles liegt auf Ihrem Gerät und in Ihrer eigenen iCloud. Es gibt keinen Server, den der Entwickler lesen könnte, und weder Werbung noch Analyse-SDKs. CSV-Export jederzeit möglich.
+
+Als Reisekasse für Reisende gebaut – und als Abrechnungsbuch für kurzfristige Missionsteams.

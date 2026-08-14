@@ -3,6 +3,7 @@
 #   bundle exec fastlane test         단위 테스트 200건
 #   bundle exec fastlane screenshots  네 탭·여행 상세를 찍어 파일로 꺼낸다
 #   bundle exec fastlane lint         SwiftLint 위반만 모아 본다
+#   bundle exec fastlane metadata     App Store 정보만 올린다 (빌드는 안 건드린다)
 #
 # 세 레인 모두 계정 정보가 필요 없다. 시뮬레이터에서만 돈다.
 
@@ -121,6 +122,34 @@ platform :ios do
       api_key: api_key,
       # 심사 대기 없이 내부 테스터에게만 먼저 간다.
       skip_waiting_for_build_processing: true
+    )
+  end
+
+  desc "App Store 정보만 올린다 (빌드는 건드리지 않는다)"
+  #
+  # 스토어에 적히는 글은 fastlane/metadata 아래에 파일로 둔다. 웹에서 고치면
+  # 무엇을 언제 왜 바꿨는지가 남지 않고, 심사에서 되돌려 받았을 때 이전 문구로
+  # 되돌릴 방법도 없다. 저장소에 두면 diff 로 보이고 되돌릴 수 있다.
+  #
+  # 빌드는 올리지 않는다. 글만 고치려고 앱을 다시 빌드할 이유가 없고,
+  # 스크린샷도 손대지 않는다(fastlane screenshots 로 따로 찍는다).
+  lane :metadata do
+    api_key = connect_api_key
+    ensure_app_exists(api_key)
+
+    privacy = File.read("metadata/ko/privacy_url.txt").strip
+    if privacy.include?("example.notion.site")
+      UI.user_error!("metadata/ko/privacy_url.txt 가 아직 예시 주소입니다. " \
+                     "노션에서 '웹에 게시' 한 뒤 나오는 공개 주소로 바꿔 주세요.")
+    end
+
+    deliver(
+      api_key: api_key,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      # 올리기 전에 무엇이 바뀌는지 보여 주고 묻는다.
+      force: false,
+      precheck_include_in_app_purchases: false
     )
   end
 

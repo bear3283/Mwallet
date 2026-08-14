@@ -1,0 +1,7 @@
+Primeira versão.
+
+• Registre gastos falando
+• Várias fotos de recibo por gasto
+• Divisão por pessoa e orçamento por categoria
+• Mapa de gastos e exportação em CSV
+• Compatível com VoiceOver e texto dinâmico

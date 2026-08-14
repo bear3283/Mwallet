@@ -1,0 +1,26 @@
+Abrir la app, elegir una categoría y teclear cifras cada vez que pagas es un engorro cuando estás de viaje. Mission Wallet lo reduce a una sola frase hablada.
+
+Mantén pulsado el botón y di «comida 15 euros tarjeta». El concepto, el importe y el método de pago van cada uno a su sitio. Sueltas, y queda guardado.
+
+■ Habla en vez de escribir
+Solo tienes que hablar mientras mantienes pulsado. La app separa el importe y el método de pago, y solo pregunta por lo que no tiene claro.
+
+■ La moneda extranjera, resuelta
+Anota en moneda local y verás el importe convertido al lado, con el cambio de ese día. Los apuntes cuyo tipo de cambio no se pudo obtener se avisan en lugar de ocultarse, para que el total nunca se desvíe en silencio.
+
+■ Recibos, por delante y por detrás
+Adjunta hasta cinco fotos a un mismo gasto: recibo, reverso, resguardo de la tarjeta. También puedes filtrar los apuntes que aún no tienen foto.
+
+■ Reparto por persona
+Marca quién compartió cada gasto y, al terminar el viaje, verás cuánto gastó cada uno.
+
+■ Presupuesto y cierre
+Fija un presupuesto por categoría y controla lo que queda. Las categorías que se pasan se avisan primero.
+
+■ Un mapa de tus gastos
+Cada gasto queda en el mapa en orden. Cuando el viaje acaba, la ruta ya está dibujada.
+
+■ Tus datos son tuyos
+Todo se queda en tu dispositivo y en tu propio iCloud. No hay ningún servidor que el desarrollador pueda leer, ni anuncios ni herramientas de analítica. Exporta a CSV cuando quieras.
+
+Pensado como cuaderno de viaje para quien viaja, y como libro de cuentas para equipos de misión de corta duración.

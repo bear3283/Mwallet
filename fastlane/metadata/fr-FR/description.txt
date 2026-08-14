@@ -1,0 +1,26 @@
+En voyage, ouvrir l'app, choisir une catégorie et taper des chiffres à chaque paiement, c'est fastidieux. Mission Wallet ramène tout cela à une seule phrase dite à voix haute.
+
+Maintenez le bouton et dites « déjeuner 15 euros carte ». L'intitulé, le montant et le moyen de paiement trouvent chacun leur place. Vous relâchez, c'est enregistré.
+
+■ Parler plutôt que taper
+Parlez simplement en maintenant le bouton. L'app sépare le montant et le moyen de paiement, et ne vous interroge que sur ce dont elle n'est pas sûre.
+
+■ Les devises, réglées
+Saisissez en monnaie locale et voyez le montant converti à côté, au taux du jour. Les écritures dont le taux n'a pas pu être récupéré sont signalées plutôt que masquées : votre total ne dérive jamais en silence.
+
+■ Reçus, recto et verso
+Jusqu'à cinq photos pour une même dépense : reçu, verso, ticket de carte. Vous pouvez aussi filtrer les écritures encore sans photo.
+
+■ Partage par personne
+Indiquez qui a partagé chaque dépense, et voyez en fin de voyage combien chacun a dépensé.
+
+■ Budget et bilan
+Fixez un budget par catégorie et suivez ce qu'il reste. Les catégories dépassées sont signalées en premier.
+
+■ Une carte de vos dépenses
+Chaque dépense se pose sur la carte, dans l'ordre. À la fin du voyage, l'itinéraire est déjà tracé.
+
+■ Vos données restent les vôtres
+Tout reste sur votre appareil et dans votre propre iCloud. Aucun serveur que le développeur pourrait lire, ni publicité, ni outil d'analyse. Export CSV quand vous le souhaitez.
+
+Conçu comme un carnet de comptes pour les voyageurs, et comme un livre de comptes pour les équipes de mission de courte durée.
