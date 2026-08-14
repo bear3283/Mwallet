@@ -37,6 +37,14 @@ enum ReceiptCategoryPalette {
         (0x9A9A9A, 0x8A8A8A)    // 기타   gray
     ]
 
+    /// 그 분류에 배정된 색 한 쌍을 문자열로. 분류 표에 옮겨 심을 때 쓴다.
+    static func storedColor(for category: String) -> CategoryColor {
+        let index = order.firstIndex(of: category) ?? (order.count - 1)
+        let pair = hexes[min(index, hexes.count - 1)]
+        return CategoryColor(light: String(format: "%06X", pair.light),
+                             dark: String(format: "%06X", pair.dark))
+    }
+
     static func color(for category: String) -> Color {
         let index = order.firstIndex(of: category) ?? (order.count - 1)
         let pair = hexes[min(index, hexes.count - 1)]

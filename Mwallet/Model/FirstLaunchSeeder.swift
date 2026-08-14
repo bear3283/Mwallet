@@ -48,6 +48,9 @@ final class FirstLaunchSeeder {
         // 한 장만 담던 사진을 여러 장 담는 곳으로 옮긴다. 한 번만 돈다.
         ReceiptPhotoMigrator.migrateIfNeeded(in: viewContext)
 
+        // 코드에 박혀 있던 분류를 표로 옮긴다. 이미 있는 것은 손대지 않는다.
+        CategorySeeder.seedIfNeeded(in: viewContext)
+
         // 값이 없으면 첫 실행이고, true 로 남아 있어도 아직 시딩 전으로 본다.
         let needsSeeding = (UserDefaults.standard.object(forKey: Self.seededKey) as? Bool) ?? true
         UserDefaults.standard.set(false, forKey: Self.seededKey)

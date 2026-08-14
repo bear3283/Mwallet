@@ -311,6 +311,63 @@ final class ScreenshotTests: XCTestCase {
     }
 }
 
+// MARK: - 분류 편집
+
+/// 예산 편집 → 분류 편집 → 색 고르기까지 들어가 본다.
+@MainActor
+final class CategoryEditScreenshotTests: XCTestCase {
+
+    private var app: XCUIApplication!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        continueAfterFailure = false
+        app = XCUIApplication()
+        app.launch()
+        XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 15))
+        try await Task.sleep(for: .seconds(1.2))
+    }
+
+    private func capture(_ name: String) {
+        let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        shot.name = name
+        shot.lifetime = .keepAlways
+        add(shot)
+    }
+
+    private func settle(_ seconds: TimeInterval = 1.2) {
+        Thread.sleep(forTimeInterval: seconds)
+    }
+
+    func test_분류_편집을_캡처한다() throws {
+        app.tabBars.buttons["예결산"].tap()
+        settle()
+
+        guard app.buttons["예산 편집"].waitForExistence(timeout: 6) else {
+            XCTFail("예산 편집 버튼을 찾지 못했습니다.")
+            return
+        }
+        app.buttons["예산 편집"].tap()
+        settle(1.6)
+        capture("20-예산편집")
+
+        let link = app.buttons["분류 만들기 · 색 바꾸기"].firstMatch
+        if !link.waitForExistence(timeout: 4) { app.swipeUp(); settle() }
+        guard link.waitForExistence(timeout: 4) else {
+            XCTFail("분류 편집으로 가는 자리를 찾지 못했습니다.")
+            return
+        }
+        link.tap()
+        settle(1.6)
+        capture("21-분류편집")
+
+        // 새 분류를 만들며 색을 고른다.
+        app.buttons["분류 추가"].firstMatch.tap()
+        settle(1.4)
+        capture("22-분류추가")
+    }
+}
+
 // MARK: - 스플래시
 
 /// 여는 화면은 1.6초 뒤 사라진다. 탭바를 기다리면 이미 지나간 뒤라,

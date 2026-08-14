@@ -86,6 +86,9 @@
 		C1A11EA700000000000009D2 /* TravelEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009D1 /* TravelEditView.swift */; };
 		C1A11EA700000000000009E2 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009E1 /* Log.swift */; };
 		C1A11EA700000000000009F2 /* Travel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009F1 /* Travel+Extension.swift */; };
+		C1F00000000000000000AA2 /* ExpenseCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00000000000000000AA1 /* ExpenseCategory+Extension.swift */; };
+		C1F00001000000000000AA2 /* CategoryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00001000000000000AA1 /* CategoryEditView.swift */; };
+		C1F00002000000000000AA2 /* CategoryDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00002000000000000AA1 /* CategoryDetailSheet.swift */; };
 		C1A11EA70000000000000AA2 /* TravelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000AA1 /* TravelPicker.swift */; };
 		C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000BB1 /* TabActionBar.swift */; };
 		C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000CC1 /* TravelListView.swift */; };
@@ -116,6 +119,9 @@
 		C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */; };
 		C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */; };
 		C1DC9A4B2AF3EFAD00CB6298 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DC9A4A2AF3EFAD00CB6298 /* MainViewModel.swift */; };
+		C1E00000000000000000AA2 /* CategoryCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E00000000000000000AA1 /* CategoryCatalog.swift */; };
+		C1E00001000000000000AA2 /* CategoryColorCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E00001000000000000AA1 /* CategoryColorCheck.swift */; };
+		C1E00002000000000000AA2 /* CategorySeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E00002000000000000AA1 /* CategorySeeder.swift */; };
 		E23357A62AE273E700E17CFF /* NSObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A52AE273E700E17CFF /* NSObject+Extension.swift */; };
 		E23357A82AE2B42300E17CFF /* dateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A72AE2B42300E17CFF /* dateFormatter.swift */; };
 		E237338C2AF7E95B008C2613 /* CurrencyList.csv in Resources */ = {isa = PBXBuildFile; fileRef = E237338B2AF7E95B008C2613 /* CurrencyList.csv */; };
@@ -252,6 +258,9 @@
 		C1A11EA700000000000009D1 /* TravelEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelEditView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009E1 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009F1 /* Travel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Travel+Extension.swift"; sourceTree = "<group>"; };
+		C1F00000000000000000AA1 /* ExpenseCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ExpenseCategory+Extension.swift"; path = "Mwallet/Extension/ExpenseCategory+Extension.swift"; sourceTree = SOURCE_ROOT; };
+		C1F00001000000000000AA1 /* CategoryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CategoryEditView.swift"; path = "Mwallet/Budget/View/CategoryEditView.swift"; sourceTree = SOURCE_ROOT; };
+		C1F00002000000000000AA1 /* CategoryDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CategoryDetailSheet.swift"; path = "Mwallet/Budget/View/CategoryDetailSheet.swift"; sourceTree = SOURCE_ROOT; };
 		C1A11EA70000000000000AA1 /* TravelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPicker.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000BB1 /* TabActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabActionBar.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000CC1 /* TravelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelListView.swift; sourceTree = "<group>"; };
@@ -282,6 +291,9 @@
 		C1DC9A462AF3428C00CB6298 /* CountryInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoModel.swift; sourceTree = "<group>"; };
 		C1DC9A482AF3859B00CB6298 /* Gesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Extension.swift"; sourceTree = "<group>"; };
 		C1DC9A4A2AF3EFAD00CB6298 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		C1E00000000000000000AA1 /* CategoryCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCatalog.swift; sourceTree = "<group>"; };
+		C1E00001000000000000AA1 /* CategoryColorCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColorCheck.swift; sourceTree = "<group>"; };
+		C1E00002000000000000AA1 /* CategorySeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySeeder.swift; sourceTree = "<group>"; };
 		E23357A52AE273E700E17CFF /* NSObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extension.swift"; sourceTree = "<group>"; };
 		E23357A72AE2B42300E17CFF /* dateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateFormatter.swift; sourceTree = "<group>"; };
 		E237338B2AF7E95B008C2613 /* CurrencyList.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = CurrencyList.csv; sourceTree = "<group>"; };
@@ -422,6 +434,9 @@
 				C15760172AEE782C0089FFE5 /* CountryList.csv */,
 				57C41DFB2AD4F1EB00345253 /* Persistence.swift */,
 				C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */,
+				C1E00000000000000000AA1 /* CategoryCatalog.swift */,
+				C1E00001000000000000AA1 /* CategoryColorCheck.swift */,
+				C1E00002000000000000AA1 /* CategorySeeder.swift */,
 				C1C00001000000000000AA1 /* ReceiptPhotoMigrator.swift */,
 				C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */,
 				C1A11EA70000000000000E31 /* KoreanNumberReader.swift */,
@@ -451,6 +466,9 @@
 				57F72CF02B04CAE900464B06 /* Double+Extension.swift */,
 				C1A11EA700000000000000B1 /* Expense+Extension.swift */,
 				C1A11EA700000000000009F1 /* Travel+Extension.swift */,
+				C1F00000000000000000AA1 /* ExpenseCategory+Extension.swift */,
+				C1F00001000000000000AA1 /* CategoryEditView.swift */,
+				C1F00002000000000000AA1 /* CategoryDetailSheet.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -934,6 +952,9 @@
 				57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */,
 				C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */,
 				C1A11EA700000000000009F2 /* Travel+Extension.swift in Sources */,
+				C1F00000000000000000AA2 /* ExpenseCategory+Extension.swift in Sources */,
+				C1F00001000000000000AA2 /* CategoryEditView.swift in Sources */,
+				C1F00002000000000000AA2 /* CategoryDetailSheet.swift in Sources */,
 				C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */,
 				C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */,
 				C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */,
@@ -965,6 +986,9 @@
 				C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */,
 				57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */,
 				C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */,
+				C1E00000000000000000AA2 /* CategoryCatalog.swift in Sources */,
+				C1E00001000000000000AA2 /* CategoryColorCheck.swift in Sources */,
+				C1E00002000000000000AA2 /* CategorySeeder.swift in Sources */,
 				C1C00001000000000000AA2 /* ReceiptPhotoMigrator.swift in Sources */,
 				C1A11EA70000000000000E22 /* VoiceSentenceParser.swift in Sources */,
 				C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */,
@@ -1048,13 +1072,13 @@
 		09B72AAF3017AAC3007F3F2E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_DEBUG_DYLIB = NO;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = MwalletWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_DEBUG_DYLIB = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MwalletWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MwalletWidget;
@@ -1083,13 +1107,13 @@
 		09B72AB03017AAC3007F3F2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_DEBUG_DYLIB = NO;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = MwalletWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_DEBUG_DYLIB = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MwalletWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MwalletWidget;
