@@ -24,6 +24,7 @@ enum MwalletShared {
 
     private static let snapshotKey = "budget.snapshot"
     private static let queueKey = "pending.expenses"
+    private static let destinationKey = "pending.destination"
 
     private static var store: UserDefaults? {
         UserDefaults(suiteName: appGroupID)
@@ -40,6 +41,20 @@ enum MwalletShared {
         guard let data = store?.data(forKey: snapshotKey) else { return nil }
         return try? JSONDecoder().decode(BudgetSnapshot.self, from: data)
     }
+
+    // MARK: 담길 곳의 이름 (앱 → 위젯)
+
+    /// 위젯에서 담은 지출이 어느 여행으로 갈지, 그 이름.
+    ///
+    /// 위젯이 스스로 정하지 않는다. 여행 중인지 판단하는 규칙이 앱과 위젯
+    /// 두 곳에 생기면 서로 다른 답을 낼 수 있고, 그러면 위젯에 적힌 곳과
+    /// 실제로 담기는 곳이 달라진다. 앱이 정하고 위젯은 받아 적는다.
+    static func writeDestinationName(_ name: String?) {
+        guard let name else { return store?.removeObject(forKey: destinationKey) ?? () }
+        store?.set(name, forKey: destinationKey)
+    }
+
+    static var destinationName: String? { store?.string(forKey: destinationKey) }
 
     // MARK: 대기 지출 큐 (위젯 → 앱)
 
@@ -60,6 +75,24 @@ enum MwalletShared {
         store?.removeObject(forKey: queueKey)
         return queue
     }
+
+    /// 방금 담은 것을 도로 뺀다.
+    ///
+    /// 홈 화면의 위젯은 한 번 누르면 그대로 담기는 자리라 잘못 누르기 쉽다.
+    /// 앱을 열어 지우게 하면 '빠른 기록' 이라는 말이 무색해진다.
+    ///
+    /// 앱이 이미 가져간 뒤에는 뺄 것이 없다. 그때는 nil 을 돌려주고, 화면은
+    /// 되돌리기 단추를 감춘다.
+    @discardableResult
+    static func undoLast() -> PendingExpense? {
+        var queue = readQueue()
+        guard let last = queue.popLast() else { return nil }
+        writeQueue(queue)
+        return last
+    }
+
+    /// 큐에 아직 남아 있는 마지막 것. 위젯이 '방금 담음' 을 보여 줄 때 쓴다.
+    static var lastPending: PendingExpense? { readQueue().last }
 
     private static func writeQueue(_ queue: [PendingExpense]) {
         guard let data = try? JSONEncoder().encode(queue) else { return }

@@ -12,7 +12,11 @@ import OSLog
 
 final class BudgetStore {
 
-    private let context: NSManagedObjectContext
+    /// 이 스토어가 보는 저장소.
+    ///
+    /// 위젯 스냅샷을 낼 때 '어디로 담기는지' 를 같은 저장소에서 물어야 해서 연다.
+    /// 화면이 따로 컨텍스트를 들고 있으면 스토어가 보는 것과 어긋날 수 있다.
+    let context: NSManagedObjectContext
 
     init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.context = context

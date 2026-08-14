@@ -134,7 +134,8 @@ final class MwalletBridgeTests: CoreDataTestCase {
         makeExpense(travel: travel, amount: 20_000, category: .food)
         let summary = BudgetStore(context: context).summary(for: travel)
 
-        MwalletBridge.publish(summary: summary, travelName: "제주 워크숍", pendingReceiptCount: 2)
+        MwalletBridge.publish(summary: summary, travelName: "제주 워크숍", pendingReceiptCount: 2,
+                              in: context)
 
         let snapshot = MwalletShared.readSnapshot()
         XCTAssertEqual(snapshot?.travelName, "제주 워크숍")
