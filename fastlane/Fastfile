@@ -133,7 +133,7 @@ platform :ios do
   #
   # 빌드는 올리지 않는다. 글만 고치려고 앱을 다시 빌드할 이유가 없고,
   # 스크린샷도 손대지 않는다(fastlane screenshots 로 따로 찍는다).
-  lane :metadata do
+  lane :metadata do |options|
     api_key = connect_api_key
     ensure_app_exists(api_key)
 
@@ -143,14 +143,43 @@ platform :ios do
                      "노션에서 '웹에 게시' 한 뒤 나오는 공개 주소로 바꿔 주세요.")
     end
 
+    # 지원 URL 은 http(s) 만 받는다. mailto: 를 넣으면 언어마다 하나씩
+    # 'Support URL you entered is invalid' 로 되돌아온다.
+    support = File.read("metadata/ko/support_url.txt").strip
+    unless support.start_with?("http")
+      UI.user_error!("지원 URL 은 http(s) 주소여야 합니다(지금: #{support}). " \
+                     "메일 주소는 App Store Connect 가 받지 않습니다.")
+    end
+
+    # 심사 연락처는 전화번호가 없으면 통째로 거절당한다. 없으면 그 부분만 빼고
+    # 나머지를 올린다 — 목록 문구까지 못 올릴 이유는 없다.
+    review = "metadata/review_information"
+    phone = File.join(review, "phone_number.txt")
+    unless File.exist?(phone) && !File.read(phone).strip.empty?
+      UI.important("심사 연락처에 전화번호가 없어 그 부분은 올리지 않습니다. " \
+                   "#{phone} 에 번호를 넣으면 함께 올라갑니다.")
+      skip_review_information = true
+    end
+
+    # 전화번호가 없으면 심사 연락처 폴더를 잠시 비켜 둔다.
+    held = nil
+    if skip_review_information && Dir.exist?(review)
+      # metadata 안에 두면 deliver 가 언어 폴더로 오해한다. 바깥으로 옮긴다.
+      held = "review_information.hold"
+      FileUtils.mv(review, held)
+    end
+
     deliver(
       api_key: api_key,
       skip_binary_upload: true,
       skip_screenshots: true,
       # 올리기 전에 무엇이 바뀌는지 보여 주고 묻는다.
-      force: false,
+      # 물어볼 수 없는 자리(비대화형)에서는 force:true 로 건너뛴다.
+      force: options[:force] == true || options[:force] == "true",
       precheck_include_in_app_purchases: false
     )
+  ensure
+    FileUtils.mv(held, review) if held && Dir.exist?(held)
   end
 
   desc "SwiftLint 위반만 모아 본다"
