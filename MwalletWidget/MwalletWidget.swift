@@ -19,6 +19,7 @@
 import AppIntents
 import Foundation
 import SwiftUI
+import OSLog
 import WidgetKit
 
 // 브랜드 코발트 — 앱 mainAccent 와 같은 값(sRGB #2F5BEA).
@@ -27,21 +28,42 @@ private let overOrange = Color(red: 1.0, green: 0.42, blue: 0.30)
 
 // MARK: - 스냅샷 타임라인 (예산·결산·영수증 위젯 공용)
 
+// MARK: - 진단 기록
+//
+// 위젯은 앱과 다른 프로세스에서 돌아 print 가 Xcode 콘솔에 남지 않는다.
+// OSLog 로 남기면 기기에서도 뽑을 수 있다:
+//
+//   log stream --predicate 'subsystem == "com.bear3745.Mwallet.widget"'
+//
+// 넷 중 어느 위젯이 실제로 조회되는지 보려고 provider 에 이름을 붙였다.
+// 갤러리는 목록을 그릴 때 위젯마다 placeholder 를 한 번씩 묻는다 —
+// 어떤 위젯의 이름이 아예 안 찍히면 그 위젯은 조회조차 되지 않는 것이다.
+enum WidgetLog {
+    static let shared = Logger(subsystem: "com.bear3745.Mwallet.widget", category: "lifecycle")
+}
+
 struct SnapshotEntry: TimelineEntry {
     let date: Date
     let snapshot: BudgetSnapshot?
 }
 
 struct SnapshotProvider: TimelineProvider {
+    /// 어느 위젯이 묻는 것인지 구분하려고 받는다. 셋이 같은 provider 를 쓴다.
+    let label: String
+
     func placeholder(in context: Context) -> SnapshotEntry {
-        SnapshotEntry(date: Date(), snapshot: nil)
+        WidgetLog.shared.notice("\(label, privacy: .public) placeholder (\(String(describing: context.family), privacy: .public))")
+        return SnapshotEntry(date: Date(), snapshot: nil)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SnapshotEntry) -> Void) {
-        completion(SnapshotEntry(date: Date(), snapshot: MwalletShared.readSnapshot()))
+        let snapshot = MwalletShared.readSnapshot()
+        WidgetLog.shared.notice("\(label, privacy: .public) getSnapshot — 스냅샷 \(snapshot == nil ? "없음" : "있음", privacy: .public)")
+        completion(SnapshotEntry(date: Date(), snapshot: snapshot))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SnapshotEntry>) -> Void) {
+        WidgetLog.shared.notice("\(label, privacy: .public) getTimeline")
         // 앱이 값을 바꾸면 WidgetCenter.reloadAllTimelines() 로 갱신한다.
         // 그와 별개로 30분마다 한 번 가볍게 재요청한다(폴백).
         let entry = SnapshotEntry(date: Date(), snapshot: MwalletShared.readSnapshot())
@@ -126,12 +148,15 @@ struct QuickLogProvider: TimelineProvider {
     }
 
     func placeholder(in context: Context) -> QuickLogEntry {
-        QuickLogEntry(date: Date(), destination: nil, lastPending: nil)
+        WidgetLog.shared.notice("지출기록 placeholder (\(String(describing: context.family), privacy: .public))")
+        return QuickLogEntry(date: Date(), destination: nil, lastPending: nil)
     }
     func getSnapshot(in context: Context, completion: @escaping (QuickLogEntry) -> Void) {
+        WidgetLog.shared.notice("지출기록 getSnapshot")
         completion(read())
     }
     func getTimeline(in context: Context, completion: @escaping (Timeline<QuickLogEntry>) -> Void) {
+        WidgetLog.shared.notice("지출기록 getTimeline")
         // 버튼을 누르면 인텐트가 reloadAllTimelines() 로 곧장 갱신한다.
         // 그와 별개로 한 시간에 한 번 다시 읽는다(앱이 큐를 가져갔을 수 있다).
         completion(Timeline(entries: [read()], policy: .after(Date().addingTimeInterval(3600))))
@@ -240,7 +265,7 @@ struct BudgetWidgetView: View {
 
 struct BudgetWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "MwalletBudget", provider: SnapshotProvider()) { entry in
+        StaticConfiguration(kind: "MwalletBudget", provider: SnapshotProvider(label: "예산")) { entry in
             BudgetWidgetView(entry: entry)
         }
         .configurationDisplayName("예산")
@@ -310,7 +335,7 @@ struct SettlementWidgetView: View {
 
 struct SettlementWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "MwalletSettlement", provider: SnapshotProvider()) { entry in
+        StaticConfiguration(kind: "MwalletSettlement", provider: SnapshotProvider(label: "결산")) { entry in
             SettlementWidgetView(entry: entry)
         }
         .configurationDisplayName("결산")
@@ -505,7 +530,7 @@ struct ReceiptWidgetView: View {
 
 struct ReceiptWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "MwalletReceipt", provider: SnapshotProvider()) { entry in
+        StaticConfiguration(kind: "MwalletReceipt", provider: SnapshotProvider(label: "영수증")) { entry in
             ReceiptWidgetView(entry: entry)
         }
         .configurationDisplayName("영수증 등록")
@@ -518,6 +543,12 @@ struct ReceiptWidget: Widget {
 
 @main
 struct MwalletWidgetBundle: WidgetBundle {
+
+    init() {
+        // 이 줄이 안 찍히면 확장 자체가 뜨지 않은 것이다.
+        WidgetLog.shared.notice("위젯 묶음 시작 — 예산·결산·지출기록·영수증 넷")
+    }
+
     var body: some Widget {
         BudgetWidget()
         SettlementWidget()
