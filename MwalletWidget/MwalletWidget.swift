@@ -332,6 +332,9 @@ struct RecordWidgetView: View {
                 AccessoryWidgetBackground()
                 Image(systemName: "mic.fill")
             }
+            // iOS 17 부터는 어느 분기든 이걸 선언해야 한다. 없으면 그 분기가
+            // 그려지지 않고, 미리보기를 못 그린 위젯은 갤러리에 아예 안 뜬다.
+            .containerBackground(.clear, for: .widget)
             .widgetURL(URL(string: "mwallet://record"))
 
         case .systemMedium:
@@ -465,6 +468,7 @@ struct ReceiptWidgetView: View {
                     Text("\(count)").font(.caption2).fontWeight(.bold)
                 }
             }
+            .containerBackground(.clear, for: .widget)
             .widgetURL(URL(string: "mwallet://receipt"))
 
         default:
