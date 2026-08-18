@@ -8,6 +8,9 @@
 import OSLog
 import SwiftUI
 import CoreData
+#if DEBUG
+import WidgetKit
+#endif
 
 struct SettingView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -19,6 +22,7 @@ struct SettingView: View {
 
     #if DEBUG
     @State private var schemaState = CloudKitSchemaState.idle
+    @State private var widgetReport: String?
     #endif
 
     var body: some View {
@@ -28,6 +32,7 @@ struct SettingView: View {
             appVersionCheck
             #if DEBUG
             cloudKitSchema
+            widgetDiagnostics
             #endif
             deleteAll
         }
@@ -99,6 +104,44 @@ struct SettingView: View {
         }
     }
     
+    /// 위젯이 iOS 에 어떻게 잡혀 있는지 앱 안에서 묻는다.
+    ///
+    /// 위젯은 다른 프로세스라 Xcode 콘솔로는 보이지 않고, Console.app 을 열어
+    /// 기기를 붙이는 것도 번거롭다. WidgetCenter 는 지금 홈 화면에 놓인 위젯을
+    /// 알려 주므로, 넷을 다 얹어 본 뒤 여기서 확인하면 어느 것이 실제로
+    /// 살아 있는지 눈으로 갈린다.
+    private var widgetDiagnostics: some View {
+        Section("위젯 진단 (개발용)") {
+            Button("지금 놓인 위젯 물어보기") { loadWidgetReport() }
+
+            if let widgetReport {
+                Text(widgetReport)
+                    .font(.caption1)
+                    .foregroundStyle(.gray400)
+                    .textSelection(.enabled)
+            }
+        }
+    }
+
+    private func loadWidgetReport() {
+        WidgetCenter.shared.getCurrentConfigurations { result in
+            switch result {
+            case .success(let widgets):
+                guard !widgets.isEmpty else {
+                    widgetReport = "홈 화면에 놓인 Mwallet 위젯이 없습니다.\n"
+                        + "갤러리에서 넷을 모두 얹은 뒤 다시 눌러 주세요."
+                    return
+                }
+                let lines = widgets
+                    .map { "· \($0.kind)  (\(String(describing: $0.family)))" }
+                    .sorted()
+                widgetReport = "놓인 위젯 \(widgets.count)개\n" + lines.joined(separator: "\n")
+            case .failure(let error):
+                widgetReport = "묻지 못했습니다: \(error.localizedDescription)"
+            }
+        }
+    }
+
     #if DEBUG
     // 개발 빌드에만 둔다. CloudKit 은 스키마를 스스로 만들지 않아, 모델에 적힌
     // 것을 한 번 올려 두지 않으면 쓰지 않은 필드가 영영 만들어지지 않는다.
