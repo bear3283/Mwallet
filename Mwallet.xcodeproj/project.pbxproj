@@ -79,7 +79,6 @@
 		C1A11EA700000000000006C2 /* BudgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006C1 /* BudgetStore.swift */; };
 		C1A11EA700000000000006D2 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006D1 /* BudgetView.swift */; };
 		C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000006E1 /* BudgetEditView.swift */; };
-		C200000A000000000000AA2 /* BudgetCategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */; };
 		C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000007A1 /* LocationPickerView.swift */; };
 		C1A11EA700000000000009A2 /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009A1 /* CSVParser.swift */; };
 		C1A11EA700000000000009B2 /* TravelExpenseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009B1 /* TravelExpenseMap.swift */; };
@@ -87,9 +86,6 @@
 		C1A11EA700000000000009D2 /* TravelEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009D1 /* TravelEditView.swift */; };
 		C1A11EA700000000000009E2 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009E1 /* Log.swift */; };
 		C1A11EA700000000000009F2 /* Travel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000009F1 /* Travel+Extension.swift */; };
-		C1F00000000000000000AA2 /* ExpenseCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00000000000000000AA1 /* ExpenseCategory+Extension.swift */; };
-		C1F00001000000000000AA2 /* CategoryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00001000000000000AA1 /* CategoryEditView.swift */; };
-		C1F00002000000000000AA2 /* CategoryDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00002000000000000AA1 /* CategoryDetailSheet.swift */; };
 		C1A11EA70000000000000AA2 /* TravelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000AA1 /* TravelPicker.swift */; };
 		C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000BB1 /* TabActionBar.swift */; };
 		C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000CC1 /* TravelListView.swift */; };
@@ -123,6 +119,10 @@
 		C1E00000000000000000AA2 /* CategoryCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E00000000000000000AA1 /* CategoryCatalog.swift */; };
 		C1E00001000000000000AA2 /* CategoryColorCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E00001000000000000AA1 /* CategoryColorCheck.swift */; };
 		C1E00002000000000000AA2 /* CategorySeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E00002000000000000AA1 /* CategorySeeder.swift */; };
+		C1F00000000000000000AA2 /* ExpenseCategory+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00000000000000000AA1 /* ExpenseCategory+Extension.swift */; };
+		C1F00001000000000000AA2 /* CategoryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00001000000000000AA1 /* CategoryEditView.swift */; };
+		C1F00002000000000000AA2 /* CategoryDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00002000000000000AA1 /* CategoryDetailSheet.swift */; };
+		C200000A000000000000AA2 /* BudgetCategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */; };
 		E23357A62AE273E700E17CFF /* NSObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A52AE273E700E17CFF /* NSObject+Extension.swift */; };
 		E23357A82AE2B42300E17CFF /* dateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A72AE2B42300E17CFF /* dateFormatter.swift */; };
 		E237338C2AF7E95B008C2613 /* CurrencyList.csv in Resources */ = {isa = PBXBuildFile; fileRef = E237338B2AF7E95B008C2613 /* CurrencyList.csv */; };
@@ -134,6 +134,7 @@
 		FA00000000000000000000A2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
 		FA00000000000000000000B2 /* MwalletBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000B1 /* MwalletBridge.swift */; };
 		FA00000000000000000000C2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
+		FA000000000000000000A000 /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000C1 /* AppDestination.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -252,7 +253,6 @@
 		C1A11EA700000000000006C1 /* BudgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStore.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006D1 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000006E1 /* BudgetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetEditView.swift; sourceTree = "<group>"; };
-		C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "BudgetCategoryDetailView.swift"; path = "Mwallet/Budget/View/BudgetCategoryDetailView.swift"; sourceTree = SOURCE_ROOT; };
 		C1A11EA700000000000007A1 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009A1 /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009B1 /* TravelExpenseMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelExpenseMap.swift; sourceTree = "<group>"; };
@@ -260,9 +260,6 @@
 		C1A11EA700000000000009D1 /* TravelEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelEditView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009E1 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000009F1 /* Travel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Travel+Extension.swift"; sourceTree = "<group>"; };
-		C1F00000000000000000AA1 /* ExpenseCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ExpenseCategory+Extension.swift"; path = "Mwallet/Extension/ExpenseCategory+Extension.swift"; sourceTree = SOURCE_ROOT; };
-		C1F00001000000000000AA1 /* CategoryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CategoryEditView.swift"; path = "Mwallet/Budget/View/CategoryEditView.swift"; sourceTree = SOURCE_ROOT; };
-		C1F00002000000000000AA1 /* CategoryDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CategoryDetailSheet.swift"; path = "Mwallet/Budget/View/CategoryDetailSheet.swift"; sourceTree = SOURCE_ROOT; };
 		C1A11EA70000000000000AA1 /* TravelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPicker.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000BB1 /* TabActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabActionBar.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000CC1 /* TravelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelListView.swift; sourceTree = "<group>"; };
@@ -296,6 +293,10 @@
 		C1E00000000000000000AA1 /* CategoryCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCatalog.swift; sourceTree = "<group>"; };
 		C1E00001000000000000AA1 /* CategoryColorCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColorCheck.swift; sourceTree = "<group>"; };
 		C1E00002000000000000AA1 /* CategorySeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySeeder.swift; sourceTree = "<group>"; };
+		C1F00000000000000000AA1 /* ExpenseCategory+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ExpenseCategory+Extension.swift"; path = "Mwallet/Extension/ExpenseCategory+Extension.swift"; sourceTree = SOURCE_ROOT; };
+		C1F00001000000000000AA1 /* CategoryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CategoryEditView.swift; path = Mwallet/Budget/View/CategoryEditView.swift; sourceTree = SOURCE_ROOT; };
+		C1F00002000000000000AA1 /* CategoryDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CategoryDetailSheet.swift; path = Mwallet/Budget/View/CategoryDetailSheet.swift; sourceTree = SOURCE_ROOT; };
+		C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BudgetCategoryDetailView.swift; path = Mwallet/Budget/View/BudgetCategoryDetailView.swift; sourceTree = SOURCE_ROOT; };
 		E23357A52AE273E700E17CFF /* NSObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extension.swift"; sourceTree = "<group>"; };
 		E23357A72AE2B42300E17CFF /* dateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateFormatter.swift; sourceTree = "<group>"; };
 		E237338B2AF7E95B008C2613 /* CurrencyList.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = CurrencyList.csv; sourceTree = "<group>"; };
@@ -307,6 +308,7 @@
 		E366F1762B02014B003CCA88 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FA00000000000000000000A1 /* MwalletShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletShared.swift; path = Shared/MwalletShared.swift; sourceTree = SOURCE_ROOT; };
 		FA00000000000000000000B1 /* MwalletBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletBridge.swift; path = Shared/MwalletBridge.swift; sourceTree = SOURCE_ROOT; };
+		FA00000000000000000000C1 /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		FB00000000000000000000P1 /* MwalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC00000000000000000000P1 /* MwalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -392,6 +394,7 @@
 				C19AFAE82AE00A7F0037A5F5 /* Utils */,
 				C179660A2ADD67440036E866 /* Info.plist */,
 				571A42692ACE857500FA3D2B /* MwalletApp.swift */,
+				FA00000000000000000000C1 /* AppDestination.swift */,
 				FA00000000000000000000A1 /* MwalletShared.swift */,
 				FA00000000000000000000B1 /* MwalletBridge.swift */,
 				57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */,
@@ -1029,6 +1032,7 @@
 				573889672AF6AFB300FAEF50 /* DateGapHandler.swift in Sources */,
 				57A65D142AD7D65600131266 /* ExpenseInfoCategory.swift in Sources */,
 				571A426A2ACE857500FA3D2B /* MwalletApp.swift in Sources */,
+				FA000000000000000000A000 /* AppDestination.swift in Sources */,
 				FA00000000000000000000A2 /* MwalletShared.swift in Sources */,
 				FA00000000000000000000B2 /* MwalletBridge.swift in Sources */,
 			);

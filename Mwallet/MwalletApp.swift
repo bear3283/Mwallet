@@ -32,18 +32,10 @@ struct MwalletApp: App {
     }
 
     // 위젯·단축어에서 mwallet:// 링크로 진입하면 해당 탭을 곧장 연다.
-    // record: 기록 탭 · receipt: 영수증 탭 · budget: 예결산 탭
+    // 어느 탭인지 푸는 일은 AppDestination 이 맡는다 — 홈 화면 바로가기와
+    // 같은 곳으로 가야 하므로 표를 두 벌 두지 않는다.
     private func handleDeepLink(_ url: URL) {
-        guard url.scheme == "mwallet" else { return }
-        switch url.host {
-        case "record":
-            MainViewModel.shared.selection = MainViewModel.Tab.record
-        case "receipt":
-            MainViewModel.shared.selection = MainViewModel.Tab.receipt
-        case "budget":
-            MainViewModel.shared.selection = MainViewModel.Tab.ledger
-        default:
-            break
-        }
+        guard let destination = AppDestination(deepLink: url) else { return }
+        MainViewModel.shared.selection = destination.tab
     }
 }
