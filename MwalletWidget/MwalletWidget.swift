@@ -549,10 +549,16 @@ struct MwalletWidgetBundle: WidgetBundle {
         WidgetLog.shared.notice("위젯 묶음 시작 — 예산·결산·지출기록·영수증 넷")
     }
 
+    // 차례가 두 곳에서 쓰인다. 갤러리에 늘어서는 순서이면서, 앱 아이콘을
+    // 길게 눌러 크기만 고를 때 얹히는 것이 여기 첫 번째다.
+    //
+    // 그 자리를 지출 기록에 준다. 예산·결산·영수증은 보는 위젯이라 갤러리에서
+    // 한 번 골라 얹으면 그만이지만, 지출 기록은 눌러서 담는 위젯이라
+    // 지름길로서 값이 가장 크다.
     var body: some Widget {
+        RecordWidget()
         BudgetWidget()
         SettlementWidget()
-        RecordWidget()
         ReceiptWidget()
     }
 }
