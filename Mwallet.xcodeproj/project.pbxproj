@@ -135,6 +135,7 @@
 		FA00000000000000000000B2 /* MwalletBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000B1 /* MwalletBridge.swift */; };
 		FA00000000000000000000C2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
 		FA000000000000000000A000 /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000C1 /* AppDestination.swift */; };
+		FA000000000000000000B100 /* StoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000B000 /* StoreLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -309,6 +310,7 @@
 		FA00000000000000000000A1 /* MwalletShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletShared.swift; path = Shared/MwalletShared.swift; sourceTree = SOURCE_ROOT; };
 		FA00000000000000000000B1 /* MwalletBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletBridge.swift; path = Shared/MwalletBridge.swift; sourceTree = SOURCE_ROOT; };
 		FA00000000000000000000C1 /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
+		FA000000000000000000B000 /* StoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoreLocation.swift; path = Shared/StoreLocation.swift; sourceTree = SOURCE_ROOT; };
 		FB00000000000000000000P1 /* MwalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC00000000000000000000P1 /* MwalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -397,6 +399,7 @@
 				FA00000000000000000000C1 /* AppDestination.swift */,
 				FA00000000000000000000A1 /* MwalletShared.swift */,
 				FA00000000000000000000B1 /* MwalletBridge.swift */,
+				FA000000000000000000B000 /* StoreLocation.swift */,
 				57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */,
 				578858262ADBBED5001B82FA /* Model */,
 				C17550562AD5518C00A61BE5 /* View */,
@@ -1035,6 +1038,7 @@
 				FA000000000000000000A000 /* AppDestination.swift in Sources */,
 				FA00000000000000000000A2 /* MwalletShared.swift in Sources */,
 				FA00000000000000000000B2 /* MwalletBridge.swift in Sources */,
+				FA000000000000000000B100 /* StoreLocation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

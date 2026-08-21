@@ -89,6 +89,11 @@ struct PersistenceController {
 
         if inMemory {
             description.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            // 앱과 위젯이 같은 장부를 보도록 App Group 안에 둔다. 예전 자리에
+            // 있던 것은 처음 한 번 옮긴다. 옮기지 못하면 옛 자리를 그대로 쓴다.
+            description.url = StoreLocation.resolve(StoreLocation.plan(),
+                                                    model: container.managedObjectModel)
         }
         // CloudKit 미러링의 전제 조건. 스토어를 만들 때부터 켜 두어야
         // 나중에 동기화를 활성화할 때 저장소를 다시 만들지 않아도 된다.
