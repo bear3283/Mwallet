@@ -25,6 +25,7 @@ enum MwalletShared {
     private static let snapshotKey = "budget.snapshot"
     private static let queueKey = "pending.expenses"
     private static let destinationKey = "pending.destination"
+    private static let lastLoggedKey = "last.logged"
 
     private static var store: UserDefaults? {
         UserDefaults(suiteName: appGroupID)
@@ -98,6 +99,42 @@ enum MwalletShared {
         guard let data = try? JSONEncoder().encode(queue) else { return }
         store?.set(data, forKey: queueKey)
     }
+
+    // MARK: - 방금 담은 것
+
+    /// 방금 담은 하나. 큐에 남았든 장부에 적혔든 여기에 적어 둔다.
+    ///
+    /// 예전에는 위젯이 큐의 마지막 것을 '방금 담음' 으로 보여 줬다. 이제
+    /// 위젯이 장부에 곧장 적으므로 큐가 대개 비어 있고, 그대로 두면 담아도
+    /// 아무 표시가 안 남는다 — 눌렀는지 아닌지 알 수 없는 자리가 된다.
+    static func writeLastLogged(_ record: LoggedRecord?) {
+        guard let record else {
+            store?.removeObject(forKey: lastLoggedKey)
+            return
+        }
+        guard let data = try? JSONEncoder().encode(record) else { return }
+        store?.set(data, forKey: lastLoggedKey)
+    }
+
+    static var lastLogged: LoggedRecord? {
+        guard let data = store?.data(forKey: lastLoggedKey) else { return nil }
+        return try? JSONDecoder().decode(LoggedRecord.self, from: data)
+    }
+}
+
+// MARK: - 방금 담은 것
+
+/// 되돌리기가 무엇을 되돌려야 하는지까지 담는다.
+///
+/// 큐에 남은 것이면 큐에서 빼면 되지만, 장부에 적힌 것은 그 지출을 찾아
+/// 지워야 한다. 어느 쪽인지 나중에 짐작하려 들면 틀린다 — 담을 때 적어 둔다.
+struct LoggedRecord: Codable, Equatable {
+    var info: String
+    var amount: Double
+    /// 장부에 적힌 경우 그 지출의 주소. 큐에 남았으면 nil.
+    var expenseURI: String?
+
+    var isSaved: Bool { expenseURI != nil }
 }
 
 // MARK: - 스냅샷 모델
