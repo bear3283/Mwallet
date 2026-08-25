@@ -8,12 +8,14 @@
 //   - 기록 위젯:   systemSmall, systemMedium, accessoryCircular
 //   - 영수증 위젯: systemSmall, accessoryCircular
 //
-//  데이터 표시는 App Group 스냅샷(MwalletShared)을 읽고, 기록 위젯의 프리셋은
-//  App Group 큐에 담는다(앱이 다음에 열릴 때 Core Data 로 반영).
+//  데이터 표시는 App Group 스냅샷(MwalletShared)을 읽는다. 기록 위젯의
+//  프리셋은 QuickExpenseStore 로 장부에 곧장 적는다 — 장부가 App Group 안에
+//  있어 위젯도 같은 파일을 본다. 적지 못하는 경우(담을 여행이 없거나 통화를
+//  물려받을 지출이 없을 때)에만 예전처럼 큐에 남고, 앱이 열릴 때 옮겨진다.
 //
-//  공유 계약(MwalletShared 등)은 이 파일 하단에 함께 넣어 위젯 타깃이
-//  추가 파일 없이 스스로 컴파일되게 했다. 같은 계약의 앱 쪽 사본은
-//  Shared/MwalletShared.swift 에 있다(앱 타깃 전용). 절차는 README-위젯-추가.md.
+//  공유 계약(MwalletShared 등)은 Shared/MwalletShared.swift 한 곳에 있고
+//  앱과 위젯이 그 파일을 함께 컴파일한다. 사본을 두지 않는 이유는 이 파일
+//  하단에 적어 두었다. 타깃에 붙이는 절차는 README-위젯-추가.md.
 //
 
 import AppIntents
@@ -105,7 +107,9 @@ struct LogExpenseIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        MwalletShared.enqueue(
+        // 장부에 곧장 적는다. 적지 못하면 QuickExpenseStore 가 큐에 남기므로
+        // 어느 쪽이든 기록은 사라지지 않는다.
+        QuickExpenseStore.log(
             PendingExpense(amount: amount, categoryIndex: categoryIndex,
                            paymentMethodIndex: 0, info: label)
         )
@@ -123,7 +127,8 @@ struct UndoLastLogIntent: AppIntent {
     static let isDiscoverable = false
 
     func perform() async throws -> some IntentResult {
-        MwalletShared.undoLast()
+        // 장부에 적힌 것이면 그 지출을 지우고, 큐에 남은 것이면 큐에서 뺀다.
+        QuickExpenseStore.undoLast()
         WidgetCenter.shared.reloadAllTimelines()
         return .result()
     }
@@ -136,20 +141,20 @@ struct QuickLogEntry: TimelineEntry {
     let date: Date
     /// 이 위젯으로 담으면 들어갈 여행의 이름. 앱이 정해서 넘겨 준다.
     let destination: String?
-    /// 앱이 아직 가져가지 않은 마지막 기록. 있으면 되돌릴 수 있다.
-    let lastPending: PendingExpense?
+    /// 방금 담은 것. 장부에 적혔든 큐에 남았든 여기로 온다.
+    let lastLogged: LoggedRecord?
 }
 
 struct QuickLogProvider: TimelineProvider {
     private func read() -> QuickLogEntry {
         QuickLogEntry(date: Date(),
                       destination: MwalletShared.destinationName,
-                      lastPending: MwalletShared.lastPending)
+                      lastLogged: MwalletShared.lastLogged)
     }
 
     func placeholder(in context: Context) -> QuickLogEntry {
         WidgetLog.shared.notice("지출기록 placeholder (\(String(describing: context.family), privacy: .public))")
-        return QuickLogEntry(date: Date(), destination: nil, lastPending: nil)
+        return QuickLogEntry(date: Date(), destination: nil, lastLogged: nil)
     }
     func getSnapshot(in context: Context, completion: @escaping (QuickLogEntry) -> Void) {
         WidgetLog.shared.notice("지출기록 getSnapshot")
@@ -443,7 +448,7 @@ struct RecordWidgetView: View {
     /// 되돌릴 것이 없으므로 그때는 안내만 남는다.
     @ViewBuilder
     private var footer: some View {
-        if let last = entry.lastPending {
+        if let last = entry.lastLogged {
             HStack(spacing: 6) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.caption2).foregroundStyle(brandCobalt)

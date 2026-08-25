@@ -59,6 +59,18 @@ enum MwalletBridge {
 
         let pending = MwalletShared.drainQueue()
 
+        // 그 여행에서 마지막으로 적은 지출의 통화를 물려받는다.
+        //
+        // 예전에는 무조건 원화로 적었다. 방콕에서 ฿60 짜리 커피를 담으면
+        // 장부에 ₩60 이 되어, 60원짜리 커피가 됐다. 위젯이 곧장 적는 길
+        // (QuickExpenseStore)과 같은 규칙을 쓴다 — 두 벌이 되면 한쪽만
+        // 고쳐지는 날이 온다.
+        //
+        // 물려받을 것이 없는 여행(아직 한 건도 없음)은 원화로 둔다. 위젯
+        // 쪽은 이 경우 아예 적지 않고 큐에 남기지만, 여기까지 왔다는 것은
+        // 이미 큐에 있다는 뜻이라 어딘가에는 적어야 한다.
+        let money = QuickExpenseStore.inheritedMoney(of: travel)
+
         for item in pending {
             let expense = Expense(context: context)
             expense.travel = travel
@@ -66,11 +78,11 @@ enum MwalletBridge {
             expense.payAmount = item.amount
             expense.category = Int64(item.categoryIndex)
             expense.paymentMethod = Int64(item.paymentMethodIndex)
-            expense.currency = ExpenseCode.currencyIndex(for: "KRW")
-            expense.exchangeRate = 1               // 원화는 기준 통화라 환율 1
+            expense.currency = money?.currency ?? ExpenseCode.currencyIndex(for: "KRW")
+            expense.exchangeRate = money?.exchangeRate ?? 1
             // 위젯은 위치를 묻지 않으므로 어느 나라인지 알 수 없다.
             // 예전에는 0(대한민국)을 넣어, 해외에서 담은 지출도 국내로 표시됐다.
-            expense.country = ExpenseCode.unknownCountry
+            expense.country = money?.country ?? ExpenseCode.unknownCountry
             expense.payDate = item.createdAt
             expense.timeZoneIdentifier = TimeZone.current.identifier
         }
@@ -98,23 +110,9 @@ enum MwalletBridge {
     /// 여행 중이 아니면 예전처럼 기본함이다. 어느 여행인지 알 수 없는데
     /// 아무 여행에나 붙이면 남의 결산이 틀어진다.
     static func destination(in context: NSManagedObjectContext) -> Travel? {
-        ongoingTravel(in: context) ?? Travel.fetchDefault(in: context)
+        // 규칙 자체는 QuickExpenseStore 에 있다. 위젯도 같은 판단을 해야 하는데
+        // 그쪽에서는 앱 전용 확장을 쓸 수 없어, 두 벌이 되지 않도록 그리로 모았다.
+        QuickExpenseStore.destination(in: context)
     }
 
-    /// 오늘이 기간 안에 드는 여행. 여럿이면 늦게 시작한 것을 고른다.
-    private static func ongoingTravel(in context: NSManagedObjectContext,
-                                      now: Date = Date()) -> Travel? {
-        do {
-            return try context.fetch(Travel.fetchRequest())
-                .filter { travel in
-                    guard travel.isUserCreated,
-                          let start = travel.startDate, let end = travel.endDate else { return false }
-                    return start <= now && now <= end
-                }
-                .max { ($0.startDate ?? .distantPast) < ($1.startDate ?? .distantPast) }
-        } catch {
-            Logger.widget.error("여행 조회 실패: \(error.localizedDescription, privacy: .public)")
-            return nil
-        }
-    }
 }
