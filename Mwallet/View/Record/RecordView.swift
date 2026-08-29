@@ -96,9 +96,53 @@ struct RecordView: View {
     private func screen(_ metrics: RecordLayout) -> some View {
         ZStack {
             Color(.white)
+            travelCover
             mainColumn(metrics)
             alertLayer(metrics)
             recordButtonLayer(metrics)
+        }
+    }
+
+    // MARK: - 고른 여행의 사진
+
+    /// 지금 어느 여행에 적고 있는지, 이름을 읽지 않아도 알게 한다.
+    ///
+    /// 여행 카드와 같은 그림을 쓴다(TravelArtworkBuilder). 나라를 모르는
+    /// 여행에는 사진이 없으므로 그때는 아무것도 깔지 않는다 — 빈자리 표시
+    /// 한 장을 대신 깔면 어느 여행이든 같은 화면이 되어, 알려 주려던 것을
+    /// 도리어 가린다.
+    private var coverPhotoName: String? {
+        guard let travel = mainVM.selectedTravel,
+              case .photo(let name) = TravelArtworkBuilder.artwork(for: travel).cover else { return nil }
+        return name
+    }
+
+    /// 사진 띠의 높이. 여행 선택 글자가 앉는 자리(위에서 130 즈음)보다
+    /// 아래까지 내려오되, 그 자리에 닿기 전에 흰색으로 다 녹는다.
+    private static let coverHeight: CGFloat = 190
+
+    @ViewBuilder
+    private var travelCover: some View {
+        if let name = coverPhotoName {
+            VStack(spacing: 0) {
+                Image(name)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: Self.coverHeight)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+                    // 사진 위로 흰색을 겹쳐 아래쪽을 지운다. 글자가 앉는 자리에
+                    // 이르면 흰 바탕과 구별되지 않아, 검은 글씨를 그대로 쓴다.
+                    .overlay(
+                        LinearGradient(stops: [
+                            .init(color: .white.opacity(0), location: 0),
+                            .init(color: .white.opacity(0.25), location: 0.45),
+                            .init(color: .white, location: 1)
+                        ], startPoint: .top, endPoint: .bottom)
+                    )
+                Spacer()
+            }
+            .accessibilityHidden(true)
         }
     }
 
