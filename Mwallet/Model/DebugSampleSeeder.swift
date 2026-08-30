@@ -6,18 +6,28 @@
 //
 //  ⚠️ DEBUG 빌드에서만 컴파일된다. 릴리스에는 들어가지 않는다.
 //     사용자의 실제 기록에 예시가 섞이면 결산이 틀어지기 때문이다.
-//     (첫 실행의 '예시: 제주 워크숍' 은 FirstLaunchSeeder 에 따로 있다)
+//     (첫 실행의 '예시: 속초 수련회' 는 FirstLaunchSeeder 에 따로 있다)
 //
-//  들어 있는 것: 여행 4개 · 지출 30건.
+//  들어 있는 것: 여행 6개 · 지출 45건.
 //
 //  여행을 여러 해에 흩어 놓은 것은 뜻이 있다. 여행 선택 시트가 연도로
 //  나뉘고 오른쪽 위에서 한 해만 골라 볼 수 있는데, 같은 해에 모두 몰려
 //  있으면 그 두 가지가 도는지 눈으로 볼 수 없다.
 //
-//  통화도 일부러 섞었다 — 원(1:1), 바트(수십 배), 동(0.05배), 투그릭
-//  (0.4배). 자릿수가 크게 다른 통화가 합계와 칸 너비에서 깨지지 않는지
-//  본다. 환율을 받지 못한 건도 하나 넣어, 합계에서 빠지는 경로까지
-//  확인할 수 있다.
+//  통화도 일부러 섞었다 — 페소(24배), 대만 달러(42배), 엔(9배),
+//  동(0.05배), 유로(1,490배), 홍콩 달러(176배). 1 단위가 원화로 얼마인지가
+//  0.05 부터 1,490 까지 벌어져 있어, 자릿수가 크게 다른 통화가 합계와 칸
+//  너비에서 깨지지 않는지 본다.
+//
+//  일부러 넣어 둔 자리가 셋 더 있다.
+//   - 세부의 '시장 점심' 은 환율을 받지 못한 건이다. 합계에서 빠지고
+//     화면에 알림이 뜨는 경로를 본다.
+//   - 타이베이는 예산을 조금 넘겨 두었다. 넘긴 상태의 색과 문구는 안 넘긴
+//     화면만 보아서는 확인할 수 없다.
+//   - 세부는 지금 다니는 중이고, 첫 실행 예시(속초)와 기간이 겹친다.
+//     겹치면 늦게 시작한 것이 '지금 있는 곳' 이라는 규칙이 있어서(세부가
+//     하루 늦게 떠났다), 위젯으로 담은 것이 세부로 간다. 겹치는 여행이
+//     하나도 없으면 그 규칙이 도는지 볼 수 없다.
 //
 
 #if DEBUG
@@ -30,9 +40,9 @@ import OSLog
 @MainActor
 enum DebugSampleSeeder {
 
-    // 여행이 하나뿐이던 v1 에서 늘렸다. 이름이 같은 여행은 건너뛰므로
-    // 이미 예시를 받은 기기에도 새것만 더해진다.
-    private static let seededKey = "DebugSampleSeeder.seeded.v2"
+    // 예시를 통째로 갈아끼울 때마다 올린다. 이름이 같은 여행은 건너뛰므로
+    // 예전 예시가 남아 있는 기기에는 새것만 더해진다.
+    private static let seededKey = "DebugSampleSeeder.seeded.v3"
 
     private struct Stop {
         let merchant: String
@@ -69,142 +79,215 @@ enum DebugSampleSeeder {
 
     // MARK: - 예시 여행
 
-    /// 지금 다니는 중인 여행. 방콕 시내 여러 좌표에 흩어져 있어 지도의 순서
+    /// 지금 다니는 중인 여행. 세부 시내 여러 좌표에 흩어져 있어 지도의 순서
     /// 핀과 여정 레일, 카드의 축소 레일이 모두 채워진 상태로 보인다.
-    private static let bangkok = Sample(
-        name: "예시: 방콕 단기사역",
-        country: "Thailand", currency: "THB", timeZone: "Asia/Bangkok",
-        startDaysAgo: 4, endDaysAgo: -1,
-        companions: ["지훈", "예린", "간사님"],
-        budgets: [(.room, 150_000), (.food, 90_000), (.transportation, 40_000),
-                  (.ministry, 120_000), (.offering, 80_000)],
+    ///
+    /// 첫 실행 예시(속초)보다 하루 늦게 떠난다. 기간이 겹칠 때 늦게 시작한
+    /// 것을 고르는 규칙이 있어, 위젯으로 담은 것이 이리로 온다 — 원화가
+    /// 아닌 통화를 물려받는 길을 눈으로 볼 수 있다.
+    private static let cebu = Sample(
+        name: "예시: 세부 의료봉사",
+        country: "Philippine", currency: "PHP", timeZone: "Asia/Manila",
+        startDaysAgo: 3, endDaysAgo: -2,
+        companions: ["민서", "재현", "간사님"],
+        budgets: [(.room, 220_000), (.food, 120_000), (.transportation, 60_000),
+                  (.ministry, 300_000), (.offering, 60_000)],
         stops: [
-            .init(merchant: "수완나품 공항 리무진", amount: 260, rate: 39.5,
-                  category: .transportation, latitude: 13.6900, longitude: 100.7501,
-                  hoursFromStart: 20, memo: "공항 → 숙소"),
-            .init(merchant: "반뜨랏 게스트하우스", amount: 3_200, rate: 39.5,
-                  category: .room, latitude: 13.7563, longitude: 100.5018,
-                  hoursFromStart: 22, memo: "3박", sharedBy: ["나", "지훈"]),
-            .init(merchant: "쏨땀 콘반", amount: 480, rate: 39.5,
-                  category: .food, latitude: 13.7460, longitude: 100.5340,
-                  hoursFromStart: 26, memo: "팀 첫 식사"),
-            .init(merchant: "현지 교회 헌금", amount: 2_000, rate: 39.4,
-                  category: .offering, latitude: 13.7370, longitude: 100.5600,
-                  hoursFromStart: 36, memo: "주일 예배", sharedBy: ["나"]),
-            .init(merchant: "아동센터 간식", amount: 850, rate: 39.4,
-                  category: .ministry, latitude: 13.7220, longitude: 100.5250,
-                  hoursFromStart: 38, memo: "40명분"),
-            .init(merchant: "BTS 하루권", amount: 150, rate: 39.4,
-                  category: .transportation, latitude: 13.7440, longitude: 100.5480,
-                  hoursFromStart: 44, memo: "", sharedBy: ["나", "예린", "간사님"]),
-            .init(merchant: "짜뚜짝 시장 물품", amount: 1_180, rate: 39.2,
-                  category: .ministry, latitude: 13.7999, longitude: 100.5502,
-                  hoursFromStart: 50, memo: "교구 준비물"),
-            .init(merchant: "카오산 로드 저녁", amount: 620, rate: 39.2,
-                  category: .food, latitude: 13.7590, longitude: 100.4970,
-                  hoursFromStart: 52, memo: ""),
-            .init(merchant: "왓 포 사원 입장료", amount: 300, rate: 39.2,
-                  category: .tour, latitude: 13.7465, longitude: 100.4930,
-                  hoursFromStart: 66, memo: "팀 자유시간"),
+            .init(merchant: "막탄 공항 밴", amount: 1_200, rate: 24.1,
+                  category: .transportation, latitude: 10.3075, longitude: 123.9791,
+                  hoursFromStart: 3, memo: "공항 → 숙소"),
+            .init(merchant: "라푸라푸 게스트하우스", amount: 4_500, rate: 24.1,
+                  category: .room, latitude: 10.3103, longitude: 123.9494,
+                  hoursFromStart: 5, memo: "4박", sharedBy: ["나", "재현"]),
+            .init(merchant: "첫날 저녁 - 씨푸드", amount: 890, rate: 24.1,
+                  category: .food, latitude: 10.3157, longitude: 123.8854,
+                  hoursFromStart: 9, memo: "팀 첫 식사"),
+            .init(merchant: "의약품 구입", amount: 8_200, rate: 24.0,
+                  category: .ministry, latitude: 10.2960, longitude: 123.9020,
+                  hoursFromStart: 26, memo: "진료소 준비"),
+            .init(merchant: "현지 교회 헌금", amount: 2_500, rate: 24.0,
+                  category: .offering, latitude: 10.3020, longitude: 123.8930,
+                  hoursFromStart: 30, memo: "주일 예배", sharedBy: ["나"]),
+            .init(merchant: "진료소 천막 대여", amount: 3_400, rate: 24.0,
+                  category: .ministry, latitude: 10.2880, longitude: 123.8760,
+                  hoursFromStart: 34, memo: "이틀분"),
+            .init(merchant: "지프니 이동", amount: 180, rate: 23.9,
+                  category: .transportation, latitude: 10.3110, longitude: 123.8910,
+                  hoursFromStart: 50, memo: "", sharedBy: ["나", "민서", "간사님"]),
             // 오프라인에서 기록해 환율을 받지 못한 건. 합계에서 빠지고 화면에 알림이 뜬다.
-            .init(merchant: "차이나타운 노점", amount: 240, rate: nil,
-                  category: .food, latitude: 13.7400, longitude: 100.5100,
-                  hoursFromStart: 70, memo: "오프라인 기록"),
-            .init(merchant: "선물 - 현지 간사", amount: 900, rate: 39.0,
-                  category: .gift, latitude: 13.7300, longitude: 100.5400,
-                  hoursFromStart: 84, memo: "", sharedBy: ["나", "지훈", "예린"]),
-            .init(merchant: "귀국 공항철도", amount: 45, rate: 39.0,
-                  category: .transportation, latitude: 13.6900, longitude: 100.7501,
-                  hoursFromStart: 92, memo: "")
+            .init(merchant: "시장 점심", amount: 620, rate: nil,
+                  category: .food, latitude: 10.2940, longitude: 123.9010,
+                  hoursFromStart: 54, memo: "오프라인 기록"),
+            .init(merchant: "산토니뇨 성당", amount: 150, rate: 23.9,
+                  category: .tour, latitude: 10.2945, longitude: 123.9020,
+                  hoursFromStart: 58, memo: "팀 자유시간"),
+            .init(merchant: "선물 - 현지 통역", amount: 1_100, rate: 23.9,
+                  category: .gift, latitude: 10.3170, longitude: 123.9050,
+                  hoursFromStart: 68, memo: "", sharedBy: ["나", "민서", "재현"])
         ])
 
-    /// 국내. 환율이 1:1 이라 외화 환산이 끼지 않은 화면을 볼 수 있다.
-    private static let busan = Sample(
-        name: "예시: 부산 수련회",
-        country: "Korea", currency: "KRW", timeZone: "Asia/Seoul",
-        startDaysAgo: 384, endDaysAgo: 381,
-        companions: ["지훈", "수민"],
-        budgets: [(.room, 240_000), (.food, 150_000), (.transportation, 120_000),
-                  (.ministry, 90_000)],
+    /// 예산을 조금 넘긴 여행. 넘긴 상태의 색과 문구를 보려면 하나는 넘겨야 한다.
+    private static let taipei = Sample(
+        name: "예시: 타이베이 청년집회",
+        country: "Taiwan", currency: "TWD", timeZone: "Asia/Taipei",
+        startDaysAgo: 45, endDaysAgo: 41,
+        companions: ["지연", "현우"],
+        budgets: [(.room, 180_000), (.food, 120_000), (.transportation, 60_000),
+                  (.ministry, 150_000)],
         stops: [
-            .init(merchant: "서울역 KTX", amount: 59_800, rate: 1,
-                  category: .transportation, latitude: 37.5547, longitude: 126.9707,
-                  hoursFromStart: 2, memo: "3인 왕복 중 편도"),
-            .init(merchant: "해운대 게스트하우스", amount: 186_000, rate: 1,
-                  category: .room, latitude: 35.1587, longitude: 129.1604,
-                  hoursFromStart: 6, memo: "3박"),
-            .init(merchant: "광안리 저녁", amount: 62_000, rate: 1,
-                  category: .food, latitude: 35.1532, longitude: 129.1187,
-                  hoursFromStart: 10, memo: "첫날 모임"),
-            .init(merchant: "수련회 교재 인쇄", amount: 48_000, rate: 1,
-                  category: .ministry, latitude: 35.1550, longitude: 129.0600,
-                  hoursFromStart: 28, memo: "30부"),
-            .init(merchant: "감천문화마을 입장", amount: 12_000, rate: 1,
-                  category: .tour, latitude: 35.0975, longitude: 129.0107,
-                  hoursFromStart: 52, memo: "", sharedBy: ["나", "수민"]),
-            .init(merchant: "돌아오는 KTX", amount: 59_800, rate: 1,
-                  category: .transportation, latitude: 35.1150, longitude: 129.0420,
-                  hoursFromStart: 70, memo: "")
+            .init(merchant: "타오위안 공항철도", amount: 160, rate: 42.3,
+                  category: .transportation, latitude: 25.0797, longitude: 121.2342,
+                  hoursFromStart: 2, memo: ""),
+            .init(merchant: "시먼딩 호스텔", amount: 3_600, rate: 42.3,
+                  category: .room, latitude: 25.0421, longitude: 121.5074,
+                  hoursFromStart: 4, memo: "3박", sharedBy: ["나", "현우"]),
+            .init(merchant: "스린 야시장 저녁", amount: 520, rate: 42.3,
+                  category: .food, latitude: 25.0880, longitude: 121.5240,
+                  hoursFromStart: 10, memo: "팀 첫 식사"),
+            .init(merchant: "집회 장소 대관", amount: 6_800, rate: 42.1,
+                  category: .ministry, latitude: 25.0330, longitude: 121.5654,
+                  hoursFromStart: 28, memo: "이틀 대관"),
+            .init(merchant: "지하철 하루권", amount: 150, rate: 42.1,
+                  category: .transportation, latitude: 25.0478, longitude: 121.5170,
+                  hoursFromStart: 32, memo: "", sharedBy: ["나", "지연"]),
+            .init(merchant: "딘타이펑 점심", amount: 980, rate: 42.0,
+                  category: .food, latitude: 25.0330, longitude: 121.5640,
+                  hoursFromStart: 52, memo: ""),
+            .init(merchant: "예류 지질공원", amount: 120, rate: 42.0,
+                  category: .tour, latitude: 25.2077, longitude: 121.6900,
+                  hoursFromStart: 74, memo: "팀 자유시간")
         ])
 
-    /// 해외 하나. 동(VND)은 자릿수가 커서 금액 칸이 밀리지 않는지 보기 좋다.
-    private static let danang = Sample(
-        name: "예시: 다낭 건축봉사",
+    /// 지난해 가을. 엔은 원화와 자릿수가 가까워, 환산이 끼어도 눈에 덜 띄는 쪽이다.
+    private static let osaka = Sample(
+        name: "예시: 오사카 교회방문",
+        country: "Japan", currency: "JPY", timeZone: "Asia/Tokyo",
+        startDaysAgo: 330, endDaysAgo: 327,
+        companions: ["수아"],
+        budgets: [(.room, 200_000), (.food, 150_000), (.transportation, 80_000),
+                  (.ministry, 100_000)],
+        stops: [
+            .init(merchant: "간사이 공항 특급", amount: 1_800, rate: 9.25,
+                  category: .transportation, latitude: 34.4320, longitude: 135.2304,
+                  hoursFromStart: 2, memo: ""),
+            .init(merchant: "난바 비즈니스호텔", amount: 21_000, rate: 9.25,
+                  category: .room, latitude: 34.6660, longitude: 135.5010,
+                  hoursFromStart: 4, memo: "2박", sharedBy: ["나", "수아"]),
+            .init(merchant: "도톤보리 저녁", amount: 3_600, rate: 9.25,
+                  category: .food, latitude: 34.6687, longitude: 135.5013,
+                  hoursFromStart: 9, memo: "팀 첫 식사"),
+            .init(merchant: "교회 방문 선물", amount: 4_500, rate: 9.18,
+                  category: .gift, latitude: 34.6900, longitude: 135.5100,
+                  hoursFromStart: 26, memo: "떡과 차"),
+            .init(merchant: "지하철 1일권", amount: 800, rate: 9.18,
+                  category: .transportation, latitude: 34.6750, longitude: 135.4960,
+                  hoursFromStart: 30, memo: ""),
+            .init(merchant: "청년부 간식", amount: 6_200, rate: 9.18,
+                  category: .ministry, latitude: 34.6930, longitude: 135.5020,
+                  hoursFromStart: 34, memo: "20명분"),
+            .init(merchant: "오사카성 입장", amount: 600, rate: 9.10,
+                  category: .tour, latitude: 34.6873, longitude: 135.5262,
+                  hoursFromStart: 50, memo: "")
+        ])
+
+    /// 지난해 겨울. 동(VND)은 자릿수가 커서 금액 칸이 밀리지 않는지 보기 좋다.
+    private static let hochiminh = Sample(
+        name: "예시: 호치민 건축봉사",
         country: "Vietnam", currency: "VND", timeZone: "Asia/Ho_Chi_Minh",
-        startDaysAgo: 520, endDaysAgo: 513,
-        companions: ["예린", "간사님"],
-        budgets: [(.room, 300_000), (.food, 180_000), (.ministry, 400_000),
+        startDaysAgo: 250, endDaysAgo: 242,
+        companions: ["재현", "예은", "간사님"],
+        budgets: [(.room, 320_000), (.food, 200_000), (.ministry, 450_000),
                   (.transportation, 90_000)],
         stops: [
-            .init(merchant: "다낭 공항 택시", amount: 320_000, rate: 0.053,
-                  category: .transportation, latitude: 16.0439, longitude: 108.1994,
+            .init(merchant: "떤선녓 공항 택시", amount: 380_000, rate: 0.053,
+                  category: .transportation, latitude: 10.8188, longitude: 106.6520,
                   hoursFromStart: 3, memo: "공항 → 숙소"),
-            .init(merchant: "미케비치 숙소", amount: 4_200_000, rate: 0.053,
-                  category: .room, latitude: 16.0678, longitude: 108.2470,
-                  hoursFromStart: 5, memo: "6박"),
-            .init(merchant: "반미 프엉", amount: 90_000, rate: 0.053,
-                  category: .food, latitude: 16.0544, longitude: 108.2022,
+            .init(merchant: "1군 숙소", amount: 5_200_000, rate: 0.053,
+                  category: .room, latitude: 10.7769, longitude: 106.7009,
+                  hoursFromStart: 5, memo: "7박"),
+            .init(merchant: "반미 후인호아", amount: 150_000, rate: 0.053,
+                  category: .food, latitude: 10.7830, longitude: 106.6900,
                   hoursFromStart: 26, memo: "팀 점심"),
-            .init(merchant: "건축 자재 - 시멘트", amount: 5_600_000, rate: 0.052,
-                  category: .ministry, latitude: 16.0300, longitude: 108.2100,
+            .init(merchant: "건축 자재 - 벽돌", amount: 6_900_000, rate: 0.052,
+                  category: .ministry, latitude: 10.7550, longitude: 106.6700,
                   hoursFromStart: 50, memo: "교회 증축분"),
-            .init(merchant: "현지 교회 헌금", amount: 1_500_000, rate: 0.052,
-                  category: .offering, latitude: 16.0470, longitude: 108.2190,
+            .init(merchant: "현지 교회 헌금", amount: 2_000_000, rate: 0.052,
+                  category: .offering, latitude: 10.7620, longitude: 106.6820,
                   hoursFromStart: 122, memo: "주일 예배", sharedBy: ["나"]),
-            .init(merchant: "한강 야시장 저녁", amount: 260_000, rate: 0.052,
-                  category: .food, latitude: 16.0610, longitude: 108.2270,
-                  hoursFromStart: 146, memo: "")
+            .init(merchant: "벤탄시장 저녁", amount: 340_000, rate: 0.052,
+                  category: .food, latitude: 10.7723, longitude: 106.6980,
+                  hoursFromStart: 146, memo: ""),
+            .init(merchant: "목수 사례", amount: 3_500_000, rate: 0.051,
+                  category: .ministry, latitude: 10.7540, longitude: 106.6690,
+                  hoursFromStart: 170, memo: "이틀 품삯")
         ])
 
-    /// 해외 둘. 가장 오래된 여행이라 시트에서 아래쪽 연도 묶음을 채운다.
-    private static let ulaanbaatar = Sample(
-        name: "예시: 울란바토르 캠프",
-        country: "Mongolia", currency: "MNT", timeZone: "Asia/Ulaanbaatar",
-        startDaysAgo: 890, endDaysAgo: 881,
-        companions: ["지훈", "예린"],
-        budgets: [(.room, 350_000), (.food, 200_000), (.ministry, 500_000)],
+    /// 재작년 겨울. 유로는 1 단위가 원화로 가장 큰 통화라, 적은 숫자가 큰
+    /// 합계가 되는 쪽을 본다.
+    private static let frankfurt = Sample(
+        name: "예시: 프랑크푸르트 선교대회",
+        country: "Germany", currency: "EUR", timeZone: "Europe/Berlin",
+        startDaysAgo: 620, endDaysAgo: 614,
+        companions: ["현우", "간사님"],
+        budgets: [(.room, 600_000), (.food, 300_000), (.transportation, 200_000),
+                  (.ministry, 400_000)],
         stops: [
-            .init(merchant: "칭기즈칸 공항 픽업", amount: 45_000, rate: 0.40,
-                  category: .transportation, latitude: 47.8464, longitude: 106.7669,
-                  hoursFromStart: 4, memo: "팀 승합차"),
-            .init(merchant: "게르 캠프 숙소", amount: 780_000, rate: 0.40,
-                  category: .room, latitude: 47.9210, longitude: 106.9050,
-                  hoursFromStart: 7, memo: "8박"),
-            .init(merchant: "허르헉 저녁", amount: 120_000, rate: 0.40,
-                  category: .food, latitude: 47.9186, longitude: 106.9177,
-                  hoursFromStart: 12, memo: "환영 식사"),
-            .init(merchant: "캠프 물품 - 담요", amount: 640_000, rate: 0.39,
-                  category: .ministry, latitude: 47.9050, longitude: 106.8800,
-                  hoursFromStart: 34, memo: "아동 60명분"),
-            .init(merchant: "아동 간식", amount: 210_000, rate: 0.39,
-                  category: .ministry, latitude: 47.9120, longitude: 106.9300,
-                  hoursFromStart: 106, memo: ""),
-            .init(merchant: "선물 - 통역 자매", amount: 95_000, rate: 0.39,
-                  category: .gift, latitude: 47.9186, longitude: 106.9177,
-                  hoursFromStart: 200, memo: "", sharedBy: ["나", "예린"])
+            .init(merchant: "프랑크푸르트 공항철도", amount: 12, rate: 1_478,
+                  category: .transportation, latitude: 50.0512, longitude: 8.5705,
+                  hoursFromStart: 2, memo: ""),
+            .init(merchant: "시내 호스텔", amount: 380, rate: 1_478,
+                  category: .room, latitude: 50.1109, longitude: 8.6821,
+                  hoursFromStart: 4, memo: "5박", sharedBy: ["나", "현우"]),
+            .init(merchant: "대회 등록비", amount: 240, rate: 1_478,
+                  category: .ministry, latitude: 50.1180, longitude: 8.6620,
+                  hoursFromStart: 6, memo: "1인분"),
+            .init(merchant: "마인강 근처 저녁", amount: 38, rate: 1_465,
+                  category: .food, latitude: 50.1050, longitude: 8.6800,
+                  hoursFromStart: 12, memo: "팀 첫 식사"),
+            .init(merchant: "트램 주간권", amount: 22, rate: 1_465,
+                  category: .transportation, latitude: 50.1070, longitude: 8.6630,
+                  hoursFromStart: 30, memo: ""),
+            .init(merchant: "자료집 인쇄", amount: 65, rate: 1_465,
+                  category: .ministry, latitude: 50.1140, longitude: 8.6700,
+                  hoursFromStart: 54, memo: "30부"),
+            .init(merchant: "뢰머 광장 커피", amount: 14, rate: 1_452,
+                  category: .food, latitude: 50.1103, longitude: 8.6820,
+                  hoursFromStart: 100, memo: "", sharedBy: ["나", "간사님"])
         ])
 
-    private static let samples: [Sample] = [bangkok, busan, danang, ulaanbaatar]
+    /// 가장 오래된 여행이라 시트에서 아래쪽 연도 묶음을 채운다.
+    private static let hongkong = Sample(
+        name: "예시: 홍콩 청년수련회",
+        country: "Hongkong", currency: "HKD", timeZone: "Asia/Hong_Kong",
+        startDaysAgo: 800, endDaysAgo: 796,
+        companions: ["지연", "예은"],
+        budgets: [(.room, 300_000), (.food, 180_000), (.transportation, 90_000),
+                  (.ministry, 200_000)],
+        stops: [
+            .init(merchant: "공항 익스프레스", amount: 115, rate: 176.2,
+                  category: .transportation, latitude: 22.3160, longitude: 113.9365,
+                  hoursFromStart: 2, memo: ""),
+            .init(merchant: "침사추이 게스트하우스", amount: 1_450, rate: 176.2,
+                  category: .room, latitude: 22.2976, longitude: 114.1722,
+                  hoursFromStart: 4, memo: "3박"),
+            .init(merchant: "딤섬 점심", amount: 220, rate: 176.2,
+                  category: .food, latitude: 22.2980, longitude: 114.1690,
+                  hoursFromStart: 10, memo: "팀 첫 식사"),
+            .init(merchant: "수련회 교재 인쇄", amount: 680, rate: 175.4,
+                  category: .ministry, latitude: 22.3080, longitude: 114.1750,
+                  hoursFromStart: 28, memo: "25부"),
+            .init(merchant: "옥토퍼스 카드 충전", amount: 150, rate: 175.4,
+                  category: .transportation, latitude: 22.3020, longitude: 114.1720,
+                  hoursFromStart: 32, memo: "", sharedBy: ["나", "지연"]),
+            .init(merchant: "빅토리아 피크 트램", amount: 88, rate: 175.4,
+                  category: .tour, latitude: 22.2759, longitude: 114.1455,
+                  hoursFromStart: 74, memo: "팀 자유시간"),
+            .init(merchant: "현지 교회 헌금", amount: 500, rate: 174.8,
+                  category: .offering, latitude: 22.2830, longitude: 114.1580,
+                  hoursFromStart: 80, memo: "주일 예배", sharedBy: ["나"])
+        ])
+
+    private static let samples: [Sample] = [cebu, taipei, osaka, hochiminh, frankfurt, hongkong]
 
     // MARK: - 넣기
 

@@ -4688,6 +4688,70 @@
         }
       }
     },
+    "대포항 저녁": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abendessen am Hafen Daepo"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daepo Port dinner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cena en el puerto de Daepo"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cena en el puerto de Daepo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dîner au port de Daepo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cena al porto di Daepo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "大浦港の夕食"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jantar no porto de Daepo"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "大浦港晚餐"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "大浦港晚餐"
+          }
+        }
+      }
+    },
     "대표 사진 고르기": {
       "extractionState": "manual",
       "localizations": {
@@ -5589,71 +5653,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "未定"
-          }
-        }
-      }
-    },
-    "바다뷰 게스트하우스": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gästehaus Meerblick"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seaview Guesthouse"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Casa de huéspedes Vista al Mar"
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Casa de huéspedes Vista al Mar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maison d’hôtes Vue Mer"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guesthouse Vista Mare"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オーシャンビュー・ゲストハウス"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pousada Vista do Mar"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "海景旅舍"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "海景旅舍"
           }
         }
       }
@@ -7844,6 +7843,70 @@
           "stringUnit": {
             "state": "translated",
             "value": "支出內容和金額\n至少要記一項才能儲存"
+          }
+        }
+      }
+    },
+    "속초 게스트하우스": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gästehaus in Sokcho"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sokcho guesthouse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Casa de huéspedes en Sokcho"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Casa de huéspedes en Sokcho"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maison d’hôtes à Sokcho"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guesthouse a Sokcho"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "束草のゲストハウス"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pousada em Sokcho"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "束草旅舍"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "束草旅舍"
           }
         }
       }
@@ -11968,67 +12031,66 @@
         }
       }
     },
-    "예시: 제주 워크숍": {
-      "extractionState": "manual",
+    "예시: 속초 수련회": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beispiel: Workshop auf Jeju"
+            "value": "Beispiel: Freizeit in Sokcho"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Example: Jeju workshop"
+            "value": "Example: Sokcho retreat"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ejemplo: taller en Jeju"
+            "value": "Ejemplo: retiro en Sokcho"
           }
         },
         "es-MX": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ejemplo: taller en Jeju"
+            "value": "Ejemplo: retiro en Sokcho"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Exemple : atelier à Jeju"
+            "value": "Exemple : retraite à Sokcho"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esempio: workshop a Jeju"
+            "value": "Esempio: ritiro a Sokcho"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "例：済州ワークショップ"
+            "value": "例：束草リトリート"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Exemplo: oficina em Jeju"
+            "value": "Exemplo: retiro em Sokcho"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "示例：济州工作坊"
+            "value": "示例：束草退修会"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "範例：濟州工作坊"
+            "value": "範例：束草退修會"
           }
         }
       }
@@ -14997,71 +15059,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "未命名"
-          }
-        }
-      }
-    },
-    "제주 흑돼지집": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schweinehaus Jeju"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jeju Pork House"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Asador de cerdo negro de Jeju"
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Asador de cerdo negro de Jeju"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restaurant de porc noir de Jeju"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trattoria di maiale nero di Jeju"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "済州の黒豚料理店"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Casa de porco preto de Jeju"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "济州黑猪肉馆"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "濟州黑豬肉館"
           }
         }
       }
