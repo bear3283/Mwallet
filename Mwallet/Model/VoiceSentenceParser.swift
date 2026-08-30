@@ -14,6 +14,8 @@
 //  오디오도 건드리지 않으므로 문장만 넣어 곧바로 확인할 수 있다.
 //
 
+import Foundation
+
 struct ParsedVoiceSentence: Equatable {
 
     /// 금액을 말하지 않았다는 표시. 0원과 달리 합계와 저장에서 빠진다.
@@ -30,11 +32,18 @@ struct ParsedVoiceSentence: Equatable {
 
 enum VoiceSentenceParser {
 
-    static func parse(_ sentence: String) -> ParsedVoiceSentence {
+    /// 문장을 갈라 읽는다.
+    ///
+    /// 로케일을 받는 까닭은 시험 때문이다. 기본값이 기기 설정이라 쓰는
+    /// 쪽은 예전과 똑같지만, 이 인자가 없으면 '독일어로 말했을 때 15,50 이
+    /// 15.5 로 읽히는가' 를 기기 언어를 바꾸지 않고는 확인할 수 없다.
+    static func parse(_ sentence: String, locale: Locale = .current) -> ParsedVoiceSentence {
         guard !sentence.isEmpty else { return .empty }
 
-        var splits = sentence.components(separatedBy: " ").map(removingThousandsCommas)
-        let paymentMethod = takePaymentMethod(from: &splits)
+        let language = SentenceRules.languageKey(for: locale)
+        var splits = sentence.components(separatedBy: " ")
+            .map { SentenceRules.normalizingSeparators($0, locale: locale) }
+        let paymentMethod = takePaymentMethod(from: &splits, language: language)
 
         guard !splits.isEmpty else {
             return ParsedVoiceSentence(info: nil,
@@ -58,41 +67,30 @@ enum VoiceSentenceParser {
         }
     }
 
-    // MARK: - 쉼표
-
-    /// "90,000" 처럼 천 단위 쉼표를 붙여 말해도 수로 읽히도록 걷어낸다.
-    private static func removingThousandsCommas(_ split: String) -> String {
-        split.filter { $0 != "," }
-    }
-
     // MARK: - 결제 방식
 
     /// 문장 끝의 결제 방식을 떼어 낸다. 뗀 만큼 splits 가 줄어든다.
     ///
     /// 받는 말투: 카드 · 카드로 · 카드결제 · 카드 결제 (현금도 같다)
-    private static func takePaymentMethod(from splits: inout [String]) -> PaymentMethod {
+    /// 어느 낱말이 결제 방식인지는 언어마다 달라 SentenceRules 가 안다.
+    private static func takePaymentMethod(from splits: inout [String],
+                                          language: String) -> PaymentMethod {
         guard let last = splits.last else { return .unknown }
 
-        if let method = method(for: last) {
+        if let method = SentenceRules.paymentMethod(for: last, language: language) {
             splits.removeLast()
             return method
         }
 
-        // "카드 결제" 처럼 띄어 말하면 마지막 조각이 '결제' 다.
-        if last == "결제", splits.count > 1, let method = method(for: splits[splits.count - 2]) {
+        // "카드 결제"·"paid by card" 처럼 띄어 말하면 마지막 조각이 '결제' 다.
+        if SentenceRules.isPaymentWord(last, language: language), splits.count > 1,
+           let method = SentenceRules.paymentMethod(for: splits[splits.count - 2],
+                                                    language: language) {
             splits.removeLast(2)
             return method
         }
 
         return .unknown
-    }
-
-    private static func method(for word: String) -> PaymentMethod? {
-        switch word {
-        case "카드", "카드로", "카드결제": return .card
-        case "현금", "현금으로", "현금결제": return .cash
-        default: return nil
-        }
     }
 
     // MARK: - 금액

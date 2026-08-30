@@ -35,8 +35,8 @@ struct BudgetView: View {
 
                 if travels.isEmpty {
                     ReceiptEmptyState(
-                        message: "여행이 없어요",
-                        detail: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다."
+                        message: String(localized: "여행이 없어요"),
+                        detail: String(localized: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다.")
                     )
                 } else {
                     travelSelector
@@ -74,7 +74,7 @@ struct BudgetView: View {
             Button {
                 isEditingBudget = true
             } label: {
-                TabActionLabel(text: "예산 편집", isEnabled: selectedTravel != nil)
+                TabActionLabel(text: String(localized: "예산 편집"), isEnabled: selectedTravel != nil)
             }
             .disabled(selectedTravel == nil)
         }
@@ -86,8 +86,8 @@ struct BudgetView: View {
     private var content: some View {
         if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(
-                message: "아직 예산이 없어요",
-                detail: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요."
+                message: String(localized: "아직 예산이 없어요"),
+                detail: String(localized: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요.")
             )
         } else {
             ScrollView(showsIndicators: false) {
@@ -145,14 +145,14 @@ struct BudgetView: View {
 
             if !summary.overspentLines.isEmpty {
                 ReceiptNotice(
-                    text: "예산을 넘긴 항목이 \(summary.overspentLines.count)개 있습니다"
+                    text: String(localized: "예산을 넘긴 항목이 \(summary.overspentLines.count)개 있습니다")
                 )
                 .padding(.top, 10)
             }
 
             if summary.hasUnconvertible {
                 ReceiptNotice(
-                    text: "환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다"
+                    text: String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다")
                 )
                 .padding(.top, 6)
             }
@@ -198,11 +198,24 @@ struct BudgetView: View {
         let pending = store.expenses(for: selectedTravel).filter { $0.needsPhoto }.count
         MwalletBridge.publish(
             summary: store.summary(for: selectedTravel),
-            travelName: selectedTravel?.name ?? "여행",
+            travelName: selectedTravel?.name ?? String(localized: "여행"),
             pendingReceiptCount: pending,
             in: store.context
         )
     }
+}
+
+// 막대 그래프 범례에 그대로 찍히는 글자.
+//
+// 색 표(chartForegroundStyleScale)의 열쇠와 막대가 드는 값이 같은 문자열이어야
+// 짝이 맞는다. 두 자리에 따로 적어 두면 번역을 한쪽만 고쳤을 때 색이 통째로
+// 빠지는데, 그때 화면은 아무 말도 하지 않는다. 그래서 한곳에서 만든다.
+//
+// group 은 막대를 나란히 세우는 데만 쓰이고 화면에 나오지 않아 영어로 둔다.
+enum BudgetBarLabel {
+    static let planned = String(localized: "예산")
+    static let spent = String(localized: "집행")
+    static let over = String(localized: "초과")
 }
 
 // MARK: - 그래프 섹션
@@ -210,10 +223,21 @@ struct BudgetView: View {
 // 같은 예결산 데이터를 세 가지 질문으로 본다.
 // 집행률: 항목별 진행 · 예산 대비: 세운 것과 쓴 것 비교 · 비중: 집행액 분포
 enum BudgetChartMode: String, CaseIterable, Identifiable {
-    case progress = "집행률"
-    case compare = "예산 대비"
-    case share = "비중"
+    // rawValue 는 자리를 가리키는 이름일 뿐이라 언어를 타지 않는다.
+    // 화면에 적는 글자는 title 이다.
+    case progress
+    case compare
+    case share
+
     var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .progress: return String(localized: "집행률")
+        case .compare: return String(localized: "예산 대비")
+        case .share: return String(localized: "비중")
+        }
+    }
 }
 
 struct BudgetChartSection: View {
@@ -246,7 +270,7 @@ struct BudgetChartSection: View {
                 Button {
                     withAnimation(.easeInOut(duration: 0.15)) { mode = chartMode }
                 } label: {
-                    Text(chartMode.rawValue)
+                    Text(chartMode.title)
                         .font(.subhead2_2)
                         .foregroundStyle(mode == chartMode ? Color.white : Color.gray400)
                         .frame(maxWidth: .infinity)
@@ -297,7 +321,7 @@ struct BudgetChartSection: View {
                         .fill(ReceiptCategoryPalette.color(for: line.category.description))
                         .frame(width: 10, height: 10)
 
-                    Text(line.category.description)
+                    Text(line.category.visibleDescription)
                         .font(.body1)
                         .foregroundStyle(.black)
 
@@ -379,9 +403,9 @@ struct BudgetChartSection: View {
                 .cornerRadius(3)
             }
             .chartForegroundStyleScale([
-                "예산": Color.gray200,
-                "집행": Color.mainAccent,
-                "초과": Color.mainOrange
+                BudgetBarLabel.planned: Color.gray200,
+                BudgetBarLabel.spent: Color.mainAccent,
+                BudgetBarLabel.over: Color.mainOrange
             ])
             .chartLegend(position: .bottom, alignment: .leading, spacing: 12)
             .chartXAxis {
@@ -418,10 +442,11 @@ struct BudgetChartSection: View {
     private var compareBars: [BudgetBar] {
         summary.lines.flatMap { line -> [BudgetBar] in
             [
-                BudgetBar(category: line.category.description, group: "예산",
-                          colorKey: "예산", amount: line.planned),
-                BudgetBar(category: line.category.description, group: "집행",
-                          colorKey: line.isOverspent ? "초과" : "집행", amount: line.spent)
+                BudgetBar(category: line.category.visibleDescription, group: "planned",
+                          colorKey: BudgetBarLabel.planned, amount: line.planned),
+                BudgetBar(category: line.category.visibleDescription, group: "spent",
+                          colorKey: line.isOverspent ? BudgetBarLabel.over : BudgetBarLabel.spent,
+                          amount: line.spent)
             ]
         }
     }
@@ -469,7 +494,7 @@ struct BudgetChartSection: View {
                         RoundedRectangle(cornerRadius: 3)
                             .fill(ReceiptCategoryPalette.color(for: slice.category))
                             .frame(width: 10, height: 10)
-                        Text(slice.category)
+                        Text(ExpenseInfoCategory.displayName(forStored: slice.category))
                             .font(.body1)
                             .foregroundStyle(.black)
                         Spacer(minLength: 8)
@@ -499,8 +524,8 @@ struct BudgetChartSection: View {
 
     private func compactWon(_ value: Double) -> String {
         if value <= 0 { return "0" }
-        if value >= 10000 { return "\(Int((value / 10000).rounded()))만" }
-        return "\(Int((value / 1000).rounded()))천"
+        if value >= 10000 { return String(localized: "\(Int((value / 10000).rounded()))만") }
+        return String(localized: "\(Int((value / 1000).rounded()))천")
     }
 
     private func sharePercent(_ amount: Double) -> String {

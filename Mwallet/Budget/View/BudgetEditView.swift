@@ -33,7 +33,7 @@ struct BudgetEditView: View {
                         Divider()
                             .padding(.top, 20)
 
-                        ReceiptSectionTitle(text: "카테고리별 예산")
+                        ReceiptSectionTitle(text: String(localized: "카테고리별 예산"))
                             .padding(.top, 20)
 
                         ForEach(categories, id: \.objectID) { category in
@@ -47,7 +47,7 @@ struct BudgetEditView: View {
                     .padding(.horizontal, ReceiptLayout.gutter)
                 }
 
-                ReceiptPrimaryButton(title: "저장") { save() }
+                ReceiptPrimaryButton(title: String(localized: "저장")) { save() }
                     .padding(.horizontal, ReceiptLayout.gutter)
                     .padding(.top, 8)
                     .padding(.bottom, 12)
@@ -56,7 +56,7 @@ struct BudgetEditView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(travel.name ?? "예산 편집")
+                    Text(travel.name ?? String(localized: "예산 편집"))
                         .font(.title1)
                         .foregroundStyle(.black)
                         .lineLimit(1)

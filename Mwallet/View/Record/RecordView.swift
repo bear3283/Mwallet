@@ -113,8 +113,8 @@ struct RecordView: View {
                 // 자리라 생김새도 하나여야 한다.
                 TravelPicker(travels: travelChoices,
                              selection: $mainVM.selectedTravel,
-                             emptyTitle: "여행 선택",
-                             emptyDescription: "눌러서 여행을 고르세요",
+                             emptyTitle: String(localized: "여행 선택"),
+                             emptyDescription: String(localized: "눌러서 여행을 고르세요"),
                              alignment: .center)
                     .accessibilityIdentifier("record.travelChoice")
                 Spacer()
@@ -147,9 +147,9 @@ struct RecordView: View {
                 Spacer()
                 ZStack(alignment: .bottom) {
                     speakWhilePressingView
-                    RecordAlertBubble(message: "소비내역이나 금액 중 한 가지는\n반드시 기록해야 저장할 수 있어요",
+                    RecordAlertBubble(message: String(localized: "소비내역이나 금액 중 한 가지는\n반드시 기록해야 저장할 수 있어요"),
                                       isShown: viewModel.alertView_emptyIsShown)
-                    RecordAlertBubble(message: "길게 누른 채로 말해주세요",
+                    RecordAlertBubble(message: String(localized: "길게 누른 채로 말해주세요"),
                                       isShown: viewModel.alertView_shortIsShown)
                 }
                 Spacer()

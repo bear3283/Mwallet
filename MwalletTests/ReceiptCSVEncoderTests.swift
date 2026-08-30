@@ -52,10 +52,14 @@ final class ReceiptCSVEncoderTests: XCTestCase {
         XCTAssertEqual(Array(data.prefix(3)), [0xEF, 0xBB, 0xBF])
     }
 
+    // 머리글은 기기 언어를 따른다. 이 테스트는 한국어 기기에서 도는 것을 전제로
+    // 적혀 있고, '결제 일자' 는 화면의 항목 이름과 같은 문자열을 나눠 쓴다 —
+    // 뜻이 같은 말을 두 벌 번역하지 않으려고 하나로 합쳤다.
     func test_헤더만_있어도_유효한_CSV_다() throws {
         let text = try encodedText([])
 
-        XCTAssertTrue(text.hasPrefix("\"여행\",\"결제일자\""))
+        XCTAssertTrue(text.hasPrefix("\"\(String(localized: "여행"))\",\"\(String(localized: "결제 일자"))\""),
+                      "머리글이 첫 두 칸에 여행·결제 일자로 서야 한다: \(text.prefix(40))")
         XCTAssertTrue(text.hasSuffix("\r\n"))
     }
 

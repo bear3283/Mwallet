@@ -51,7 +51,7 @@ struct ReceiptPhotoField: View {
     private var emptyPicker: some View {
         // PhotosPicker 의 label 클로저는 메인 액터에 묶여 있지 않다.
         // 화면 상태를 안에서 읽지 않도록 문자열을 미리 뽑아 둔다.
-        let title = isProcessingImage ? "불러오는 중…" : "영수증 사진 첨부"
+        let title = isProcessingImage ? String(localized: "불러오는 중…") : String(localized: "영수증 사진 첨부")
         return VStack(alignment: .leading, spacing: 10) {
             PhotosPicker(selection: $pickedItems,
                          maxSelectionCount: Self.limit,
@@ -183,11 +183,11 @@ struct ReceiptPhotoField: View {
                 // 하나 때문에 전부 잃으면 다시 고르는 수고가 크다.
                 do {
                     guard let original = try await item.loadTransferable(type: Data.self) else {
-                        errorMessage = "사진을 불러오지 못했습니다."
+                        errorMessage = String(localized: "사진을 불러오지 못했습니다.")
                         continue
                     }
                     guard let processed = ReceiptImageProcessor.process(original) else {
-                        errorMessage = "지원하지 않는 이미지 형식입니다."
+                        errorMessage = String(localized: "지원하지 않는 이미지 형식입니다.")
                         continue
                     }
                     loaded.append(processed)
@@ -198,7 +198,7 @@ struct ReceiptPhotoField: View {
 
             let room = Self.limit - draft.photos.count
             if loaded.count > room {
-                errorMessage = "사진은 \(Self.limit)장까지 붙일 수 있습니다."
+                errorMessage = String(localized: "사진은 \(Self.limit)장까지 붙일 수 있습니다.")
             }
             draft.photos.append(contentsOf: loaded.prefix(max(room, 0)))
         }

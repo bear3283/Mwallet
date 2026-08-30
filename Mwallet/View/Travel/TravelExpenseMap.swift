@@ -103,8 +103,8 @@ struct TravelExpenseStop: Identifiable {
 
     var timeText: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "M월 d일 HH:mm"
+        // "8월 30일 13:39" 는 한국어 차례다. 틀로 주면 언어마다 제 차례로 놓인다.
+        formatter.setLocalizedDateFormatFromTemplate("MMMdjm")
         return formatter.string(from: paidDate)
     }
 }
@@ -291,7 +291,7 @@ struct TravelExpenseRow: View {
                         .monospacedDigit()
                 }
 
-                Text("\(stop.category.description) · \(stop.timeText)")
+                Text("\(stop.category.visibleDescription) · \(stop.timeText)")
                     .font(.caption1)
                     .foregroundStyle(.gray300)
                     .lineLimit(1)

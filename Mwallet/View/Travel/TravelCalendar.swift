@@ -24,7 +24,14 @@ struct TravelCalendar: View {
 
 private var monthHeader: some View {
     
-    let koreanWeekdaySymbols = ["일", "월", "화", "수", "목", "금", "토"]
+    // 요일 이름은 달력에 물어본다. 언어마다 다르고, 한 주가 어느 요일에
+    // 시작하는지도 다르다 — 손으로 적으면 둘 다 한국 기준으로 굳는다.
+    let weekdaySymbols: [String] = {
+        let calendar = Calendar.current
+        let symbols = calendar.veryShortStandaloneWeekdaySymbols
+        let first = calendar.firstWeekday - 1
+        return Array(symbols[first...] + symbols[..<first])
+    }()
     
     return VStack(spacing: 30) {
         HStack {
@@ -59,7 +66,7 @@ private var monthHeader: some View {
         .padding(.horizontal, 30)
 
         HStack {
-            ForEach(koreanWeekdaySymbols, id: \.self) { symbol in
+            ForEach(weekdaySymbols, id: \.self) { symbol in
                 Text(symbol)
                     .font(.caption2)
                     .foregroundStyle(Color.gray300)
@@ -74,7 +81,7 @@ private var monthHeader: some View {
 private var dayGrid: some View {
 
     let daysInMonth: Int = viewModel.numberOfDays(in: viewModel.month)
-    let firstWeekday: Int = viewModel.firstWeekdayOfMonth(in: viewModel.month) - 1
+    let firstWeekday: Int = viewModel.leadingBlankDays(in: viewModel.month)
     let maxNumOfCalendar = viewModel.calculateGridItemCount(daysInMonth: daysInMonth, firstWeekday: firstWeekday)
     
     return VStack {

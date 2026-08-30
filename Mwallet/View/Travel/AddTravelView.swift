@@ -49,12 +49,12 @@ struct AddTravelView: View {
                         Spacer()
                         
                         if viewModel.startDate != nil {
-                            NextButtonActive(title: "다음", action: {
+                            NextButtonActive(title: String(localized: "다음"), action: {
                                 isButtonOn = true
                             })
                             .ignoresSafeArea()
                         } else {
-                            NextButtonUnactive(title: "다음", action: {
+                            NextButtonUnactive(title: String(localized: "다음"), action: {
                                 
                             })
                             .disabled(true)

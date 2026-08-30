@@ -111,20 +111,23 @@ final class FirstLaunchSeeder {
 
         let travel = Travel(context: viewContext)
         travel.id = UUID()
-        travel.name = "예시: 제주 워크숍"
+        // 처음 연 사람이 '이런 걸 담는 앱이구나' 하고 알아보는 자리라
+        // 이름도 기기 언어로 적는다. 좌표는 그대로 둔다 — 어느 언어로 보든
+        // 지도에 점이 찍히는 것을 보여 주는 게 목적이다.
+        travel.name = String(localized: "예시: 제주 워크숍")
         travel.startDate = calendar.date(byAdding: .day, value: -2, to: now)
         travel.endDate = calendar.date(byAdding: .day, value: 1, to: now)
         travel.lastUpdate = now
         // '나' 는 넣지 않는다. 화면이 늘 앞에 붙여 세므로 넣으면 3명이 된다.
-        travel.participants = ["동료"]
+        travel.participants = [String(localized: "동료")]
 
         let samples = [
-            SampleExpense(merchant: "제주 흑돼지집", amount: 48000, category: .food,
+            SampleExpense(merchant: String(localized: "제주 흑돼지집"), amount: 48000, category: .food,
                           latitude: 33.2496, longitude: 126.5600, hoursAgo: 5,
-                          sharedBy: ["나", "동료"]),
-            SampleExpense(merchant: "바다뷰 게스트하우스", amount: 90000, category: .room,
+                          sharedBy: [String(localized: "나"), String(localized: "동료")]),
+            SampleExpense(merchant: String(localized: "바다뷰 게스트하우스"), amount: 90000, category: .room,
                           latitude: 33.4586, longitude: 126.9425, hoursAgo: 20,
-                          sharedBy: ["나", "동료"])
+                          sharedBy: [String(localized: "나"), String(localized: "동료")])
         ]
 
         for sample in samples {

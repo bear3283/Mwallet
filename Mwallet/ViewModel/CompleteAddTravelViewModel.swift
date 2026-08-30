@@ -50,7 +50,7 @@ class CompleteAddTravelViewModel: ObservableObject {
     
     func dateToString(in date: Date?) -> String {
         if date == nil {
-            return "미정"
+            return String(localized: "미정")
         } else {
             return AddTravelViewModel.startDateFormatter.string(from: date!)
         }
@@ -58,7 +58,7 @@ class CompleteAddTravelViewModel: ObservableObject {
     
     func endDateToString(in date: Date?) -> String {
         if date == nil {
-            return "미정"
+            return String(localized: "미정")
         } else {
             return AddTravelViewModel.startDateFormatter.string(from: date!)
         }

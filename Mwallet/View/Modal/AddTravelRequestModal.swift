@@ -34,11 +34,11 @@ struct AddTravelRequestModal: View {
     
     private var twoButtonsView: some View {
         HStack {
-            MediumButtonStroke(title: "임시 기록하기") {
+            MediumButtonStroke(title: String(localized: "임시 기록하기")) {
                 viewModel.isExplicitTempRecord = true
                 viewModel.addTravelRequestModalIsShown = false
             }
-            MediumButtonActive(title: "여행 생성하기") {
+            MediumButtonActive(title: String(localized: "여행 생성하기")) {
                 viewModel.addTravelRequestModalIsShown = false
                 MainViewModel.shared.navigationToTravelView()
             }

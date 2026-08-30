@@ -29,10 +29,10 @@ enum ReceiptPeriod: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .all: return "전체 기간"
-        case .today: return "오늘"
-        case .lastWeek: return "최근 7일"
-        case .thisMonth: return "이번 달"
+        case .all: return String(localized: "전체 기간")
+        case .today: return String(localized: "오늘")
+        case .lastWeek: return String(localized: "최근 7일")
+        case .thisMonth: return String(localized: "이번 달")
         }
     }
 
@@ -204,11 +204,17 @@ enum ReceiptFormat {
         summary.convertibleCount == 0 ? "-" : krw(summary.totalInKRW)
     }
 
+    /// 원화 금액. 숫자는 기기 언어의 자릿점으로, 단위는 그 언어가 읽는 방식으로.
+    ///
+    /// 한국어는 '1,234원' 이지만 '원' 은 다른 언어에서 읽히지 않는다. 단위를
+    /// 문자열 표에 맡겨 두면 언어마다 제자리에 붙는다 — 영어 '₩1,234' 처럼
+    /// 앞에 오는 언어도 있다.
     static func krw(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 0
-        return (formatter.string(from: NSNumber(value: value)) ?? "0") + "원"
+        let number = formatter.string(from: NSNumber(value: value)) ?? "0"
+        return String(localized: "\(number)원")
     }
 
     // 환율은 소수점을 버리면 안 된다. 24.5 를 24 로 보여 주면
@@ -218,14 +224,14 @@ enum ReceiptFormat {
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 2
-        return (formatter.string(from: NSNumber(value: value)) ?? "0") + "원"
+        let number = formatter.string(from: NSNumber(value: value)) ?? "0"
+        return String(localized: "\(number)원")
     }
 
     static func dayTitle(_ date: Date, calendar: Calendar = .current) -> String {
-        if calendar.isDateInToday(date) { return "오늘" }
-        if calendar.isDateInYesterday(date) { return "어제" }
+        if calendar.isDateInToday(date) { return String(localized: "오늘") }
+        if calendar.isDateInYesterday(date) { return String(localized: "어제") }
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
         formatter.setLocalizedDateFormatFromTemplate("MMMd(E)")
         return formatter.string(from: date)
     }

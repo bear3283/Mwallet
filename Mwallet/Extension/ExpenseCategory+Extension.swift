@@ -14,11 +14,17 @@ import Foundation
 extension ExpenseCategory {
 
     /// 화면에 적을 이름. 비어 있으면 번호로 되짚는다.
+    ///
+    /// 붙박이 분류는 표에 한국어로 저장돼 있다 — 그 이름이 저장·색·CSV 의
+    /// 열쇠라서 언어를 따라 바꿀 수 없다. 그래서 화면에 내보내기 직전
+    /// 여기서 기기 언어로 옮긴다. 사용자가 손수 지은 이름은 건드리지 않는다.
     var displayName: String {
         let trimmed = (name ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmed.isEmpty else { return trimmed }
-        return ExpenseInfoCategory(rawValue: Int(code))?.description
-            ?? ExpenseInfoCategory.unknown.description
+        guard trimmed.isEmpty else {
+            return isBuiltIn ? ExpenseInfoCategory.displayName(forStored: trimmed) : trimmed
+        }
+        return ExpenseInfoCategory(rawValue: Int(code))?.visibleDescription
+            ?? ExpenseInfoCategory.unknown.visibleDescription
     }
 
     /// 밝은 화면과 어두운 화면의 색 한 쌍.

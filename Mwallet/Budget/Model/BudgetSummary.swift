@@ -127,7 +127,7 @@ enum BudgetFormat {
     // 잔액은 부호를 분명히 한다. 초과분을 음수로만 보여 주면 눈에 안 들어온다.
     static func remaining(_ value: Double) -> String {
         value < 0
-            ? "\(ReceiptFormat.krw(abs(value))) 초과"
-            : "\(ReceiptFormat.krw(value)) 남음"
+            ? String(localized: "\(ReceiptFormat.krw(abs(value))) 초과")
+            : String(localized: "\(ReceiptFormat.krw(value)) 남음")
     }
 }

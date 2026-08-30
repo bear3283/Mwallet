@@ -18,8 +18,15 @@ import Foundation
 
 extension Travel {
 
-    /// 사용자에게 보여 주는 기본함 이름.
+    /// 기본함에 저장하는 이름. **번역하지 않는다.**
+    ///
+    /// 이 값은 이미 기기와 iCloud 에 적혀 있다. 언어를 따라 바꾸면 같은 계정의
+    /// 두 기기가 서로 다른 이름의 기본함을 갖게 된다. 화면에 적을 이름은
+    /// defaultTravelDisplayName 이다.
     static let defaultTravelName = "임시 기록"
+
+    /// 화면에 적을 기본함 이름.
+    static var defaultTravelDisplayName: String { String(localized: "임시 기록") }
 
     /// isDefault 로 옮기기 전에 쓰던 이름. 이미 설치된 기기의 기록을 찾을 때만 쓴다.
     static let legacyDefaultName = "🧚🧚🧚🂥☮︎🂾⑃☣︎%>>#"
@@ -29,9 +36,9 @@ extension Travel {
 
     /// 화면에 적을 이름.
     var displayName: String {
-        if isDefault { return Self.defaultTravelName }
+        if isDefault { return Self.defaultTravelDisplayName }
         let name = name ?? ""
-        return name.isEmpty ? "이름 없는 여행" : name
+        return name.isEmpty ? String(localized: "이름 없는 여행") : name
     }
 
     /// 기본함 하나를 찾는다. 없으면 nil.

@@ -167,7 +167,7 @@ struct AddTravelHeader: View {
             .datePickerStyle(WheelDatePickerStyle())
             .labelsHidden()
 
-            LargeButtonActive(title: "확인") {
+            LargeButtonActive(title: String(localized: "확인")) {
                 onConfirm(modalDate)
             }
         }

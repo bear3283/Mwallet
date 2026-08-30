@@ -45,20 +45,20 @@ struct CategoryDetailSheet: View {
                 } header: {
                     Text("색")
                 } footer: {
-                    Text("예결산 그래프에서 이 분류를 가리키는 색입니다. "
-                         + "어두운 화면용 색은 자동으로 맞춥니다.")
+                    // 두 토막을 + 로 잇지 않는다. 이으면 String 이 되어 Text 가
+                    // 번역할 열쇠로 보지 않고 적힌 그대로 내보낸다.
+                    Text("예결산 그래프에서 이 분류를 가리키는 색입니다. 어두운 화면용 색은 자동으로 맞춥니다.")
                 }
 
                 if let existing, existing.isBuiltIn {
                     Section {
-                        Text("기본 분류입니다. 이름과 색은 바꿀 수 있지만 지울 수는 없습니다 — "
-                             + "이미 이 분류로 적힌 기록이 있을 수 있습니다.")
+                        Text("기본 분류입니다. 이름과 색은 바꿀 수 있지만 지울 수는 없습니다 — 이미 이 분류로 적힌 기록이 있을 수 있습니다.")
                             .font(.caption1)
                             .foregroundStyle(.gray400)
                     }
                 }
             }
-            .navigationTitle(isNew ? "분류 추가" : "분류 편집")
+            .navigationTitle(isNew ? String(localized: "분류 추가") : String(localized: "분류 편집"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -100,8 +100,7 @@ struct CategoryDetailSheet: View {
                         .font(.caption1)
                         .foregroundStyle(Color.mainOrange)
 
-                    Text("그래프에서 두 조각이 붙어 있으면 한 덩어리로 보일 수 있습니다. "
-                         + "그대로 저장해도 됩니다.")
+                    Text("그래프에서 두 조각이 붙어 있으면 한 덩어리로 보일 수 있습니다. 그대로 저장해도 됩니다.")
                         .font(.caption1)
                         .foregroundStyle(.gray400)
                 }

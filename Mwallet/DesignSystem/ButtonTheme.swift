@@ -215,7 +215,7 @@ struct NextButtonUnactive: View {
 
 struct DoneButtonActive: View {
     
-    var title: String = "완료"
+    var title: String = String(localized: "완료")
     var action: () -> Void
     
     var body: some View {
@@ -236,7 +236,7 @@ struct DoneButtonActive: View {
 
 struct DoneButtonUnactive: View {
     
-    var title: String = "완료"
+    var title: String = String(localized: "완료")
     var action: () -> Void
     
     var body: some View {

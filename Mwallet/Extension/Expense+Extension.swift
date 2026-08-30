@@ -36,7 +36,7 @@ extension Expense {
 
     // 여행에 배정되지 않은 임시 기록은 '미분류' 로 본다.
     var missionTitle: String {
-        guard let travel, travel.isUserCreated, let name = travel.name, !name.isEmpty else { return "미분류" }
+        guard let travel, travel.isUserCreated, let name = travel.name, !name.isEmpty else { return String(localized: "미분류") }
         return name
     }
 
@@ -53,7 +53,7 @@ extension Expense {
     }
 
     var merchantName: String {
-        (info?.isEmpty == false ? info : nil) ?? "상호 미입력"
+        (info?.isEmpty == false ? info : nil) ?? String(localized: "상호 미입력")
     }
 
     var memoText: String { memo ?? "" }
@@ -173,7 +173,6 @@ extension Expense {
 
     func formattedDate(style: DateFormatter.Style = .medium) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
         formatter.timeZone = recordedTimeZone
         formatter.dateStyle = style
         formatter.timeStyle = .short
@@ -183,9 +182,9 @@ extension Expense {
     // 기록 당시 현지 시각만. 기기 시간대와 다르면 약어를 덧붙인다.
     var formattedTimeOnly: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
         formatter.timeZone = recordedTimeZone
-        formatter.dateFormat = "HH:mm"
+        // 12시간제를 쓰는 언어가 있어 시각도 틀로 준다.
+        formatter.setLocalizedDateFormatFromTemplate("jm")
         let time = formatter.string(from: paidDate)
 
         guard recordedTimeZone.identifier != TimeZone.current.identifier,
@@ -208,7 +207,8 @@ extension Expense {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 0
-        return (formatter.string(from: NSNumber(value: value)) ?? "0") + "원"
+        let number = formatter.string(from: NSNumber(value: value)) ?? "0"
+        return String(localized: "\(number)원")
     }
 
     /// 이 지출을 함께 쓴 사람들. 인원별 정산이 이 값으로 나뉜다.
