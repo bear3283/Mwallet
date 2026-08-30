@@ -178,9 +178,9 @@ private struct QuickPreset: Identifiable {
 }
 
 private let quickPresets: [QuickPreset] = [
-    QuickPreset(emoji: "☕️", label: "커피", amount: 4500, categoryIndex: 3),
-    QuickPreset(emoji: "🍽", label: "식사", amount: 10000, categoryIndex: 3),
-    QuickPreset(emoji: "🚌", label: "교통", amount: 3000, categoryIndex: 2)
+    QuickPreset(emoji: "☕️", label: String(localized: "커피"), amount: 4500, categoryIndex: 3),
+    QuickPreset(emoji: "🍽", label: String(localized: "식사"), amount: 10000, categoryIndex: 3),
+    QuickPreset(emoji: "🚌", label: String(localized: "교통"), amount: 3000, categoryIndex: 2)
 ]
 
 // MARK: - 공통 조각
@@ -224,7 +224,7 @@ struct BudgetWidgetView: View {
         if let snapshot = entry.snapshot, snapshot.hasBudget {
             content(snapshot)
         } else {
-            snapshotPlaceholder("예결산 탭을 한 번 열면\n예산이 표시됩니다")
+            snapshotPlaceholder(String(localized: "예결산 탭을 한 번 열면\n예산이 표시됩니다"))
         }
     }
 
@@ -288,7 +288,7 @@ struct SettlementWidgetView: View {
         if let snapshot = entry.snapshot, snapshot.hasBudget {
             content(snapshot)
         } else {
-            snapshotPlaceholder("예결산 탭을 한 번 열면\n결산이 표시됩니다")
+            snapshotPlaceholder(String(localized: "예결산 탭을 한 번 열면\n결산이 표시됩니다"))
         }
     }
 

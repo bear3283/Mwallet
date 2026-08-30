@@ -25,7 +25,7 @@ struct TravelYearGroup: Identifiable {
     var id: Int { year ?? Int.min }
 
     var title: String {
-        guard let year else { return "날짜 미정" }
+        guard let year else { return String(localized: "날짜 미정") }
         return "\(year)년"
     }
 }

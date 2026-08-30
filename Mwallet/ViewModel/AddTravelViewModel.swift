@@ -98,10 +98,17 @@ class AddTravelViewModel: ObservableObject {
     }
 
     // 해당 월의 첫 번째 날짜의 요일
-    func firstWeekdayOfMonth(in date: Date) -> Int {
-        let components = Calendar.current.dateComponents([.year, .month], from: date)
-        let firstDayOfMonth = Calendar.current.date(from: components)!
-        return Calendar.current.component(.weekday, from: firstDayOfMonth)
+    /// 그 달 1일이 달력에서 몇 칸 뒤에 놓이는지.
+    ///
+    /// 예전에는 요일 번호(일=1)를 그대로 돌려주어 달력이 늘 일요일에서 시작했다.
+    /// 한 주가 월요일에 시작하는 나라(유럽 대부분)에서는 날짜가 하루씩 밀려
+    /// 보인다. 달력이 정한 첫 요일을 빼서 '몇 칸 비우는가' 로 답한다.
+    func leadingBlankDays(in date: Date) -> Int {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month], from: date)
+        let firstDayOfMonth = calendar.date(from: components)!
+        let weekday = calendar.component(.weekday, from: firstDayOfMonth)
+        return (weekday - calendar.firstWeekday + 7) % 7
     }
 
     // 특정 해당 날짜 반환

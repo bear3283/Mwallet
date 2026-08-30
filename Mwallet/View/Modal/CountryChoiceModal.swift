@@ -66,7 +66,8 @@ struct CountryChoiceModal: View {
                                     .frame(width: 24, height: 24)
                                     .padding(.vertical, 13)
                                 
-                                Text(CountryInfoModel.shared.countryResult[Int(country)]?.koreanNm ?? "알 수 없음")
+                                Text(CountryInfoModel.shared.countryResult[Int(country)]?.displayName
+                                     ?? String(localized: "알 수 없음"))
                                     .foregroundStyle(.black)
                                     .font(.subhead3_2)
                                     .padding(.vertical, 16)
@@ -95,7 +96,8 @@ struct CountryChoiceModal: View {
                                     .frame(width: 24, height: 24)
                                     .padding(.vertical, 13)
                                 
-                                Text(CountryInfoModel.shared.countryResult[Int(currentCountry)]?.koreanNm ?? "알 수 없음")
+                                Text(CountryInfoModel.shared.countryResult[Int(currentCountry)]?.displayName
+                                     ?? String(localized: "알 수 없음"))
                                     .foregroundStyle(.black)
                                     .font(.subhead3_2)
                                     .padding(.vertical, 16)

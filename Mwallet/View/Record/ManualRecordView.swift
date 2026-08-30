@@ -247,7 +247,7 @@ struct ManualRecordView: View {
     
     private var saveButtonView: some View {
         ZStack {
-            LargeButtonActive(title: "저장하기") {
+            LargeButtonActive(title: String(localized: "저장하기")) {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 viewModel.save()
                 // 여행을 고르지 않았으면 기본함으로 돌려 둔다.
@@ -265,7 +265,7 @@ struct ManualRecordView: View {
             .opacity((viewModel.payAmount != -1 || viewModel.info != nil) ? 1 : 0.0000001)
             .allowsHitTesting(viewModel.payAmount != -1 || viewModel.info != nil)
             
-            LargeButtonUnactive(title: "저장하기") { }
+            LargeButtonUnactive(title: String(localized: "저장하기")) { }
                 .opacity((viewModel.payAmount != -1 || viewModel.info != nil) ? 0.0000001 : 1)
                 .allowsHitTesting(!(viewModel.payAmount != -1 || viewModel.info != nil))
         }

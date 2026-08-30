@@ -35,8 +35,7 @@ struct CategoryEditView: View {
                 } header: {
                     Text("분류")
                 } footer: {
-                    Text("색은 예결산 그래프에서 이 분류를 가리킵니다. "
-                         + "붙박이 분류와 이미 쓰인 분류는 지우는 대신 목록에서 감춥니다.")
+                    Text("색은 예결산 그래프에서 이 분류를 가리킵니다. 붙박이 분류와 이미 쓰인 분류는 지우는 대신 목록에서 감춥니다.")
                 }
 
                 if !hidden.isEmpty {

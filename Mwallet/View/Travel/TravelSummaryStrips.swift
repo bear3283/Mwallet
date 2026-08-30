@@ -26,12 +26,12 @@ struct TravelBasicInfoStrip: View {
 
             divider
 
-            infoCell(title: "국가",
+            infoCell(title: String(localized: "국가"),
                      value: countryText)
 
             divider
 
-            infoCell(title: "인원", value: "\(peopleCount)명")
+            infoCell(title: String(localized: "인원"), value: String(localized: "\(peopleCount)명"))
         }
         .padding(.vertical, 12)
         .background(Color.gray100)

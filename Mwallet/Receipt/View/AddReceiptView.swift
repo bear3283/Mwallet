@@ -75,13 +75,13 @@ struct AddReceiptView: View {
 
                         Divider()
 
-                        ReceiptSectionTitle(text: "상세")
+                        ReceiptSectionTitle(text: String(localized: "상세"))
                             .padding(.top, 20)
                         detailBlock
 
                         Divider()
 
-                        ReceiptSectionTitle(text: "증빙")
+                        ReceiptSectionTitle(text: String(localized: "증빙"))
                             .padding(.top, 20)
                         ReceiptPhotoField(draft: $draft,
                                           errorMessage: $errorMessage,
@@ -89,7 +89,7 @@ struct AddReceiptView: View {
 
                         Divider()
 
-                        ReceiptSectionTitle(text: "위치")
+                        ReceiptSectionTitle(text: String(localized: "위치"))
                             .padding(.top, 20)
                         ReceiptLocationField(draft: $draft)
 
@@ -99,7 +99,7 @@ struct AddReceiptView: View {
                 }
 
                 ReceiptPrimaryButton(
-                    title: isEditing ? "수정 완료" : "저장",
+                    title: isEditing ? String(localized: "수정 완료") : String(localized: "저장"),
                     isEnabled: draft.isValid && !isProcessingImage
                 ) {
                     save()
@@ -161,7 +161,7 @@ struct AddReceiptView: View {
 
             if draft.currency != ExpenseCode.baseCurrency {
                 if currentRate == nil {
-                    ReceiptNotice(text: "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다")
+                    ReceiptNotice(text: String(localized: "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다"))
                 } else {
                     Text("원화 환산 \(convertedPreview)")
                         .font(.caption2)
@@ -183,12 +183,12 @@ struct AddReceiptView: View {
                 } else {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 4) {
-                            ReceiptChip(title: "미분류", isSelected: draft.travel == nil) {
+                            ReceiptChip(title: String(localized: "미분류"), isSelected: draft.travel == nil) {
                                 draft.travel = nil
                             }
                             ForEach(travels, id: \.objectID) { travel in
                                 ReceiptChip(
-                                    title: travel.name ?? "이름 없음",
+                                    title: travel.name ?? String(localized: "이름 없음"),
                                     isSelected: draft.travel?.objectID == travel.objectID
                                 ) {
                                     draft.travel = travel
@@ -199,7 +199,7 @@ struct AddReceiptView: View {
                 }
             }
 
-            ReceiptFieldRow(label: "결제 일자") {
+            ReceiptFieldRow(label: String(localized: "결제 일자")) {
                 DatePicker("", selection: $draft.date, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
                     .tint(.mainAccent)
@@ -211,7 +211,7 @@ struct AddReceiptView: View {
 
     private var detailBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ReceiptFieldRow(label: "상호명") {
+            ReceiptFieldRow(label: String(localized: "상호명")) {
                 TextField("어디에서 썼나요", text: $draft.merchant)
                     .focused($focusedField, equals: .merchant)
                     .receiptField()
@@ -223,7 +223,7 @@ struct AddReceiptView: View {
                         // 카테고리는 Core Data 에 Int64 코드로 저장되므로 자유 입력을 받지 않는다.
                         // 기록 탭과 같은 목록이라 두 화면의 분류가 어긋나지 않는다.
                         ForEach(categories, id: \.self) { name in
-                            ReceiptChip(title: name, isSelected: draft.category == name) {
+                            ReceiptChip(title: ExpenseInfoCategory.displayName(forStored: name), isSelected: draft.category == name) {
                                 draft.category = name
                             }
                         }

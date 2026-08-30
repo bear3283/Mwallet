@@ -223,9 +223,9 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
 
     @Published var country: Int = -1 {
         didSet {
-            countryExpression = CountryInfoModel.shared.countryResult[country]?.koreanNm
-                ?? CountryInfoModel.shared.countryResult[-1]?.koreanNm
-                ?? "알 수 없음"
+            countryExpression = CountryInfoModel.shared.countryResult[country]?.displayName
+                ?? CountryInfoModel.shared.countryResult[-1]?.displayName
+                ?? String(localized: "알 수 없음")
 
             // 국가가 바뀌면 그 나라 통화로 맞춘다.
             // 미국을 따로 분기하던 코드가 있었는데, CountryList.csv 의 미국 행이

@@ -43,14 +43,14 @@ struct ReceiptStatsView: View {
 
                 if slices.isEmpty {
                     ReceiptEmptyState(
-                        message: "집계할 지출이 없어요",
-                        detail: "원화로 환산할 수 있는 기록이 있어야 비율을 낼 수 있습니다."
+                        message: String(localized: "집계할 지출이 없어요"),
+                        detail: String(localized: "원화로 환산할 수 있는 기록이 있어야 비율을 낼 수 있습니다.")
                     )
                 } else {
                     Divider()
                         .padding(.top, 20)
 
-                    ReceiptSectionTitle(text: "카테고리별 비율")
+                    ReceiptSectionTitle(text: String(localized: "카테고리별 비율"))
                         .padding(.top, 20)
 
                     chart
@@ -99,7 +99,7 @@ struct ReceiptStatsView: View {
             .padding(.top, 6)
 
             if summary.hasUnconvertible {
-                ReceiptNotice(text: "환율을 받지 못한 \(summary.unconvertibleCount)건은 비율 계산에서 빠졌습니다")
+                ReceiptNotice(text: String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 비율 계산에서 빠졌습니다"))
                     .padding(.top, 8)
             }
         }
@@ -146,7 +146,7 @@ struct ReceiptStatsView: View {
                         .fill(ReceiptCategoryPalette.color(for: slice.category))
                         .frame(width: 10, height: 10)
 
-                    Text(slice.category)
+                    Text(ExpenseInfoCategory.displayName(forStored: slice.category))
                         .font(.body1)
                         .foregroundStyle(.black)
 

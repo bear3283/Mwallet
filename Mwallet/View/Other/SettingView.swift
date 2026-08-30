@@ -62,8 +62,8 @@ struct SettingView: View {
     
     private var defaultSetting: some View {
         Section {
-            listButton(title: "위치 설정", target: UIApplication.openSettingsURLString)
-            listButton(title: "마이크 설정", target: UIApplication.openSettingsURLString)
+            listButton(title: String(localized: "위치 설정"), target: UIApplication.openSettingsURLString)
+            listButton(title: String(localized: "마이크 설정"), target: UIApplication.openSettingsURLString)
         } header: {
             Text("기본 설정")
                 .font(.caption2)
@@ -73,7 +73,7 @@ struct SettingView: View {
     
     private var feedbackAndQuestion: some View {
         Section {
-            listButton(title: "버그 신고 및 피드백", target: "mailto:eunkwanbear@gmail.com")
+            listButton(title: String(localized: "버그 신고 및 피드백"), target: "mailto:eunkwanbear@gmail.com")
         } header: {
             Text("피드백 및 문의사항")
                 .font(.caption2)

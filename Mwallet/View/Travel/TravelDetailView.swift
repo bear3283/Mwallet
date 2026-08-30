@@ -56,7 +56,7 @@ struct TravelDetailView: View {
 
     private var travelName: String {
         let name = travel.name ?? ""
-        return name.isEmpty ? "이름 없는 여행" : name
+        return name.isEmpty ? String(localized: "이름 없는 여행") : name
     }
 
     private var isOngoing: Bool {
@@ -73,10 +73,9 @@ struct TravelDetailView: View {
 
     private var periodText: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "MM.dd"
+        formatter.setLocalizedDateFormatFromTemplate("MMd")
         guard let start = travel.startDate else { return "미정" }
-        guard let end = travel.endDate else { return "\(formatter.string(from: start)) ~ 미정" }
+        guard let end = travel.endDate else { return String(localized: "\(formatter.string(from: start)) ~ 미정") }
         return "\(formatter.string(from: start)) ~ \(formatter.string(from: end))"
     }
 
@@ -105,7 +104,7 @@ struct TravelDetailView: View {
                                        dayCount: dayCount)
                     TravelBasicInfoStrip(
                         periodText: periodText,
-                        countryText: countries.isEmpty ? "기록 없음" : countries.map(\.koreanNm).joined(separator: ", "),
+                        countryText: countries.isEmpty ? String(localized: "기록 없음") : countries.map(\.displayName).joined(separator: ", "),
                         peopleCount: participants.count)
                         .padding(.horizontal, ReceiptLayout.gutter)
                         .padding(.top, 16)

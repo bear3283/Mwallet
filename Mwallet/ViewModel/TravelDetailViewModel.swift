@@ -22,8 +22,9 @@ class TravelDetailViewModel: ObservableObject {
     
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "YY.MM.dd (E)"
+        // 자리 차례는 언어마다 다르다(ko 26.08.30, en 08/30/26). 틀을 주면
+        // 시스템이 그 언어의 차례로 놓는다.
+        formatter.setLocalizedDateFormatFromTemplate("yyMMdE")
         
         return formatter
     }()

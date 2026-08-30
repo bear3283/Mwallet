@@ -34,7 +34,7 @@ struct ReceiptDetailView: View {
                 Divider()
                     .padding(.top, 20)
 
-                ReceiptSectionTitle(text: "상세")
+                ReceiptSectionTitle(text: String(localized: "상세"))
                     .padding(.top, 20)
 
                 detailBlock
@@ -114,8 +114,8 @@ struct ReceiptDetailView: View {
     private var photoCaption: String {
         let size = ReceiptImageProcessor.formattedSize(
             bytes: photos.reduce(0) { $0 + $1.count })
-        guard photos.count > 1 else { return "사진을 누르면 크게 볼 수 있어요 · \(size)" }
-        return "\(viewingIndex + 1)/\(photos.count)장 · 누르면 크게 볼 수 있어요 · \(size)"
+        guard photos.count > 1 else { return String(localized: "사진을 누르면 크게 볼 수 있어요 · \(size)") }
+        return String(localized: "\(viewingIndex + 1)/\(photos.count)장 · 누르면 크게 볼 수 있어요 · \(size)")
     }
 
     // 등록돼 있으면 사진을, 없으면 바로 첨부할 수 있는 버튼을 하단에 보여 준다.
@@ -152,7 +152,7 @@ struct ReceiptDetailView: View {
                 .padding(.top, 8)
         } else {
             // PhotosPicker 의 label 클로저는 메인 액터에 묶여 있지 않다.
-            let title = isAttaching ? "불러오는 중…" : "영수증 사진 첨부"
+            let title = isAttaching ? String(localized: "불러오는 중…") : String(localized: "영수증 사진 첨부")
             PhotosPicker(selection: $pickedItem, matching: .images, photoLibrary: .shared()) {
                 HStack(spacing: 8) {
                     Image(systemName: "camera")
@@ -201,7 +201,7 @@ struct ReceiptDetailView: View {
     // 목록에서 "합계에서 빠졌습니다" 라고 알리기만 하고 고칠 방법이 없으면 막다른 길이 된다.
     private var unavailableRate: some View {
         VStack(alignment: .leading, spacing: 8) {
-            ReceiptNotice(text: "환율을 받지 못해 원화 합계에서 빠져 있어요")
+            ReceiptNotice(text: String(localized: "환율을 받지 못해 원화 합계에서 빠져 있어요"))
 
             Button {
                 applyCurrentRate()
@@ -227,13 +227,14 @@ struct ReceiptDetailView: View {
         VStack(spacing: 0) {
             ReceiptValueRow(label: "여행", value: expense.missionTitle)
             Divider()
-            ReceiptValueRow(label: "카테고리", value: expense.categoryName)
+            ReceiptValueRow(label: String(localized: "카테고리"),
+                            value: ExpenseInfoCategory.displayName(forStored: expense.categoryName))
             Divider()
-            ReceiptValueRow(label: "결제 일자", value: expense.formattedDate())
+            ReceiptValueRow(label: String(localized: "결제 일자"), value: expense.formattedDate())
 
             if expense.recordedTimeZone.identifier != TimeZone.current.identifier {
                 Divider()
-                ReceiptValueRow(label: "기록 지역", value: expense.recordedTimeZone.identifier)
+                ReceiptValueRow(label: String(localized: "기록 지역"), value: expense.recordedTimeZone.identifier)
             }
 
             if !expense.memoText.isEmpty {
@@ -279,11 +280,11 @@ struct ReceiptDetailView: View {
             defer { isAttaching = false }
             do {
                 guard let original = try await item.loadTransferable(type: Data.self) else {
-                    errorMessage = "사진을 불러오지 못했습니다."
+                    errorMessage = String(localized: "사진을 불러오지 못했습니다.")
                     return
                 }
                 guard let processed = ReceiptImageProcessor.process(original) else {
-                    errorMessage = "지원하지 않는 이미지 형식입니다."
+                    errorMessage = String(localized: "지원하지 않는 이미지 형식입니다.")
                     return
                 }
                 try store.attachPhoto(processed, to: expense)

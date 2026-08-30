@@ -43,8 +43,8 @@ struct TravelListView: View {
 
                 if travels.isEmpty {
                     ReceiptEmptyState(
-                        message: "아직 여행이 없어요",
-                        detail: "오른쪽 위 + 로 여행을 만들면\n지출이 그 여행에 모입니다."
+                        message: String(localized: "아직 여행이 없어요"),
+                        detail: String(localized: "오른쪽 위 + 로 여행을 만들면\n지출이 그 여행에 모입니다.")
                     )
                 } else {
                     AllTravelsMap(traces: traces, cameraPosition: $cameraPosition)
@@ -79,7 +79,7 @@ struct TravelListView: View {
             }
         } actions: {
             NavigationLink { SettingView() } label: { TabActionIcon(systemName: "gearshape", label: "설정") }
-            NavigationLink { AddTravelView() } label: { TabActionIcon(systemName: "plus", label: "여행 추가") }
+            NavigationLink { AddTravelView() } label: { TabActionIcon(systemName: "plus", label: String(localized: "여행 추가")) }
         }
     }
 

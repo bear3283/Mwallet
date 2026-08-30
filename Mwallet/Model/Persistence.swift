@@ -152,9 +152,9 @@ enum CloudKitSchemaError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .syncDisabled:
-            return "CloudKit 동기화가 꺼져 있습니다."
+            return String(localized: "CloudKit 동기화가 꺼져 있습니다.")
         case .storeNotUsingCloudKit:
-            return "저장소가 CloudKit 없이 열렸습니다. iCloud 권한(entitlement)과 로그인 상태를 확인하세요."
+            return String(localized: "저장소가 CloudKit 없이 열렸습니다. iCloud 권한(entitlement)과 로그인 상태를 확인하세요.")
         }
     }
 }

@@ -187,7 +187,7 @@ enum MwalletSharedFormat {
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 0
         let number = formatter.string(from: NSNumber(value: value)) ?? "0"
-        return "\(number)원"
+        return String(localized: "\(number)원")
     }
 
     static func percent(_ ratio: Double) -> String {

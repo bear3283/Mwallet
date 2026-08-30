@@ -1,0 +1,3142 @@
+{
+  "sourceLanguage": "ko",
+  "strings": {
+    "": {
+      "shouldTranslate": false
+    },
+    " ": {
+      "shouldTranslate": false
+    },
+    " / ": {
+      "shouldTranslate": false
+    },
+    " 나": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " Me"
+          }
+        }
+      }
+    },
+    "\"%@\"": {
+      "shouldTranslate": false
+    },
+    "%@": {
+      "shouldTranslate": false
+    },
+    "%@ %@": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@ / %@": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ / %2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@ ~ 미정": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ~ TBD"
+          }
+        }
+      }
+    },
+    "%@ · %@": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · %2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@ · %lld명": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %lld people"
+          }
+        }
+      }
+    },
+    "%@ · 1 %@ = %@": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · 1 %2$@ = %3$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@ 남음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ left"
+          }
+        }
+      }
+    },
+    "%@ 외 %lld명의 여행": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trip with %@ and %lld others"
+          }
+        }
+      }
+    },
+    "%@ 초과": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ over"
+          }
+        }
+      }
+    },
+    "%@년": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        }
+      }
+    },
+    "%@년만 보는 중": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Showing %@ only"
+          }
+        }
+      }
+    },
+    "%@님과의 여행": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trip with %@"
+          }
+        }
+      }
+    },
+    "%@원": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "₩%@"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld%%": {
+      "shouldTranslate": false
+    },
+    "%lld/%lld장 · 누르면 크게 볼 수 있어요 · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld · tap to enlarge · %@"
+          }
+        }
+      }
+    },
+    "%lld개의 여행": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld trips"
+          }
+        }
+      }
+    },
+    "%lld건": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items"
+          }
+        }
+      }
+    },
+    "%lld건 · %lld일에 걸쳐": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items over %lld days"
+          }
+        }
+      }
+    },
+    "%lld곳 · 기록 순서": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld places · in order recorded"
+          }
+        }
+      }
+    },
+    "%lld만": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld0K"
+          }
+        }
+      }
+    },
+    "%lld명": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld people"
+          }
+        }
+      }
+    },
+    "%lld명 · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld people · %2$@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld명 · %2$@"
+          }
+        }
+      }
+    },
+    "%lld번 지점을 지도에서 보기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show stop %lld on the map"
+          }
+        }
+      }
+    },
+    "%lld번째 사진 지우기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete photo %lld"
+          }
+        }
+      }
+    },
+    "%lld장 · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld photos · %2$@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld장 · %2$@"
+          }
+        }
+      }
+    },
+    "%lld천": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldK"
+          }
+        }
+      }
+    },
+    "%lld초 후 자동 저장": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving in %lld seconds"
+          }
+        }
+      }
+    },
+    "'%@' 과 색이 비슷합니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close in colour to ‘%@’"
+          }
+        }
+      }
+    },
+    "'%@' 과 적록색각 이상에서 구별하기 어렵습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard to tell from ‘%@’ with red-green colour blindness"
+          }
+        }
+      }
+    },
+    "'임시 기록'은 고칠 수 없습니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'Quick notes' can't be renamed."
+          }
+        }
+      }
+    },
+    "*": {
+      "shouldTranslate": false
+    },
+    "-": {
+      "shouldTranslate": false
+    },
+    ".": {
+      "shouldTranslate": false
+    },
+    "/ %@": {
+      "shouldTranslate": false
+    },
+    "0": {
+      "shouldTranslate": false
+    },
+    "0000\n0000\n0000\n0000": {
+      "shouldTranslate": false
+    },
+    "CSV 내보내기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export CSV"
+          }
+        }
+      }
+    },
+    "CloudKit 동기화가 꺼져 있습니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CloudKit sync is off."
+          }
+        }
+      }
+    },
+    "CloudKit 스키마 올리기": {
+      "extractionState": "manual",
+      "shouldTranslate": false
+    },
+    "DAY %lld": {
+      "shouldTranslate": false
+    },
+    "Mission Wallet": {
+      "shouldTranslate": false
+    },
+    "me": {
+      "shouldTranslate": false
+    },
+    "·": {
+      "shouldTranslate": false
+    },
+    "가계부에 표시할 여행 인원의 이름을 알려주세요. ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tell us the names to show in the ledger. "
+          }
+        }
+      }
+    },
+    "감추기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide"
+          }
+        }
+      }
+    },
+    "감춘 분류": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hidden categories"
+          }
+        }
+      }
+    },
+    "개발용": {
+      "extractionState": "manual",
+      "shouldTranslate": false
+    },
+    "검색 결과가 없어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No results"
+          }
+        }
+      }
+    },
+    "결제 금액": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
+    "결제 내역": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Item"
+          }
+        }
+      }
+    },
+    "결제 방식": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Method"
+          }
+        }
+      }
+    },
+    "결제 수단": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payment method"
+          }
+        }
+      }
+    },
+    "결제 인원": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paid for"
+          }
+        }
+      }
+    },
+    "결제 일자": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date paid"
+          }
+        }
+      }
+    },
+    "계속": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "관광": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sightseeing"
+          }
+        }
+      }
+    },
+    "교통": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transit"
+          }
+        }
+      }
+    },
+    "구분": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        }
+      }
+    },
+    "국가": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Countries"
+          }
+        }
+      }
+    },
+    "그래프에서 두 조각이 붙어 있으면 한 덩어리로 보일 수 있습니다. 그대로 저장해도 됩니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If two slices sit next to each other on the chart, they may read as one. You can save it as is."
+          }
+        }
+      }
+    },
+    "금": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amt"
+          }
+        }
+      }
+    },
+    "금액": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
+    "금액 입력": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter amount"
+          }
+        }
+      }
+    },
+    "기간": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dates"
+          }
+        }
+      }
+    },
+    "기간 미정": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dates TBD"
+          }
+        }
+      }
+    },
+    "기간을 선택해주세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick the dates"
+          }
+        }
+      }
+    },
+    "기록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record"
+          }
+        }
+      }
+    },
+    "기록 없음": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None recorded"
+          }
+        }
+      }
+    },
+    "기록 완료": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved"
+          }
+        }
+      }
+    },
+    "기록 지역": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded in"
+          }
+        }
+      }
+    },
+    "기본": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default"
+          }
+        }
+      }
+    },
+    "기본 목록에 없는 카테고리는 '기타' 에 합산했습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categories outside the default list were added to ‘Other’."
+          }
+        }
+      }
+    },
+    "기본 분류입니다. 이름과 색은 바꿀 수 있지만 지울 수는 없습니다 — 이미 이 분류로 적힌 기록이 있을 수 있습니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is a built-in category. You can change its name and color but not delete it — records may already be filed under it."
+          }
+        }
+      }
+    },
+    "기본 설정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "기타": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "길게 누른 채로 말해주세요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold and speak"
+          }
+        }
+      }
+    },
+    "나": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Me"
+          }
+        }
+      }
+    },
+    "나가기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave"
+          }
+        }
+      }
+    },
+    "나의 여행": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My trip"
+          }
+        }
+      }
+    },
+    "날짜 미정": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No date"
+          }
+        }
+      }
+    },
+    "남길 말이 있다면": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anything to note"
+          }
+        }
+      }
+    },
+    "녹음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording"
+          }
+        }
+      }
+    },
+    "누르는 동안 말하기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speak while holding"
+          }
+        }
+      }
+    },
+    "눌러서 여행을 고르세요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to pick a trip"
+          }
+        }
+      }
+    },
+    "다시 쓰기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start over"
+          }
+        }
+      }
+    },
+    "다음": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
+    "닫기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "대표 사진 고르기": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a cover photo"
+          }
+        }
+      }
+    },
+    "동료": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teammate"
+          }
+        }
+      }
+    },
+    "두 번 누른 채로 있으면 말한 내용을 받아 적습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double-tap and hold to dictate"
+          }
+        }
+      }
+    },
+    "듣고 있어요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listening"
+          }
+        }
+      }
+    },
+    "마이크 설정": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone settings"
+          }
+        }
+      }
+    },
+    "막대가 회색(예산)보다 길면 초과입니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A bar longer than the grey one is over budget."
+          }
+        }
+      }
+    },
+    "메모": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        }
+      }
+    },
+    "모델에 적힌 엔티티·속성을 CloudKit 개발 환경에 올립니다. 유료 개발자 계정으로 서명하고 iCloud 에 로그인한 기기에서만 됩니다.\n\n올린 뒤 CloudKit Dashboard 에서 개발 → 운영으로 승격해야 실제 사용자에게 적용됩니다. 승격은 되돌릴 수 없어 여기서 하지 않습니다.": {
+      "extractionState": "manual",
+      "shouldTranslate": false
+    },
+    "모두 삭제": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all"
+          }
+        }
+      }
+    },
+    "모든 데이터 삭제하기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all data"
+          }
+        }
+      }
+    },
+    "모든 데이터를 삭제할까요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all data?"
+          }
+        }
+      }
+    },
+    "모든 여행의 영수증을 함께 봅니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receipts from every trip"
+          }
+        }
+      }
+    },
+    "묶음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group"
+          }
+        }
+      }
+    },
+    "미분류": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsorted"
+          }
+        }
+      }
+    },
+    "미정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not set"
+          }
+        }
+      }
+    },
+    "바다뷰 게스트하우스": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seaview Guesthouse"
+          }
+        }
+      }
+    },
+    "버그 신고 및 피드백": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report a bug or send feedback"
+          }
+        }
+      }
+    },
+    "분류": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        }
+      }
+    },
+    "분류 만들기 · 색 바꾸기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add categories · change colours"
+          }
+        }
+      }
+    },
+    "분류 추가": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add category"
+          }
+        }
+      }
+    },
+    "분류 편집": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit categories"
+          }
+        }
+      }
+    },
+    "불러오는 중…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading…"
+          }
+        }
+      }
+    },
+    "비워 두면 예산을 잡지 않은 항목으로 둡니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave empty to keep it unbudgeted."
+          }
+        }
+      }
+    },
+    "비중": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
+    "빈 칸과 중복된 이름은 저장할 때 정리됩니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empty and duplicate names are cleaned up on save."
+          }
+        }
+      }
+    },
+    "사역비": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ministry"
+          }
+        }
+      }
+    },
+    "사진 더 붙이기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add more photos"
+          }
+        }
+      }
+    },
+    "사진 바꾸기": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change photo"
+          }
+        }
+      }
+    },
+    "사진 보관함에서 선택": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose from library"
+          }
+        }
+      }
+    },
+    "사진 촬영": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take a photo"
+          }
+        }
+      }
+    },
+    "사진은 %lld장까지 붙일 수 있습니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can attach up to %lld photos."
+          }
+        }
+      }
+    },
+    "사진은 장변 %lldpx 로 줄여 저장합니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos are saved scaled to %lldpx on the long edge."
+          }
+        }
+      }
+    },
+    "사진을 누르면 크게 볼 수 있어요 · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the photo to enlarge · %@"
+          }
+        }
+      }
+    },
+    "사진을 불러오지 못했습니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load the photo."
+          }
+        }
+      }
+    },
+    "삭제": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "삭제하기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "삭제하지 못했습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t delete"
+          }
+        }
+      }
+    },
+    "상세": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details"
+          }
+        }
+      }
+    },
+    "상세 위치를 입력해주세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the place"
+          }
+        }
+      }
+    },
+    "상호 미입력": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No merchant"
+          }
+        }
+      }
+    },
+    "상호명": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merchant"
+          }
+        }
+      }
+    },
+    "상호명, 메모, 카테고리": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merchant, note, category"
+          }
+        }
+      }
+    },
+    "새로운 여행 생성": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New trip"
+          }
+        }
+      }
+    },
+    "색": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour"
+          }
+        }
+      }
+    },
+    "색은 예결산 그래프에서 이 분류를 가리킵니다. 붙박이 분류와 이미 쓰인 분류는 지우는 대신 목록에서 감춥니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The color marks this category on the budget chart. Built-in categories and ones already in use are hidden rather than deleted."
+          }
+        }
+      }
+    },
+    "선물": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gifts"
+          }
+        }
+      }
+    },
+    "설정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "소비 내역": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Item"
+          }
+        }
+      }
+    },
+    "소비 내역을 입력해주세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter what you paid for"
+          }
+        }
+      }
+    },
+    "소비내역이나 금액 중 한 가지는\n반드시 기록해야 저장할 수 있어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter an item or an amount\nbefore saving"
+          }
+        }
+      }
+    },
+    "쇼핑": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shopping"
+          }
+        }
+      }
+    },
+    "수정 완료": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "숙소": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lodging"
+          }
+        }
+      }
+    },
+    "시작일": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "식비": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meals"
+          }
+        }
+      }
+    },
+    "아직 나눌 지출이 없습니다.\n기록할 때 함께 쓴 사람을 고르면 여기에 나뉩니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing to split yet.\nPick who shared an expense when you record it and it will be split here."
+          }
+        }
+      }
+    },
+    "아직 여행이 없습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No trips yet"
+          }
+        }
+      }
+    },
+    "아직 여행이 없어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No trips yet"
+          }
+        }
+      }
+    },
+    "아직 영수증이 없어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No receipts yet"
+          }
+        }
+      }
+    },
+    "아직 예산이 없어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No budget yet"
+          }
+        }
+      }
+    },
+    "아직 위치가 남은 지출이 없습니다.\n기록할 때 위치를 함께 남기면 들른 순서가 지도에 그려집니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No expenses with a location yet.\nAdd a location when you record and your stops will be drawn on the map."
+          }
+        }
+      }
+    },
+    "아직 이 분류로 적은 지출이 없습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing recorded in this category yet"
+          }
+        }
+      }
+    },
+    "아직 집행 내역이 없어요. 지출을 기록하면 비중이 채워집니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing spent yet. Record an expense and the shares will fill in."
+          }
+        }
+      }
+    },
+    "알 수 없음": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
+          }
+        }
+      }
+    },
+    "앱 버전": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        }
+      }
+    },
+    "앱 정보": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
+          }
+        }
+      }
+    },
+    "어디서 썼나요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where did you spend"
+          }
+        }
+      }
+    },
+    "어디에서 썼나요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where did you spend"
+          }
+        }
+      }
+    },
+    "어제": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "여": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "T"
+          }
+        }
+      }
+    },
+    "여러 명이서 정산이 필요한 여행이에요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This trip needs splitting between people"
+          }
+        }
+      }
+    },
+    "여행": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trips"
+          }
+        }
+      }
+    },
+    "여행 삭제하기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete trip"
+          }
+        }
+      }
+    },
+    "여행 생성 완료 !": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trip created!"
+          }
+        }
+      }
+    },
+    "여행 생성하기": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a trip"
+          }
+        }
+      }
+    },
+    "여행 선택": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a trip"
+          }
+        }
+      }
+    },
+    "여행 이름": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trip name"
+          }
+        }
+      }
+    },
+    "여행 이름을 입력해 주세요.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a trip name."
+          }
+        }
+      }
+    },
+    "여행 제목": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trip title"
+          }
+        }
+      }
+    },
+    "여행 중": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the trip"
+          }
+        }
+      }
+    },
+    "여행 추가": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add trip"
+          }
+        }
+      }
+    },
+    "여행 탭에서 먼저 여행을 만들어 주세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a trip in the Trips tab first"
+          }
+        }
+      }
+    },
+    "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a trip on the Trips tab first,\nthen you can set a budget."
+          }
+        }
+      }
+    },
+    "여행 탭에서 일정을 먼저 만들어 주세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a trip in the Trips tab first"
+          }
+        }
+      }
+    },
+    "여행 편집": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit trip"
+          }
+        }
+      }
+    },
+    "여행 확인하기": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View trip"
+          }
+        }
+      }
+    },
+    "여행·지출·예산·영수증 사진이 모두 지워집니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trips, expenses, budgets and receipt photos will all be erased."
+          }
+        }
+      }
+    },
+    "여행·지출·예산이 모두 지워집니다. 되돌릴 수 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trips, expenses and budgets will all be erased. This can’t be undone."
+          }
+        }
+      }
+    },
+    "여행을 골라 주세요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick a trip"
+          }
+        }
+      }
+    },
+    "여행을 만들어 시작하세요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a trip to begin"
+          }
+        }
+      }
+    },
+    "여행의 시작일과 종료일을 설정해주세요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the start and end dates."
+          }
+        }
+      }
+    },
+    "여행이 없어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No trips"
+          }
+        }
+      }
+    },
+    "연도": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Year"
+          }
+        }
+      }
+    },
+    "연도 고르기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick a year"
+          }
+        }
+      }
+    },
+    "영수증": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receipts"
+          }
+        }
+      }
+    },
+    "영수증 %lld건을 표로 내보냅니다. 통화가 섞여 있어도 현지 금액과 적용 환율, 원화 환산액이 각각 들어갑니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exports %lld receipts as a table. Even with mixed currencies, the local amount, the rate used and the converted amount each get a column."
+          }
+        }
+      }
+    },
+    "영수증 사진": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receipt photo"
+          }
+        }
+      }
+    },
+    "영수증 사진 %lld장": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld receipt photos"
+          }
+        }
+      }
+    },
+    "영수증 사진 첨부": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attach a receipt photo"
+          }
+        }
+      }
+    },
+    "영수증 사진이 없는 항목이 %lld건 있습니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items have no receipt photo"
+          }
+        }
+      }
+    },
+    "영수증 삭제": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete receipt"
+          }
+        }
+      }
+    },
+    "영수증 수정": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit receipt"
+          }
+        }
+      }
+    },
+    "영수증 없음 %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No receipt %lld"
+          }
+        }
+      }
+    },
+    "영수증 추가": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add receipt"
+          }
+        }
+      }
+    },
+    "예: 현지 교통": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. Local transport"
+          }
+        }
+      }
+    },
+    "예결산": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Budget"
+          }
+        }
+      }
+    },
+    "예결산 그래프에서 이 분류를 가리키는 색입니다. 어두운 화면용 색은 자동으로 맞춥니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The color that marks this category on the budget chart. The dark-mode color is derived automatically."
+          }
+        }
+      }
+    },
+    "예산 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Budget %@"
+          }
+        }
+      }
+    },
+    "예산 대비": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vs. budget"
+          }
+        }
+      }
+    },
+    "예산 편집": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit budget"
+          }
+        }
+      }
+    },
+    "예산도 지출도 없습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No budget and nothing spent"
+          }
+        }
+      }
+    },
+    "예산만 세워 두고 아직 쓰지 않았습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Budgeted but nothing spent yet"
+          }
+        }
+      }
+    },
+    "예산을 넘긴 항목이 %lld개 있습니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld categories are over budget"
+          }
+        }
+      }
+    },
+    "예시: 제주 워크숍": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Example: Jeju workshop"
+          }
+        }
+      }
+    },
+    "오늘": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
+    "오른쪽 위 + 로 여행을 만들면\n지출이 그 여행에 모입니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap + at the top right to create a trip,\nand your spending will collect there."
+          }
+        }
+      }
+    },
+    "완료": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "원": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KRW"
+          }
+        }
+      }
+    },
+    "원화 환산 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ in KRW"
+          }
+        }
+      }
+    },
+    "원화로 환산할 수 있는 기록이 있어야 비율을 낼 수 있습니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shares need records that can be converted to won."
+          }
+        }
+      }
+    },
+    "원화환산": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In won"
+          }
+        }
+      }
+    },
+    "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap 'Edit budget' above\nto set amounts by category."
+          }
+        }
+      }
+    },
+    "위치": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location"
+          }
+        }
+      }
+    },
+    "위치 설정": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location settings"
+          }
+        }
+      }
+    },
+    "위치를 남긴 지출이 아직 없어요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No expenses with a location yet"
+          }
+        }
+      }
+    },
+    "위치를 확인하는 중…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finding the place…"
+          }
+        }
+      }
+    },
+    "이 기기에서 %@ 음성 인식을 쓸 수 없습니다. 직접 기록으로 남겨 주세요.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ speech recognition isn't available on this device. Enter it manually instead."
+          }
+        }
+      }
+    },
+    "이 동작은 되돌릴 수 없습니다.\niCloud 로 연결된 다른 기기에서도 함께 지워집니다.\n\n남겨야 할 기록이 있다면 영수증 탭에서 CSV 로 먼저 내보내세요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This can’t be undone.\nIt is erased on your other iCloud devices too.\n\nIf there’s anything to keep, export a CSV from the Receipts tab first."
+          }
+        }
+      }
+    },
+    "이 여행은 누구와 함께하나요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Who’s on this trip?"
+          }
+        }
+      }
+    },
+    "이 영수증을 삭제할까요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this receipt?"
+          }
+        }
+      }
+    },
+    "이 위치로 저장": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save this location"
+          }
+        }
+      }
+    },
+    "이곳이 맞나요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Is this the place?"
+          }
+        }
+      }
+    },
+    "이름": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "이름 없는 여행": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Untitled trip"
+          }
+        }
+      }
+    },
+    "이름 없음": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Untitled"
+          }
+        }
+      }
+    },
+    "이름 입력": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a name"
+          }
+        }
+      }
+    },
+    "이름을 찾지 못한 곳": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unnamed place"
+          }
+        }
+      }
+    },
+    "이번 달": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This month"
+          }
+        }
+      }
+    },
+    "인원": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "People"
+          }
+        }
+      }
+    },
+    "인원 추가": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add person"
+          }
+        }
+      }
+    },
+    "인원별 정산": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split by person"
+          }
+        }
+      }
+    },
+    "임시 기록": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick notes"
+          }
+        }
+      }
+    },
+    "임시 기록하기": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record without a trip"
+          }
+        }
+      }
+    },
+    "저장": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "저장되었습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved"
+          }
+        }
+      }
+    },
+    "저장소가 CloudKit 없이 열렸습니다. iCloud 권한(entitlement)과 로그인 상태를 확인하세요.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The store opened without CloudKit. Check the iCloud entitlement and that you're signed in."
+          }
+        }
+      }
+    },
+    "저장하기": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "저장하지 못했습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t save"
+          }
+        }
+      }
+    },
+    "저장하지 않고 나가기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave without saving"
+          }
+        }
+      }
+    },
+    "적용환율": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate applied"
+          }
+        }
+      }
+    },
+    "전체": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
+    "전체 기간": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All dates"
+          }
+        }
+      }
+    },
+    "전체 보기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show all"
+          }
+        }
+      }
+    },
+    "전체 여행": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All trips"
+          }
+        }
+      }
+    },
+    "전체여행": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All trips"
+          }
+        }
+      }
+    },
+    "점심 15000원 카드": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lunch 15 dollars card"
+          }
+        }
+      }
+    },
+    "정말 지울까요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this?"
+          }
+        }
+      }
+    },
+    "정산이 필요 없어요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing to split"
+          }
+        }
+      }
+    },
+    "제목 미정": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Untitled"
+          }
+        }
+      }
+    },
+    "제주 흑돼지집": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeju Pork House"
+          }
+        }
+      }
+    },
+    "종료일": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End"
+          }
+        }
+      }
+    },
+    "종료일 정하기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the end date"
+          }
+        }
+      }
+    },
+    "종료일이 시작일보다 빠릅니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The end date is before the start date."
+          }
+        }
+      }
+    },
+    "증빙": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evidence"
+          }
+        }
+      }
+    },
+    "지도로 위치를 남겨 두면 나중에 지출을 지도에서 볼 수 있어요": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave a location and you can see your expenses on the map later"
+          }
+        }
+      }
+    },
+    "지도에서 다시 고르기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick again on the map"
+          }
+        }
+      }
+    },
+    "지우기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
+    "지원하지 않는 이미지 형식입니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsupported image format."
+          }
+        }
+      }
+    },
+    "지출 기록하기": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record spending"
+          }
+        }
+      }
+    },
+    "지출 당일이 아닌 오늘 기준 환율이 적용됩니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s rate is used, not the rate on the day you spent."
+          }
+        }
+      }
+    },
+    "지출 순서": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Order spent"
+          }
+        }
+      }
+    },
+    "지출 위치": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place"
+          }
+        }
+      }
+    },
+    "지출 일시": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date and time"
+          }
+        }
+      }
+    },
+    "지출 통계": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spending stats"
+          }
+        }
+      }
+    },
+    "지출이 생기면 바로 남겨두세요.\n오프라인에서도 저장됩니다.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jot spending down as it happens.\nIt saves offline too."
+          }
+        }
+      }
+    },
+    "지출한 곳": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where"
+          }
+        }
+      }
+    },
+    "직접 기록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter manually"
+          }
+        }
+      }
+    },
+    "집계할 지출이 없어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing to total"
+          }
+        }
+      }
+    },
+    "집행": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spent"
+          }
+        }
+      }
+    },
+    "집행률": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress"
+          }
+        }
+      }
+    },
+    "처리하지 못했습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t do that"
+          }
+        }
+      }
+    },
+    "첨부한 사진도 함께 삭제되며 되돌릴 수 없습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attached photos are deleted too, and this can’t be undone."
+          }
+        }
+      }
+    },
+    "총 예산": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total budget"
+          }
+        }
+      }
+    },
+    "총 지출": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total spent"
+          }
+        }
+      }
+    },
+    "총 집행": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total spent"
+          }
+        }
+      }
+    },
+    "최근 7일": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 7 days"
+          }
+        }
+      }
+    },
+    "최대 %lld장까지, 장변 %lldpx 로 줄여 저장합니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Up to %1$lld photos, saved scaled to %2$lldpx on the long edge."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "최대 %1$lld장까지, 장변 %2$lldpx 로 줄여 저장합니다."
+          }
+        }
+      }
+    },
+    "취소": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "카드": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Card"
+          }
+        }
+      }
+    },
+    "카테고리": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        }
+      }
+    },
+    "카테고리 선택": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a category"
+          }
+        }
+      }
+    },
+    "카테고리별 비율": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share by category"
+          }
+        }
+      }
+    },
+    "카테고리별 예산": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Budget by category"
+          }
+        }
+      }
+    },
+    "통계": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stats"
+          }
+        }
+      }
+    },
+    "통화": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Currency"
+          }
+        }
+      }
+    },
+    "편집": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        }
+      }
+    },
+    "피드백 및 문의사항": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feedback and questions"
+          }
+        }
+      }
+    },
+    "한 문장이면 충분합니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One sentence is enough"
+          }
+        }
+      }
+    },
+    "함께 쓴 사람이 적히지 않은 %lld건(%@)은 나누지 못했습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld items (%2$@) had nobody recorded, so they couldn’t be split"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "함께 쓴 사람이 적히지 않은 %1$lld건(%2$@)은 나누지 못했습니다"
+          }
+        }
+      }
+    },
+    "함께하는 사람": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "People"
+          }
+        }
+      }
+    },
+    "항공": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flights"
+          }
+        }
+      }
+    },
+    "항상 포함": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Always included"
+          }
+        }
+      }
+    },
+    "헌금": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offering"
+          }
+        }
+      }
+    },
+    "현금": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cash"
+          }
+        }
+      }
+    },
+    "현재 생성된 여행이 없어요.\n여행을 생성할까요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have no trips yet.\nCreate one?"
+          }
+        }
+      }
+    },
+    "현재 선택한 여행방에 저장된 지출 기록 및 관련 데이터를 모두 삭제할까요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete every expense and related data saved in the selected trip?"
+          }
+        }
+      }
+    },
+    "현재 화면의 정보를 모두 초기화하고 이전 화면으로 돌아갈까요?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear everything on this screen and go back?"
+          }
+        }
+      }
+    },
+    "현재 환율 적용": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use today’s rate"
+          }
+        }
+      }
+    },
+    "현지금액": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local amount"
+          }
+        }
+      }
+    },
+    "화폐": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Currency"
+          }
+        }
+      }
+    },
+    "확인": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "환산 전": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not converted"
+          }
+        }
+      }
+    },
+    "환율 없음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rate"
+          }
+        }
+      }
+    },
+    "환율 정보를 아직 받지 못했어요. 금액은 그대로 저장되고 나중에 상세 화면에서 환산할 수 있습니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No exchange rate yet. The amount is saved as is, and you can convert it later on the detail screen"
+          }
+        }
+      }
+    },
+    "환율을 받지 못한 %lld건은 비율 계산에서 빠졌습니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items without an exchange rate are excluded from the shares"
+          }
+        }
+      }
+    },
+    "환율을 받지 못한 %lld건은 정산에서 빠졌습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items without a rate were left out of the split"
+          }
+        }
+      }
+    },
+    "환율을 받지 못한 %lld건은 집행액에서 빠졌습니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items without a rate were left out of the total spent"
+          }
+        }
+      }
+    },
+    "환율을 받지 못한 %lld건은 합계에서 빠졌습니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items without an exchange rate are excluded from the total"
+          }
+        }
+      }
+    },
+    "환율을 받지 못해 원화 합계에서 빠져 있어요": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No exchange rate, so it's excluded from the won total"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

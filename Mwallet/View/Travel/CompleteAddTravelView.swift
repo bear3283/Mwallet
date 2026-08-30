@@ -40,7 +40,7 @@ struct CompleteAddTravelView: View {
             Spacer()
             
             HStack {
-                MediumButtonStroke(title: "여행 확인하기", action: {
+                MediumButtonStroke(title: String(localized: "여행 확인하기"), action: {
                     // 선택값 초기화
                     applyEdits()
                     viewModel.saveTravel()
@@ -49,7 +49,7 @@ struct CompleteAddTravelView: View {
                     addViewModel.endDate = nil
                 })
                 
-                MediumButtonActive(title: "지출 기록하기", action: {
+                MediumButtonActive(title: String(localized: "지출 기록하기"), action: {
                     applyEdits()
                     viewModel.saveTravel()
                     NavigationUtil.popToRootView()
@@ -61,7 +61,7 @@ struct CompleteAddTravelView: View {
         .onAppear {
             viewModel.fetchTravel()
             self.selectedTravel = viewModel.filterTravelByID(selectedTravelID: travelID)
-            self.travelNM = memberViewModel.travelName ?? "제목 미정"
+            self.travelNM = memberViewModel.travelName ?? String(localized: "제목 미정")
             self.participantArr = memberViewModel.participantArr ?? ["me"]
         }
         .onAppear(perform: UIApplication.shared.hideKeyboard)
@@ -134,8 +134,8 @@ struct CompleteAddTravelView: View {
     }
 
     private var pickerTitle: String {
-        if isLoadingCover { return "불러오는 중…" }
-        return coverImageData == nil ? "대표 사진 고르기" : "사진 바꾸기"
+        if isLoadingCover { return String(localized: "불러오는 중…") }
+        return coverImageData == nil ? String(localized: "대표 사진 고르기") : String(localized: "사진 바꾸기")
     }
 
     private var travelSquareView: some View {

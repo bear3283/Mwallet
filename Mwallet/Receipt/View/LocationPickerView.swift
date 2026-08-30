@@ -115,7 +115,7 @@ struct LocationPickerView: View {
                         .font(.body1)
                         .foregroundStyle(.gray300)
                 } else {
-                    Text(placeName ?? "이름을 찾지 못한 곳")
+                    Text(placeName ?? String(localized: "이름을 찾지 못한 곳"))
                         .font(.body1)
                         .foregroundStyle(.black)
                         .lineLimit(1)
@@ -123,7 +123,7 @@ struct LocationPickerView: View {
                 Spacer(minLength: 0)
             }
 
-            ReceiptPrimaryButton(title: "이 위치로 저장") {
+            ReceiptPrimaryButton(title: String(localized: "이 위치로 저장")) {
                 onConfirm(centerCoordinate, placeName)
                 dismiss()
             }
@@ -153,7 +153,7 @@ struct LocationPickerView: View {
         isResolving = true
         geocoder.cancelGeocode()
         let location = CLLocation(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude)
-        geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "ko_KR")) { placemarks, _ in
+        geocoder.reverseGeocodeLocation(location, preferredLocale: .current) { placemarks, _ in
             // 지오코딩 콜백은 메인으로 온다고 문서화돼 있지만 클로저 타입이
             // @Sendable 이라 컴파일러가 그걸 알 수 없다.
             MainActor.assumeIsolated {

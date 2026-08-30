@@ -45,7 +45,7 @@ struct BudgetCategoryDetailView: View {
             .padding(.horizontal, ReceiptLayout.gutter)
         }
         .background(Color.white)
-        .navigationTitle(line.category.description)
+        .navigationTitle(line.category.visibleDescription)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: load)
     }
@@ -85,7 +85,7 @@ struct BudgetCategoryDetailView: View {
                 .foregroundStyle(.gray400)
 
             if line.unconvertibleCount > 0 {
-                ReceiptNotice(text: "환율을 받지 못한 \(line.unconvertibleCount)건은 합계에서 빠졌습니다")
+                ReceiptNotice(text: String(localized: "환율을 받지 못한 \(line.unconvertibleCount)건은 합계에서 빠졌습니다"))
             }
         }
         .padding(.bottom, 4)
@@ -93,7 +93,7 @@ struct BudgetCategoryDetailView: View {
 
     private var spreadText: String {
         guard !sections.isEmpty else { return "\(line.spentCount)건" }
-        return "\(line.spentCount)건 · \(sections.count)일에 걸쳐"
+        return String(localized: "\(line.spentCount)건 · \(sections.count)일에 걸쳐")
     }
 
     private var emptyNotice: some View {

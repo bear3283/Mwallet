@@ -76,11 +76,11 @@ enum TravelStoreError: LocalizedError, Equatable {
     var errorDescription: String? {
         switch self {
         case .emptyName:
-            return "여행 이름을 입력해 주세요."
+            return String(localized: "여행 이름을 입력해 주세요.")
         case .endBeforeStart:
             return "종료일이 시작일보다 빠릅니다."
         case .cannotEditDefault:
-            return "'임시 기록'은 고칠 수 없습니다."
+            return String(localized: "'임시 기록'은 고칠 수 없습니다.")
         }
     }
 }

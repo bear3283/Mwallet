@@ -20,7 +20,10 @@ enum RecordError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .speechRecognizerUnavailable:
-            return "이 기기에서 한국어 음성 인식을 쓸 수 없습니다. 직접 기록으로 남겨 주세요."
+            // '한국어' 라고 못 박아 두면 독일어 기기에서 엉뚱한 말이 된다.
+            // 실제로 어느 언어로 들으려 했는지 SpeechLocale 에게 묻는다.
+            let language = SpeechLocale.resolvedLanguageName
+            return String(localized: "이 기기에서 \(language) 음성 인식을 쓸 수 없습니다. 직접 기록으로 남겨 주세요.")
         }
     }
 }
@@ -166,7 +169,7 @@ final class RecordViewModel: ObservableObject {
     // STT
     private let audioEngine = AVAudioEngine()
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
-    private var speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ko_KR"))
+    private var speechRecognizer = SpeechLocale.makeRecognizer()
     private var recognitionTask: SFSpeechRecognitionTask?
     
     // record

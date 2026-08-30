@@ -1,0 +1,362 @@
+{
+  "sourceLanguage": "ko",
+  "strings": {
+    "%@ %@": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@ 남음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ left"
+          }
+        }
+      }
+    },
+    "%@ 초과": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ over"
+          }
+        }
+      }
+    },
+    "%@원": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "₩%@"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld건": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items"
+          }
+        }
+      }
+    },
+    "/ %@": {
+      "shouldTranslate": false
+    },
+    "→ %@": {
+      "shouldTranslate": false
+    },
+    "결산": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settlement"
+          }
+        }
+      }
+    },
+    "교통": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transit"
+          }
+        }
+      }
+    },
+    "금액": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
+    "내용": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Item"
+          }
+        }
+      }
+    },
+    "눌러서 등록하기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to add"
+          }
+        }
+      }
+    },
+    "눌러서 바로 기록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to record"
+          }
+        }
+      }
+    },
+    "눌러서 바로 기록하거나, 프리셋으로 빠르게 담습니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to record, or use a preset to add one fast."
+          }
+        }
+      }
+    },
+    "눌러서 바로 담기 · 앱을 열면 기록에 들어갑니다": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to add · it lands in your ledger when you open the app"
+          }
+        }
+      }
+    },
+    "되돌리기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        }
+      }
+    },
+    "모두 등록됨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All added"
+          }
+        }
+      }
+    },
+    "미등록 영수증 없음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No receipts pending"
+          }
+        }
+      }
+    },
+    "방금 담은 것 되돌리기": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo the last one"
+          }
+        }
+      }
+    },
+    "빠른 기록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick record"
+          }
+        }
+      }
+    },
+    "빠른 지출 기록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick expense"
+          }
+        }
+      }
+    },
+    "식사": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meal"
+          }
+        }
+      }
+    },
+    "영수증 등록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add receipt"
+          }
+        }
+      }
+    },
+    "영수증 미등록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receipts pending"
+          }
+        }
+      }
+    },
+    "영수증이 아직 없는 지출 수를 보고 바로 등록합니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See how many expenses still need a receipt, and add one right away."
+          }
+        }
+      }
+    },
+    "예결산 탭을 한 번 열면\n결산이 표시됩니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Budget tab once\nand your totals appear here"
+          }
+        }
+      }
+    },
+    "예결산 탭을 한 번 열면\n예산이 표시됩니다": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Budget tab once\nand your budget appears here"
+          }
+        }
+      }
+    },
+    "예산": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Budget"
+          }
+        }
+      }
+    },
+    "예산 대비 집행과 카테고리 내역을 봅니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See spending against budget, and the breakdown by category."
+          }
+        }
+      }
+    },
+    "이번 여행 예산과 집행률을 봅니다.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See this trip’s budget and how much is spent."
+          }
+        }
+      }
+    },
+    "지출 기록": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record expense"
+          }
+        }
+      }
+    },
+    "직접": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manual"
+          }
+        }
+      }
+    },
+    "집행 · 예산 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spent · budget %@"
+          }
+        }
+      }
+    },
+    "집행 없음": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing spent"
+          }
+        }
+      }
+    },
+    "카테고리": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        }
+      }
+    },
+    "커피": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coffee"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

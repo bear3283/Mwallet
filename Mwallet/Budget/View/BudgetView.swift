@@ -35,8 +35,8 @@ struct BudgetView: View {
 
                 if travels.isEmpty {
                     ReceiptEmptyState(
-                        message: "여행이 없어요",
-                        detail: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다."
+                        message: String(localized: "여행이 없어요"),
+                        detail: String(localized: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다.")
                     )
                 } else {
                     travelSelector
@@ -74,7 +74,7 @@ struct BudgetView: View {
             Button {
                 isEditingBudget = true
             } label: {
-                TabActionLabel(text: "예산 편집", isEnabled: selectedTravel != nil)
+                TabActionLabel(text: String(localized: "예산 편집"), isEnabled: selectedTravel != nil)
             }
             .disabled(selectedTravel == nil)
         }
@@ -86,8 +86,8 @@ struct BudgetView: View {
     private var content: some View {
         if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(
-                message: "아직 예산이 없어요",
-                detail: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요."
+                message: String(localized: "아직 예산이 없어요"),
+                detail: String(localized: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요.")
             )
         } else {
             ScrollView(showsIndicators: false) {
@@ -145,7 +145,7 @@ struct BudgetView: View {
 
             if !summary.overspentLines.isEmpty {
                 ReceiptNotice(
-                    text: "예산을 넘긴 항목이 \(summary.overspentLines.count)개 있습니다"
+                    text: String(localized: "예산을 넘긴 항목이 \(summary.overspentLines.count)개 있습니다")
                 )
                 .padding(.top, 10)
             }
@@ -210,10 +210,21 @@ struct BudgetView: View {
 // 같은 예결산 데이터를 세 가지 질문으로 본다.
 // 집행률: 항목별 진행 · 예산 대비: 세운 것과 쓴 것 비교 · 비중: 집행액 분포
 enum BudgetChartMode: String, CaseIterable, Identifiable {
-    case progress = "집행률"
-    case compare = "예산 대비"
-    case share = "비중"
+    // rawValue 는 자리를 가리키는 이름일 뿐이라 언어를 타지 않는다.
+    // 화면에 적는 글자는 title 이다.
+    case progress
+    case compare
+    case share
+
     var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .progress: return String(localized: "집행률")
+        case .compare: return String(localized: "예산 대비")
+        case .share: return String(localized: "비중")
+        }
+    }
 }
 
 struct BudgetChartSection: View {
@@ -246,7 +257,7 @@ struct BudgetChartSection: View {
                 Button {
                     withAnimation(.easeInOut(duration: 0.15)) { mode = chartMode }
                 } label: {
-                    Text(chartMode.rawValue)
+                    Text(chartMode.title)
                         .font(.subhead2_2)
                         .foregroundStyle(mode == chartMode ? Color.white : Color.gray400)
                         .frame(maxWidth: .infinity)
@@ -297,7 +308,7 @@ struct BudgetChartSection: View {
                         .fill(ReceiptCategoryPalette.color(for: line.category.description))
                         .frame(width: 10, height: 10)
 
-                    Text(line.category.description)
+                    Text(line.category.visibleDescription)
                         .font(.body1)
                         .foregroundStyle(.black)
 
@@ -469,7 +480,7 @@ struct BudgetChartSection: View {
                         RoundedRectangle(cornerRadius: 3)
                             .fill(ReceiptCategoryPalette.color(for: slice.category))
                             .frame(width: 10, height: 10)
-                        Text(slice.category)
+                        Text(ExpenseInfoCategory.displayName(forStored: slice.category))
                             .font(.body1)
                             .foregroundStyle(.black)
                         Spacer(minLength: 8)
@@ -499,8 +510,8 @@ struct BudgetChartSection: View {
 
     private func compactWon(_ value: Double) -> String {
         if value <= 0 { return "0" }
-        if value >= 10000 { return "\(Int((value / 10000).rounded()))만" }
-        return "\(Int((value / 1000).rounded()))천"
+        if value >= 10000 { return String(localized: "\(Int((value / 10000).rounded()))만") }
+        return String(localized: "\(Int((value / 1000).rounded()))천")
     }
 
     private func sharePercent(_ amount: Double) -> String {

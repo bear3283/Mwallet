@@ -64,7 +64,7 @@ struct ReceiptThumbnail: View {
     /// 사진 자리를 소리로 읽는 말. 장수까지 알려 준다.
     private var photoLabel: String {
         let count = expense.photoDataList.count
-        return count > 1 ? "영수증 사진 \(count)장" : "영수증 사진"
+        return count > 1 ? String(localized: "영수증 사진 \(count)장") : String(localized: "영수증 사진")
     }
 }
 
@@ -125,7 +125,7 @@ struct ReceiptRowContent: View {
 
     // 시각은 넣지 않는다. 시간대 약어까지 붙으면 줄이 넘쳐 상호명이 잘린다.
     private var metaLine: String {
-        var parts = [expense.categoryName]
+        var parts = [ExpenseInfoCategory.displayName(forStored: expense.categoryName)]
         if showsMission { parts.append(expense.missionTitle) }
         return parts.joined(separator: " · ")
     }

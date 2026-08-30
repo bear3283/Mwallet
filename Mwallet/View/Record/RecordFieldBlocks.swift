@@ -27,9 +27,9 @@ struct RecordAmountBlock: View {
 
         guard viewModel.payAmount != -1,
               let formatted = viewModel.payAmountInWon.getStringFraction0() else {
-            return "환산 전"
+            return String(localized: "환산 전")
         }
-        return "≈ \(formatted)원"
+        return "≈ " + String(localized: "\(formatted)원")
     }
 
     var body: some View {
@@ -62,7 +62,8 @@ struct RecordAmountBlock: View {
                         ZStack {
                             Picker("화폐", selection: $viewModel.currency) {
                                 ForEach(viewModel.currencyCandidateArray, id: \.self) { currency in
-                                    Text((CurrencyInfoModel.shared.currencyResult[currency]?.koreanNm ?? "알 수 없음") + " " + (CurrencyInfoModel.shared.currencyResult[currency]?.symbol ?? "-"))
+                                    Text(CurrencyInfoModel.shared.currencyResult[currency]?.displayLabel
+                                         ?? String(localized: "알 수 없음"))
                                 }
                             }
                             .onTapGesture {
@@ -76,7 +77,8 @@ struct RecordAmountBlock: View {
                                     .layoutPriority(-1)
                                 // 통화는 금액을 읽는 단위일 뿐이라 조용히 둔다.
                                 // display2 로 두면 금액(display4)과 크기가 붙어 경쟁한다.
-                                Text((CurrencyInfoModel.shared.currencyResult[viewModel.currency]?.koreanNm ?? "알 수 없음") + " " + (CurrencyInfoModel.shared.currencyResult[viewModel.currency]?.symbol ?? "-"))
+                                Text(CurrencyInfoModel.shared.currencyResult[viewModel.currency]?.displayLabel
+                                     ?? String(localized: "알 수 없음"))
                                     .foregroundStyle(.gray400)
                                     .font(.subhead2_1)
                                     .padding(.vertical, 6)

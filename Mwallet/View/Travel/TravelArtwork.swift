@@ -86,7 +86,9 @@ enum TravelArtworkBuilder {
         if let digit = name.first(where: \.isNumber) {
             return String(digit)
         }
-        return "여"
+        // 글자도 숫자도 없는 이름('✈︎✈︎' 같은). '여행' 의 첫 글자를 세운다 —
+        // 언어마다 그 낱말이 다르므로 표에 맡긴다.
+        return String(localized: "여", comment: "이름에서 글자를 못 찾았을 때 쓸 한 글자. '여행'의 첫 글자")
     }
 
     /// 지출이 적힌 나라를, 최근에 쓴 것부터 겹치지 않게.

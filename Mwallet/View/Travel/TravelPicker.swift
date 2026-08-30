@@ -29,7 +29,7 @@ struct TravelPicker: View {
     /// 영수증은 고르지 않은 것이 '모든 여행을 함께 본다' 는 뜻이라 청할 것이
     /// 없다. 같은 자리에 같은 생김새로 두되 말은 화면에 맞춘다.
     var emptyTitle = "여행 선택"
-    var emptyDescription = "여행을 골라 주세요"
+    var emptyDescription = String(localized: "여행을 골라 주세요")
 
     /// 영수증처럼 '고르지 않음' 이 '모두 본다' 는 뜻인 화면에서 켠다.
     var allowsAll = false
@@ -92,7 +92,7 @@ struct TravelPicker: View {
     private var metaText: String {
         guard let chosen else { return emptyDescription }
         let people = chosen.participants.count + 1
-        return "\(TravelSchedule.periodText(chosen)) · \(people)명"
+        return String(localized: "\(TravelSchedule.periodText(chosen)) · \(people)명")
     }
 }
 
@@ -113,10 +113,9 @@ enum TravelSchedule {
 
     static func periodText(_ travel: Travel) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yy.MM.dd"
-        guard let start = travel.startDate else { return "기간 미정" }
-        guard let end = travel.endDate else { return "\(formatter.string(from: start)) ~ 미정" }
+        formatter.setLocalizedDateFormatFromTemplate("yyMMd")
+        guard let start = travel.startDate else { return String(localized: "기간 미정") }
+        guard let end = travel.endDate else { return String(localized: "\(formatter.string(from: start)) ~ 미정") }
         return "\(formatter.string(from: start)) ~ \(formatter.string(from: end))"
     }
 
@@ -126,9 +125,8 @@ enum TravelSchedule {
     /// 해는 묶음 머리글이 이미 말하고 있어 카드에서는 덜어 낼 수 있다.
     static func dayRangeText(_ travel: Travel) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "MM.dd"
-        guard let start = travel.startDate else { return "날짜 미정" }
+        formatter.setLocalizedDateFormatFromTemplate("MMd")
+        guard let start = travel.startDate else { return String(localized: "날짜 미정") }
         let from = formatter.string(from: start)
         guard let end = travel.endDate else { return "\(from) ~" }
         // 하루짜리는 물결표 뒤가 같은 말이라 한 번만 적는다.

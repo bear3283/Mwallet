@@ -36,12 +36,12 @@ struct ReceiptSummaryBlock: View {
             .padding(.top, 6)
 
             if summaryValue.hasMissingPhoto {
-                ReceiptNotice(text: "영수증 사진이 없는 항목이 \(summaryValue.missingPhotoCount)건 있습니다")
+                ReceiptNotice(text: String(localized: "영수증 사진이 없는 항목이 \(summaryValue.missingPhotoCount)건 있습니다"))
                     .padding(.top, 8)
             }
 
             if summaryValue.hasUnconvertible {
-                ReceiptNotice(text: "환율을 받지 못한 \(summaryValue.unconvertibleCount)건은 합계에서 빠졌습니다")
+                ReceiptNotice(text: String(localized: "환율을 받지 못한 \(summaryValue.unconvertibleCount)건은 합계에서 빠졌습니다"))
                     .padding(.top, 8)
             }
 
@@ -86,7 +86,7 @@ struct ReceiptDayList: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             if isEmpty {
-                ReceiptEmptyState(message: "검색 결과가 없어요")
+                ReceiptEmptyState(message: String(localized: "검색 결과가 없어요"))
             } else {
                 LazyVStack(alignment: .leading, spacing: 0) {
                     ForEach(daySections) { section in

@@ -47,13 +47,13 @@ struct ReceiptHomeView: View {
                                  selection: $selectedTravel,
                                  onChange: { filter.missionName = selectedTravel?.name },
                                  emptyTitle: "전체 여행",
-                                 emptyDescription: "모든 여행의 영수증을 함께 봅니다",
+                                 emptyDescription: String(localized: "모든 여행의 영수증을 함께 봅니다"),
                                  allowsAll: true)
                 } actions: {
                     NavigationLink {
                         ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
                     } label: {
-                        TabActionIcon(systemName: "chart.pie", label: "지출 통계", isEnabled: !allReceipts.isEmpty)
+                        TabActionIcon(systemName: "chart.pie", label: String(localized: "지출 통계"), isEnabled: !allReceipts.isEmpty)
                     }
                     .disabled(allReceipts.isEmpty)
 
@@ -66,8 +66,8 @@ struct ReceiptHomeView: View {
 
                 if allReceipts.isEmpty {
                     ReceiptEmptyState(
-                        message: "아직 영수증이 없어요",
-                        detail: "지출이 생기면 바로 남겨두세요.\n오프라인에서도 저장됩니다."
+                        message: String(localized: "아직 영수증이 없어요"),
+                        detail: String(localized: "지출이 생기면 바로 남겨두세요.\n오프라인에서도 저장됩니다.")
                     )
                 } else {
                     searchField
@@ -213,7 +213,7 @@ struct ReceiptHomeView: View {
                         .frame(width: 0.5, height: 18)
                         .padding(.horizontal, 4)
 
-                    ReceiptChip(title: "영수증 없음 \(missingPhotoCount)", isSelected: filter.onlyMissingPhoto) {
+                    ReceiptChip(title: String(localized: "영수증 없음 \(missingPhotoCount)"), isSelected: filter.onlyMissingPhoto) {
                         filter.onlyMissingPhoto.toggle()
                     }
                 }
@@ -270,7 +270,7 @@ struct ReceiptHomeView: View {
             defer { pickedItem = nil }
             guard let original = try? await item.loadTransferable(type: Data.self),
                   let processed = ReceiptImageProcessor.process(original) else {
-                errorMessage = "사진을 불러오지 못했습니다."
+                errorMessage = String(localized: "사진을 불러오지 못했습니다.")
                 attachTarget = nil
                 return
             }
