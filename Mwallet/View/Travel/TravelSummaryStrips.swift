@@ -22,7 +22,7 @@ struct TravelBasicInfoStrip: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
-            infoCell(title: "기간", value: periodText)
+            infoCell(title: String(localized: "기간"), value: periodText)
 
             divider
 
@@ -69,7 +69,8 @@ struct TravelBudgetStrip: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(summary.hasBudget ? "예산 \(ReceiptFormat.krw(summary.totalPlanned))" : "집행")
+                Text(summary.hasBudget ? String(localized: "예산 \(ReceiptFormat.krw(summary.totalPlanned))")
+                     : String(localized: "집행"))
                     .font(.caption1)
                     .foregroundStyle(.gray300)
 
@@ -92,8 +93,8 @@ struct TravelBudgetStrip: View {
                 progressBar
 
                 Text(summary.isOverspent
-                     ? "\(ReceiptFormat.krw(-summary.remaining)) 초과"
-                     : "\(ReceiptFormat.krw(summary.remaining)) 남음")
+                     ? String(localized: "\(ReceiptFormat.krw(-summary.remaining)) 초과")
+                     : String(localized: "\(ReceiptFormat.krw(summary.remaining)) 남음"))
                     .font(.caption1)
                     .foregroundStyle(summary.isOverspent ? Color.mainOrange : .gray400)
                     .monospacedDigit()
@@ -102,7 +103,7 @@ struct TravelBudgetStrip: View {
             // 환율을 못 받은 지출은 집행액에서 빠져 있다. 합계가 실제보다
             // 작게 보이므로 그 사실을 숨기지 않는다.
             if summary.hasUnconvertible {
-                Text("환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다")
+                Text(String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다"))
                     .font(.caption1)
                     .foregroundStyle(Color.mainOrange)
             }

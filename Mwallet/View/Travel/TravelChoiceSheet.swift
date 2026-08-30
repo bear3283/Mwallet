@@ -107,7 +107,8 @@ struct TravelChoiceSheet: View {
             .background(year == nil ? Color.gray100 : Color.mainAccent.opacity(0.12),
                         in: Capsule())
         }
-        .accessibilityLabel(year == nil ? "연도 고르기" : "\(String(year!))년만 보는 중")
+        .accessibilityLabel(year == nil ? String(localized: "연도 고르기")
+                            : String(localized: "\(String(year!))년만 보는 중"))
     }
 
     // MARK: - 몸

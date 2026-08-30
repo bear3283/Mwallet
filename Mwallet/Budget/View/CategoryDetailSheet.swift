@@ -58,7 +58,7 @@ struct CategoryDetailSheet: View {
                     }
                 }
             }
-            .navigationTitle(isNew ? "분류 추가" : "분류 편집")
+            .navigationTitle(isNew ? String(localized: "분류 추가") : String(localized: "분류 편집"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

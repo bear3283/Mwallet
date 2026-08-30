@@ -115,7 +115,7 @@ struct CategoryEditView: View {
             Button(role: .destructive) {
                 remove(category)
             } label: {
-                Label(category.isBuiltIn ? "감추기" : "지우기",
+                Label(category.isBuiltIn ? String(localized: "감추기") : String(localized: "지우기"),
                       systemImage: category.isBuiltIn ? "eye.slash" : "trash")
             }
         }

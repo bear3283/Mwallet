@@ -180,7 +180,7 @@ struct TravelCard: View {
 
     private var accessibilityText: String {
         var parts = [travel.displayName, TravelSchedule.periodText(travel)]
-        if isOngoing { parts.append("여행 중") }
+        if isOngoing { parts.append(String(localized: "여행 중")) }
         return parts.joined(separator: ", ")
     }
 }

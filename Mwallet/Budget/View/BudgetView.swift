@@ -152,7 +152,7 @@ struct BudgetView: View {
 
             if summary.hasUnconvertible {
                 ReceiptNotice(
-                    text: "환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다"
+                    text: String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다")
                 )
                 .padding(.top, 6)
             }
@@ -198,11 +198,24 @@ struct BudgetView: View {
         let pending = store.expenses(for: selectedTravel).filter { $0.needsPhoto }.count
         MwalletBridge.publish(
             summary: store.summary(for: selectedTravel),
-            travelName: selectedTravel?.name ?? "여행",
+            travelName: selectedTravel?.name ?? String(localized: "여행"),
             pendingReceiptCount: pending,
             in: store.context
         )
     }
+}
+
+// 막대 그래프 범례에 그대로 찍히는 글자.
+//
+// 색 표(chartForegroundStyleScale)의 열쇠와 막대가 드는 값이 같은 문자열이어야
+// 짝이 맞는다. 두 자리에 따로 적어 두면 번역을 한쪽만 고쳤을 때 색이 통째로
+// 빠지는데, 그때 화면은 아무 말도 하지 않는다. 그래서 한곳에서 만든다.
+//
+// group 은 막대를 나란히 세우는 데만 쓰이고 화면에 나오지 않아 영어로 둔다.
+enum BudgetBarLabel {
+    static let planned = String(localized: "예산")
+    static let spent = String(localized: "집행")
+    static let over = String(localized: "초과")
 }
 
 // MARK: - 그래프 섹션
@@ -390,9 +403,9 @@ struct BudgetChartSection: View {
                 .cornerRadius(3)
             }
             .chartForegroundStyleScale([
-                "예산": Color.gray200,
-                "집행": Color.mainAccent,
-                "초과": Color.mainOrange
+                BudgetBarLabel.planned: Color.gray200,
+                BudgetBarLabel.spent: Color.mainAccent,
+                BudgetBarLabel.over: Color.mainOrange
             ])
             .chartLegend(position: .bottom, alignment: .leading, spacing: 12)
             .chartXAxis {
@@ -429,10 +442,11 @@ struct BudgetChartSection: View {
     private var compareBars: [BudgetBar] {
         summary.lines.flatMap { line -> [BudgetBar] in
             [
-                BudgetBar(category: line.category.description, group: "예산",
-                          colorKey: "예산", amount: line.planned),
-                BudgetBar(category: line.category.description, group: "집행",
-                          colorKey: line.isOverspent ? "초과" : "집행", amount: line.spent)
+                BudgetBar(category: line.category.visibleDescription, group: "planned",
+                          colorKey: BudgetBarLabel.planned, amount: line.planned),
+                BudgetBar(category: line.category.visibleDescription, group: "spent",
+                          colorKey: line.isOverspent ? BudgetBarLabel.over : BudgetBarLabel.spent,
+                          amount: line.spent)
             ]
         }
     }

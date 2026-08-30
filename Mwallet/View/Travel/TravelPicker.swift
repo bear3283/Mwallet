@@ -28,7 +28,7 @@ struct TravelPicker: View {
     /// 예결산은 여행이 정해져야 예산을 뽑을 수 있어 '골라 달라' 고 청하지만,
     /// 영수증은 고르지 않은 것이 '모든 여행을 함께 본다' 는 뜻이라 청할 것이
     /// 없다. 같은 자리에 같은 생김새로 두되 말은 화면에 맞춘다.
-    var emptyTitle = "여행 선택"
+    var emptyTitle = String(localized: "여행 선택")
     var emptyDescription = String(localized: "여행을 골라 주세요")
 
     /// 영수증처럼 '고르지 않음' 이 '모두 본다' 는 뜻인 화면에서 켠다.

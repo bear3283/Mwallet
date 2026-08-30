@@ -90,13 +90,13 @@ struct AddMemberView: View {
             Spacer()
             
             if isSelectedTogether == true && participantArr.count == 1 && participantArr[0] == "" {
-                DoneButtonUnactive(title: "완료", action: {
+                DoneButtonUnactive(title: String(localized: "완료"), action: {
                     
                 })
                 .disabled(true)
                 
             } else {
-                DoneButtonActive(title: "완료", action: {
+                DoneButtonActive(title: String(localized: "완료"), action: {
                     isBackButton = false
                     if !isBackButton {
                         
@@ -117,7 +117,7 @@ struct AddMemberView: View {
                             viewModel.participantArr = participantArr
                             viewModel.travelName = String(localized: "나의 여행")
                         } else if participantArr.count == 0 {
-                            viewModel.travelName = "나의 여행"
+                            viewModel.travelName = String(localized: "나의 여행")
                             viewModel.participantArr = participantArr
                         } else {
                             viewModel.travelName = String(localized: "\(participantArr[0]) 외 \(participantArr.count)명의 여행")

@@ -46,7 +46,7 @@ struct ReceiptHomeView: View {
                     TravelPicker(travels: travels,
                                  selection: $selectedTravel,
                                  onChange: { filter.missionName = selectedTravel?.name },
-                                 emptyTitle: "전체 여행",
+                                 emptyTitle: String(localized: "전체 여행"),
                                  emptyDescription: String(localized: "모든 여행의 영수증을 함께 봅니다"),
                                  allowsAll: true)
                 } actions: {
@@ -60,7 +60,7 @@ struct ReceiptHomeView: View {
                     Button {
                         isAddingExpense = true
                     } label: {
-                        TabActionIcon(systemName: "plus", label: "영수증 추가")
+                        TabActionIcon(systemName: "plus", label: String(localized: "영수증 추가"))
                     }
                 }
 

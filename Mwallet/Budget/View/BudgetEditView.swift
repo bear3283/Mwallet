@@ -47,7 +47,7 @@ struct BudgetEditView: View {
                     .padding(.horizontal, ReceiptLayout.gutter)
                 }
 
-                ReceiptPrimaryButton(title: "저장") { save() }
+                ReceiptPrimaryButton(title: String(localized: "저장")) { save() }
                     .padding(.horizontal, ReceiptLayout.gutter)
                     .padding(.top, 8)
                     .padding(.bottom, 12)

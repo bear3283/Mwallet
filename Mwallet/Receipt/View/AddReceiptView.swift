@@ -69,7 +69,7 @@ struct AddReceiptView: View {
                         Divider()
                             .padding(.top, 20)
 
-                        ReceiptSectionTitle(text: "여행")
+                        ReceiptSectionTitle(text: String(localized: "여행"))
                             .padding(.top, 20)
                         missionBlock
 
@@ -112,7 +112,7 @@ struct AddReceiptView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(isEditing ? "영수증 수정" : "영수증 추가")
+                    Text(isEditing ? String(localized: "영수증 수정") : String(localized: "영수증 추가"))
                         .font(.title1)
                         .foregroundStyle(.black)
                 }
@@ -175,7 +175,7 @@ struct AddReceiptView: View {
 
     private var missionBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ReceiptFieldRow(label: "여행") {
+            ReceiptFieldRow(label: String(localized: "여행")) {
                 if travels.isEmpty {
                     Text("여행 탭에서 일정을 먼저 만들어 주세요")
                         .font(.caption2)
@@ -217,7 +217,7 @@ struct AddReceiptView: View {
                     .receiptField()
             }
 
-            ReceiptFieldRow(label: "카테고리") {
+            ReceiptFieldRow(label: String(localized: "카테고리")) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 4) {
                         // 카테고리는 Core Data 에 Int64 코드로 저장되므로 자유 입력을 받지 않는다.
@@ -231,7 +231,7 @@ struct AddReceiptView: View {
                 }
             }
 
-            ReceiptFieldRow(label: "메모") {
+            ReceiptFieldRow(label: String(localized: "메모")) {
                 TextField("남길 말이 있다면", text: $draft.memo, axis: .vertical)
                     .lineLimit(2...4)
                     .focused($focusedField, equals: .memo)

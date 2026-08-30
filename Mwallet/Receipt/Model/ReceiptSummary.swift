@@ -29,7 +29,7 @@ enum ReceiptPeriod: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .all: return "전체 기간"
+        case .all: return String(localized: "전체 기간")
         case .today: return String(localized: "오늘")
         case .lastWeek: return String(localized: "최근 7일")
         case .thisMonth: return String(localized: "이번 달")

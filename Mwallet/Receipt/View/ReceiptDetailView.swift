@@ -42,7 +42,7 @@ struct ReceiptDetailView: View {
 
                 Divider()
 
-                ReceiptSectionTitle(text: "영수증")
+                ReceiptSectionTitle(text: String(localized: "영수증"))
                     .padding(.top, 20)
 
                 receiptSection
@@ -225,7 +225,7 @@ struct ReceiptDetailView: View {
 
     private var detailBlock: some View {
         VStack(spacing: 0) {
-            ReceiptValueRow(label: "여행", value: expense.missionTitle)
+            ReceiptValueRow(label: String(localized: "여행"), value: expense.missionTitle)
             Divider()
             ReceiptValueRow(label: String(localized: "카테고리"),
                             value: ExpenseInfoCategory.displayName(forStored: expense.categoryName))

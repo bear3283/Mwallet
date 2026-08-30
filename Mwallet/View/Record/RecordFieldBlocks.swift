@@ -40,7 +40,8 @@ struct RecordAmountBlock: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 10) {
                         ZStack {
-                            Text(viewModel.visiblePayAmount == "" ? "금액 입력" : viewModel.visiblePayAmount + "  ")
+                            Text(viewModel.visiblePayAmount == "" ? String(localized: "금액 입력")
+                 : viewModel.visiblePayAmount + "  ")
                                 .lineLimit(1)
                                 .font(.display4)
                                 .hidden()

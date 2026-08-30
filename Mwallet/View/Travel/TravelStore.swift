@@ -78,7 +78,7 @@ enum TravelStoreError: LocalizedError, Equatable {
         case .emptyName:
             return String(localized: "여행 이름을 입력해 주세요.")
         case .endBeforeStart:
-            return "종료일이 시작일보다 빠릅니다."
+            return String(localized: "종료일이 시작일보다 빠릅니다.")
         case .cannotEditDefault:
             return String(localized: "'임시 기록'은 고칠 수 없습니다.")
         }

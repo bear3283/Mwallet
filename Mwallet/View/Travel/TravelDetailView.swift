@@ -74,7 +74,7 @@ struct TravelDetailView: View {
     private var periodText: String {
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("MMd")
-        guard let start = travel.startDate else { return "미정" }
+        guard let start = travel.startDate else { return String(localized: "미정") }
         guard let end = travel.endDate else { return String(localized: "\(formatter.string(from: start)) ~ 미정") }
         return "\(formatter.string(from: start)) ~ \(formatter.string(from: end))"
     }

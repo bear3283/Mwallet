@@ -73,12 +73,13 @@ struct TravelListView: View {
                 Text("여행")
                     .font(.title3)
                     .foregroundStyle(.black)
-                Text(travels.isEmpty ? "여행을 만들어 시작하세요" : "\(travels.count)개의 여행")
+                Text(travels.isEmpty ? String(localized: "여행을 만들어 시작하세요")
+                     : String(localized: "\(travels.count)개의 여행"))
                     .font(.caption2)
                     .foregroundStyle(.gray400)
             }
         } actions: {
-            NavigationLink { SettingView() } label: { TabActionIcon(systemName: "gearshape", label: "설정") }
+            NavigationLink { SettingView() } label: { TabActionIcon(systemName: "gearshape", label: String(localized: "설정")) }
             NavigationLink { AddTravelView() } label: { TabActionIcon(systemName: "plus", label: String(localized: "여행 추가")) }
         }
     }

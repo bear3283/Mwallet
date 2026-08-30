@@ -92,7 +92,7 @@ struct BudgetCategoryDetailView: View {
     }
 
     private var spreadText: String {
-        guard !sections.isEmpty else { return "\(line.spentCount)건" }
+        guard !sections.isEmpty else { return String(localized: "\(line.spentCount)건") }
         return String(localized: "\(line.spentCount)건 · \(sections.count)일에 걸쳐")
     }
 
@@ -101,7 +101,8 @@ struct BudgetCategoryDetailView: View {
             Text("아직 이 분류로 적은 지출이 없습니다")
                 .font(.subhead1)
                 .foregroundStyle(.gray400)
-            Text(line.planned > 0 ? "예산만 세워 두고 아직 쓰지 않았습니다" : "예산도 지출도 없습니다")
+            Text(line.planned > 0 ? String(localized: "예산만 세워 두고 아직 쓰지 않았습니다")
+                              : String(localized: "예산도 지출도 없습니다"))
                 .font(.caption1)
                 .foregroundStyle(.gray300)
         }

@@ -97,7 +97,7 @@ enum ReceiptCSVEncoder {
         let cleaned = name.components(separatedBy: invalid).joined()
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .replacingOccurrences(of: " ", with: "_")
-        return cleaned.isEmpty ? "여행" : cleaned
+        return cleaned.isEmpty ? String(localized: "여행") : cleaned
     }
 }
 

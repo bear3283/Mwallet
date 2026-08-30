@@ -113,7 +113,7 @@ struct RecordView: View {
                 // 자리라 생김새도 하나여야 한다.
                 TravelPicker(travels: travelChoices,
                              selection: $mainVM.selectedTravel,
-                             emptyTitle: "여행 선택",
+                             emptyTitle: String(localized: "여행 선택"),
                              emptyDescription: String(localized: "눌러서 여행을 고르세요"),
                              alignment: .center)
                     .accessibilityIdentifier("record.travelChoice")
