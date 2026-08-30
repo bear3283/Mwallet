@@ -43,6 +43,15 @@ struct RecordSentenceArea: View {
                         // 처음 쓰는 사람도 따라 할 수 있게 실제 말투를 예시 한 줄로 보여 준다.
                         // 예시는 그 언어로 실제로 말할 법한 문장이어야 한다.
                         recordExampleRow(icon: "🍽", text: String(localized: "점심 15000원 카드"))
+
+                        // 기기 언어로 못 듣고 물러난 경우. 말없이 한국어로 들으면
+                        // 사용자는 왜 아무것도 받아 적히지 않는지 알 길이 없다.
+                        if !SpeechLocale.isAvailableForCurrentLanguage {
+                            Text("이 언어는 아직 말하기로 받아 적지 못합니다. 직접 기록을 눌러 주세요.")
+                                .font(.caption2)
+                                .foregroundStyle(.gray300)
+                                .multilineTextAlignment(.center)
+                        }
                     }
 
                 } else {

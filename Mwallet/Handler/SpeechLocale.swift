@@ -20,16 +20,18 @@ import Speech
 
 enum SpeechLocale {
 
-    /// 말하기를 지원하는 언어. 스토어에 올린 열한 언어 가운데,
-    /// 문장을 갈라 읽는 규칙까지 갖춘 것만 여기에 든다.
+    /// 문장을 갈라 읽는 규칙이 있는 언어인지 SentenceRules 에게 묻는다.
     ///
-    /// 규칙을 갖추는 대로 늘린다. 목록에 없는 언어는 받아쓰기만 되고
-    /// 금액·결제수단을 못 갈라내므로, 되는 척하느니 빼 두는 편이 낫다.
-    static let supported: [String] = ["ko", "en"]
+    /// 예전에는 이 파일에 ["ko", "en"] 이라고 적어 두었다. 규칙은 저쪽에
+    /// 있는데 목록은 이쪽에 있어서, 언어를 늘릴 때 한쪽만 고치면 조용히
+    /// 어긋난다. 표 하나만 남기고 여기서는 묻기만 한다.
+    static func canParse(_ locale: Locale) -> Bool {
+        SentenceRules.canParse(locale)
+    }
 
     /// 기기 언어로 들을 수 있는지.
     static var isAvailableForCurrentLanguage: Bool {
-        resolved().languageCode == preferredLanguageCode
+        resolved().language.languageCode?.identifier == preferredLanguageCode
     }
 
     /// 기기가 앞세운 언어의 두 글자 코드.
@@ -41,12 +43,12 @@ enum SpeechLocale {
 
     /// 실제로 들을 로케일. 지원하지 않으면 한국어로 물러난다.
     static func resolved() -> Locale {
-        let code = preferredLanguageCode
-        guard supported.contains(code) else { return Locale(identifier: "ko_KR") }
+        let candidate = Locale.current
+        guard canParse(candidate) else { return Locale(identifier: "ko_KR") }
 
         // 애플이 그 언어의 받아쓰기를 지원하는지 본다. 지원 목록은 기기와
         // OS 판마다 다르므로 코드에 적어 두지 않고 그때그때 묻는다.
-        let candidate = Locale.current
+        let code = preferredLanguageCode
         let supportedByApple = SFSpeechRecognizer.supportedLocales()
             .contains { $0.language.languageCode?.identifier == code }
         return supportedByApple ? candidate : Locale(identifier: "ko_KR")

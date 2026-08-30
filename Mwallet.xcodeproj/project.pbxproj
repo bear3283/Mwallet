@@ -130,7 +130,6 @@
 		E23733902AF7EC1E008C2613 /* CurrencyInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E237338F2AF7EC1E008C2613 /* CurrencyInfoModel.swift */; };
 		E2D4247E2AEF580E00A9ADC9 /* ExchangeRateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D4247D2AEF580E00A9ADC9 /* ExchangeRateHandler.swift */; };
 		E2D5C05C2ADD921400907501 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C05B2ADD921400907501 /* MainView.swift */; };
-		SP0000000000000000000002 /* SpeechLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = SP0000000000000000000001 /* SpeechLocale.swift */; };
 		E2D5C0722ADD928C00907501 /* findCurrentTravel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */; };
 		FA00000000000000000000A2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
 		FA00000000000000000000B2 /* MwalletBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000B1 /* MwalletBridge.swift */; };
@@ -142,6 +141,8 @@
 		FA000000000000000000D100 /* QuickExpenseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000D000 /* QuickExpenseStore.swift */; };
 		FA000000000000000000D200 /* QuickExpenseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000D000 /* QuickExpenseStore.swift */; };
 		LC0000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LC0000000000000000000001 /* Localizable.xcstrings */; };
+		SP0000000000000000000002 /* SpeechLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = SP0000000000000000000001 /* SpeechLocale.swift */; };
+		SR0000000000000000000002 /* SentenceRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = SR0000000000000000000001 /* SentenceRules.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -311,7 +312,6 @@
 		E237338F2AF7EC1E008C2613 /* CurrencyInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInfoModel.swift; sourceTree = "<group>"; };
 		E2D4247D2AEF580E00A9ADC9 /* ExchangeRateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateHandler.swift; sourceTree = "<group>"; };
 		E2D5C05B2ADD921400907501 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		SP0000000000000000000001 /* SpeechLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechLocale.swift; sourceTree = "<group>"; };
 		E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = findCurrentTravel.swift; sourceTree = "<group>"; };
 		E366F1762B02014B003CCA88 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FA00000000000000000000A1 /* MwalletShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletShared.swift; path = Shared/MwalletShared.swift; sourceTree = SOURCE_ROOT; };
@@ -322,6 +322,8 @@
 		FB00000000000000000000P1 /* MwalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC00000000000000000000P1 /* MwalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		LC0000000000000000000001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		SP0000000000000000000001 /* SpeechLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechLocale.swift; sourceTree = "<group>"; };
+		SR0000000000000000000001 /* SentenceRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceRules.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -459,6 +461,7 @@
 				C1C00001000000000000AA1 /* ReceiptPhotoMigrator.swift */,
 				C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */,
 				C1A11EA70000000000000E31 /* KoreanNumberReader.swift */,
+				SR0000000000000000000001 /* SentenceRules.swift */,
 				C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */,
 				5754FAB42AD3F94900A3FCE8 /* Mwallet.xcdatamodeld */,
 				57A65D062AD7D4BE00131266 /* Enumeration */,
@@ -1028,6 +1031,7 @@
 				C1C00001000000000000AA2 /* ReceiptPhotoMigrator.swift in Sources */,
 				C1A11EA70000000000000E22 /* VoiceSentenceParser.swift in Sources */,
 				C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */,
+				SR0000000000000000000002 /* SentenceRules.swift in Sources */,
 				C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */,
 				C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */,
 				C18168022AFDE07000130F79 /* SplashView.swift in Sources */,

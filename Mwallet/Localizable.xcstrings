@@ -12873,6 +12873,71 @@
         }
       }
     },
+    "이 언어는 아직 말하기로 받아 적지 못합니다. 직접 기록을 눌러 주세요.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Sprache lässt sich noch nicht diktieren. Tippe auf „Von Hand erfassen“."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech isn't supported in this language yet. Tap Enter manually."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este idioma aún no se puede dictar. Toca «Escribir a mano»."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este idioma aún no se puede dictar. Toca «Escribir a mano»."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette langue n’est pas encore prise en charge à la voix. Touchez « Saisir à la main »."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa lingua non è ancora supportata a voce. Tocca «Inserisci a mano»."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この言語はまだ音声で書き取れません。「手で記録」を押してください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este idioma ainda não pode ser ditado. Toque em “Digitar à mão”."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个语言还不能用语音记录。请点「手动记录」。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "這個語言還不能用語音記錄。請點「手動記錄」。"
+          }
+        }
+      }
+    },
     "이 여행은 누구와 함께하나요?": {
       "localizations": {
         "de": {
