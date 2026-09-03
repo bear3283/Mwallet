@@ -103,6 +103,13 @@ final class FirstLaunchSeeder {
         save(context: "기본 여행 표시 이전")
     }
 
+    /// 예시 여행의 동행자 이름.
+    ///
+    /// '나' 와 달리 이 이름은 번역해 저장해도 된다. 만들 때 한 번 정해져
+    /// 그대로 남고, 화면이 다시 만들어 내지 않기 때문이다. '나' 는 화면이
+    /// 늘 앞에 붙여 세므로 저장된 값과 글자가 같아야 한다.
+    private var sampleCompanion: String { String(localized: "동료") }
+
     // 앱을 처음 열었을 때 무엇을 하는 앱인지 한눈에 보이도록,
     // 실제 흐름을 그대로 담은 예시 여행과 지출 2건을 넣는다.
     private func addSampleTrip() {
@@ -119,15 +126,15 @@ final class FirstLaunchSeeder {
         travel.endDate = calendar.date(byAdding: .day, value: 1, to: now)
         travel.lastUpdate = now
         // '나' 는 넣지 않는다. 화면이 늘 앞에 붙여 세므로 넣으면 3명이 된다.
-        travel.participants = [String(localized: "동료")]
+        travel.participants = [sampleCompanion]
 
         let samples = [
             SampleExpense(merchant: String(localized: "대포항 저녁"), amount: 52000, category: .food,
                           latitude: 38.1653, longitude: 128.6001, hoursAgo: 6,
-                          sharedBy: [String(localized: "나"), String(localized: "동료")]),
+                          sharedBy: [Travel.selfParticipantName, sampleCompanion]),
             SampleExpense(merchant: String(localized: "속초 게스트하우스"), amount: 84000, category: .room,
                           latitude: 38.2070, longitude: 128.5918, hoursAgo: 20,
-                          sharedBy: [String(localized: "나"), String(localized: "동료")])
+                          sharedBy: [Travel.selfParticipantName, sampleCompanion])
         ]
 
         for sample in samples {

@@ -63,7 +63,7 @@ class AddMemberViewModel: ObservableObject {
     }
     
     func filterMeFromStrings(_ array: [String]) -> [String] {
-        return array.filter { $0 != "나" }
+        return array.filter { $0 != Travel.selfParticipantName }
     }
     
     func filterDuplicates(_ array: [String]) -> [String] {

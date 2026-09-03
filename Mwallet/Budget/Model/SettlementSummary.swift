@@ -19,6 +19,7 @@ import Foundation
 /// 한 사람 몫.
 struct SettlementShare: Identifiable, Equatable {
 
+    /// 지출에 저장된 이름. 사람을 묶는 열쇠라 번역하지 않는다.
     let name: String
     /// 이 사람이 나눠 진 금액(원).
     let amount: Double
@@ -26,6 +27,9 @@ struct SettlementShare: Identifiable, Equatable {
     let expenseCount: Int
 
     var id: String { name }
+
+    /// 화면에 적을 이름. '나' 만 기기 언어로 옮기고, 사용자가 적은 이름은 그대로.
+    var displayName: String { Travel.participantDisplayName(name) }
 }
 
 struct SettlementSummary {

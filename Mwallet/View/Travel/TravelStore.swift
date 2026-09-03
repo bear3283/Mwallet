@@ -63,7 +63,7 @@ enum TravelParticipants {
         var seen = Set<String>()
         return names
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty && $0 != "나" }
+            .filter { !$0.isEmpty && $0 != Travel.selfParticipantName }
             .filter { seen.insert($0).inserted }
     }
 }

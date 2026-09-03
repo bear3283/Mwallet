@@ -216,7 +216,9 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
     
     @Published var travelArray: [Travel] = []
     
-    @Published var participantTupleArray: [(name: String, isOn: Bool)] = [("나", true)] // passive
+    // 이름은 저장되는 값이라 여기에는 저장용을 담는다. 화면에 그릴 때만
+    // Travel.participantDisplayName 을 거친다.
+    @Published var participantTupleArray: [(name: String, isOn: Bool)] = [(Travel.selfParticipantName, true)] // passive
     
     @Published var payDate: Date = Date()
     var currentDate: Date = Date()
@@ -307,14 +309,14 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
         travelStream = travelPublisher.sink { chosenTravel in
             if let chosenTravel {
                 // 참가자가 없으면 빈 배열이라 '나' 만 남는다. 갈래를 나눌 것이 없다.
-                self.participantTupleArray = [("나", true)] + chosenTravel.participants.map { ($0, true) }
+                self.participantTupleArray = [(Travel.selfParticipantName, true)] + chosenTravel.participants.map { ($0, true) }
                 var expenseArray: [Expense] = []
                 if let expenseArrayOfChosenTravel = chosenTravel.expenseArray {
                     expenseArray = expenseArrayOfChosenTravel.allObjects as? [Expense] ?? []
                 }
                 self.otherCountryCandidateArray = Array(Set(expenseArray.map { Int($0.country) })).sorted()
             } else {
-                self.participantTupleArray = [("나", true)]
+                self.participantTupleArray = [(Travel.selfParticipantName, true)]
                 self.otherCountryCandidateArray = []
             }
         }
