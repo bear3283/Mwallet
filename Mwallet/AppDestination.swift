@@ -24,8 +24,28 @@
 //    · XCUITest 로 실제 눌러 확인
 //        → 이 환경에서는 Springboard 요소를 하나도 읽지 못한다
 //
+//  다섯째 갈래도 뒤에 시험해 보았다 — AppShortcutsProvider(iOS 16+).
+//  위 넷과 달리 UIKit 델리게이트를 거치지 않아 SwiftUI 가 가로챌 자리가
+//  없으니 이번에는 되리라 보았는데, 홈 화면 메뉴는 그 길로도 오지 않는다.
+//
+//    · AppShortcutsProvider + openAppWhenRun 인텐트
+//        → Metadata.appintents 에 autoShortcuts 로 제대로 실린다.
+//          그런데 SpringBoard 의 보관함은 그대로 비어 있다:
+//
+//              SpringBoard[AppShortcuts] com.bear3745.Mwallet.app:
+//              there are 0 application shortcut items.
+//
+//          홈 화면 메뉴를 채우는 것은 SBApplicationShortcutStore 이고,
+//          그 store 는 UIApplicationShortcutItems 계열에서만 채워진다.
+//          App Shortcuts 는 Shortcuts·Siri 쪽(BackgroundShortcutRunner 가
+//          group.is.workflow.shortcuts 를 여는 것이 로그에 보인다)으로 갈 뿐,
+//          두 곳은 서로 다른 보관함이다.
+//          덧붙여 phrases 가 0개로 뽑혀 음성 호출도 서지 않았다
+//          (AppShortcuts.xcstrings 를 두어도 그대로였다).
+//
 //  메뉴에 보이는데 눌러도 아무 일이 없는 편이 아예 없는 것보다 나쁘다.
-//  그래서 넣지 않았다. 다시 손댈 사람은 위 네 갈래를 다시 파지 말 것.
+//  그래서 넣지 않았다. 다시 손댈 사람은 위 다섯 갈래를 다시 파지 말 것.
+//  (다섯째의 실제 코드는 feature/app-shortcuts 가지의 첫 커밋에 남아 있다)
 //  ─────────────────────────────────────────────────────────────
 //
 
