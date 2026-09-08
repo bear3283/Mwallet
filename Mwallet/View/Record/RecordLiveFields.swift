@@ -46,6 +46,11 @@ struct RecordLiveFields: View {
                     Text("결제 내역")
                         .foregroundStyle(.gray400)
                         .font(.subhead2_2)
+                        // 언어마다 길이가 다르다. 포르투갈어 'Forma de pagamento' 는
+                        // 한국어 '결제 방식' 의 세 배라 네 줄로 접혔다. 칸 너비는
+                        // 숨겨 둔 '결제 내역' 이 정하므로, 넘치는 언어는 줄인다.
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 16)
                 }
@@ -96,6 +101,11 @@ struct RecordLiveFields: View {
                     Text("결제 내역")
                         .foregroundStyle(.gray400)
                         .font(.subhead2_2)
+                        // 언어마다 길이가 다르다. 포르투갈어 'Forma de pagamento' 는
+                        // 한국어 '결제 방식' 의 세 배라 네 줄로 접혔다. 칸 너비는
+                        // 숨겨 둔 '결제 내역' 이 정하므로, 넘치는 언어는 줄인다.
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 16)
                         .hidden()
@@ -103,6 +113,11 @@ struct RecordLiveFields: View {
                     Text("결제 금액")
                         .foregroundStyle(.gray400)
                         .font(.subhead2_2)
+                        // 언어마다 길이가 다르다. 포르투갈어 'Forma de pagamento' 는
+                        // 한국어 '결제 방식' 의 세 배라 네 줄로 접혔다. 칸 너비는
+                        // 숨겨 둔 '결제 내역' 이 정하므로, 넘치는 언어는 줄인다.
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 16)
                 }
@@ -156,6 +171,11 @@ struct RecordLiveFields: View {
                     Text("결제 내역")
                         .foregroundStyle(.gray400)
                         .font(.subhead2_2)
+                        // 언어마다 길이가 다르다. 포르투갈어 'Forma de pagamento' 는
+                        // 한국어 '결제 방식' 의 세 배라 네 줄로 접혔다. 칸 너비는
+                        // 숨겨 둔 '결제 내역' 이 정하므로, 넘치는 언어는 줄인다.
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 16)
                         .hidden()
@@ -163,6 +183,11 @@ struct RecordLiveFields: View {
                     Text("결제 방식")
                         .foregroundStyle(.gray400)
                         .font(.subhead2_2)
+                        // 언어마다 길이가 다르다. 포르투갈어 'Forma de pagamento' 는
+                        // 한국어 '결제 방식' 의 세 배라 네 줄로 접혔다. 칸 너비는
+                        // 숨겨 둔 '결제 내역' 이 정하므로, 넘치는 언어는 줄인다.
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 16)
                 }

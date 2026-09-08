@@ -36,6 +36,12 @@ struct RecordLayout {
                                       tabBarInset: 18 + 83)
 
     /// 375×667(4.7인치)만 좁은 쪽을 쓴다. 그 밖에는 넉넉한 쪽이다.
+    ///
+    /// @MainActor 를 붙이는 까닭은 UIScreen.main 이 메인 액터에 묶여 있어서다.
+    /// 붙이지 않으면 Swift 6 이 '격리 밖에서 읽는다' 고 경고하는데, 그 경고를
+    /// 두면 언젠가 메인이 아닌 곳에서 불러 앱이 죽는다 — 오디오 탭에서 겪은
+    /// 것과 같은 종류다. 부르는 곳은 화면 하나뿐이고 그쪽은 이미 메인이다.
+    @MainActor
     static var forCurrentScreen: RecordLayout {
         let size = UIScreen.main.bounds.size
         let isCompact = abs(size.width - 375) < 2 && abs(size.height - 667) < 2

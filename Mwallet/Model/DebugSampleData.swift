@@ -21,6 +21,14 @@ import Foundation
 @MainActor
 enum DebugSampleData {
 
+    // 여행 이름은 번역 대상이다. DEBUG 데이터인데 왜 그러느냐면, 스토어에
+    // 거는 화면이 이 데이터로 찍히기 때문이다(fastlane store_screenshots).
+    // 독일어 화면에서 법문·분류·금액은 다 독일어인데 헤더의 제목만 한국어면,
+    // 사람 눈에 가장 먼저 들어오는 자리가 '번역이 덜 된 앱' 이라고 말한다.
+    //
+    // 상호명(45건)은 그대로 둔다. 작게 나오기도 하고, 실제 사용자도 그 나라
+    // 말로 적으므로 섞여 있는 편이 오히려 자연스럽다.
+
     struct Stop {
         let merchant: String
         let amount: Double
@@ -63,7 +71,7 @@ enum DebugSampleData {
     /// 것을 고르는 규칙이 있어, 위젯으로 담은 것이 이리로 온다 — 원화가
     /// 아닌 통화를 물려받는 길을 눈으로 볼 수 있다.
     static let cebu = Sample(
-        name: "예시: 세부 의료봉사",
+        name: String(localized: "예시: 세부 의료봉사"),
         country: "Philippine", currency: "PHP", timeZone: "Asia/Manila",
         startDaysAgo: 3, endDaysAgo: -2,
         companions: ["민서", "재현", "간사님"],
@@ -105,7 +113,7 @@ enum DebugSampleData {
 
     /// 예산을 조금 넘긴 여행. 넘긴 상태의 색과 문구를 보려면 하나는 넘겨야 한다.
     static let taipei = Sample(
-        name: "예시: 타이베이 청년집회",
+        name: String(localized: "예시: 타이베이 청년집회"),
         country: "Taiwan", currency: "TWD", timeZone: "Asia/Taipei",
         startDaysAgo: 45, endDaysAgo: 41,
         companions: ["지연", "현우"],
@@ -137,7 +145,7 @@ enum DebugSampleData {
 
     /// 지난해 가을. 엔은 원화와 자릿수가 가까워, 환산이 끼어도 눈에 덜 띄는 쪽이다.
     static let osaka = Sample(
-        name: "예시: 오사카 교회방문",
+        name: String(localized: "예시: 오사카 교회방문"),
         country: "Japan", currency: "JPY", timeZone: "Asia/Tokyo",
         startDaysAgo: 330, endDaysAgo: 327,
         companions: ["수아"],
@@ -169,7 +177,7 @@ enum DebugSampleData {
 
     /// 지난해 겨울. 동(VND)은 자릿수가 커서 금액 칸이 밀리지 않는지 보기 좋다.
     static let hochiminh = Sample(
-        name: "예시: 호치민 건축봉사",
+        name: String(localized: "예시: 호치민 건축봉사"),
         country: "Vietnam", currency: "VND", timeZone: "Asia/Ho_Chi_Minh",
         startDaysAgo: 250, endDaysAgo: 242,
         companions: ["재현", "예은", "간사님"],
@@ -202,7 +210,7 @@ enum DebugSampleData {
     /// 재작년 겨울. 유로는 1 단위가 원화로 가장 큰 통화라, 적은 숫자가 큰
     /// 합계가 되는 쪽을 본다.
     static let frankfurt = Sample(
-        name: "예시: 프랑크푸르트 선교대회",
+        name: String(localized: "예시: 프랑크푸르트 선교대회"),
         country: "Germany", currency: "EUR", timeZone: "Europe/Berlin",
         startDaysAgo: 620, endDaysAgo: 614,
         companions: ["현우", "간사님"],
@@ -234,7 +242,7 @@ enum DebugSampleData {
 
     /// 가장 오래된 여행이라 시트에서 아래쪽 연도 묶음을 채운다.
     static let hongkong = Sample(
-        name: "예시: 홍콩 청년수련회",
+        name: String(localized: "예시: 홍콩 청년수련회"),
         country: "Hongkong", currency: "HKD", timeZone: "Asia/Hong_Kong",
         startDaysAgo: 800, endDaysAgo: 796,
         companions: ["지연", "예은"],

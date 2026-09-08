@@ -109,3 +109,6 @@ AuthKey_*.p8
 
 # --- macOS ---
 .DS_Store
+
+# 스토어 화면은 찍어 내는 산출물이다. 언어마다 넉 장씩 44장이 나온다.
+fastlane/screenshots/
