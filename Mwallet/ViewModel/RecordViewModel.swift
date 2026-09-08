@@ -172,6 +172,14 @@ final class RecordViewModel: ObservableObject {
     private var speechRecognizer = SpeechLocale.makeRecognizer()
     private var recognitionTask: SFSpeechRecognitionTask?
 
+    /// 소리를 아직 받고 있는지.
+    ///
+    /// '손을 뗐는가' 와 '인식이 끝났는가' 는 서로 다른 일이다. 말하다 잠깐
+    /// 쉬면 인식기가 그 자리에서 끝내 버리므로(isFinal), 손을 떼기 전에도
+    /// 인식은 끝날 수 있다. 그 둘을 한 값으로 세면 녹음 중에 오디오를
+    /// 내려 버리게 된다 — 그것이 누른 채로 크래시가 나던 까닭이다.
+    private var isCapturingAudio = false
+
     /// 마지막 인식 결과를 기다리는 쪽을 깨울 손잡이.
     ///
     /// 손을 뗀 뒤 화면이 여기서 기다린다. 인식이 끝났다는 신호(result.isFinal)나
@@ -280,7 +288,11 @@ final class RecordViewModel: ObservableObject {
         
         // 인식기가 없으면(지원하지 않는 지역 설정) 아래 recognitionTask 가 조용히
         // nil 이 되어 녹음만 돌고 받아쓰기는 아무 일도 하지 않는다. 먼저 막는다.
+        //
+        // 여기서 그냥 돌아가면 방금 켠 오디오 세션이 켜진 채로 남는다.
+        // 다른 앱의 소리를 눌러 둔(duckOthers) 상태라 그대로 두면 안 된다.
         guard let speechRecognizer, speechRecognizer.isAvailable else {
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
             throw RecordError.speechRecognizerUnavailable
         }
 
@@ -305,6 +317,7 @@ final class RecordViewModel: ObservableObject {
 
         audioEngine.prepare()
         try audioEngine.start()
+        isCapturingAudio = true
 
         // 인식 결과는 임의의 큐로 온다. 화면 상태는 메인으로 넘겨서 바꾼다.
         recognitionTask = speechRecognizer.recognitionTask(with: request) { [weak self] result, error in
@@ -327,7 +340,7 @@ final class RecordViewModel: ObservableObject {
         }
     }
     
-    /// 소리 받기를 멈추고 마지막 결과를 청한다.
+    /// 소리 받기를 멈추고 마지막 결과를 청한다. 손을 뗐을 때 부른다.
     ///
     /// 예전에는 여기서 recognitionTask 까지 놓아 버렸다. 그러면 아직 오는 중인
     /// 마지막 한 마디가 갈 곳을 잃고, isFinal 신호도 영영 오지 않는다. 그래서
@@ -336,11 +349,24 @@ final class RecordViewModel: ObservableObject {
     ///
     /// 이제 endAudio() 로 '더 넣을 소리는 없다' 만 알리고 작업은 살려 둔다.
     /// 놓는 것은 마지막 결과가 온 뒤(finishRecognition)다.
+    ///
+    /// **오디오를 내리는 자리는 여기 하나뿐이다.** 인식이 끝났다는 신호를
+    /// 받는 쪽에서 같이 내리면, 말하다 쉬어 인식이 먼저 끝난 순간에 아직
+    /// 누르고 있는 마이크를 꺼 버린다.
     func stopSTT() {
-        guard recognitionTask != nil else { return }
+        guard isCapturingAudio else { return }
+        isCapturingAudio = false
+
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
         recognitionRequest?.endAudio()
+
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            Logger.record.error("오디오 세션 해제 실패: \(error.localizedDescription, privacy: .public)")
+        }
     }
 
     /// 마지막 인식 결과가 오기를 기다린다.
@@ -350,6 +376,12 @@ final class RecordViewModel: ObservableObject {
     /// 멈춰 있는다 — 0.4초를 세던 예전보다 나쁘다.
     func awaitFinalTranscription(timeout: TimeInterval = 1.5) async {
         guard recognitionTask != nil else { return }
+
+        // 빠르게 두 번 누르면 앞의 기다림이 아직 살아 있을 수 있다. 손잡이를
+        // 덮어쓰면 앞의 것은 영영 깨어나지 못해 그 화면이 멈춘다. 먼저 깨운다.
+        finalResultContinuation?.resume()
+        finalResultContinuation = nil
+
         await withCheckedContinuation { continuation in
             finalResultContinuation = continuation
             Task { @MainActor [weak self] in
@@ -373,19 +405,14 @@ final class RecordViewModel: ObservableObject {
             Logger.record.notice("인식 종료 — \(reason, privacy: .public)")
         }
 
+        // 인식 자원만 놓는다. 오디오는 stopSTT 가 내린다 — 여기서 함께 내리면
+        // 아직 누르고 있는 중에 마이크가 꺼진다.
         recognitionRequest = nil
         recognitionTask = nil
 
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-        } catch {
-            Logger.record.error("오디오 세션 해제 실패: \(error.localizedDescription, privacy: .public)")
-        }
-
         continuation?.resume()
     }
-    
+
     func startRecording() async {
         // 지출 기록에는 결제 위치가 함께 저장된다. 사용자가 녹음을 시작한
         // 이 시점이 위치 권한을 요청할 맥락이다. (이미 준비됐으면 무시된다)
