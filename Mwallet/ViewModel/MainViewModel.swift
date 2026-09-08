@@ -38,6 +38,13 @@ class MainViewModel: ObservableObject {
         }
     }
     @Published var chosenTravelInManualRecord: Travel?
+
+    /// 밖에서 '직접 기록' 화면까지 열어 달라고 들어온 요청.
+    ///
+    /// 큰 위젯의 ＋ 칸이 이 길로 온다. 직접 기록 화면은 RecordView 가 제
+    /// 뷰모델로 들고 있어 밖에서 곧장 열 수 없다. 여기에 신호를 두면
+    /// 그 화면이 보고 열고, 열면서 도로 내린다.
+    @Published var opensManualEntry = false
     
     private init() {
         selectedTravelInExpense = findInitialTravelInExpense()

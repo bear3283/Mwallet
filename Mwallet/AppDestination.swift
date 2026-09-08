@@ -62,4 +62,15 @@ enum AppDestination: CaseIterable {
         default: return nil
         }
     }
+
+    /// 탭을 연 뒤 직접 기록 화면까지 열어야 하는 링크인지. `mwallet://record/manual`
+    ///
+    /// 이것을 AppDestination 의 다섯째 case 로 두지 않았다. 이 열거형이 답하는
+    /// 것은 '어느 탭인가' 하나이고, 네 곳이 서로 다른 탭을 가리키는 것을 시험이
+    /// 지키고 있다. 직접 기록은 탭이 아니라 그 탭 위에 얹히는 화면이라, 같은
+    /// 물음의 답이 아니다.
+    static func opensManualEntry(_ url: URL) -> Bool {
+        guard url.scheme == "mwallet", url.host == "record" else { return false }
+        return url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) == "manual"
+    }
 }

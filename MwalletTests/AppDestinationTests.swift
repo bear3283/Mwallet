@@ -37,6 +37,26 @@ final class AppDestinationTests: XCTestCase {
                        MainViewModel.Tab.ledger)
     }
 
+    // 큰 위젯의 ＋ 칸이 오는 길. 탭만 여는 링크와 갈라져야 한다.
+    func test_직접_기록_링크는_기록_탭을_열고_한_겹_더_연다() throws {
+        let manual = try url("mwallet://record/manual")
+
+        XCTAssertEqual(AppDestination(deepLink: manual)?.tab, MainViewModel.Tab.record,
+                       "직접 기록도 기록 탭 위에 얹힌다")
+        XCTAssertTrue(AppDestination.opensManualEntry(manual))
+    }
+
+    func test_그냥_기록_링크는_직접_기록까지_열지_않는다() throws {
+        XCTAssertFalse(AppDestination.opensManualEntry(try url("mwallet://record")))
+        XCTAssertFalse(AppDestination.opensManualEntry(try url("mwallet://record/")))
+    }
+
+    // 남의 링크로는 직접 기록이 열리지 않아야 한다.
+    func test_다른_링크는_직접_기록을_열지_않는다() throws {
+        XCTAssertFalse(AppDestination.opensManualEntry(try url("mwallet://receipt/manual")))
+        XCTAssertFalse(AppDestination.opensManualEntry(try url("https://record/manual")))
+    }
+
     func test_남의_링크는_받지_않는다() throws {
         XCTAssertNil(AppDestination(deepLink: try url("https://record")))
         XCTAssertNil(AppDestination(deepLink: try url("mwallet://없는곳")))

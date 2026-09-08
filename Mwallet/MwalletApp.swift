@@ -37,5 +37,9 @@ struct MwalletApp: App {
     private func handleDeepLink(_ url: URL) {
         guard let destination = AppDestination(deepLink: url) else { return }
         MainViewModel.shared.selection = destination.tab
+        // 탭만 여는 링크와, 그 위에 직접 기록까지 여는 링크가 있다.
+        if AppDestination.opensManualEntry(url) {
+            MainViewModel.shared.opensManualEntry = true
+        }
     }
 }
