@@ -8,4 +8,16 @@
 //  Configuration settings file format documentation can be found at:
 //  https://help.apple.com/xcode/#/dev745c5c974
 
+// ── 둘 중 하나만 채우면 됩니다 ──────────────────────────────
+//
+// 중계(프록시)를 세웠다면 주소만 적으세요. 키는 앱에 싣지 않습니다.
+// 세우는 법은 docs/exchange-rate-proxy/README.md 에 있습니다.
+//
+//   EXCHANGE_RATE_ENDPOINT = https:/$()/mwallet-rates.<계정>.workers.dev
+//
+// (xcconfig 는 // 를 주석으로 보므로 주소의 // 를 위처럼 끊어 적습니다)
+//
+// 중계 없이 개발만 할 때는 키를 직접 적으세요. 이때는 키가 앱에 실립니다.
+
+EXCHANGE_RATE_ENDPOINT =
 API_KEY = YOUR_EXCHANGERATE_API_KEY_HERE

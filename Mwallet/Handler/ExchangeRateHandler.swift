@@ -120,6 +120,44 @@ final class ExchangeRateHandler: @unchecked Sendable {
         UserDefaults.standard.set(now.timeIntervalSince1970, forKey: lastAttemptKey)
     }
 
+    // MARK: - 어디로 물어보는가
+
+    /// 중계 주소. 있으면 이리로 묻고 키는 싣지 않는다.
+    static var proxyEndpoint: String? {
+        let value = (Bundle.main.infoDictionary?["EXCHANGE_RATE_ENDPOINT"] as? String)?
+            .trimmingCharacters(in: .whitespaces)
+        return (value?.isEmpty == false) ? value : nil
+    }
+
+    static var apiKey: String? {
+        let value = (Bundle.main.infoDictionary?["API_KEY"] as? String)?
+            .trimmingCharacters(in: .whitespaces)
+        return (value?.isEmpty == false) ? value : nil
+    }
+
+    /// 환율을 물어볼 주소.
+    ///
+    /// 중계(프록시)가 설정돼 있으면 그리로 간다. 그 편이 두 가지에서 낫다.
+    ///
+    ///   * 키가 앱에 실리지 않는다. 지금은 Info.plist 에 그대로 들어가
+    ///     IPA 를 열면 꺼낼 수 있다.
+    ///   * 중계가 하루치 답을 담아 두었다가 모두에게 나눠 준다. 지금은
+    ///     사용자마다 제 몫의 요청을 써서, 무료 요금제라면 사용자 스물몇
+    ///     명에서 한도가 찬다.
+    ///
+    /// 중계가 없으면 예전처럼 키로 직접 부른다. 아직 중계를 세우지 않은
+    /// 개발 기기에서도 그대로 돌아야 하기 때문이다.
+    static func requestURL(baseCode: String,
+                           endpoint: String? = proxyEndpoint,
+                           key: String? = apiKey) -> URL? {
+        if let endpoint {
+            let trimmed = endpoint.hasSuffix("/") ? String(endpoint.dropLast()) : endpoint
+            return URL(string: "\(trimmed)/latest/\(baseCode)")
+        }
+        guard let key else { return nil }
+        return URL(string: "https://v6.exchangerate-api.com/v6/\(key)/latest/\(baseCode)")
+    }
+
     func fetchAndSaveExchangeRates() {
         // 여러 화면의 onAppear가 겹쳐 같은 요청이 중복으로 나가는 것을 막는다.
         lock.lock()
@@ -130,12 +168,8 @@ final class ExchangeRateHandler: @unchecked Sendable {
         isFetching = true
         lock.unlock()
 
-        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
-            endFetching()
-            return
-        }
-        let baseCode = "KRW"
-        guard let url = URL(string: "https://v6.exchangerate-api.com/v6/\(apiKey)/latest/\(baseCode)") else {
+        guard let url = Self.requestURL(baseCode: "KRW") else {
+            Logger.exchangeRate.error("환율을 부를 주소를 만들지 못했습니다 — 중계 주소도 키도 없습니다")
             endFetching()
             return
         }
