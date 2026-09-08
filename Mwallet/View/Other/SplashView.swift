@@ -37,21 +37,21 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
                 VStack(spacing: 28) {
-                    // 획이 그어지며 W 가 완성된다. 기록을 남기는 동작을 그대로 옮긴 움직임이다.
-                    // 앱 아이콘과 같은 글자꼴이라 아이콘을 누른 손이 그대로 이어진다.
+                    // 획이 그어지며 M 이 완성된다. 기록을 남기는 동작을 그대로 옮긴 움직임이다.
+                    // 앱 아이콘과 같은 글자라 아이콘을 누른 손이 그대로 이어진다.
                     BrandMarkView(progress: markProgress)
                         .frame(width: 150, height: 150)
 
-                    // 마크는 W 인데 이름은 'Mission Wallet' 이다. 어긋난 것이 아니라
-                    // 읽는 사람이 둘이기 때문이다.
+                    // 마크의 M 과 이름의 Mission 이 같은 글자를 가리킨다.
                     //
                     // 단기사역을 가는 사람에게 Mission 은 그대로 '선교' 다.
                     // 그렇지 않은 사람에게는 퀘스트에 가깝다 — 이 앱이 건네는
                     // 미션(오늘 쓴 것을 남겨라)을 해내는 지갑이다. 한 낱말이
                     // 두 사람에게 각각 맞는 뜻으로 읽힌다.
                     //
-                    // 마크에 M 이 아니라 W 를 앞세운 것도 같은 이유다. 그림은
-                    // 설명 없이 '지갑' 만 전하고, 뜻은 이름이 진다.
+                    // 아이콘에서는 지갑 그림이 '무엇을 담는 것인가' 를 말하고
+                    // M 이 그 위에 이름을 얹는다. 여기서는 그릴 자리가 넉넉해
+                    // 글자만 크게 세우고, 지갑이라는 뜻은 이름이 진다.
                     Text("Mission Wallet")
                         .font(.custom(FontsManager.WantedSans.semiBold, fixedSize: 18))
                         .foregroundStyle(.white)
