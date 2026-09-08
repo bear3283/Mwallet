@@ -233,38 +233,29 @@ struct RecordView: View {
                     isDetectingPress_letButtonBigger = false
                     viewModel.stopSTT()
                     viewModel.stopRecording()
-                    // 0.4초를 기다리는 것은 아직 오는 중인 인식 결과 때문이다.
+
+                    // 예전에는 여기서 0.4초를 셌다. 인식 결과가 비동기로 오는데
+                    // 손을 뗀 그 순간에 읽으면 마지막 한 마디가 아직 도착하지
+                    // 않아, 말을 했는데도 '아무것도 못 알아들었다' 가 됐다.
                     //
-                    // 음성 인식은 결과를 비동기로 흘려 보내고, 받은 문장은
-                    // voiceSentence 의 didSet 에서 다시 한 번 메인 큐로 미뤄져
-                    // 내역·금액으로 나뉜다. 손을 뗀 그 순간에 읽으면 마지막
-                    // 한 마디가 아직 도착하지 않아, 말을 했는데도 '아무것도
-                    // 못 알아들었다' 로 잘못 판단한다.
-                    //
-                    // 제대로 고치려면 시간이 아니라 인식이 끝났다는 신호
-                    // (result.isFinal)를 기다려야 한다. 지금은 stopSTT 가
-                    // 작업을 취소해 그 신호가 오지 않으므로, endAudio 로
-                    // 바꿔 마지막 결과를 받고 판단하는 구조가 되어야 한다.
-                    //
-                    // 그 길은 실기기 마이크가 있어야 확인할 수 있어 남겨 둔다.
-                    // 눈감고 바꾸면 이 앱의 핵심인 '말해서 기록하기' 가
-                    // 조용히 어긋난다.
-                    if Double(viewModel.endRecordTime - viewModel.startRecordTime) < 1.5 {
-                        DispatchQueue.main.async {
+                    // 시간을 세는 대신 인식이 끝났다는 신호를 기다린다.
+                    // 짧게 말하면 짧게, 길게 말하면 그만큼 기다린다.
+                    Task { @MainActor in
+                        await viewModel.awaitFinalTranscription()
+
+                        let pressed = Double(viewModel.endRecordTime - viewModel.startRecordTime)
+                        switch RecordOutcome.decide(pressedSeconds: pressed,
+                                                    info: viewModel.info,
+                                                    payAmount: viewModel.payAmount) {
+                        case .tooShort:
                             viewModel.alertView_shortIsShown = true
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                             viewModel.resetInStringProperties()
-                        }
-                    } else {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                            if viewModel.info == nil && viewModel.payAmount == -1 {
-                                viewModel.resetTranscribedString()
-                                viewModel.alertView_emptyIsShown = true
-                                viewModel.resetInStringProperties()
-                            } else {
-                                viewModel.manualRecordViewIsShown = true
-                            }
+                        case .nothingHeard:
+                            viewModel.resetTranscribedString()
+                            viewModel.alertView_emptyIsShown = true
+                            viewModel.resetInStringProperties()
+                        case .proceed:
+                            viewModel.manualRecordViewIsShown = true
                         }
                     }
                 } else {

@@ -171,6 +171,12 @@ final class RecordViewModel: ObservableObject {
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var speechRecognizer = SpeechLocale.makeRecognizer()
     private var recognitionTask: SFSpeechRecognitionTask?
+
+    /// 마지막 인식 결과를 기다리는 쪽을 깨울 손잡이.
+    ///
+    /// 손을 뗀 뒤 화면이 여기서 기다린다. 인식이 끝났다는 신호(result.isFinal)나
+    /// 오류가 오면 깨우고, 둘 다 안 오면 시간 제한이 깨운다.
+    private var finalResultContinuation: CheckedContinuation<Void, Never>?
     
     // record
     private var audioRecorder: AVAudioRecorder?
@@ -306,33 +312,78 @@ final class RecordViewModel: ObservableObject {
 
             if let result {
                 let transcribed = result.bestTranscription.formattedString
+                let isFinal = result.isFinal
                 Task { @MainActor in
                     self.updateVoiceSentence(with: transcribed)
+                    // 마지막 결과다. 기다리던 쪽을 이제 깨운다.
+                    if isFinal { self.finishRecognition(reason: "isFinal") }
                 }
             }
             if error != nil {
                 Task { @MainActor in
-                    self.stopSTT()
+                    self.finishRecognition(reason: "error")
                 }
             }
         }
     }
     
+    /// 소리 받기를 멈추고 마지막 결과를 청한다.
+    ///
+    /// 예전에는 여기서 recognitionTask 까지 놓아 버렸다. 그러면 아직 오는 중인
+    /// 마지막 한 마디가 갈 곳을 잃고, isFinal 신호도 영영 오지 않는다. 그래서
+    /// 화면이 0.4초를 세어 보고 '이쯤이면 왔겠지' 하고 읽었다 — 짧게 말하면
+    /// 맞고 길게 말하면 틀리는 셈이었다.
+    ///
+    /// 이제 endAudio() 로 '더 넣을 소리는 없다' 만 알리고 작업은 살려 둔다.
+    /// 놓는 것은 마지막 결과가 온 뒤(finishRecognition)다.
     func stopSTT() {
-        if recognitionTask != nil { // startSTT() 동작이 끝난 경우에 stopSTT() 동작
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            audioEngine.inputNode.removeTap(onBus: 0)
-            recognitionRequest = nil
-            recognitionTask = nil
-            
-            let audioSession = AVAudioSession.sharedInstance()
-            do {
-                try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-            } catch {
-                Logger.record.error("오디오 세션 해제 실패: \(error.localizedDescription, privacy: .public)")
+        guard recognitionTask != nil else { return }
+        audioEngine.stop()
+        audioEngine.inputNode.removeTap(onBus: 0)
+        recognitionRequest?.endAudio()
+    }
+
+    /// 마지막 인식 결과가 오기를 기다린다.
+    ///
+    /// 시간 제한을 두는 까닭은 인식이 기기 밖(네트워크)에서 돌 수 있어서다.
+    /// 신호가 영영 안 오는 자리에서 무작정 기다리면, 손을 떼고도 화면이
+    /// 멈춰 있는다 — 0.4초를 세던 예전보다 나쁘다.
+    func awaitFinalTranscription(timeout: TimeInterval = 1.5) async {
+        guard recognitionTask != nil else { return }
+        await withCheckedContinuation { continuation in
+            finalResultContinuation = continuation
+            Task { @MainActor [weak self] in
+                try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+                // 이미 깨웠으면 손잡이가 비어 있어 아무 일도 하지 않는다.
+                self?.finishRecognition(reason: "timeout")
             }
         }
+    }
+
+    /// 기다리던 쪽을 깨우고 인식 자원을 놓는다. 두 번 불러도 한 번만 듣는다.
+    ///
+    /// reason 을 남기는 까닭은 이 길이 기기에서만 도는 길이어서다. 신호를
+    /// 받아 끝난 것인지 시간 제한에 걸린 것인지 로그로 갈라 보지 않으면,
+    /// 고친 뒤에도 예전처럼 시간에 기대고 있는지 알 수 없다.
+    @MainActor
+    private func finishRecognition(reason: String) {
+        let continuation = finalResultContinuation
+        finalResultContinuation = nil
+        if continuation != nil {
+            Logger.record.notice("인식 종료 — \(reason, privacy: .public)")
+        }
+
+        recognitionRequest = nil
+        recognitionTask = nil
+
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            Logger.record.error("오디오 세션 해제 실패: \(error.localizedDescription, privacy: .public)")
+        }
+
+        continuation?.resume()
     }
     
     func startRecording() async {
