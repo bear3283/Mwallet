@@ -226,3 +226,17 @@ extension Expense {
         set { participantArray = newValue as NSArray }
     }
 }
+
+// MARK: - 여행에 매인 환율 (통화 코드로 묻기)
+
+extension TravelExchangeRate {
+
+    /// 이 여행이 이 통화로 처음 쓴 환율. 통화 코드로 묻는다.
+    ///
+    /// 코드를 번호로 푸는 표(ExpenseCode)가 앱 타깃에만 있어 여기에 둔다.
+    /// 셈 자체는 Shared 의 것을 그대로 쓴다 — 위젯과 규칙이 갈리면 안 된다.
+    static func anchoredRate(for travel: Travel?, currencyCode: String) -> Double? {
+        guard currencyCode != ExpenseCode.baseCurrency else { return 1 }
+        return anchoredRate(for: travel, currency: ExpenseCode.currencyIndex(for: currencyCode))
+    }
+}
