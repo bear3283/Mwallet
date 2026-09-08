@@ -31,10 +31,17 @@ struct RecordSentenceArea: View {
             Group {
                 if (!isPressing && viewModel.voiceSentence == "") || (!viewModel.AreThereOtherTravels && !viewModel.isExplicitTempRecord) {
                     VStack(spacing: 16) {
-                        // 언어마다 길이가 달라서 — 한국어 열두 자가 영어로는 스물두 자다 —
-                        // 줄을 하나로 묶고 모자라면 글자를 줄인다. 두 줄로 접히면
-                        // 아래 예시 말풍선이 밀려 화면이 흔들린다.
-                        Text("한 문장이면 충분합니다")
+                        // 아래 세 칸이 채워지는 것을 미리 말한다. 설득하는 대신
+                        // 보여 주기로 넘기는 자리다 — 예시 말풍선과 세 칸이
+                        // 곧바로 그 약속을 증명한다.
+                        //
+                        // 예전에는 '한 문장이면 충분합니다' 였다. 묻지도 않은
+                        // 질문에 먼저 답하는 말이었고, 방법은 이미 화면 맨 아래가
+                        // '누르는 동안 말하기' 로 일러 주고 있었다.
+                        //
+                        // 언어마다 길이가 달라 줄을 하나로 묶고 모자라면 글자를
+                        // 줄인다. 두 줄로 접히면 아래 말풍선이 밀려 화면이 흔들린다.
+                        Text("말하면 알아서 나뉩니다")
                             .foregroundStyle(.gray400)
                             .font(.title4)
                             .lineLimit(1)
