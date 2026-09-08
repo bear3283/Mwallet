@@ -47,22 +47,77 @@ final class ExchangeRateHandler: @unchecked Sendable {
     private init() {}
 
     private let cacheKey = "SavedExchangeRates"
+    /// 마지막으로 받아 오기를 시도한 시각. 성공했든 실패했든 적는다.
+    private let lastAttemptKey = "ExchangeRate.lastAttemptAt"
     private let lock = NSLock()
     private var isFetching = false
+
+    /// 하루에 두 번까지 다시 물어본다.
+    ///
+    /// 여행 중에는 연결이 자주 끊긴다. 하루 한 번만 물어보면 그 한 번이
+    /// 비행기 안이었을 때 그날 내내 옛 환율로 적힌다.
+    static let recheckInterval: TimeInterval = 12 * 60 * 60
 
     // 갱신 진입점. 캐시가 만료되었을 때만 네트워크를 탄다.
     // 호출부마다 만료 판단을 중복 구현하지 않도록 이 메서드로 단일화한다.
     func refreshExchangeRatesIfNeeded() {
         guard needsRefresh() else { return }
+        markAttempt()
         fetchAndSaveExchangeRates()
     }
 
     // 캐시 만료 여부를 API가 내려준 절대 시각(time_next_update_unix)으로 판정한다.
     // 기기 로컬 캘린더로 "오늘 갱신분인가"를 따지면, API가 UTC 자정에 갱신되는 탓에
     // KST 기준 00~09시 구간에서 방금 받은 캐시도 만료로 오판해 매 실행마다 재요청이 나간다.
-    func needsRefresh(now: Date = Date()) -> Bool {
+    //
+    // ── 하루 두 번 ────────────────────────────────────────────────
+    //
+    // 캐시가 살아 있어도 열두 시간이 지났으면 한 번 더 물어본다.
+    //
+    // API 는 하루에 한 번만 갱신하므로(time_next_update_unix 를 재 보면 정확히
+    // 24시간이다) 두 번째 물음이 새 환율을 가져오지는 않는다. 그런데도 다시
+    // 묻는 까닭은 **첫 번째가 실패했을 수 있어서**다. 여행 중에는 연결이 자주
+    // 끊기고, 하루 한 번만 물어보면 그 한 번이 비행기 안이었을 때 그날 내내
+    // 옛 환율로 적힌다. 환율은 지출에 박아 저장되므로 그날 기록이 통째로
+    // 어긋난 채 남는다.
+    //
+    // 대신 '열두 시간마다 무조건' 은 아니다. 마지막 시도 시각을 적어 두고
+    // 그로부터 열두 시간이 지났을 때만 다시 묻는다. 앱을 하루에 스무 번 열어도
+    // 요청은 두 번을 넘지 않는다 — 무료 할당량을 쓰는 자리라 아껴야 한다.
+    /// - Parameters:
+    ///   - now: 지금 시각.
+    ///   - lastAttempt: 마지막으로 물어본 시각. 넘기지 않으면 저장된 값을 쓴다.
+    ///     시험이 이 자리를 넘겨 '열두 시간이 지난 상태' 를 만든다.
+    func needsRefresh(now: Date = Date(), lastAttempt: Date? = nil) -> Bool {
         guard let cached = loadExchangeRatesFromUserDefaults() else { return true }
-        return now >= cached.nextUpdateDate
+
+        // 캐시가 만료됐으면 두말할 것 없이 받아 온다.
+        if now >= cached.nextUpdateDate { return true }
+
+        // 아직 살아 있어도 열두 시간이 지났으면 한 번 더 물어본다.
+        //
+        // 물어본 적이 없으면 캐시를 받은 시각을 기준으로 삼는다. 그때가
+        // 마지막으로 성공한 순간이라 뜻이 같다.
+        let reference = lastAttempt
+            ?? lastAttemptDate
+            ?? Date(timeIntervalSince1970: TimeInterval(cached.time_last_update_unix))
+
+        // 기기 시계를 뒤로 돌린 경우. 미래에 물어본 것으로 남아 있으면 영영
+        // 다시 묻지 않게 되므로, 그때는 곧바로 다시 묻는다.
+        guard reference <= now else { return true }
+
+        return now >= reference.addingTimeInterval(Self.recheckInterval)
+    }
+
+    var lastAttemptDate: Date? {
+        let stamp = UserDefaults.standard.double(forKey: lastAttemptKey)
+        return stamp > 0 ? Date(timeIntervalSince1970: stamp) : nil
+    }
+
+    /// 물어본 사실을 적는다. 받아 오기에 실패해도 적는다 — 실패했다고 곧바로
+    /// 다시 물으면, 연결이 없는 동안 앱을 열 때마다 요청이 나간다.
+    private func markAttempt(now: Date = Date()) {
+        UserDefaults.standard.set(now.timeIntervalSince1970, forKey: lastAttemptKey)
     }
 
     func fetchAndSaveExchangeRates() {

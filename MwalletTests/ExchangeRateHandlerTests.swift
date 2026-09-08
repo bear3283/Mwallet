@@ -13,12 +13,17 @@ import XCTest
 final class ExchangeRateHandlerTests: XCTestCase {
 
     private let cacheKey = "SavedExchangeRates"
+    private let lastAttemptKey = "ExchangeRate.lastAttemptAt"
     private var savedCache: Data?
+    private var savedAttempt: Any?
 
     override func setUp() {
         super.setUp()
         // 실기기/시뮬레이터에 남아 있던 실제 캐시를 건드리지 않도록 보관해 둔다.
         savedCache = UserDefaults.standard.data(forKey: cacheKey)
+        savedAttempt = UserDefaults.standard.object(forKey: lastAttemptKey)
+        // 시도 기록이 남아 있으면 '다시 물을 때' 판정이 시험마다 달라진다.
+        UserDefaults.standard.removeObject(forKey: lastAttemptKey)
     }
 
     override func tearDown() {
@@ -26,6 +31,11 @@ final class ExchangeRateHandlerTests: XCTestCase {
             UserDefaults.standard.set(savedCache, forKey: cacheKey)
         } else {
             UserDefaults.standard.removeObject(forKey: cacheKey)
+        }
+        if let savedAttempt {
+            UserDefaults.standard.set(savedAttempt, forKey: lastAttemptKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: lastAttemptKey)
         }
         super.tearDown()
     }
@@ -62,14 +72,73 @@ final class ExchangeRateHandlerTests: XCTestCase {
     }
 
     // 구버전 캐시에는 time_next_update_unix 가 없다. 마지막 갱신 + 24시간으로 본다.
+    // 이 시험이 지키는 것은 '만료 시각' 이다. 하루 두 번 다시 묻는 규칙이
+    // 끼어들면 12시간에서 참이 되어 무엇을 재는지 흐려지므로, 방금 물어본
+    // 것으로 두어 다시 묻기를 잠재운다.
     func test_다음_갱신_시각이_없으면_마지막_갱신_24시간_뒤로_본다() {
         writeCache(rates: ["USD": 0.00075], lastUpdate: 1_000_000, nextUpdate: nil)
 
         let justBefore = Date(timeIntervalSince1970: 1_000_000 + 86_399)
         let justAfter = Date(timeIntervalSince1970: 1_000_000 + 86_401)
 
-        XCTAssertFalse(ExchangeRateHandler.shared.needsRefresh(now: justBefore))
-        XCTAssertTrue(ExchangeRateHandler.shared.needsRefresh(now: justAfter))
+        XCTAssertFalse(ExchangeRateHandler.shared.needsRefresh(now: justBefore,
+                                                              lastAttempt: justBefore))
+        XCTAssertTrue(ExchangeRateHandler.shared.needsRefresh(now: justAfter,
+                                                             lastAttempt: justAfter))
+    }
+
+    // MARK: - 하루 두 번 다시 묻기
+
+    // API 는 하루에 한 번만 갱신한다(캐시의 time_next_update_unix 를 재 보면
+    // 정확히 24시간이다). 그런데도 열두 시간 뒤에 한 번 더 묻는 까닭은 첫
+    // 번째가 실패했을 수 있어서다 — 여행 중에는 연결이 자주 끊기고, 그 한
+    // 번이 비행기 안이었으면 그날 기록이 통째로 옛 환율로 굳는다.
+    func test_열두_시간이_지나면_캐시가_살아_있어도_다시_묻는다() {
+        writeCache(rates: ["USD": 0.00075], lastUpdate: 1_000_000, nextUpdate: 1_086_400)
+        let attempt = Date(timeIntervalSince1970: 1_000_000)
+        let twelveHoursLater = attempt.addingTimeInterval(ExchangeRateHandler.recheckInterval)
+
+        XCTAssertTrue(ExchangeRateHandler.shared.needsRefresh(now: twelveHoursLater,
+                                                             lastAttempt: attempt))
+    }
+
+    // 앱을 하루에 스무 번 열어도 요청은 두 번을 넘지 않아야 한다.
+    // 무료 할당량을 쓰는 자리라 아껴야 한다.
+    func test_열두_시간_전에는_다시_묻지_않는다() {
+        writeCache(rates: ["USD": 0.00075], lastUpdate: 1_000_000, nextUpdate: 1_086_400)
+        let attempt = Date(timeIntervalSince1970: 1_000_000)
+        let elevenHours = attempt.addingTimeInterval(11 * 60 * 60)
+
+        XCTAssertFalse(ExchangeRateHandler.shared.needsRefresh(now: elevenHours,
+                                                              lastAttempt: attempt))
+    }
+
+    // 물어본 적이 없으면 캐시를 받은 시각을 기준으로 삼는다.
+    // 그때가 마지막으로 성공한 순간이라 뜻이 같다.
+    func test_물어본_기록이_없으면_캐시를_받은_시각을_기준으로_센다() {
+        writeCache(rates: ["USD": 0.00075], lastUpdate: 1_000_000, nextUpdate: 1_086_400)
+
+        let elevenHours = Date(timeIntervalSince1970: 1_000_000 + 11 * 3_600)
+        let thirteenHours = Date(timeIntervalSince1970: 1_000_000 + 13 * 3_600)
+
+        XCTAssertFalse(ExchangeRateHandler.shared.needsRefresh(now: elevenHours))
+        XCTAssertTrue(ExchangeRateHandler.shared.needsRefresh(now: thirteenHours))
+    }
+
+    // 기기 시계를 뒤로 돌린 경우. 미래에 물어본 것으로 남아 있으면 영영
+    // 다시 묻지 않게 된다.
+    func test_시계가_뒤로_가도_멈추지_않는다() {
+        writeCache(rates: ["USD": 0.00075], lastUpdate: 1_000_000, nextUpdate: 1_086_400)
+        let now = Date(timeIntervalSince1970: 1_010_000)
+        let futureAttempt = Date(timeIntervalSince1970: 1_080_000)
+
+        XCTAssertTrue(ExchangeRateHandler.shared.needsRefresh(now: now,
+                                                             lastAttempt: futureAttempt))
+    }
+
+    // 하루에 두 번이지 그 이상은 아니다.
+    func test_다시_묻는_사이는_열두_시간이다() {
+        XCTAssertEqual(ExchangeRateHandler.recheckInterval, 12 * 60 * 60)
     }
 
     // MARK: - 환산
