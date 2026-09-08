@@ -28,6 +28,27 @@ extension Travel {
     /// 화면에 적을 기본함 이름.
     static var defaultTravelDisplayName: String { String(localized: "임시 기록") }
 
+    /// 정산에서 '나' 를 가리키는 이름. **번역하지 않는다.**
+    ///
+    /// 이 값은 화면 글자처럼 보이지만 지출에 저장된다 — 함께 쓴 사람을 고르면
+    /// Expense.participantArray 에 이름 문자열로 들어가고, 정산은 그 문자열로
+    /// 사람을 묶는다. iCloud 로 다른 기기에도 그대로 건너간다.
+    ///
+    /// 기기 언어를 따라 바꾸면 언어를 바꾼 순간 예전 기록의 '나' 와 새 기록의
+    /// 'Me' 가 서로 다른 사람이 되어, 정산 화면에 내가 둘로 나뉘어 선다.
+    /// 화면에 적을 이름은 selfParticipantDisplayName 이다.
+    static let selfParticipantName = "나"
+
+    /// 화면에 적을 '나'.
+    static var selfParticipantDisplayName: String { String(localized: "나") }
+
+    /// 저장된 참여자 이름을 화면에 보일 이름으로. '나' 만 옮기고 나머지는 그대로.
+    ///
+    /// 다른 이름은 사용자가 손수 적은 것이라 건드리지 않는다.
+    static func participantDisplayName(_ stored: String) -> String {
+        stored == selfParticipantName ? selfParticipantDisplayName : stored
+    }
+
     /// isDefault 로 옮기기 전에 쓰던 이름. 이미 설치된 기기의 기록을 찾을 때만 쓴다.
     static let legacyDefaultName = "🧚🧚🧚🂥☮︎🂾⑃☣︎%>>#"
 

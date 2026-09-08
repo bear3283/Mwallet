@@ -57,7 +57,7 @@ struct TravelSettlementSection: View {
     private func row(for share: SettlementShare) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(share.name)
+                Text(share.displayName)
                     .font(.subhead2_1)
                     .foregroundStyle(.black)
                     .lineLimit(1)

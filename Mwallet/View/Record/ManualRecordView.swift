@@ -325,18 +325,17 @@ struct ParticipantToggleView: View {
                     .padding(.vertical, 6)
                     .hidden()
                 
-                HStack(spacing: 4) {
-                    if tuple.name == "나" {
-                        Text("me")
-                            .lineLimit(1)
-                            .foregroundStyle(tuple.isOn ? .gray200 : .gray300)
-                            .font(.subhead2_1)
-                    }
-                    Text(tuple.0)
-                        .lineLimit(1)
-                        .foregroundStyle(tuple.isOn ? .white : .gray300)
-                        .font(.subhead2_2)
-                }
+                // 이름은 저장되는 값이라 tuple 이 저장용을 들고 있다.
+                // 그리기 직전에만 기기 언어로 옮긴다.
+                //
+                // 예전에는 '나' 앞에 'me' 라는 작은 딱지를 덧붙였다. 이름이
+                // 기기 언어를 따르게 된 지금은 그 낱말이 곧 '나' 라서, 영어
+                // 기기에서 'me Me' 로 두 번 적히게 된다. 딱지를 걷었다 —
+                // 이 칩은 언제나 맨 앞에 서므로 자리만으로도 가려진다.
+                Text(Travel.participantDisplayName(tuple.name))
+                    .lineLimit(1)
+                    .foregroundStyle(tuple.isOn ? .white : .gray300)
+                    .font(.subhead2_2)
                 .padding(.vertical, 6)
                 .padding(.horizontal, 12)
             }

@@ -90,7 +90,7 @@ struct TravelDetailView: View {
     }
 
     private var participants: [String] {
-        ["나"] + travel.participants
+        [Travel.selfParticipantName] + travel.participants
     }
 
     // MARK: - 본문
