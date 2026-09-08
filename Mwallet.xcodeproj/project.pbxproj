@@ -147,6 +147,8 @@
 		RO000000000000000000C100 /* RecordOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = RO000000000000000000C000 /* RecordOutcome.swift */; };
 		SP0000000000000000000002 /* SpeechLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = SP0000000000000000000001 /* SpeechLocale.swift */; };
 		SR0000000000000000000002 /* SentenceRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = SR0000000000000000000001 /* SentenceRules.swift */; };
+		TE000000000000000000D100 /* TravelExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = TE000000000000000000D000 /* TravelExchangeRate.swift */; };
+		TE000000000000000000D200 /* TravelExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = TE000000000000000000D000 /* TravelExchangeRate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -331,6 +333,7 @@
 		RO000000000000000000C000 /* RecordOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordOutcome.swift; sourceTree = "<group>"; };
 		SP0000000000000000000001 /* SpeechLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechLocale.swift; sourceTree = "<group>"; };
 		SR0000000000000000000001 /* SentenceRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceRules.swift; sourceTree = "<group>"; };
+		TE000000000000000000D000 /* TravelExchangeRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TravelExchangeRate.swift; path = Shared/TravelExchangeRate.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -420,6 +423,7 @@
 				FA000000000000000000B000 /* StoreLocation.swift */,
 				FA000000000000000000D000 /* QuickExpenseStore.swift */,
 				FA000000000000000000E000 /* QuickPresetSuggester.swift */,
+				TE000000000000000000D000 /* TravelExchangeRate.swift */,
 				57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */,
 				578858262ADBBED5001B82FA /* Model */,
 				C17550562AD5518C00A61BE5 /* View */,
@@ -952,6 +956,7 @@
 				FA000000000000000000C100 /* StoreLocation.swift in Sources */,
 				FA000000000000000000D200 /* QuickExpenseStore.swift in Sources */,
 				FA000000000000000000E200 /* QuickPresetSuggester.swift in Sources */,
+				TE000000000000000000D200 /* TravelExchangeRate.swift in Sources */,
 				FA000000000000000000C000 /* Mwallet.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1084,6 +1089,7 @@
 				FA000000000000000000B100 /* StoreLocation.swift in Sources */,
 				FA000000000000000000D100 /* QuickExpenseStore.swift in Sources */,
 				FA000000000000000000E100 /* QuickPresetSuggester.swift in Sources */,
+				TE000000000000000000D100 /* TravelExchangeRate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

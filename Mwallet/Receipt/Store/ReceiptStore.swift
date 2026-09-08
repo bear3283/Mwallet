@@ -87,7 +87,7 @@ final class ReceiptStore {
 
         // 기록 시점의 상태를 스냅샷으로 남긴다.
         expense.timeZoneIdentifier = TimeZone.current.identifier
-        expense.exchangeRate = snapshotExchangeRate(for: draft.currency)
+        expense.exchangeRate = snapshotExchangeRate(for: draft.currency, travel: draft.travel)
 
         try context.save()
         return expense
@@ -105,7 +105,7 @@ final class ReceiptStore {
         // 환율도 마찬가지로, 통화가 그대로이고 이미 유효한 값이 있으면 보존한다.
         // 오타를 고쳤다고 해서 그날의 환율이 오늘 환율로 바뀌면 안 된다.
         if draft.currency != previousCurrency || previousRate == nil {
-            expense.exchangeRate = snapshotExchangeRate(for: draft.currency)
+            expense.exchangeRate = snapshotExchangeRate(for: draft.currency, travel: draft.travel)
         }
 
         try context.save()
@@ -128,7 +128,7 @@ final class ReceiptStore {
     // 오프라인에서 기록해 환율을 못 받은 건에 현재 환율을 채운다.
     // 그날의 환율이 아니라 지금 환율이므로, 화면에서 그 사실을 알리고 쓴다.
     func applyCurrentExchangeRate(to expense: Expense) throws {
-        expense.exchangeRate = snapshotExchangeRate(for: expense.currencyCode)
+        expense.exchangeRate = snapshotExchangeRate(for: expense.currencyCode, travel: expense.travel)
         try context.save()
     }
 
@@ -167,9 +167,15 @@ final class ReceiptStore {
     // 원화면 환산이 필요 없으므로 1 을 쓴다.
     // 조회에 실패하면 unknownExchangeRate 를 넣고, 화면과 통계는
     // amountInKRW 가 nil 임을 보고 합계에서 제외하거나 "-" 로 표시한다.
-    private func snapshotExchangeRate(for currency: String) -> Double {
+    /// 이 지출에 박을 환율.
+    ///
+    /// 그 여행이 이 통화로 처음 쓴 환율을 이어 쓴다. 한 여행 안에서 환율이
+    /// 여러 개가 되면 돌아와서 손으로 검산할 수 없다.
+    /// 그 여행의 첫 지출이면 오늘 환율이 곧 그 여행의 환율이 된다.
+    private func snapshotExchangeRate(for currency: String, travel: Travel?) -> Double {
         guard currency != ExpenseCode.baseCurrency else { return 1 }
-        return exchangeRateHandler.getExchangeRateFromKRW(currencyCode: currency)
+        return TravelExchangeRate.anchoredRate(for: travel, currencyCode: currency)
+            ?? exchangeRateHandler.getExchangeRateFromKRW(currencyCode: currency)
             ?? Expense.unknownExchangeRate
     }
 }

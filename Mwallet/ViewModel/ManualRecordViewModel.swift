@@ -327,14 +327,33 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
         audioPlayer?.stop()
     }
         
+    /// 이 기록이 들어갈 여행.
+    private func fetchChosenTravel() -> Travel? {
+        guard let chosen = MainViewModel.shared.chosenTravelInManualRecord else { return nil }
+        do {
+            return try viewContext.fetch(Travel.fetchRequest()).first { $0.id == chosen.id }
+        } catch {
+            Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
+            return nil
+        }
+    }
+
     func save() {
-        
+
+        // 여행을 먼저 찾는다. 환율이 그 여행에 매여 있어 순서가 뜻을 가진다 —
+        // 여행을 모르는 채로 환율을 정하면 오늘 환율이 박힌다.
+        let travel = fetchChosenTravel()
+
         let expense = Expense(context: viewContext)
         expense.category = Int64(category.rawValue)
         expense.country = Int64(country)
         expense.currency = Int64(currency)
         let code = CurrencyInfoModel.shared.currencyResult[currency]?.isoCodeNm ?? "Unknown"
-        expense.exchangeRate = exchangeHandler.getExchangeRateFromKRW(currencyCode: code) ?? Expense.unknownExchangeRate
+        // 그 여행이 이 통화로 처음 쓴 환율을 이어 쓴다. 처음이면 오늘 환율이
+        // 그 여행의 환율이 된다.
+        expense.exchangeRate = TravelExchangeRate.anchoredRate(for: travel, currencyCode: code)
+            ?? exchangeHandler.getExchangeRateFromKRW(currencyCode: code)
+            ?? Expense.unknownExchangeRate
         expense.info = info
         expense.location = locationExpression
         expense.participants = participantTupleArray.filter { $0.1 == true }.map { $0.0 }
@@ -346,17 +365,9 @@ final class ManualRecordViewModel: NSObject, ObservableObject {
             expense.voiceRecordFile = soundData
         }
         
-        if let chosenTravel = MainViewModel.shared.chosenTravelInManualRecord {
-            var fetchedTravel: Travel?
-            do {
-                fetchedTravel = try viewContext.fetch(Travel.fetchRequest()).filter { travel in
-                        return travel.id == chosenTravel.id
-                }.first
-            } catch {
-                Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
-            }
-            fetchedTravel?.lastUpdate = Date()
-            fetchedTravel?.addToExpenseArray(expense)
+        if let travel {
+            travel.lastUpdate = Date()
+            travel.addToExpenseArray(expense)
         }
         do {
             try viewContext.save()

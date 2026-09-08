@@ -180,8 +180,12 @@ enum QuickExpenseStore {
             .sorted { ($0.payDate ?? .distantPast) > ($1.payDate ?? .distantPast) }
 
         guard let latest = expenses.first else { return nil }
+        // 통화와 나라는 마지막에 적은 것을 따른다 — 지금 있는 곳이 그곳이다.
+        // 환율만은 그 여행이 그 통화로 처음 쓴 값을 이어 쓴다. 앱에서 적는
+        // 것과 위젯으로 담는 것이 같은 환율이어야 한 여행의 셈이 맞는다.
+        let anchored = TravelExchangeRate.anchoredRate(for: travel, currency: latest.currency)
         return Money(currency: latest.currency,
-                     exchangeRate: latest.exchangeRate,
+                     exchangeRate: anchored ?? latest.exchangeRate,
                      country: latest.country)
     }
 
