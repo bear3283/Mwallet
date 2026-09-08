@@ -139,8 +139,9 @@ struct UndoLastLogIntent: AppIntent {
 /// 위젯이 화면에 적을 것 — 담길 곳과, 아직 큐에 남아 있는 마지막 기록.
 struct QuickLogEntry: TimelineEntry {
     let date: Date
-    /// 이 위젯으로 담으면 들어갈 여행의 이름. 앱이 정해서 넘겨 준다.
-    let destination: String?
+    /// 이 위젯으로 담으면 들어갈 여행과, 그 여행의 통화·프리셋.
+    /// 앱이 정해서 넘겨 준다.
+    let destination: QuickLogDestination?
     /// 방금 담은 것. 장부에 적혔든 큐에 남았든 여기로 온다.
     let lastLogged: LoggedRecord?
 }
@@ -148,7 +149,7 @@ struct QuickLogEntry: TimelineEntry {
 struct QuickLogProvider: TimelineProvider {
     private func read() -> QuickLogEntry {
         QuickLogEntry(date: Date(),
-                      destination: MwalletShared.destinationName,
+                      destination: MwalletShared.destination,
                       lastLogged: MwalletShared.lastLogged)
     }
 
@@ -167,21 +168,6 @@ struct QuickLogProvider: TimelineProvider {
         completion(Timeline(entries: [read()], policy: .after(Date().addingTimeInterval(3600))))
     }
 }
-
-// 기록 위젯 중형의 프리셋. 자주 쓰는 지출을 한 번에 담는다. (자유롭게 수정 가능)
-private struct QuickPreset: Identifiable {
-    let id = UUID()
-    let emoji: String
-    let label: String
-    let amount: Double
-    let categoryIndex: Int   // ExpenseInfoCategory.rawValue (식비 3, 교통 2)
-}
-
-private let quickPresets: [QuickPreset] = [
-    QuickPreset(emoji: "☕️", label: String(localized: "커피"), amount: 4500, categoryIndex: 3),
-    QuickPreset(emoji: "🍽", label: String(localized: "식사"), amount: 10000, categoryIndex: 3),
-    QuickPreset(emoji: "🚌", label: String(localized: "교통"), amount: 3000, categoryIndex: 2)
-]
 
 // MARK: - 공통 조각
 
@@ -394,16 +380,48 @@ struct RecordWidgetView: View {
     private var presetGrid: some View {
         VStack(alignment: .leading, spacing: 7) {
             header
+            presetRow
+            footer
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .containerBackground(.background, for: .widget)
+    }
+
+    /// 프리셋 단추 줄.
+    ///
+    /// 프리셋은 이 여행에서 실제로 적어 온 것에서 앱이 뽑아 넘긴다. 아직 한
+    /// 건도 없는 여행이면 넘어오지 않는데, 그때는 통화도 정해지지 않아 담아도
+    /// 큐로 물러난다. 금액이 적힌 단추를 보이면 담기는 척만 하는 셈이라
+    /// 대신 무엇을 하면 되는지 적는다.
+    @ViewBuilder
+    private var presetRow: some View {
+        let presets = entry.destination?.presets ?? []
+        if presets.isEmpty {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("자주 적는 것이 여기 뜹니다")
+                    .font(.caption2).fontWeight(.medium)
+                Text("이 여행에 한 번 기록하면 그때 쓴 금액으로 단추가 생깁니다")
+                    .font(.system(size: 10)).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 10)
+        } else {
             HStack(spacing: 8) {
-                ForEach(quickPresets) { preset in
+                ForEach(presets) { preset in
                     Button(intent: LogExpenseIntent(amount: preset.amount,
                                                     categoryIndex: preset.categoryIndex,
                                                     label: preset.label)) {
                         VStack(spacing: 2) {
                             Text(preset.emoji).font(.title3)
-                            Text(preset.label).font(.caption2).foregroundStyle(.primary)
-                            Text(MwalletSharedFormat.krw(preset.amount))
+                            Text(preset.label)
+                                .font(.caption2).foregroundStyle(.primary)
+                                .lineLimit(1).minimumScaleFactor(0.8)
+                            // 적히는 돈과 같은 돈으로 적는다. 여기가 어긋나면
+                            // 단추가 거짓말을 한다.
+                            Text(amountText(preset.amount))
                                 .font(.system(size: 10)).foregroundStyle(.secondary)
+                                .lineLimit(1).minimumScaleFactor(0.8)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -412,10 +430,16 @@ struct RecordWidgetView: View {
                     .buttonStyle(.plain)
                 }
             }
-            footer
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .containerBackground(.background, for: .widget)
+    }
+
+    /// 담길 여행의 통화로 적는다. 통화를 모르면 숫자만.
+    private func amountText(_ amount: Double) -> String {
+        let code = entry.destination?.currencyCode ?? ""
+        guard !code.isEmpty else {
+            return NumberFormatter.localizedString(from: NSNumber(value: amount), number: .decimal)
+        }
+        return MwalletSharedFormat.money(amount, currencyCode: code)
     }
 
     /// 첫 줄 — 무엇을 하는 자리인지와, 담기면 어디로 가는지.
@@ -426,7 +450,7 @@ struct RecordWidgetView: View {
         HStack(spacing: 4) {
             Text("빠른 기록").font(.subheadline).fontWeight(.bold)
             if let destination = entry.destination {
-                Text("→ \(destination)")
+                Text("→ \(destination.travelName)")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -452,7 +476,7 @@ struct RecordWidgetView: View {
             HStack(spacing: 6) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.caption2).foregroundStyle(brandCobalt)
-                Text("\(last.info) \(MwalletSharedFormat.krw(last.amount))")
+                Text("\(last.info) \(amountText(last.amount))")
                     .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
                 Spacer(minLength: 4)
                 Button(intent: UndoLastLogIntent()) {

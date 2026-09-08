@@ -21,6 +21,20 @@ struct RecordLiveFields: View {
     /// 사용자가 고른 글자 크기. 여백을 여기에 맞춘다.
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    /// 아직 안 채워진 자리에 흐리게 적을 예시.
+    ///
+    /// 위 예시 말풍선('점심 15000원 카드')이 가르치는 문장을 세 조각으로
+    /// 나눠 각자의 자리에 놓은 것이다. 화면 하나가 한 문장을 가르치고, 그
+    /// 문장의 어느 조각이 어디로 들어가는지를 자리로 보여 준다.
+    ///
+    /// 말풍선을 쪼개 쓰지 않고 따로 둔다. 언어마다 어순이 달라 쪼개는 규칙을
+    /// 세울 수 없고, 금액도 그 나라에서 말이 되는 값이어야 한다 — 한국어는
+    /// 15,000원이지만 영어 예시는 15달러다.
+    static let infoHint = String(localized: "예: 점심",
+                                 comment: "결제 내역 자리에 흐리게 적는 예시. 예시 말풍선의 내역 부분과 맞춘다")
+    static let amountHint = String(localized: "예: 15,000",
+                                   comment: "결제 금액 자리에 흐리게 적는 예시. 예시 말풍선의 금액과 맞춘다")
+
     var body: some View {
         VStack(spacing: 18) {
             HStack(spacing: 0) {
@@ -59,9 +73,14 @@ struct RecordLiveFields: View {
                         .accessibilityHidden(true)
                     Spacer()
                         .frame(width: 12)
-                    Text("-")
+                    // 아직 안 채워진 자리. 예전에는 '-' 한 글자였는데, 그것만으로는
+                    // 여기에 무엇이 들어오는지 알 수 없었다. 아래 결제 방식이
+                    // '현금 / 카드' 로 고를 것을 미리 보여 주는 것과 같은 방식으로,
+                    // 위 예시 말풍선이 가르치는 문장의 해당 조각을 흐리게 적는다.
+                    Text(Self.infoHint)
                         .foregroundStyle(.gray200)
                         .font(.subhead3_2)
+                        .lineLimit(1)
                 }
                 Spacer()
                     .frame(minWidth: 0)
@@ -117,9 +136,10 @@ struct RecordLiveFields: View {
                         .accessibilityHidden(true)
                     Spacer()
                         .frame(width: 12)
-                    Text("-")
+                    Text(Self.amountHint)
                         .foregroundStyle(.gray200)
                         .font(.subhead3_2)
+                        .lineLimit(1)
                 }
                 Spacer()
                     .frame(minWidth: 0)
