@@ -141,6 +141,54 @@ final class ExchangeRateHandlerTests: XCTestCase {
         XCTAssertEqual(ExchangeRateHandler.recheckInterval, 12 * 60 * 60)
     }
 
+    // MARK: - 어디로 물어보는가
+
+    // 중계를 세우면 키가 앱에 실리지 않는다. 주소에 키가 섞여 나가면
+    // 중계를 세운 뜻이 통째로 사라진다.
+    func test_중계가_있으면_키_없이_그리로_묻는다() throws {
+        let url = try XCTUnwrap(ExchangeRateHandler.requestURL(
+            baseCode: "KRW",
+            endpoint: "https://rates.example.workers.dev",
+            key: "SECRET"))
+
+        XCTAssertEqual(url.absoluteString, "https://rates.example.workers.dev/latest/KRW")
+        XCTAssertFalse(url.absoluteString.contains("SECRET"), "키가 주소에 섞이면 안 된다")
+    }
+
+    // 주소 끝에 / 를 붙여 적는 사람이 있다. 그것 때문에 //latest 가 되면
+    // 중계가 404 를 돌려주고, 환율이 조용히 안 온다.
+    func test_주소_끝의_빗금을_받아_준다() throws {
+        let url = try XCTUnwrap(ExchangeRateHandler.requestURL(
+            baseCode: "KRW",
+            endpoint: "https://rates.example.workers.dev/",
+            key: nil))
+
+        XCTAssertEqual(url.absoluteString, "https://rates.example.workers.dev/latest/KRW")
+    }
+
+    // 중계를 아직 안 세운 개발 기기에서도 그대로 돌아야 한다.
+    func test_중계가_없으면_키로_직접_묻는다() throws {
+        let url = try XCTUnwrap(ExchangeRateHandler.requestURL(
+            baseCode: "KRW", endpoint: nil, key: "SECRET"))
+
+        XCTAssertEqual(url.absoluteString,
+                       "https://v6.exchangerate-api.com/v6/SECRET/latest/KRW")
+    }
+
+    // 둘 다 없으면 부를 곳이 없다. 엉뚱한 주소를 만들어 조용히 실패하는
+    // 것보다 아무것도 만들지 않는 편이 낫다.
+    func test_중계도_키도_없으면_주소를_만들지_않는다() {
+        XCTAssertNil(ExchangeRateHandler.requestURL(baseCode: "KRW", endpoint: nil, key: nil))
+    }
+
+    // xcconfig 가 비어 있으면 Info.plist 에 빈 문자열이 들어온다.
+    // 그것을 '설정됨' 으로 보면 주소가 '/latest/KRW' 가 되어 버린다.
+    func test_빈_문자열은_설정되지_않은_것으로_본다() throws {
+        let url = try XCTUnwrap(ExchangeRateHandler.requestURL(
+            baseCode: "KRW", endpoint: nil, key: "SECRET"))
+        XCTAssertTrue(url.absoluteString.hasPrefix("https://"))
+    }
+
     // MARK: - 환산
 
     func test_환율을_뒤집어_원화_가치를_준다() {

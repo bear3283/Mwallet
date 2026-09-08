@@ -1,0 +1,6 @@
+name = "mwallet-rates"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# 키는 여기 적지 않는다. 아래로 넣는다.
+#     wrangler secret put EXCHANGERATE_API_KEY
