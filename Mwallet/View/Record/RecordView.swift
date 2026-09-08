@@ -68,6 +68,14 @@ struct RecordView: View {
             .onDisappear {
                 viewModel.recordButtonResetTimer?.invalidate()
             }
+            // 큰 위젯의 ＋ 칸이 mwallet://record/manual 로 들어온다.
+            // 신호를 보면 직접 기록을 열고, 열면서 도로 내린다 — 내리지 않으면
+            // 그 화면을 닫고 돌아왔을 때 곧바로 다시 열린다.
+            .onChange(of: mainVM.opensManualEntry) { _, wants in
+                guard wants else { return }
+                mainVM.opensManualEntry = false
+                viewModel.manualRecordViewIsShown = true
+            }
             .sheet(isPresented: $viewModel.addTravelRequestModalIsShown) {
                 AddTravelRequestModal(viewModel: viewModel)
                     .presentationDetents([.height(247 - 34)])

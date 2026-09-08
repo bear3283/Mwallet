@@ -356,6 +356,9 @@ struct RecordWidgetView: View {
         case .systemMedium:
             presetGrid
 
+        case .systemLarge:
+            largeGrid
+
         default:
             smallButton
         }
@@ -395,7 +398,7 @@ struct RecordWidgetView: View {
     /// 대신 무엇을 하면 되는지 적는다.
     @ViewBuilder
     private var presetRow: some View {
-        let presets = entry.destination?.presets ?? []
+        let presets = Array((entry.destination?.presets ?? []).prefix(QuickPresetSpec.mediumSlots))
         if presets.isEmpty {
             VStack(alignment: .leading, spacing: 3) {
                 Text("자주 적는 것이 여기 뜹니다")
@@ -409,25 +412,108 @@ struct RecordWidgetView: View {
         } else {
             HStack(spacing: 8) {
                 ForEach(presets) { preset in
-                    Button(intent: LogExpenseIntent(amount: preset.amount,
-                                                    categoryIndex: preset.categoryIndex,
-                                                    label: preset.label)) {
-                        VStack(spacing: 2) {
-                            Text(preset.emoji).font(.title3)
-                            Text(preset.label)
-                                .font(.caption2).foregroundStyle(.primary)
-                                .lineLimit(1).minimumScaleFactor(0.8)
-                            // 적히는 돈과 같은 돈으로 적는다. 여기가 어긋나면
-                            // 단추가 거짓말을 한다.
-                            Text(amountText(preset.amount))
-                                .font(.system(size: 10)).foregroundStyle(.secondary)
-                                .lineLimit(1).minimumScaleFactor(0.8)
+                    presetTile(preset)
+                }
+            }
+        }
+    }
+
+    /// 프리셋 단추 한 칸. 중형과 대형이 함께 쓴다.
+    private func presetTile(_ preset: QuickPresetSpec) -> some View {
+        Button(intent: LogExpenseIntent(amount: preset.amount,
+                                        categoryIndex: preset.categoryIndex,
+                                        label: preset.label)) {
+            VStack(spacing: 2) {
+                Text(preset.emoji).font(.title3)
+                Text(preset.label)
+                    .font(.caption2).foregroundStyle(.primary)
+                    .lineLimit(1).minimumScaleFactor(0.8)
+                // 적히는 돈과 같은 돈으로 적는다. 여기가 어긋나면
+                // 단추가 거짓말을 한다.
+                Text(amountText(preset.amount))
+                    .font(.system(size: 10)).foregroundStyle(.secondary)
+                    .lineLimit(1).minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(.gray.opacity(0.15), in: RoundedRectangle(cornerRadius: 10))
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// ＋ 칸. 프리셋에 없는 금액은 앱에서 적는다.
+    ///
+    /// 단추가 아니라 링크다. 위젯 안에서 금액을 입력받을 방법이 없어
+    /// 앱의 직접 기록 화면으로 넘긴다.
+    private var manualEntryTile: some View {
+        Link(destination: URL(string: "mwallet://record/manual")!) {
+            VStack(spacing: 2) {
+                Image(systemName: "plus").font(.title3).foregroundStyle(brandCobalt)
+                Text("직접 입력")
+                    .font(.caption2).foregroundStyle(.primary)
+                    .lineLimit(1).minimumScaleFactor(0.8)
+                Text("금액 적기")
+                    .font(.system(size: 10)).foregroundStyle(.secondary)
+                    .lineLimit(1).minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(.gray.opacity(0.15), in: RoundedRectangle(cornerRadius: 10))
+        }
+    }
+
+    /// 큰 크기 — 프리셋 다섯 칸과 ＋ 한 칸을 세 칸씩 두 줄로.
+    ///
+    /// 중형이 셋인 것은 자리가 좁아서지 셋이 알맞아서가 아니다. 자리가 넓어지면
+    /// 그 여행에서 자주 적은 것을 더 많이 올릴 수 있다. 마지막 칸은 ＋ 가
+    /// 가져간다 — 프리셋에 없는 금액을 적을 길이 위젯 안에 없으면, 자주 쓰는
+    /// 것만 담기고 나머지는 앱을 찾아 열어야 한다.
+    private var largeGrid: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            header
+            largeTiles
+            Spacer(minLength: 0)
+            footer
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .containerBackground(.background, for: .widget)
+    }
+
+    @ViewBuilder
+    private var largeTiles: some View {
+        let presets = Array((entry.destination?.presets ?? []).prefix(QuickPresetSpec.maxSlots))
+        // 프리셋이 없으면 ＋ 만 남는다. 담길 통화를 모르는 상태라
+        // 금액이 적힌 단추를 보이면 담기는 척만 하는 셈이다.
+        if presets.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("자주 적는 것이 여기 뜹니다")
+                    .font(.caption).fontWeight(.medium)
+                Text("이 여행에 한 번 기록하면 그때 쓴 금액으로 단추가 생깁니다")
+                    .font(.caption2).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                manualEntryTile.frame(maxWidth: 120)
+            }
+            .padding(.vertical, 4)
+        } else {
+            // 빈칸을 남기지 않으려고 ＋ 를 프리셋 뒤에 붙여 한 줄로 센다.
+            let slots = presets.count + 1
+            let rows = Int(ceil(Double(slots) / 3.0))
+            VStack(spacing: 8) {
+                ForEach(0..<rows, id: \.self) { row in
+                    HStack(spacing: 8) {
+                        ForEach(0..<3, id: \.self) { column in
+                            let index = row * 3 + column
+                            if index < presets.count {
+                                presetTile(presets[index])
+                            } else if index == presets.count {
+                                manualEntryTile
+                            } else {
+                                // 마지막 줄의 남는 자리. 칸 너비를 지켜
+                                // 앞의 단추가 늘어나 보이지 않게 한다.
+                                Color.clear.frame(maxWidth: .infinity)
+                            }
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(.gray.opacity(0.15), in: RoundedRectangle(cornerRadius: 10))
                     }
-                    .buttonStyle(.plain)
                 }
             }
         }
@@ -500,7 +586,7 @@ struct RecordWidget: Widget {
         }
         .configurationDisplayName("지출 기록")
         .description("눌러서 바로 기록하거나, 프리셋으로 빠르게 담습니다.")
-        .supportedFamilies([.systemSmall, .systemMedium, .accessoryCircular])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryCircular])
     }
 }
 

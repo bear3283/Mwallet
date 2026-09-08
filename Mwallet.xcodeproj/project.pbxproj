@@ -90,7 +90,6 @@
 		C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000BB1 /* TabActionBar.swift */; };
 		C1A11EA70000000000000CC2 /* TravelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000CC1 /* TravelListView.swift */; };
 		C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */; };
-		DA000000000000000000F100 /* DebugSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA000000000000000000F000 /* DebugSampleData.swift */; };
 		C1A11EA70000000000000E22 /* VoiceSentenceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */; };
 		C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000E31 /* KoreanNumberReader.swift */; };
 		C1A11EA7000000000000A02 /* TravelPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A01 /* TravelPalette.swift */; };
@@ -124,6 +123,7 @@
 		C1F00001000000000000AA2 /* CategoryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00001000000000000AA1 /* CategoryEditView.swift */; };
 		C1F00002000000000000AA2 /* CategoryDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F00002000000000000AA1 /* CategoryDetailSheet.swift */; };
 		C200000A000000000000AA2 /* BudgetCategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */; };
+		DA000000000000000000F100 /* DebugSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA000000000000000000F000 /* DebugSampleData.swift */; };
 		E23357A62AE273E700E17CFF /* NSObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A52AE273E700E17CFF /* NSObject+Extension.swift */; };
 		E23357A82AE2B42300E17CFF /* dateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23357A72AE2B42300E17CFF /* dateFormatter.swift */; };
 		E237338C2AF7E95B008C2613 /* CurrencyList.csv in Resources */ = {isa = PBXBuildFile; fileRef = E237338B2AF7E95B008C2613 /* CurrencyList.csv */; };
@@ -275,7 +275,6 @@
 		C1A11EA70000000000000BB1 /* TabActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabActionBar.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000CC1 /* TravelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelListView.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSampleSeeder.swift; sourceTree = "<group>"; };
-		DA000000000000000000F000 /* DebugSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSampleData.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSentenceParser.swift; sourceTree = "<group>"; };
 		C1A11EA70000000000000E31 /* KoreanNumberReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoreanNumberReader.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000A01 /* TravelPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPalette.swift; sourceTree = "<group>"; };
@@ -309,6 +308,7 @@
 		C1F00001000000000000AA1 /* CategoryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CategoryEditView.swift; path = Mwallet/Budget/View/CategoryEditView.swift; sourceTree = SOURCE_ROOT; };
 		C1F00002000000000000AA1 /* CategoryDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CategoryDetailSheet.swift; path = Mwallet/Budget/View/CategoryDetailSheet.swift; sourceTree = SOURCE_ROOT; };
 		C200000A000000000000AA1 /* BudgetCategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BudgetCategoryDetailView.swift; path = Mwallet/Budget/View/BudgetCategoryDetailView.swift; sourceTree = SOURCE_ROOT; };
+		DA000000000000000000F000 /* DebugSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSampleData.swift; sourceTree = "<group>"; };
 		E23357A52AE273E700E17CFF /* NSObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extension.swift"; sourceTree = "<group>"; };
 		E23357A72AE2B42300E17CFF /* dateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateFormatter.swift; sourceTree = "<group>"; };
 		E237338B2AF7E95B008C2613 /* CurrencyList.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = CurrencyList.csv; sourceTree = "<group>"; };

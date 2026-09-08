@@ -230,6 +230,14 @@ struct QuickPresetSpec: Codable, Equatable, Identifiable {
     var categoryIndex: Int   // ExpenseInfoCategory.rawValue
 
     var id: String { "\(categoryIndex)-\(label)-\(amount)" }
+
+    /// 앱이 넘겨 주는 프리셋의 최대 개수.
+    ///
+    /// 큰 위젯이 다섯 칸을 쓰고 남은 한 칸은 ＋(직접 입력)가 가져간다.
+    /// 중형은 이 가운데 앞의 셋만 쓴다 — 한 번 뽑아 두 크기가 나눠 쓴다.
+    static let maxSlots = 5
+    /// 중형 위젯이 쓰는 칸 수.
+    static let mediumSlots = 3
 }
 
 // MARK: - 표시 포맷 (위젯용, 앱 ReceiptFormat 과 별개의 가벼운 버전)

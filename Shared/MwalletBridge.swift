@@ -74,7 +74,8 @@ enum MwalletBridge {
 
         return QuickLogDestination(travelName: travel.displayName,
                                    currencyCode: code,
-                                   presets: QuickPresetSuggester.suggest(from: candidates))
+                                   presets: QuickPresetSuggester.suggest(from: candidates,
+                                                                         limit: QuickPresetSpec.maxSlots))
     }
 
     // MARK: 위젯 → 앱: 대기 지출을 Core Data 로 반영
