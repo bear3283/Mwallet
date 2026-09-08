@@ -32,8 +32,8 @@ struct RecordLiveFields: View {
     /// 15,000원이지만 영어 예시는 15달러다.
     static let infoHint = String(localized: "예: 점심",
                                  comment: "결제 내역 자리에 흐리게 적는 예시. 예시 말풍선의 내역 부분과 맞춘다")
-    static let amountHint = String(localized: "예: 15,000",
-                                   comment: "결제 금액 자리에 흐리게 적는 예시. 예시 말풍선의 금액과 맞춘다")
+    static let amountHint = String(localized: "예: 15,000원",
+                                   comment: "결제 금액 자리에 흐리게 적는 예시. 예시 말풍선의 금액·화폐 단위와 맞춘다")
 
     var body: some View {
         VStack(spacing: 18) {
@@ -140,6 +140,7 @@ struct RecordLiveFields: View {
                         .foregroundStyle(.gray200)
                         .font(.subhead3_2)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 Spacer()
                     .frame(minWidth: 0)
