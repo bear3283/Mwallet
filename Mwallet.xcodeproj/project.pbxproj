@@ -136,6 +136,7 @@
 		FA00000000000000000000B2 /* MwalletBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000B1 /* MwalletBridge.swift */; };
 		FA00000000000000000000C2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
 		FA000000000000000000A000 /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000C1 /* AppDestination.swift */; };
+		AS000000000000000000A100 /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AS000000000000000000A000 /* AppShortcuts.swift */; };
 		FA000000000000000000B100 /* StoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000B000 /* StoreLocation.swift */; };
 		FA000000000000000000C000 /* Mwallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5754FAB42AD3F94900A3FCE8 /* Mwallet.xcdatamodeld */; };
 		FA000000000000000000C100 /* StoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000B000 /* StoreLocation.swift */; };
@@ -144,6 +145,7 @@
 		FA000000000000000000E100 /* QuickPresetSuggester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000E000 /* QuickPresetSuggester.swift */; };
 		FA000000000000000000E200 /* QuickPresetSuggester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000E000 /* QuickPresetSuggester.swift */; };
 		LC0000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LC0000000000000000000001 /* Localizable.xcstrings */; };
+		AS000000000000000000B100 /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AS000000000000000000B000 /* AppShortcuts.xcstrings */; };
 		SP0000000000000000000002 /* SpeechLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = SP0000000000000000000001 /* SpeechLocale.swift */; };
 		SR0000000000000000000002 /* SentenceRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = SR0000000000000000000001 /* SentenceRules.swift */; };
 /* End PBXBuildFile section */
@@ -321,12 +323,14 @@
 		FA00000000000000000000A1 /* MwalletShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletShared.swift; path = Shared/MwalletShared.swift; sourceTree = SOURCE_ROOT; };
 		FA00000000000000000000B1 /* MwalletBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletBridge.swift; path = Shared/MwalletBridge.swift; sourceTree = SOURCE_ROOT; };
 		FA00000000000000000000C1 /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
+		AS000000000000000000A000 /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
 		FA000000000000000000B000 /* StoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoreLocation.swift; path = Shared/StoreLocation.swift; sourceTree = SOURCE_ROOT; };
 		FA000000000000000000D000 /* QuickExpenseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickExpenseStore.swift; path = Shared/QuickExpenseStore.swift; sourceTree = SOURCE_ROOT; };
 		FA000000000000000000E000 /* QuickPresetSuggester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickPresetSuggester.swift; path = Shared/QuickPresetSuggester.swift; sourceTree = SOURCE_ROOT; };
 		FB00000000000000000000P1 /* MwalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC00000000000000000000P1 /* MwalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		LC0000000000000000000001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		AS000000000000000000B000 /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
 		SP0000000000000000000001 /* SpeechLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechLocale.swift; sourceTree = "<group>"; };
 		SR0000000000000000000001 /* SentenceRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceRules.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -413,6 +417,7 @@
 				C179660A2ADD67440036E866 /* Info.plist */,
 				571A42692ACE857500FA3D2B /* MwalletApp.swift */,
 				FA00000000000000000000C1 /* AppDestination.swift */,
+				AS000000000000000000A000 /* AppShortcuts.swift */,
 				FA00000000000000000000A1 /* MwalletShared.swift */,
 				FA00000000000000000000B1 /* MwalletBridge.swift */,
 				FA000000000000000000B000 /* StoreLocation.swift */,
@@ -429,6 +434,7 @@
 				C190C20A2ADCD4520099EE3A /* DesignSystem */,
 				571A426D2ACE857600FA3D2B /* Assets.xcassets */,
 				LC0000000000000000000001 /* Localizable.xcstrings */,
+				AS000000000000000000B000 /* AppShortcuts.xcstrings */,
 				571A426F2ACE857600FA3D2B /* Preview Content */,
 			);
 			path = Mwallet;
@@ -920,6 +926,7 @@
 				C17966072ADD66F90036E866 /* WantedSans-Medium.otf in Resources */,
 				571A426E2ACE857600FA3D2B /* Assets.xcassets in Resources */,
 				LC0000000000000000000002 /* Localizable.xcstrings in Resources */,
+				AS000000000000000000B100 /* AppShortcuts.xcstrings in Resources */,
 				C17966082ADD66F90036E866 /* WantedSans-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1075,6 +1082,7 @@
 				57A65D142AD7D65600131266 /* ExpenseInfoCategory.swift in Sources */,
 				571A426A2ACE857500FA3D2B /* MwalletApp.swift in Sources */,
 				FA000000000000000000A000 /* AppDestination.swift in Sources */,
+				AS000000000000000000A100 /* AppShortcuts.swift in Sources */,
 				FA00000000000000000000A2 /* MwalletShared.swift in Sources */,
 				FA00000000000000000000B2 /* MwalletBridge.swift in Sources */,
 				FA000000000000000000B100 /* StoreLocation.swift in Sources */,
