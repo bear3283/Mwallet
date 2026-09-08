@@ -144,6 +144,7 @@
 		FA000000000000000000E100 /* QuickPresetSuggester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000E000 /* QuickPresetSuggester.swift */; };
 		FA000000000000000000E200 /* QuickPresetSuggester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000E000 /* QuickPresetSuggester.swift */; };
 		LC0000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LC0000000000000000000001 /* Localizable.xcstrings */; };
+		RO000000000000000000C100 /* RecordOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = RO000000000000000000C000 /* RecordOutcome.swift */; };
 		SP0000000000000000000002 /* SpeechLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = SP0000000000000000000001 /* SpeechLocale.swift */; };
 		SR0000000000000000000002 /* SentenceRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = SR0000000000000000000001 /* SentenceRules.swift */; };
 /* End PBXBuildFile section */
@@ -327,6 +328,7 @@
 		FB00000000000000000000P1 /* MwalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC00000000000000000000P1 /* MwalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		LC0000000000000000000001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		RO000000000000000000C000 /* RecordOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordOutcome.swift; sourceTree = "<group>"; };
 		SP0000000000000000000001 /* SpeechLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechLocale.swift; sourceTree = "<group>"; };
 		SR0000000000000000000001 /* SentenceRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceRules.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -466,6 +468,7 @@
 				C1E00002000000000000AA1 /* CategorySeeder.swift */,
 				C1C00001000000000000AA1 /* ReceiptPhotoMigrator.swift */,
 				C1A11EA70000000000000E11 /* VoiceSentenceParser.swift */,
+				RO000000000000000000C000 /* RecordOutcome.swift */,
 				C1A11EA70000000000000E31 /* KoreanNumberReader.swift */,
 				SR0000000000000000000001 /* SentenceRules.swift */,
 				C1A11EA70000000000000DD1 /* DebugSampleSeeder.swift */,
@@ -1038,6 +1041,7 @@
 				C1E00002000000000000AA2 /* CategorySeeder.swift in Sources */,
 				C1C00001000000000000AA2 /* ReceiptPhotoMigrator.swift in Sources */,
 				C1A11EA70000000000000E22 /* VoiceSentenceParser.swift in Sources */,
+				RO000000000000000000C100 /* RecordOutcome.swift in Sources */,
 				C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */,
 				SR0000000000000000000002 /* SentenceRules.swift in Sources */,
 				C1A11EA70000000000000DD2 /* DebugSampleSeeder.swift in Sources */,
