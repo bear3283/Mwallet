@@ -35,9 +35,46 @@ enum MwalletBridge {
             updatedAt: Date()
         )
         MwalletShared.writeSnapshot(snapshot)
-        // 위젯이 '어디로 담기는지' 를 적어 둘 수 있게 함께 넘긴다.
-        MwalletShared.writeDestinationName(destination(in: context)?.displayName)
+        // 위젯이 '어디로, 어떤 돈으로 담기는지' 를 적어 둘 수 있게 함께 넘긴다.
+        MwalletShared.writeDestination(quickLogDestination(in: context))
         WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    // MARK: 앱 → 위젯: 담길 곳과 프리셋
+
+    /// 위젯이 프리셋 단추에 적을 것.
+    ///
+    /// 통화와 프리셋을 앱이 정해서 넘긴다. 위젯 쪽에서 장부를 뒤져 셈하게 하면
+    /// 타임라인을 그릴 때마다 저장소를 열어야 하고, 통화 코드를 푸는 표
+    /// (CurrencyInfoModel)는 앱 타깃에만 있다.
+    ///
+    /// 아직 한 건도 없는 여행이면 통화를 물려받을 수 없다. 그때는 통화를 비우고
+    /// 프리셋도 넘기지 않는다 — 위젯이 담아도 QuickExpenseStore 가 큐로 물러나는
+    /// 상태라, 금액이 적힌 단추를 보이면 담기는 척만 하는 셈이 된다.
+    static func quickLogDestination(in context: NSManagedObjectContext) -> QuickLogDestination? {
+        guard let travel = destination(in: context) else { return nil }
+
+        guard let money = QuickExpenseStore.inheritedMoney(of: travel) else {
+            return QuickLogDestination(travelName: travel.displayName,
+                                       currencyCode: "",
+                                       presets: [])
+        }
+
+        let code = ExpenseCode.currencyCode(for: money.currency)
+        // 프리셋은 그 여행에서 지금 쓰는 통화로 적은 것만 본다. 통화가 바뀐
+        // 여행(국경을 넘었다)에서 옛 통화의 금액을 올리면 자릿수가 어긋난다.
+        let candidates = ((travel.expenseArray?.allObjects as? [Expense]) ?? [])
+            .filter { $0.currency == money.currency }
+            .map {
+                QuickPresetCandidate(label: $0.info ?? "",
+                                     amount: $0.payAmount,
+                                     categoryIndex: Int($0.category),
+                                     date: $0.payDate ?? .distantPast)
+            }
+
+        return QuickLogDestination(travelName: travel.displayName,
+                                   currencyCode: code,
+                                   presets: QuickPresetSuggester.suggest(from: candidates))
     }
 
     // MARK: 위젯 → 앱: 대기 지출을 Core Data 로 반영

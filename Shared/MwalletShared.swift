@@ -24,7 +24,10 @@ enum MwalletShared {
 
     private static let snapshotKey = "budget.snapshot"
     private static let queueKey = "pending.expenses"
-    private static let destinationKey = "pending.destination"
+    // 예전에는 이름 문자열 하나였다. 통화·프리셋까지 담게 되면서 열쇠를 새로
+    // 냈다 — 같은 열쇠에 다른 모양을 적으면 업데이트되는 사이 위젯이 못 읽는다.
+    private static let destinationKey = "pending.destination.v2"
+    private static let legacyDestinationKey = "pending.destination"
     private static let lastLoggedKey = "last.logged"
 
     private static var store: UserDefaults? {
@@ -43,19 +46,37 @@ enum MwalletShared {
         return try? JSONDecoder().decode(BudgetSnapshot.self, from: data)
     }
 
-    // MARK: 담길 곳의 이름 (앱 → 위젯)
+    // MARK: 담길 곳 (앱 → 위젯)
 
-    /// 위젯에서 담은 지출이 어느 여행으로 갈지, 그 이름.
+    /// 위젯에서 담은 지출이 어디로, 어떤 돈으로 갈지.
     ///
     /// 위젯이 스스로 정하지 않는다. 여행 중인지 판단하는 규칙이 앱과 위젯
     /// 두 곳에 생기면 서로 다른 답을 낼 수 있고, 그러면 위젯에 적힌 곳과
     /// 실제로 담기는 곳이 달라진다. 앱이 정하고 위젯은 받아 적는다.
-    static func writeDestinationName(_ name: String?) {
-        guard let name else { return store?.removeObject(forKey: destinationKey) ?? () }
-        store?.set(name, forKey: destinationKey)
+    static func writeDestination(_ destination: QuickLogDestination?) {
+        guard let destination else {
+            store?.removeObject(forKey: destinationKey)
+            store?.removeObject(forKey: legacyDestinationKey)
+            return
+        }
+        if let data = try? JSONEncoder().encode(destination) {
+            store?.set(data, forKey: destinationKey)
+        }
+        // 아직 예전 위젯이 돌고 있을 수 있다(앱만 먼저 업데이트된 순간).
+        // 이름 하나만 읽던 그 위젯이 빈칸을 보이지 않도록 함께 적어 둔다.
+        store?.set(destination.travelName, forKey: legacyDestinationKey)
     }
 
-    static var destinationName: String? { store?.string(forKey: destinationKey) }
+    static var destination: QuickLogDestination? {
+        guard let data = store?.data(forKey: destinationKey),
+              let decoded = try? JSONDecoder().decode(QuickLogDestination.self, from: data) else {
+            // 앱이 아직 예전 판이면 이름만 있다. 통화를 모르므로 프리셋은 비운다 —
+            // 모르는 채로 금액을 적으면 그것이 바로 고치려던 잘못이다.
+            guard let name = store?.string(forKey: legacyDestinationKey) else { return nil }
+            return QuickLogDestination(travelName: name, currencyCode: "", presets: [])
+        }
+        return decoded
+    }
 
     // MARK: 대기 지출 큐 (위젯 → 앱)
 
@@ -179,7 +200,39 @@ struct PendingExpense: Codable, Identifiable {
     }
 }
 
-// MARK: - 원화 표시 포맷 (위젯 표시용, 앱 ReceiptFormat 과 별개의 가벼운 버전)
+// MARK: - 담길 곳
+
+/// 위젯이 담으면 어디에, 어떤 돈으로 들어가는지.
+///
+/// 예전에는 여행 이름만 넘겼다. 그런데 위젯이 담은 지출은 그 여행이 마지막으로
+/// 쓰던 통화로 적힌다(QuickExpenseStore.inheritedMoney). 이름만 아는 위젯은
+/// 버튼에 원화를 적어 두고 바트를 저장하고 있었다 — 방콕 여행에서 '₩4,500'
+/// 이라고 적힌 단추를 누르면 장부에 ฿4,500(17만 원)이 들어갔다.
+///
+/// 버튼에 적는 돈과 저장되는 돈은 같아야 한다. 그래서 통화까지 함께 넘긴다.
+struct QuickLogDestination: Codable, Equatable {
+
+    var travelName: String
+    /// 담기면 이 돈으로 적힌다. 버튼의 금액도 이 돈으로 적어야 한다.
+    var currencyCode: String
+    /// 이 여행에서 실제로 적어 온 것에서 뽑은 프리셋.
+    ///
+    /// 비어 있을 수 있다 — 아직 한 건도 없는 여행이다. 그때는 통화도 알 수
+    /// 없어 위젯이 담아도 큐로 물러나므로, 프리셋 대신 안내를 띄운다.
+    var presets: [QuickPresetSpec]
+}
+
+/// 프리셋 한 칸.
+struct QuickPresetSpec: Codable, Equatable, Identifiable {
+    var emoji: String
+    var label: String
+    var amount: Double
+    var categoryIndex: Int   // ExpenseInfoCategory.rawValue
+
+    var id: String { "\(categoryIndex)-\(label)-\(amount)" }
+}
+
+// MARK: - 표시 포맷 (위젯용, 앱 ReceiptFormat 과 별개의 가벼운 버전)
 
 enum MwalletSharedFormat {
     static func krw(_ value: Double) -> String {
@@ -188,6 +241,23 @@ enum MwalletSharedFormat {
         formatter.maximumFractionDigits = 0
         let number = formatter.string(from: NSNumber(value: value)) ?? "0"
         return String(localized: "\(number)원")
+    }
+
+    /// 그 여행의 돈으로 적는다.
+    ///
+    /// 원화는 예전 그대로 둔다 — 한국어에서 '4,500원' 이라고 읽어 온 자리라
+    /// 통화 포맷터로 넘기면 '₩4,500' 으로 바뀐다. 나머지 통화는 iOS 에 맡긴다.
+    /// 기호가 앞에 붙는지 뒤에 붙는지는 언어마다 다르고, 소수 자릿수도 통화마다
+    /// 다르다(엔·원은 0, 달러는 2).
+    static func money(_ value: Double, currencyCode: String) -> String {
+        guard currencyCode != "KRW" else { return krw(value) }
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = currencyCode
+        // 위젯은 자리가 좁다. 딱 떨어지는 금액에 '.00' 을 달지 않는다.
+        if value == value.rounded() { formatter.maximumFractionDigits = 0 }
+        return formatter.string(from: NSNumber(value: value)) ?? "\(currencyCode) \(Int(value))"
     }
 
     static func percent(_ ratio: Double) -> String {

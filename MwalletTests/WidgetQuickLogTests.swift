@@ -19,12 +19,12 @@ final class WidgetQuickLogTests: CoreDataTestCase {
         try super.setUpWithError()
         // 앞선 시험이 남긴 큐가 섞이지 않게 비우고 시작한다.
         MwalletShared.drainQueue()
-        MwalletShared.writeDestinationName(nil)
+        MwalletShared.writeDestination(nil)
     }
 
     override func tearDown() {
         MwalletShared.drainQueue()
-        MwalletShared.writeDestinationName(nil)
+        MwalletShared.writeDestination(nil)
         super.tearDown()
     }
 

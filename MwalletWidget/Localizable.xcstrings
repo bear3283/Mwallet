@@ -1690,6 +1690,70 @@
         }
       }
     },
+    "이 여행에 한 번 기록하면 그때 쓴 금액으로 단추가 생깁니다": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfasse einmal auf dieser Reise, dann entstehen Tasten mit deinen Beträgen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record once on this trip and buttons appear with the amounts you used"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apunta una vez en este viaje y aparecerán botones con tus importes"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra una vez en este viaje y aparecerán botones con tus montos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisissez une fois sur ce voyage et des boutons apparaîtront avec vos montants"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra una volta in questo viaggio e compariranno i tasti con i tuoi importi"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この旅行で一度記録すると、その金額のボタンができます"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anote uma vez nesta viagem e surgem botões com os seus valores"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在这个行程记录一次，就会按当时的金额生成按钮"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在這個行程記錄一次，就會按當時的金額產生按鈕"
+          }
+        }
+      }
+    },
     "이번 여행 예산과 집행률을 봅니다.": {
       "localizations": {
         "de": {
@@ -1750,6 +1814,70 @@
           "stringUnit": {
             "state": "translated",
             "value": "查看這次行程的預算和支出進度。"
+          }
+        }
+      }
+    },
+    "자주 적는 것이 여기 뜹니다": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine häufigen Posten stehen hier"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your regulars appear here"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aquí aparecen tus habituales"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aquí aparecen tus habituales"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos habitudes apparaîtront ici"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qui compaiono le tue voci ricorrenti"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よく使うものがここに出ます"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus itens frequentes aparecem aqui"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "常用的会出现在这里"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "常用的會出現在這裡"
           }
         }
       }
