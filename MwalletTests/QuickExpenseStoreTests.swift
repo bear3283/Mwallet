@@ -127,8 +127,8 @@ final class QuickExpenseStoreTests: CoreDataTestCase {
 
     // 위젯이 적지 못해 큐에 남은 것을 앱이 옮길 때도 원화로 굳으면 안 된다.
     func test_큐에서_옮길_때도_그_여행의_통화를_따른다() throws {
-        MwalletShared.drainQueue()
-        defer { MwalletShared.drainQueue() }
+        _ = MwalletShared.drainQueue()
+        defer { _ = MwalletShared.drainQueue() }
 
         let travel = makeTravel(name: "방콕",
                                 start: Date().addingTimeInterval(-86_400),

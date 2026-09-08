@@ -40,6 +40,10 @@ enum QuickExpenseStore {
         /// 적지 못해 큐에 남겼다. 앱을 열면 옮겨진다.
         case queued(reason: Reason)
 
+        // 'queued 인 까닭' 이라는 뜻이 이름이 아니라 자리에 담겨 있다.
+        // 밖으로 빼면 QuickExpenseQueueReason 처럼 자리를 이름으로 되풀이해야
+        // 하고, 그러면 Outcome 을 안 보고도 읽히는 대신 짝이 흐려진다.
+        // swiftlint:disable:next nesting
         enum Reason: Equatable {
             /// App Group 장부를 열지 못했다.
             case noStore
@@ -63,7 +67,10 @@ enum QuickExpenseStore {
             MwalletShared.enqueue(pending)
             return .queued(reason: .noStore)
         }
-        var outcome: Outcome = .queued(reason: .saveFailed)
+        // performAndWait 는 이름 그대로 끝날 때까지 기다린다. 그런데 Swift 6 은
+        // 이 클로저를 다른 곳에서 돌 수도 있는 것으로 보아, 바깥 변수를 고치면
+        // 경고한다. 여기서는 기다린 뒤에만 읽으므로 겹칠 일이 없다.
+        nonisolated(unsafe) var outcome: Outcome = .queued(reason: .saveFailed)
         context.performAndWait {
             outcome = write(pending, in: context)
         }
@@ -136,7 +143,10 @@ enum QuickExpenseStore {
               let objectID = context.persistentStoreCoordinator?
                   .managedObjectID(forURIRepresentation: url) else { return false }
 
-        var removed = false
+        // performAndWait 는 이름 그대로 끝날 때까지 기다린다. 그런데 Swift 6 은
+        // 이 클로저를 다른 곳에서 돌 수도 있는 것으로 보아, 바깥 변수를 고치면
+        // 경고한다. 여기서는 기다린 뒤에만 읽으므로 겹칠 일이 없다.
+        nonisolated(unsafe) var removed = false
         context.performAndWait {
             // 앱에서 이미 지웠을 수 있다. 그때는 조용히 넘어간다.
             guard let expense = try? context.existingObject(with: objectID) else { return }

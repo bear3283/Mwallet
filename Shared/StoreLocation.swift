@@ -45,8 +45,11 @@ enum StoreLocation {
     // MARK: - 판단
 
     enum Plan: Equatable {
+        // 옮기는 일에 붙는 이름은 from·to 다. source·destination 으로 늘리면
+        // 규칙은 통과하지만 부르는 자리가 길어질 뿐 더 또렷해지지 않는다.
+        // (disable:next 를 쓰면 주석이 case 에서 떨어져 다른 규칙에 걸린다)
         /// 옛 자리에 있는 것을 새 자리로 옮기고, 새 자리를 쓴다.
-        case move(from: URL, to: URL)
+        case move(from: URL, to: URL) // swiftlint:disable:this identifier_name
         /// 옮길 것 없이 새 자리를 쓴다.
         case useShared(URL)
         /// App Group 을 열 수 없다. 옛 자리를 그대로 쓴다.

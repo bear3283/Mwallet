@@ -18,12 +18,12 @@ final class WidgetQuickLogTests: CoreDataTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         // 앞선 시험이 남긴 큐가 섞이지 않게 비우고 시작한다.
-        MwalletShared.drainQueue()
+        _ = MwalletShared.drainQueue()
         MwalletShared.writeDestination(nil)
     }
 
     override func tearDown() {
-        MwalletShared.drainQueue()
+        _ = MwalletShared.drainQueue()
         MwalletShared.writeDestination(nil)
         super.tearDown()
     }
@@ -53,7 +53,7 @@ final class WidgetQuickLogTests: CoreDataTestCase {
     // 엉뚱한(그 전에 담은) 것이 사라지면 안 된다.
     func test_앱이_가져간_뒤에는_되돌릴_것이_없다() {
         MwalletShared.enqueue(pending(4_500, "커피"))
-        MwalletShared.drainQueue()
+        _ = MwalletShared.drainQueue()
 
         XCTAssertNil(MwalletShared.undoLast())
     }
