@@ -311,8 +311,30 @@ final class RecordViewModel: ObservableObject {
         //    예전에는 self.recognitionRequest 를 매 콜백마다 읽었는데,
         //    메인에서 stopSTT 가 그 프로퍼티를 nil 로 바꾸는 순간과 겹칠 수 있었다.
         //    지역 상수를 붙잡아 두면 프로퍼티를 건드리지 않아 그 경합이 사라진다.
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
-            request.append(buffer)
+        //
+        // ⚠️ @Sendable 을 빼면 앱이 죽는다.
+        //    이 클래스가 @MainActor 라, 그 안에서 쓴 클로저는 아무 표시가 없으면
+        //    메인 액터에 묶인 것으로 정해진다. 그런데 이것을 부르는 쪽은
+        //    AVFAudio 의 실시간 오디오 스레드다. Swift 6 은 그런 클로저를 부를
+        //    때마다 '지금 그 액터 위인가' 를 검사하고, 아니면 그 자리에서
+        //    프로세스를 끊는다.
+        //
+        //        _dispatch_assert_queue_fail
+        //        ← _swift_task_checkIsolatedSwift
+        //        ← closure #1 in RecordViewModel.startSTT()
+        //        ← AVAudioNodeTap::RealtimeMessenger_Perform
+        //
+        //    @Sendable 은 이 클로저가 어느 액터에도 매이지 않았음을 밝혀 그
+        //    검사를 없앤다. append(_:) 는 원래 오디오 스레드에서 부르라고 있는
+        //    것이라 액터에 묶을 까닭도 없다.
+        //
+        //    request 를 nonisolated(unsafe) 로 넘기는 것도 같은 이유다.
+        //    SFSpeechAudioBufferRecognitionRequest 는 Sendable 이 아니지만,
+        //    여기서 하는 일은 오디오 버퍼를 넣는 것 하나이고 그 길은
+        //    애플이 오디오 스레드용으로 열어 둔 길이다.
+        nonisolated(unsafe) let sink = request
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { @Sendable buffer, _ in
+            sink.append(buffer)
         }
 
         audioEngine.prepare()
@@ -320,7 +342,12 @@ final class RecordViewModel: ObservableObject {
         isCapturingAudio = true
 
         // 인식 결과는 임의의 큐로 온다. 화면 상태는 메인으로 넘겨서 바꾼다.
-        recognitionTask = speechRecognizer.recognitionTask(with: request) { [weak self] result, error in
+        //
+        // 위 탭과 같은 이유로 @Sendable 을 붙인다. 이 클래스가 @MainActor 라
+        // 표시가 없으면 메인 액터에 묶인 것으로 정해지는데, 부르는 쪽은
+        // 음성 인식이 쓰는 임의의 큐다. 아직 여기서 죽은 적은 없지만 —
+        // 탭이 더 자주 불려 먼저 걸렸을 뿐 — 같은 함정이다.
+        recognitionTask = speechRecognizer.recognitionTask(with: request) { @Sendable [weak self] result, error in
             guard let self else { return }
 
             if let result {
