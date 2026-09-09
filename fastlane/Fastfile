@@ -116,6 +116,7 @@ platform :ios do
     FileUtils.mkdir_p(out)
 
     targets.each_with_index do |(store_locale, setting), index|
+      attempted = false
       UI.header("#{store_locale}  (#{index + 1}/#{targets.count})")
 
       # 언어마다 기기를 비운다.
@@ -132,6 +133,12 @@ platform :ios do
       # erase 가 기기를 통째로 비우는 유일한 길이다.
       sh("xcrun simctl shutdown #{udid} > /dev/null 2>&1 || true", log: false)
       sh("xcrun simctl erase #{udid}", log: false)
+      # 지운 직후에 바로 돌리면 러너가 붙다 만다 —
+      #   The test runner failed to initialize for UI testing.
+      #   (Timed out while loading Accessibility.)
+      # 갓 지운 기기는 접근성 서비스가 아직 뜨지 않았다. bootstatus 가
+      # 다 뜰 때까지 기다려 준다.
+      sh("xcrun simctl bootstatus #{udid} -b", log: false)
 
       run_tests(
         project: PROJECT,
@@ -152,6 +159,13 @@ platform :ios do
 
       moved = export_screenshots(File.join(out, store_locale))
       UI.user_error!("#{store_locale} 화면을 한 장도 못 찍었습니다") if moved.zero?
+    rescue StandardError => error
+      # 시뮬레이터가 어긋나는 날이 있다. 열한 번 도는 동안 한 번 미끄러졌다고
+      # 처음부터 다시 하게 두면 스물몇 분을 버린다. 그 언어만 한 번 더 한다.
+      raise error if attempted
+      UI.important("#{store_locale} 를 다시 시도합니다 — #{error.message.lines.first&.strip}")
+      attempted = true
+      retry
     end
 
     UI.success("열한 언어 화면을 fastlane/screenshots 아래 언어별로 꺼냈습니다")
