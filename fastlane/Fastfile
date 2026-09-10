@@ -40,6 +40,8 @@ end
 PROJECT = "Mwallet.xcodeproj"
 SCHEME = "Mwallet"
 DEVICE = "iPhone 17"
+# 화면을 찍을 때 언어마다 새로 깔려고 쓴다.
+APP_ID = "com.bear3745.Mwallet.app"
 
 platform :ios do
 
@@ -72,6 +74,101 @@ platform :ios do
       output_directory: "fastlane/test_output"
     )
     export_screenshots
+  end
+
+  # 스토어 페이지는 열한 언어인데 화면은 한국어 한 벌뿐이었다.
+  # 앱이 열한 언어로 뜨게 된 지금은 언어마다 찍을 수 있다.
+  #
+  # 폴더 이름은 fastlane/metadata 의 것을 그대로 쓴다. deliver 가 그 짝을 보고
+  # 올리므로 하나라도 어긋나면 그 언어만 조용히 빠진다.
+  STORE_LOCALES = {
+    "ko"      => { language: "ko",      locale: "ko_KR" },
+    "en-US"   => { language: "en",      locale: "en_US" },
+    "ja"      => { language: "ja",      locale: "ja_JP" },
+    "zh-Hans" => { language: "zh-Hans", locale: "zh_CN" },
+    "zh-Hant" => { language: "zh-Hant", locale: "zh_TW" },
+    "de-DE"   => { language: "de",      locale: "de_DE" },
+    "fr-FR"   => { language: "fr",      locale: "fr_FR" },
+    "it"      => { language: "it",      locale: "it_IT" },
+    "es-ES"   => { language: "es",      locale: "es_ES" },
+    "es-MX"   => { language: "es-MX",   locale: "es_MX" },
+    "pt-BR"   => { language: "pt-BR",   locale: "pt_BR" }
+  }.freeze
+
+  desc "스토어용 화면을 열한 언어로 찍는다"
+  lane :store_screenshots do |options|
+    only = options[:locale]
+    targets = only ? STORE_LOCALES.select { |key, _| key == only } : STORE_LOCALES
+    UI.user_error!("모르는 언어입니다: #{only}") if targets.empty?
+
+    # 기기를 이름이 아니라 UDID 로 못 박는다.
+    #
+    # 이름으로 주면 xcodebuild 가 같은 기종의 다른 기기를 골라 갈 수 있다.
+    # 실제로 그랬다 — '시뮬2' 라는 기기가 iPhone 17 기종이라 그리로 갔고,
+    # 지우기는 이름이 'iPhone 17' 인 기기에 했다. 그래서 아무리 지워도
+    # 옛 예시 데이터가 그대로 나왔다.
+    udid = simulator_udid(DEVICE)
+    UI.user_error!("'#{DEVICE}' 시뮬레이터를 찾지 못했습니다") if udid.nil?
+    UI.message("기기 #{DEVICE} (#{udid})")
+
+    out = File.join(File.expand_path("..", __dir__), "fastlane/screenshots")
+    FileUtils.rm_rf(out) unless only
+    FileUtils.mkdir_p(out)
+
+    targets.each_with_index do |(store_locale, setting), index|
+      attempted = false
+      UI.header("#{store_locale}  (#{index + 1}/#{targets.count})")
+
+      # 언어마다 기기를 비운다.
+      #
+      # 화면을 채우는 예시 데이터(DebugSampleData)는 첫 실행 때 한 번 저장되고
+      # 그대로 남는다. 지우지 않으면 열한 번을 돌려도 처음 돈 언어의 이름이
+      # 계속 나온다 — 독일어 화면에 한국어 여행 이름이 박히는 것이 그 탓이다.
+      #
+      # 여행 이름은 사용자가 적는 값이라 화면에서 옮기지 않는다. 저장될 때
+      # 그 언어로 적히게 하는 것이 옳고, 그러려면 새로 깔아야 한다.
+      #
+      # uninstall 로는 모자란다. 장부가 App Group 으로 옮겨 간 뒤로는(#42)
+      # 앱을 지워도 그 컨테이너가 남아 옛 이름이 그대로 살아 있다.
+      # erase 가 기기를 통째로 비우는 유일한 길이다.
+      sh("xcrun simctl shutdown #{udid} > /dev/null 2>&1 || true", log: false)
+      sh("xcrun simctl erase #{udid}", log: false)
+      # 지운 직후에 바로 돌리면 러너가 붙다 만다 —
+      #   The test runner failed to initialize for UI testing.
+      #   (Timed out while loading Accessibility.)
+      # 갓 지운 기기는 접근성 서비스가 아직 뜨지 않았다. bootstatus 가
+      # 다 뜰 때까지 기다려 준다.
+      sh("xcrun simctl bootstatus #{udid} -b", log: false)
+
+      run_tests(
+        project: PROJECT,
+        scheme: SCHEME,
+        destination: ["platform=iOS Simulator,id=#{udid}"],
+        only_testing: ["MwalletUITests/StoreScreenshotTests"],
+        result_bundle: true,
+        output_directory: "fastlane/test_output",
+        # 언어는 xcodebuild 가 정한다. 환경변수로 넘기면 빌드 설정이 되어
+        # 테스트 프로세스까지 닿지 않는다.
+        # -parallel-testing-enabled NO 가 있어야 한다. 없으면 xcodebuild 가
+        # 시뮬레이터를 복제해 그 위에서 돌리는데, 위에서 지운 것은 원본이라
+        # 복제본에는 옛 예시 데이터가 그대로 살아 있다. 그러면 언어만 바뀌고
+        # 여행 이름은 처음 돈 언어의 것이 계속 나온다.
+        xcargs: "-testLanguage #{setting[:language]} -testRegion #{setting[:locale]} " \
+                "-parallel-testing-enabled NO"
+      )
+
+      moved = export_screenshots(File.join(out, store_locale))
+      UI.user_error!("#{store_locale} 화면을 한 장도 못 찍었습니다") if moved.zero?
+    rescue StandardError => error
+      # 시뮬레이터가 어긋나는 날이 있다. 열한 번 도는 동안 한 번 미끄러졌다고
+      # 처음부터 다시 하게 두면 스물몇 분을 버린다. 그 언어만 한 번 더 한다.
+      raise error if attempted
+      UI.important("#{store_locale} 를 다시 시도합니다 — #{error.message.lines.first&.strip}")
+      attempted = true
+      retry
+    end
+
+    UI.success("열한 언어 화면을 fastlane/screenshots 아래 언어별로 꺼냈습니다")
   end
 
   desc "App Store Connect 열쇠가 통하는지 본다 (읽기만 한다)"
@@ -227,22 +324,42 @@ end
 # 경로는 모두 절대 경로로 만든다. fastlane 은 레인을 fastlane 폴더 안에서
 # 돌리는데 run_tests 의 output_directory 는 프로젝트 뿌리를 기준으로 잡아,
 # 상대 경로로 적으면 둘이 어긋난다.
-def export_screenshots
+# 이름으로 시뮬레이터의 UDID 를 찾는다.
+#
+# 같은 기종의 기기가 여럿일 수 있어(사용자가 이름을 바꿔 만든 것 포함),
+# 이름으로만 주면 xcodebuild 가 어느 것을 고를지 우리가 정할 수 없다.
+def simulator_udid(name)
+  require "json"
+  listing = JSON.parse(`xcrun simctl list devices --json`)
+  listing["devices"].values.flatten.find do |device|
+    device["name"] == name && device["isAvailable"]
+  end&.dig("udid")
+end
+
+# destination 을 주면 그리로 꺼내고, 안 주면 예전처럼 fastlane/screenshots 로 간다.
+# 언어별로 찍을 때는 벌마다 제 폴더가 있어야 해서 자리를 받는다.
+def export_screenshots(destination = nil)
   require "json"
   require "fileutils"
 
   root = File.expand_path("..", __dir__)
   bundle = Dir[File.join(root, "fastlane/test_output/*.xcresult")].max_by { |path| File.mtime(path) }
-  return UI.important("결과 묶음을 찾지 못했습니다") if bundle.nil?
+  if bundle.nil?
+    UI.important("결과 묶음을 찾지 못했습니다")
+    return 0
+  end
 
   raw = File.join(root, "fastlane/test_output/attachments")
   FileUtils.rm_rf(raw)
   sh("xcrun xcresulttool export attachments --path '#{bundle}' --output-path '#{raw}'", log: false)
 
   manifest = File.join(raw, "manifest.json")
-  return UI.important("매니페스트가 없습니다") unless File.exist?(manifest)
+  unless File.exist?(manifest)
+    UI.important("매니페스트가 없습니다")
+    return 0
+  end
 
-  out = File.join(root, "fastlane/screenshots")
+  out = destination || File.join(root, "fastlane/screenshots")
   FileUtils.rm_rf(out)
   FileUtils.mkdir_p(out)
 
@@ -261,7 +378,8 @@ def export_screenshots
     count += 1
   end
 
-  UI.success("화면 #{count}장을 fastlane/screenshots 에 꺼냈습니다")
+  UI.success("화면 #{count}장을 #{out.sub(root + '/', '')} 에 꺼냈습니다")
+  count
 end
 
 # 매니페스트의 짜임이 판마다 달라, 파일 이름을 든 마디를 찾아 훑는다.
