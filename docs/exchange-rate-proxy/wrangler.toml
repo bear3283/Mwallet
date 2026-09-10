@@ -2,5 +2,9 @@ name = "mwallet-rates"
 main = "worker.js"
 compatibility_date = "2024-11-01"
 
+# 판마다 따로 붙는 미리보기 주소를 두지 않는다. 그 주소도 같은 키를 쥐고
+# 있는데, 여기서는 쓸 데가 없다 — 배포는 CLI 로만 한다.
+preview_urls = false
+
 # 키는 여기 적지 않는다. 아래로 넣는다.
 #     wrangler secret put EXCHANGERATE_API_KEY

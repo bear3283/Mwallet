@@ -20,28 +20,33 @@
 **둘째는 키다.** 지금은 키가 `Info.plist` 에 실려 나가 IPA 를 열면 꺼낼 수
 있다. 중계를 쓰면 키는 Cloudflare 안에만 있고 앱에는 주소만 실린다.
 
-## 세우는 법
+## 세워 둔 것
 
-Cloudflare 계정이 필요하다. 무료 요금제가 하루 10만 요청이라 이 앱에는
-사실상 한도가 없는 셈이다.
+**이미 서 있다.** `https://mwallet-rates.bearwallet.workers.dev`
+
+아래는 다시 세울 때의 순서다. Cloudflare 무료 요금제가 하루 10만 요청이라
+이 앱에는 사실상 한도가 없는 셈이다.
 
 ```sh
 npm install -g wrangler
 wrangler login
 
 cd docs/exchange-rate-proxy
+wrangler deploy                            # 처음이면 workers.dev 하위 도메인을 묻는다
 wrangler secret put EXCHANGERATE_API_KEY   # 지금 쓰는 키를 붙여 넣는다
-wrangler deploy
 ```
 
-배포하면 주소가 나온다. `https://mwallet-rates.<계정>.workers.dev`
+배포하면 주소가 나온다. `https://mwallet-rates.<하위도메인>.workers.dev`
+
+새 하위 도메인은 **인증서가 붙는 데 몇 분 걸린다.** 그 사이에 부르면
+`curl` 이 TLS 실패로 끊긴다 — 잘못 세운 것이 아니니 기다렸다 다시 부른다.
 
 ## 앱에 연결하기
 
 `Mwallet/View/Config.xcconfig` 에 주소를 적고 키는 비운다.
 
 ```
-EXCHANGE_RATE_ENDPOINT = https:/$()/mwallet-rates.<계정>.workers.dev
+EXCHANGE_RATE_ENDPOINT = https:/$()/mwallet-rates.bearwallet.workers.dev
 API_KEY =
 ```
 
@@ -50,7 +55,7 @@ API_KEY =
 ## 확인
 
 ```sh
-curl -i https://mwallet-rates.<계정>.workers.dev/latest/KRW
+curl -i https://mwallet-rates.bearwallet.workers.dev/latest/KRW
 ```
 
 `conversion_rates` 가 담긴 JSON 이 오면 된다. 두 번째로 부르면
