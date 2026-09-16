@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Apple 이 '사유를 적어야 하는 API' 로 정해 둔 것들을 쓰면 여기에 적어야 한다.
+	  적지 않고 올리면 업로드 직후 ITMS-91053 메일이 오고, 심사에서 되돌아온다.
+
+	  이 앱이 쓰는 것은 UserDefaults 하나뿐이다. 파일 시각·남은 용량·기기 가동
+	  시간·시스템 정보 API 는 쓰지 않는다(확인함).
+	-->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+
+	<!--
+	  비어 있는 것이 맞다. 이 앱은 기록을 기기와 사용자 본인의 iCloud(CloudKit
+	  개인 데이터베이스)에만 둔다. 만든 사람이 들여다볼 수 있는 곳으로 나가는
+	  것이 없으므로 Apple 이 말하는 '수집' 에 해당하지 않는다.
+
+	  환율 중계(Cloudflare Worker)로 나가는 것은 통화 코드뿐이고 그마저도
+	  사용자를 가리키지 않는다.
+	-->
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<!--
+				  CA92.1 — 이 앱이 제 것만 읽고 쓴다.
+				  환율 캐시·첫 실행 표시·마이그레이션 표시가 여기 있다.
+				-->
+				<string>CA92.1</string>
+				<!--
+				  1C8F.1 — App Group 으로 묶인 제 확장(위젯)과 함께 쓴다.
+				  Shared/MwalletShared.swift 의 group.com.Mwallet.app 묶음이다.
+				-->
+				<string>1C8F.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

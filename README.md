@@ -17,8 +17,8 @@
 | 음성 인식 | Speech |
 | 카테고리 분류 | CreateML (온디바이스 `InfoClassifier.mlmodel`) |
 | 위치 | Core Location |
-| 환율 | exchangerate-api.com (무료 플랜, 1일 1회 갱신) |
-| 의존성 | SPM 단일 — lottie-ios 4.3.3, SwiftLintPlugins 0.65.0 |
+| 환율 | 자체 중계(Cloudflare Worker) → exchangerate-api.com. 하루 두 번까지 조회 |
+| 의존성 | SPM 단 하나 — SwiftLintPlugins 0.65.0 |
 
 <br>
 
@@ -82,9 +82,14 @@ bundle exec fastlane lint           # SwiftLint 위반만 모아 본다
 배포 쪽은 App Store Connect 열쇠가 있어야 합니다. [`fastlane/.env.example`](fastlane/.env.example)을 `fastlane/.env` 로 복사해 채우세요.
 
 ```bash
-bundle exec fastlane check_key      # 열쇠가 통하는지 (읽기만 한다)
-bundle exec fastlane beta           # TestFlight 에 올린다
+bundle exec fastlane check_key            # 열쇠가 통하는지 (읽기만 한다)
+bundle exec fastlane store_screenshots    # 열한 언어로 찍는다 (6.9인치)
+bundle exec fastlane screenshots_upload   # 찍어 둔 것을 올린다
+bundle exec fastlane metadata             # 스토어에 적히는 글을 올린다
+bundle exec fastlane beta                 # TestFlight 에 올린다
 ```
+
+배포까지의 순서와 대시보드에서만 되는 일은 [`docs/배포-절차.md`](docs/배포-절차.md)에 적어 두었습니다.
 
 `.p8` 개인키는 **저장소 밖**에 두고 경로만 넘깁니다. 한 번만 내려받을 수 있는 파일이고, 들어오면 계정 전체를 만질 수 있습니다. `*.p8` 은 `.gitignore` 로도 막아 뒀습니다.
 
@@ -92,7 +97,9 @@ bundle exec fastlane beta           # TestFlight 에 올린다
 
 **Ruby 4에서는 fastlane 2.228 이상이 필요합니다.** 그 아래 버전은 시작하자마자 `uninitialized constant FastlaneCore::UpdateChecker`로 죽습니다. `Gemfile`에 하한을 걸어 뒀습니다.
 
-App Store Connect에 올리는 레인은 아직 없습니다. [`fastlane/Appfile`](fastlane/Appfile)의 계정 항목은 사람마다 다른 값이라 비워 두었고, 환경 변수로 넘기는 편을 권합니다.
+[`fastlane/Appfile`](fastlane/Appfile)의 계정 항목은 사람마다 다른 값이라 비워 두었고, 환경 변수로 넘기는 편을 권합니다.
+
+`screenshots`(개발용 확인)와 `store_screenshots`(스토어용)는 기기가 다릅니다. 스토어가 iPhone 에 요구하는 규격이 6.9인치라 뒤쪽만 `iPhone 17 Pro Max` 로 찍습니다. 6.3인치로 찍은 벌은 올릴 때 그 언어만 조용히 빠집니다.
 
 <br>
 
@@ -188,7 +195,7 @@ Mwallet/
 **P1 — 안정성**
 - [x] SwiftLint 실제 동작 복구 (원본은 미설치 상태로 스킵되고 있었음)
 - [x] SwiftLint 위반 0건 달성
-- [x] 테스트 타깃 신설 (`MwalletTests`) — 405건. CSV 파서 · 국가/통화 표 · 환율 · 금액 환산 · CSV 인코딩 · 예산 집계 · 영수증 집계/필터 · 저장 규칙 · 지도 순서 · 위젯 큐
+- [x] 테스트 타깃 신설 (`MwalletTests`) — 407건. CSV 파서 · 국가/통화 표 · 환율 · 금액 환산 · CSV 인코딩 · 예산 집계 · 영수증 집계/필터 · 저장 규칙 · 지도 순서 · 위젯 큐
 - [x] CI(빌드 + 린트 + 테스트) — [`.github/workflows/ci.yml`](.github/workflows/ci.yml). **손으로 돌릴 때만 돈다** (Actions 탭 → CI → Run workflow). 비공개 저장소의 macos 러너는 분당 10배로 계산되어 무료 한도가 40회 남짓인데, 여기서 하는 일은 손안의 기계에서 몇 분이면 끝나고 머지 전에 늘 그렇게 확인한다. 파일을 남겨 둔 것은 '깨끗한 기계에서 빌드하는 법' 의 기록이기 때문이다
 - [x] `fatalError` 5곳 → 3곳을 복구 가능한 처리로 전환 (남은 2곳은 `Persistence` 의 저장소 개방 실패로, 앱이 할 수 있는 복구가 없음)
 - [x] 기존 `CSVArchive` 를 `ReceiptCSVEncoder` 로 교체 완료
@@ -237,7 +244,15 @@ Mwallet/
 - [x] **쉼표를 소수점으로 쓰는 언어에서 금액이 백 배** — 독일어·스페인어·이탈리아어·포르투갈어·프랑스어는 쉼표가 소수점이고 마침표가 자릿점이다. 쉼표를 무조건 걷어내던 코드가 `15,50 Euro` 를 1550 으로 읽었다. 자릿점 판단을 로케일에 맡겼다
 - [x] **말하기를 열한 언어로** — 결제 방식 낱말 표를 언어별로 두었다. 한꺼번에 보지 않는다 — 독일어에서 현금인 `bar` 는 스페인어에서 술집이다
 - [x] **나라·통화 이름을 iOS 에 물어봄** — csv 사백 줄을 열 번 옮겨 적는 대신 ISO 코드로 묻는다
-- [ ] **스토어 스크린샷이 한국어 한 벌뿐** — `fastlane/metadata/` 에는 열한 언어가 다 있는데 `fastlane/screenshots/` 는 언어 구분이 없다. 앱이 열한 언어로 뜨게 된 지금은 언어별로 찍을 수 있다
+- [x] **스토어 스크린샷이 한국어 한 벌뿐** — `fastlane/metadata/` 에는 열한 언어가 다 있는데 `fastlane/screenshots/` 는 언어 구분이 없었다. `store_screenshots` 가 언어마다 기기를 비우고 새로 깔며 열한 벌을 찍는다. 찍는 기기는 `iPhone 17 Pro Max` 다 — 스토어가 iPhone 에 요구하는 규격이 6.9인치라, 6.3인치로 찍은 벌은 올릴 때 그 언어만 조용히 빠진다
+
+**내보내기 준비**
+- [x] **여행 선택이 스스로를 불러 앱이 죽던 것** — `selectedTravelInExpense` 가 비면 `findCurrentTravel()` 의 답을 그대로 넣었는데, 그 함수도 nil 을 주면 nil 을 도로 넣는 꼴이라 didSet 이 자기를 다시 불렀다. 멈출 자리가 없어 스택을 넘어 프로세스가 죽었고, 한 겹마다 Core Data 를 한 번씩 뒤지므로 조용히 느려지다 터졌다. **여행이 하나도 없는 장부에서 재현된다 — 보던 여행을 지운 직후가 그 상태다.** 테스트에서는 호스트가 죽고 러너가 다시 붙어, 단언은 모두 통과하는데 레인만 실패하는 모양으로 나타났다(`** TEST EXECUTE FAILED **`). 메울 것이 있을 때만 넣고 그 자리에서 멈춘다
+- [x] **개인정보 매니페스트** — `UserDefaults` 를 쓰면서 사유를 적어 두지 않으면 올린 직후 ITMS-91053 이 오고 심사에서 되돌아온다. 앱과 위젯에 각각 뒀다 — 검사는 번들마다 돈다. 이 앱이 걸리는 것은 그 하나뿐이고 파일 시각·남은 용량 API 는 쓰지 않는다
+- [x] **쓰지 않는 entitlement 삭제** — `background-tasks.continued-processing.gpu` 가 적혀 있었는데 코드 어디에서도 쓰지 않는다. App ID 에 켜 두지 않은 권한이 적혀 있으면 아카이브를 내보낼 때 막힌다
+- [x] **버전 `1.0.0` · 위젯 기기 패밀리** — 위젯이 `1,2`(iPad 포함)라 iPhone 전용인 앱보다 넓었다. 확장이 상위 앱보다 넓으면 업로드 검증에서 걸린다
+- [x] **스크린샷 업로드 레인** — 글(`metadata`)과 나눠 뒀다. 문구는 자주 고치고 그림은 화면이 바뀔 때만 다시 찍는다. 규격이 섞여 있으면 올리기 전에 멈춘다
+- [x] **배포 절차 문서** — [`docs/배포-절차.md`](docs/배포-절차.md). 레인으로 되는 것과 대시보드에서만 되는 것을 갈랐다. CloudKit 스키마 승격을 빼먹으면 출시된 앱에서 동기화가 조용히 실패한다
 
 **기능 공백 (코드 리뷰에서 발견 — 로드맵 미등록분)**
 - [x] **여행 편집 화면** — 여행 상세 우상단 연필. 쓰기 규칙은 `TravelStore` 로 분리

@@ -39,6 +39,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 스토어용 화면을 열한 언어로 찍는다
 
+### ios screenshots_upload
+
+```sh
+[bundle exec] fastlane ios screenshots_upload
+```
+
+찍어 둔 화면을 App Store 에 올린다 (빌드·글은 건드리지 않는다)
+
 ### ios check_key
 
 ```sh

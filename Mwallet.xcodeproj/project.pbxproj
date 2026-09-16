@@ -143,6 +143,7 @@
 		FA000000000000000000D200 /* QuickExpenseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000D000 /* QuickExpenseStore.swift */; };
 		FA000000000000000000E100 /* QuickPresetSuggester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000E000 /* QuickPresetSuggester.swift */; };
 		FA000000000000000000E200 /* QuickPresetSuggester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000E000 /* QuickPresetSuggester.swift */; };
+		DA0000000000000000000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DA0000000000000000000001 /* PrivacyInfo.xcprivacy */; };
 		LC0000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LC0000000000000000000001 /* Localizable.xcstrings */; };
 		RO000000000000000000C100 /* RecordOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = RO000000000000000000C000 /* RecordOutcome.swift */; };
 		SP0000000000000000000002 /* SpeechLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = SP0000000000000000000001 /* SpeechLocale.swift */; };
@@ -329,6 +330,7 @@
 		FA000000000000000000E000 /* QuickPresetSuggester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickPresetSuggester.swift; path = Shared/QuickPresetSuggester.swift; sourceTree = SOURCE_ROOT; };
 		FB00000000000000000000P1 /* MwalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC00000000000000000000P1 /* MwalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MwalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA0000000000000000000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		LC0000000000000000000001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		RO000000000000000000C000 /* RecordOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordOutcome.swift; sourceTree = "<group>"; };
 		SP0000000000000000000001 /* SpeechLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechLocale.swift; sourceTree = "<group>"; };
@@ -435,6 +437,7 @@
 				C190C20A2ADCD4520099EE3A /* DesignSystem */,
 				571A426D2ACE857600FA3D2B /* Assets.xcassets */,
 				LC0000000000000000000001 /* Localizable.xcstrings */,
+				DA0000000000000000000001 /* PrivacyInfo.xcprivacy */,
 				571A426F2ACE857600FA3D2B /* Preview Content */,
 			);
 			path = Mwallet;
@@ -927,6 +930,7 @@
 				C17966072ADD66F90036E866 /* WantedSans-Medium.otf in Resources */,
 				571A426E2ACE857600FA3D2B /* Assets.xcassets in Resources */,
 				LC0000000000000000000002 /* Localizable.xcstrings in Resources */,
+				DA0000000000000000000002 /* PrivacyInfo.xcprivacy in Resources */,
 				C17966082ADD66F90036E866 /* WantedSans-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1152,7 +1156,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1163,7 +1167,7 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1187,7 +1191,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1198,7 +1202,7 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1363,7 +1367,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1408,7 +1412,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1430,7 +1434,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1450,7 +1454,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1468,7 +1472,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1486,7 +1490,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bear3745.Mwallet.app.MwalletUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;

@@ -5,7 +5,15 @@
 #   bundle exec fastlane lint         SwiftLint 위반만 모아 본다
 #   bundle exec fastlane metadata     App Store 정보만 올린다 (빌드는 안 건드린다)
 #
-# 세 레인 모두 계정 정보가 필요 없다. 시뮬레이터에서만 돈다.
+# 위의 test·screenshots·lint 는 계정 정보가 필요 없다. 시뮬레이터에서만 돈다.
+#
+# 스토어에 무언가를 올리는 레인은 fastlane/.env 의 열쇠가 있어야 한다.
+#
+#   bundle exec fastlane check_key            열쇠가 통하는지 (읽기만 한다)
+#   bundle exec fastlane store_screenshots    열한 언어로 찍는다 (6.9인치)
+#   bundle exec fastlane screenshots_upload   찍어 둔 것을 올린다
+#   bundle exec fastlane metadata             글을 올린다
+#   bundle exec fastlane beta                 TestFlight 에 올린다
 
 default_platform(:ios)
 
@@ -40,6 +48,12 @@ end
 PROJECT = "Mwallet.xcodeproj"
 SCHEME = "Mwallet"
 DEVICE = "iPhone 17"
+# 스토어에 올릴 그림만 다른 기기에서 찍는다.
+#
+# App Store 가 iPhone 에 요구하는 규격은 6.9 인치(1320×2868)다. iPhone 17 은
+# 6.3 인치라 1206×2622 로 나오고, 규격이 어긋난 벌은 올릴 때 그 언어만 조용히
+# 빠진다. 테스트·린트는 빠른 쪽이 나으므로 DEVICE 를 그대로 쓴다.
+SCREENSHOT_DEVICE = "iPhone 17 Pro Max"
 # 화면을 찍을 때 언어마다 새로 깔려고 쓴다.
 APP_ID = "com.bear3745.Mwallet.app"
 
@@ -107,9 +121,9 @@ platform :ios do
     # 실제로 그랬다 — '시뮬2' 라는 기기가 iPhone 17 기종이라 그리로 갔고,
     # 지우기는 이름이 'iPhone 17' 인 기기에 했다. 그래서 아무리 지워도
     # 옛 예시 데이터가 그대로 나왔다.
-    udid = simulator_udid(DEVICE)
-    UI.user_error!("'#{DEVICE}' 시뮬레이터를 찾지 못했습니다") if udid.nil?
-    UI.message("기기 #{DEVICE} (#{udid})")
+    udid = simulator_udid(SCREENSHOT_DEVICE)
+    UI.user_error!("'#{SCREENSHOT_DEVICE}' 시뮬레이터를 찾지 못했습니다") if udid.nil?
+    UI.message("기기 #{SCREENSHOT_DEVICE} (#{udid})")
 
     out = File.join(File.expand_path("..", __dir__), "fastlane/screenshots")
     FileUtils.rm_rf(out) unless only
@@ -169,6 +183,41 @@ platform :ios do
     end
 
     UI.success("열한 언어 화면을 fastlane/screenshots 아래 언어별로 꺼냈습니다")
+  end
+
+  desc "찍어 둔 화면을 App Store 에 올린다 (빌드·글은 건드리지 않는다)"
+  #
+  # store_screenshots 로 찍은 fastlane/screenshots 아래 열한 벌을 그대로 올린다.
+  # 글(metadata 레인)과 나눠 둔 것은 둘의 주기가 다르기 때문이다 — 문구는 자주
+  # 고치고 그림은 화면이 바뀔 때만 다시 찍는다.
+  lane :screenshots_upload do |options|
+    api_key = connect_api_key
+    ensure_app_exists(api_key)
+
+    path = File.join(File.expand_path("..", __dir__), "fastlane/screenshots")
+    shots = Dir[File.join(path, "*", "*.png")]
+    UI.user_error!("올릴 그림이 없습니다. 먼저 `fastlane store_screenshots` 를 돌리세요.") if shots.empty?
+
+    # 규격이 어긋난 벌은 deliver 가 그 언어만 조용히 건너뛴다. 올리기 전에
+    # 크기를 재 보고, 다른 것이 섞여 있으면 여기서 멈춘다.
+    sizes = shots.group_by { |file| `sips -g pixelWidth -g pixelHeight "#{file}"`.scan(/\d+$/).join("×") }
+    if sizes.count > 1
+      UI.user_error!("크기가 여러 가지입니다: #{sizes.keys.join(', ')}. 한 기기로 다시 찍으세요.")
+    end
+    UI.message("#{shots.count}장 · #{sizes.keys.first} · #{Dir[File.join(path, '*')].count}개 언어")
+
+    deliver(
+      api_key: api_key,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: false,
+      screenshots_path: path,
+      # 언어별로 예전 그림을 지우고 새로 올린다. 이것이 없으면 장수만 늘어난다.
+      overwrite_screenshots: true,
+      # 글을 안 올리므로 문구 검사도 돌릴 것이 없다.
+      run_precheck_before_submit: false,
+      force: options[:force] == true || options[:force] == "true"
+    )
   end
 
   desc "App Store Connect 열쇠가 통하는지 본다 (읽기만 한다)"

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  확장도 제 것을 따로 낸다. 앱 것 하나로 갈음되지 않는다 — 검사는 번들마다
+	  돈다.
+
+	  위젯이 쓰는 UserDefaults 는 App Group 묶음(group.com.Mwallet.app) 하나뿐이다.
+	  Shared/MwalletShared.swift 를 앱과 함께 컴파일해 그 자리를 같이 쓴다.
+	-->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<!-- 1C8F.1 — 같은 App Group 으로 묶인 제 앱과 함께 쓴다. -->
+				<string>1C8F.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

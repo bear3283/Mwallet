@@ -29,8 +29,19 @@ class MainViewModel: ObservableObject {
     }
     @Published var selectedTravelInExpense: Travel? {
         didSet {
-            if selectedTravelInExpense == nil {
-                selectedTravelInExpense = findCurrentTravel()
+            // 비면 여행 중인 것으로 메운다. 메울 것이 있을 때만 대입한다.
+            //
+            // 예전에는 `findCurrentTravel()` 의 답을 그대로 넣었는데, 그 함수도
+            // nil 을 돌려주면 nil 을 도로 넣는 꼴이라 didSet 이 자기를 다시 불렀다.
+            // 멈출 자리가 없어 여행이 하나도 없는 장부에서는 되풀이하다
+            // 스택을 넘어 프로세스가 죽었다 — 부를 때마다 Core Data 를 한 번씩
+            // 뒤지므로 조용히 느려지다 터진다.
+            //
+            // 여행이 없는 장부는 드물지 않다. 지금 보던 여행을 지운 직후가 그렇다.
+            if selectedTravelInExpense == nil, let current = findCurrentTravel() {
+                // 이 대입이 didSet 을 다시 부른다. 뒷일은 그쪽이 맡으므로 여기서 멈춘다.
+                selectedTravelInExpense = current
+                return
             }
             if selectedTravelInExpense != selectedTravel {
                 updateSelectedTravel()
