@@ -302,6 +302,25 @@ platform :ios do
     review = "metadata/review_information"
     phone = File.join(review, "phone_number.txt")
     unless File.exist?(phone) && !File.read(phone).strip.empty?
+      # 다만 연락처 기록이 스토어에 아직 없으면 비켜 두는 것으로 끝나지 않는다.
+      #
+      # deliver 는 연락처를 쓴 다음(review_information) 바로 그 기록에 붙은
+      # 첨부 파일을 보러 간다(review_attachment_file). 넘길 연락처가 비어 있으면
+      # 앞의 것은 아무 일도 하지 않고 빠져나가므로 기록이 만들어지지 않고,
+      # 뒤의 것이 없는 기록을 읽다 `No data` 로 죽는다. 처음 올리는 앱에서만
+      # 나는 일이라 원인이 한눈에 보이지 않는다.
+      #
+      # 언어별 문구는 그 전에 이미 올라간 뒤라, 실패해도 절반은 올라가 있다.
+      unless review_detail_exists?(api_key)
+        UI.user_error!(
+          "심사 연락처가 스토어에도 없고 #{phone} 에도 없습니다.\n" \
+          "둘 중 하나를 먼저 채우세요.\n" \
+          "  · #{phone} 에 번호를 넣고 이 레인을 다시 돌리거나\n" \
+          "  · App Store Connect → 앱 심사 정보 에 연락처를 한 번 저장하거나\n" \
+          "(비워 둔 채로 올리면 deliver 가 `No data` 로 죽습니다)"
+        )
+      end
+
       UI.important("심사 연락처에 전화번호가 없어 그 부분은 올리지 않습니다. " \
                    "#{phone} 에 번호를 넣으면 함께 올라갑니다.")
       skip_review_information = true
@@ -362,6 +381,24 @@ def ensure_app_exists(api_key)
     "먼저 https://appstoreconnect.apple.com 에서 앱을 만드세요.\n" \
     "(이름·SKU·번들 ID 를 정하는 일이라 여기서 대신 하지 않습니다)"
   )
+end
+
+# 심사 연락처 기록이 스토어에 이미 있는지 본다.
+#
+# 있으면 이번에 연락처를 안 넘겨도 deliver 가 그것을 읽어 갈 수 있다.
+# 없으면 비워 둔 채로 올릴 수 없다 — 위 metadata 레인의 주석 참고.
+def review_detail_exists?(api_key)
+  Spaceship::ConnectAPI.auth(**api_key.slice(:key_id, :issuer_id, :key, :duration, :in_house))
+  app = Spaceship::ConnectAPI::App.find("com.bear3745.Mwallet.app")
+  return false if app.nil?
+
+  version = app.get_edit_app_store_version(platform: "IOS")
+  return false if version.nil?
+
+  !version.fetch_app_store_review_detail.nil?
+rescue StandardError
+  # 없으면 `No data` 로 튄다. 그것이 곧 답이다.
+  false
 end
 
 # 화면 테스트는 XCTAttachment 로 그림을 남긴다. 결과 묶음 안에 들어 있어
