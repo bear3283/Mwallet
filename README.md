@@ -1,6 +1,8 @@
 # Mwallet
 
-해외여행 가계부 iOS 앱. [NomadWallet](https://apps.apple.com/ca/app/id6470182505)(2023, MacC Team11-UMM)의 코드베이스를 기반으로 새롭게 개발하는 프로젝트입니다.
+해외여행 가계부 iOS 앱. [NomadWallet](https://apps.apple.com/ca/app/id6470182505)(2023, MacC Team11-UMM)의 코드베이스를 기반으로 새롭게 개발했습니다.
+
+**App Store 에 [Mission Wallet](https://apps.apple.com/app/id6800831562) 로 나가 있습니다** — 1.0.0, 2026-09-23, 열한 언어.
 
 원본 프로젝트의 README(팀 정보, 기존 기능 명세, Git/코드 컨벤션)는 [`docs/NomadWallet-원본-README.md`](docs/NomadWallet-원본-README.md)에 보관되어 있습니다.
 
