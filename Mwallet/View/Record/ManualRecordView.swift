@@ -79,14 +79,17 @@ struct ManualRecordView: View {
         .sheet(isPresented: $viewModel.categoryChoiceModalIsShown) {
             CategoryChoiceModal(chosenCategory: $viewModel.category)
                 .presentationDetents([.height(289 - 34)])
+                .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $viewModel.countryChoiceModalIsShown) {
             CountryChoiceModal(chosenCountry: $viewModel.country, countryIsModified: $viewModel.countryIsModified, countryArray: viewModel.otherCountryCandidateArray, currentCountry: viewModel.currentCountry)
                 .presentationDetents([.height(289 - 34)])
+                .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $viewModel.dateChoiceModalIsShown) {
             DateChoiceModal(date: $viewModel.payDate, startDate: mainVM.chosenTravelInManualRecord?.startDate ?? Date.distantPast, endDate: mainVM.chosenTravelInManualRecord?.endDate ?? Date.distantFuture)
                 .presentationDetents([.height(289 - 34)])
+                .presentationDragIndicator(.visible)
         }
         .alert(Text("저장하지 않고 나가기"), isPresented: $viewModel.backButtonAlertIsShown) {
             Button {

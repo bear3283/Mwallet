@@ -124,7 +124,7 @@ final class ScreenshotTests: XCTestCase {
             settle()
         }
 
-        tapIfExists(app.buttons["닫기"])
+        lowerSheet()
     }
 
     /// 영수증 탭에는 '전체 여행' 칸이 하나 더 붙는다.
@@ -140,7 +140,7 @@ final class ScreenshotTests: XCTestCase {
         raiseSheet()
         capture("08-영수증-여행선택")
 
-        tapIfExists(app.buttons["닫기"])
+        lowerSheet()
     }
 
     /// 기록 탭도 같은 시트를 쓴다. 세 탭이 정말 한 벌인지 눈으로 견준다.
@@ -156,7 +156,7 @@ final class ScreenshotTests: XCTestCase {
         raiseSheet()
         capture("10-기록-여행선택-올림")
 
-        tapIfExists(app.buttons["닫기"])
+        lowerSheet()
     }
 
     /// 영수증 사진 여러 장 — 목록의 장수 표시와 상세의 넘겨 보기.
@@ -219,6 +219,20 @@ final class ScreenshotTests: XCTestCase {
         let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.06))
         from.press(forDuration: 0.05, thenDragTo: to)
         settle()
+    }
+
+    /// 시트를 끌어내려 닫는다. 닫기 버튼을 없앤 뒤로는 이것이 닫는 길이다.
+    ///
+    /// 손잡이 근처를 잡는다. 더 아래를 잡으면 목록이 스크롤로 받아 가서
+    /// 시트가 내려가지 않는 때가 있다. 낮은 단에 머물러 있으면 한 번으로는
+    /// 높은 단에서 낮은 단으로만 내려오므로, 남아 있으면 한 번 더 내린다.
+    private func lowerSheet() {
+        for start in [0.10, 0.68] {
+            let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: start))
+            let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.99))
+            from.press(forDuration: 0.05, thenDragTo: to)
+            settle()
+        }
     }
 
     // MARK: - 여행 상세 · 편집

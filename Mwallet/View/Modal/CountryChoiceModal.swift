@@ -12,6 +12,8 @@ struct CountryChoiceModal: View {
     @Binding var countryIsModified: Bool
     let countryArray: [Int]
     let currentCountry: Int
+
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ZStack {
@@ -52,70 +54,56 @@ struct CountryChoiceModal: View {
                     Spacer()
                         .frame(height: 12)
                     ForEach(countryArray, id: \.self) { country in
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(.gray100)
-                                .layoutPriority(-1)
-                                .opacity(chosenCountry == country ? 1.0 : 0.0000001)
-                                .opacity((country == currentCountry && !countryIsModified) ? 0.0000001 : 1)
-                            
-                            HStack {
-                                Image(CountryInfoModel.shared.countryResult[Int(country)]?.flagString ?? "DefaultFlag")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .padding(.vertical, 13)
-                                
-                                Text(CountryInfoModel.shared.countryResult[Int(country)]?.displayName
-                                     ?? String(localized: "알 수 없음"))
-                                    .foregroundStyle(.black)
-                                    .font(.subhead3_2)
-                                    .padding(.vertical, 16)
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal, 13)
-                        }
-                        .onTapGesture {
-                            chosenCountry = country
-                            countryIsModified = true
-                        }
+                        row(country,
+                            isHighlighted: chosenCountry == country
+                                && !(country == currentCountry && !countryIsModified))
                     }
                     
                     if !countryArray.contains(currentCountry) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(.gray100)
-                                .layoutPriority(-1)
-                                .opacity((chosenCountry == currentCountry && countryIsModified) ? 1.0 : 0.0000001)
-                            
-                            HStack {
-                                Image(CountryInfoModel.shared.countryResult[currentCountry]?.flagString ?? "DefaultFlag")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .padding(.vertical, 13)
-                                
-                                Text(CountryInfoModel.shared.countryResult[Int(currentCountry)]?.displayName
-                                     ?? String(localized: "알 수 없음"))
-                                    .foregroundStyle(.black)
-                                    .font(.subhead3_2)
-                                    .padding(.vertical, 16)
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal, 13)
-                        }
-                        .onTapGesture {
-                            chosenCountry = currentCountry
-                            countryIsModified = true
-                        }
+                        row(currentCountry,
+                            isHighlighted: chosenCountry == currentCountry && countryIsModified)
                     }
                 }
             }
             Spacer()
                 .frame(width: 20)
         }
+    }
+
+    // 고르면 바로 닫는다. 하나만 고르는 자리라 고른 뒤에 더 할 일이 없다.
+    private func row(_ country: Int, isHighlighted: Bool) -> some View {
+        Button {
+            chosenCountry = country
+            countryIsModified = true
+            dismiss()
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(.gray100)
+                    .layoutPriority(-1)
+                    .opacity(isHighlighted ? 1.0 : 0.0000001)
+
+                HStack {
+                    Image(CountryInfoModel.shared.countryResult[country]?.flagString ?? "DefaultFlag")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .padding(.vertical, 13)
+
+                    Text(CountryInfoModel.shared.countryResult[country]?.displayName
+                         ?? String(localized: "알 수 없음"))
+                        .foregroundStyle(.black)
+                        .font(.subhead3_2)
+                        .padding(.vertical, 16)
+
+                    Spacer()
+                }
+                .padding(.horizontal, 13)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isHighlighted ? .isSelected : [])
     }
 }
 

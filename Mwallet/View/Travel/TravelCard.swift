@@ -187,36 +187,30 @@ struct TravelCard: View {
 
 // MARK: - 전체 여행
 
-/// 영수증 탭에서 '고르지 않음' 을 고르는 칸.
+/// 영수증 탭에서 '고르지 않음' 을 고르는 칩.
 ///
 /// 영수증은 여행을 고르지 않은 것이 '모두 함께 본다' 는 뜻이라, 그 상태로
-/// 돌아갈 길이 있어야 한다. 사진이 없으니 여행 카드와 같은 크기의 빈 칸으로
-/// 두어 격자가 어긋나지 않게 한다.
-struct TravelAllCard: View {
+/// 돌아갈 길이 있어야 한다. 예전에는 여행 카드와 같은 크기의 빈 칸이었는데,
+/// 사진도 날짜도 없는 칸이 격자 첫 자리를 차지해 정작 여행이 한 칸 밀렸다.
+/// 여행이 아니라 '거르지 않음' 이라는 상태라서 격자 밖 맨 윗줄에 칩으로 둔다.
+struct TravelAllChip: View {
 
     let isSelected: Bool
 
     var body: some View {
-        VStack(spacing: 6) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.gray100)
-                Image(systemName: "square.grid.2x2")
-                    .font(.system(size: 20, weight: .light))
-                    .foregroundStyle(isSelected ? Color.mainAccent : .gray400)
-            }
-            .aspectRatio(4.0 / 3.0, contentMode: .fit)
-            .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(Color.mainAccent, lineWidth: isSelected ? 2.5 : 0)
-            }
-
+        HStack(spacing: 6) {
+            Image(systemName: isSelected ? "checkmark" : "square.grid.2x2")
+                .font(.system(size: 13, weight: .semibold))
             Text("전체 여행")
                 .font(.subhead1)
-                .foregroundStyle(isSelected ? Color.mainAccent : .black)
                 .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .foregroundStyle(isSelected ? Color.mainAccent : .gray400)
+        .padding(.horizontal, 14)
+        .frame(minHeight: 36)
+        .background(isSelected ? Color.mainAccent.opacity(0.12) : Color.gray100, in: Capsule())
+        // 칩은 36pt 로 보이지만 누르는 자리는 줄 높이(44pt)를 다 쓴다.
+        .frame(minHeight: 44)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel("전체 여행")

@@ -32,8 +32,12 @@ struct TabActionIcon: View {
         Image(systemName: systemName)
             .font(.system(size: 17, weight: .medium))
             .foregroundStyle(isEnabled ? Color.black : Color.gray200)
-            .frame(width: 34, height: 34)
+            // 누르는 자리는 44pt 다. 34pt 였을 때는 엄지로 누르기에 좁았다.
+            // 차지하는 폭은 34pt 그대로 두어(양옆 -5) 그림의 자리와 오른쪽
+            // 여백 선이 예전과 같다.
+            .frame(width: 44, height: 44)
             .contentShape(Rectangle())
+            .padding(.horizontal, -5)
             // 화면 테스트가 이 버튼을 이름으로 찾는다. 툴바를 쓰지 않으므로
             // 네비게이션 바에서 순서로 집을 수 없고, 그림에는 글자가 없다.
             .accessibilityIdentifier("tabAction.\(systemName)")
@@ -51,7 +55,7 @@ struct TabActionLabel: View {
         Text(text)
             .font(.subhead2_2)
             .foregroundStyle(isEnabled ? Color.mainAccent : Color.gray200)
-            .frame(height: 34)
+            .frame(height: 44)
             .contentShape(Rectangle())
     }
 }

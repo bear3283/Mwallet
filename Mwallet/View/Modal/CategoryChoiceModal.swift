@@ -11,6 +11,8 @@ import SwiftUI
 
 struct CategoryChoiceModal: View {
     @Binding var chosenCategory: ExpenseInfoCategory
+
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ZStack {
@@ -70,7 +72,20 @@ struct CategoryChoiceModal: View {
         }
     }
 
+    // 고르면 바로 닫는다. 하나만 고르는 자리라 고른 뒤에 더 할 일이 없는데,
+    // 예전에는 끌어내려야 닫혀서 골라졌는지 알 수 없었다.
     private func cell(for category: ExpenseInfoCategory) -> some View {
+        Button {
+            chosenCategory = category
+            dismiss()
+        } label: {
+            cellLabel(for: category)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(chosenCategory == category ? .isSelected : [])
+    }
+
+    private func cellLabel(for category: ExpenseInfoCategory) -> some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundStyle(.gray100)
@@ -96,9 +111,7 @@ struct CategoryChoiceModal: View {
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
         }
-        .onTapGesture {
-            chosenCategory = category
-        }
+        .contentShape(Rectangle())
     }
 }
 #Preview {

@@ -27,9 +27,8 @@ struct ReceiptHomeView: View {
     @State private var deletionTarget: Expense?
     @State private var errorMessage: String?
 
-    // 사진 첨부 흐름: 썸네일 탭 → 소스 선택 → 보관함/카메라 → 저장
+    // 사진 첨부 흐름: 썸네일의 메뉴에서 고름 → 보관함/카메라 → 저장
     @State private var attachTarget: Expense?
-    @State private var isChoosingPhotoSource = false
     @State private var isPickingFromLibrary = false
     @State private var isTakingPhoto = false
     @State private var pickedItem: PhotosPickerItem?
@@ -94,7 +93,14 @@ struct ReceiptHomeView: View {
                     ReceiptDayList(daySections: daySections,
                                    isEmpty: filtered.isEmpty,
                                    showsMission: filter.missionName == nil,
-                                   onAttachPhoto: { attachTarget = $0 },
+                                   onPickLibrary: {
+                                       attachTarget = $0
+                                       isPickingFromLibrary = true
+                                   },
+                                   onTakePhoto: {
+                                       attachTarget = $0
+                                       isTakingPhoto = true
+                                   },
                                    onDelete: { deletionTarget = $0 })
                 }
 
@@ -116,26 +122,13 @@ struct ReceiptHomeView: View {
             .sheet(isPresented: $isAddingExpense) {
                 AddReceiptView()
             }
-            .confirmationDialog(
-                "이 영수증을 삭제할까요?",
-                isPresented: deletionBinding,
-                titleVisibility: .visible
-            ) {
+            // 줄을 길게 눌러 여는 길이라 확인창을 붙여 둘 버튼이 없다.
+            // 화면에 붙인 선택창은 엉뚱한 자리에 뜨므로 가운데 알림으로 묻는다.
+            .alert("이 영수증을 삭제할까요?", isPresented: deletionBinding) {
                 Button("삭제", role: .destructive) { confirmDeletion() }
                 Button("취소", role: .cancel) { deletionTarget = nil }
             } message: {
                 Text("첨부한 사진도 함께 삭제되며 되돌릴 수 없습니다.")
-            }
-            .confirmationDialog(
-                "영수증 사진",
-                isPresented: $isChoosingPhotoSource,
-                titleVisibility: .visible
-            ) {
-                Button("사진 보관함에서 선택") { isPickingFromLibrary = true }
-                if CameraPicker.isAvailable {
-                    Button("사진 촬영") { isTakingPhoto = true }
-                }
-                Button("취소", role: .cancel) { attachTarget = nil }
             }
             .photosPicker(isPresented: $isPickingFromLibrary, selection: $pickedItem, matching: .images)
             .fullScreenCover(isPresented: $isTakingPhoto) {
@@ -147,9 +140,6 @@ struct ReceiptHomeView: View {
                     attachTarget = nil
                 }
                 .ignoresSafeArea()
-            }
-            .onChange(of: attachTarget) { _, target in
-                isChoosingPhotoSource = target != nil
             }
             .onChange(of: pickedItem) { _, item in
                 loadFromLibrary(item)

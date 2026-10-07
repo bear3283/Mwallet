@@ -80,7 +80,8 @@ struct ReceiptDayList: View {
     let isEmpty: Bool
     /// 여행을 하나로 좁혀 보고 있으면 줄마다 여행 이름을 되풀이하지 않는다.
     let showsMission: Bool
-    var onAttachPhoto: (Expense) -> Void
+    var onPickLibrary: (Expense) -> Void
+    var onTakePhoto: (Expense) -> Void
     var onDelete: (Expense) -> Void
 
     var body: some View {
@@ -100,9 +101,9 @@ struct ReceiptDayList: View {
                         ForEach(section.expenses) { expense in
                             // 썸네일과 본문의 목적지가 달라 한 링크로 묶지 않는다.
                             HStack(spacing: 12) {
-                                ReceiptThumbnail(expense: expense) {
-                                    onAttachPhoto(expense)
-                                }
+                                ReceiptThumbnail(expense: expense,
+                                                 onPickLibrary: { onPickLibrary(expense) },
+                                                 onTakePhoto: { onTakePhoto(expense) })
                                 NavigationLink {
                                     ReceiptDetailView(expense: expense)
                                 } label: {

@@ -3,7 +3,7 @@
 //  Mwallet
 //
 //  목록 한 줄. 썸네일과 본문이 서로 다른 곳으로 간다.
-//    썸네일 → 사진 첨부 (미첨부일 때)
+//    썸네일 → 사진 첨부 메뉴 (미첨부일 때)
 //    본문   → 상세 화면
 //  그래서 한 덩어리로 묶지 않고 두 조각으로 나눠 둔다.
 //
@@ -15,13 +15,19 @@ import SwiftUI
 struct ReceiptThumbnail: View {
 
     let expense: Expense
-    let onTapWhenMissing: () -> Void
+    let onPickLibrary: () -> Void
+    let onTakePhoto: () -> Void
 
     private let side: CGFloat = 40
 
     var body: some View {
         if expense.needsPhoto {
-            Button(action: onTapWhenMissing) {
+            // 어디서 가져올지는 누른 자리에서 바로 묻는다. 예전에는 화면에
+            // 붙은 선택창을 띄웠는데, 누른 썸네일과 동떨어진 곳에 떠서
+            // 무엇에 대한 물음인지 알기 어려웠다. 메뉴는 누른 곳에 붙는다.
+            Menu {
+                ReceiptPhotoSourceButtons(onPickLibrary: onPickLibrary, onTakePhoto: onTakePhoto)
+            } label: {
                 RoundedRectangle(cornerRadius: 6)
                     .strokeBorder(
                         Color.gray300,
@@ -33,8 +39,12 @@ struct ReceiptThumbnail: View {
                             .font(.system(size: 14))
                             .foregroundStyle(.gray400)
                     }
+                    // 그림은 40pt 지만 누르는 자리는 44pt 다. 줄 높이는
+                    // 그대로 두려고 바깥 여백을 그만큼 되돌린다.
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .padding(-2)
             }
-            .buttonStyle(.plain)
             .accessibilityLabel("영수증 사진 첨부")
         } else if let data = expense.photoDataList.first, let image = UIImage(data: data) {
             Image(uiImage: image)
@@ -65,6 +75,30 @@ struct ReceiptThumbnail: View {
     private var photoLabel: String {
         let count = expense.photoDataList.count
         return count > 1 ? String(localized: "영수증 사진 \(count)장") : String(localized: "영수증 사진")
+    }
+}
+
+// MARK: - 사진을 가져올 곳
+
+/// 사진 첨부 메뉴의 항목. 목록의 썸네일과 상세의 첨부 버튼이 함께 쓴다.
+///
+/// 두 곳의 항목이 따로 적혀 있으면 한쪽만 늘거나 줄기 쉽다 — 상세는
+/// 한동안 보관함만 열 수 있었다.
+struct ReceiptPhotoSourceButtons: View {
+
+    let onPickLibrary: () -> Void
+    let onTakePhoto: () -> Void
+
+    var body: some View {
+        Button(action: onPickLibrary) {
+            Label("사진 보관함에서 선택", systemImage: "photo.on.rectangle")
+        }
+        // 카메라가 없는 기기(시뮬레이터 등)에서는 고를 수 없는 항목을 보이지 않는다.
+        if CameraPicker.isAvailable {
+            Button(action: onTakePhoto) {
+                Label("사진 촬영", systemImage: "camera")
+            }
+        }
     }
 }
 

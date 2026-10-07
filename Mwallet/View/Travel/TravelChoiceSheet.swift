@@ -17,6 +17,10 @@
 //  이것을 또 시트로 띄우면 시트가 겹쳐, 끌어내릴 때 어느 쪽이 닫히는지
 //  알 수 없다. 그래서 메뉴다.
 //
+//  제목과 닫기 버튼은 두지 않는다. 누른 자리가 이미 '여행 선택' 이라 시트가
+//  같은 말을 되풀이할 까닭이 없고, 닫는 일은 끌어내리면 된다. 그 줄을 비운
+//  덕에 맨 위가 곧 첫 해('2026년')이고, 달력은 그 줄 오른쪽에 떠 있다.
+//
 
 import SwiftUI
 
@@ -51,38 +55,31 @@ struct TravelChoiceSheet: View {
     /// 석 줄. 칸이 110pt 남짓 남아 카드가 알아볼 수 있는 가장 작은 크기다.
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 3)
 
+    /// 맨 윗줄의 높이. 달력 버튼과 첫 머리글이 같은 줄에 앉도록 맞춘다.
+    private let topRowHeight: CGFloat = 44
+    /// 손잡이 아래로 띄우는 여백. 이보다 좁으면 첫 줄이 손잡이에 붙는다.
+    private let topInset: CGFloat = 22
+
     var body: some View {
-        VStack(spacing: 0) {
-            header
+        ZStack(alignment: .topTrailing) {
             content
+            if !travels.isEmpty {
+                yearMenu
+                    .padding(.top, topInset)
+                    .padding(.trailing, 20)
+            }
         }
         .background(Color.white)
         .presentationDetents([.fraction(0.36), .large])
         .presentationDragIndicator(.visible)
     }
 
-    // MARK: - 머리
-
-    private var header: some View {
-        HStack(spacing: 12) {
-            Text("여행 선택")
-                .font(.title3)
-                .foregroundStyle(.black)
-
-            Spacer(minLength: 0)
-
-            yearMenu
-
-            Button("닫기") { dismiss() }
-                .font(.subhead1)
-                .foregroundStyle(.gray400)
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 14)
-    }
+    // MARK: - 달력
 
     /// 해를 고르는 달력. Picker 를 메뉴 안에 두면 고른 것에 체크가 붙는다.
+    ///
+    /// 목록 위에 떠 있어 카드가 그 밑으로 지나간다. 바탕이 비치면 카드와
+    /// 겹쳐 읽히지 않으므로 흰색을 먼저 깔고 그 위에 색을 얹는다.
     private var yearMenu: some View {
         Menu {
             Picker("연도", selection: $year) {
@@ -92,20 +89,22 @@ struct TravelChoiceSheet: View {
                 }
             }
         } label: {
-            HStack(spacing: 4) {
+            HStack(spacing: 5) {
                 Image(systemName: "calendar")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 20, weight: .medium))
                 if let year {
                     Text("\(String(year))년")
-                        .font(.caption1)
+                        .font(.subhead1)
                         .monospacedDigit()
                 }
             }
             .foregroundStyle(year == nil ? Color.gray400 : Color.mainAccent)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
+            .padding(.horizontal, 12)
+            .frame(minWidth: topRowHeight, minHeight: topRowHeight)
             .background(year == nil ? Color.gray100 : Color.mainAccent.opacity(0.12),
                         in: Capsule())
+            .background(Color.white, in: Capsule())
+            .contentShape(Capsule())
         }
         .accessibilityLabel(year == nil ? String(localized: "연도 고르기")
                             : String(localized: "\(String(year!))년만 보는 중"))
@@ -119,46 +118,50 @@ struct TravelChoiceSheet: View {
             emptyNotice
         } else {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 18) {
+                VStack(spacing: 0) {
                     if allowsAll {
-                        Section {
-                            Button {
-                                choose(nil)
-                            } label: {
-                                TravelAllCard(isSelected: selection == nil)
-                            }
-                            .buttonStyle(.plain)
+                        Button {
+                            choose(nil)
+                        } label: {
+                            TravelAllChip(isSelected: selection == nil)
                         }
+                        .buttonStyle(.plain)
+                        .frame(maxWidth: .infinity, minHeight: topRowHeight, alignment: .leading)
+                        .padding(.bottom, 8)
                     }
 
-                    ForEach(groups) { group in
-                        Section {
-                            ForEach(group.travels, id: \.objectID) { travel in
-                                Button {
-                                    choose(travel)
-                                } label: {
-                                    TravelCard(travel: travel,
-                                               artwork: TravelArtworkBuilder.artwork(for: travel),
-                                               isSelected: travel.objectID == selection?.objectID)
+                    LazyVGrid(columns: columns, spacing: 18) {
+                        ForEach(Array(groups.enumerated()), id: \.element.id) { index, group in
+                            Section {
+                                ForEach(group.travels, id: \.objectID) { travel in
+                                    Button {
+                                        choose(travel)
+                                    } label: {
+                                        TravelCard(travel: travel,
+                                                   artwork: TravelArtworkBuilder.artwork(for: travel),
+                                                   isSelected: travel.objectID == selection?.objectID)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
+                            } header: {
+                                // 맨 윗줄에 오는 머리글만 달력과 키를 맞춘다.
+                                sectionHeader(group, sharesTopRow: index == 0 && !allowsAll)
                             }
-                        } header: {
-                            sectionHeader(group)
                         }
                     }
                 }
                 .padding(.horizontal, 20)
+                .padding(.top, topInset)
                 .padding(.bottom, 24)
             }
         }
     }
 
     /// 해와 건수. 카드가 월·일만 지는 것은 이 머리글이 해를 맡기 때문이다.
-    private func sectionHeader(_ group: TravelYearGroup) -> some View {
+    private func sectionHeader(_ group: TravelYearGroup, sharesTopRow: Bool) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
             Text(group.title)
-                .font(.subhead2_1)
+                .font(sharesTopRow ? .title2 : .subhead2_1)
                 .foregroundStyle(.black)
                 .monospacedDigit()
 
@@ -169,9 +172,9 @@ struct TravelChoiceSheet: View {
 
             Spacer(minLength: 8)
         }
-        .padding(.top, 4)
-        .padding(.bottom, 2)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, sharesTopRow ? 0 : 4)
+        .padding(.bottom, sharesTopRow ? 0 : 2)
+        .frame(maxWidth: .infinity, minHeight: sharesTopRow ? topRowHeight : nil, alignment: .leading)
         .accessibilityAddTraits(.isHeader)
     }
 

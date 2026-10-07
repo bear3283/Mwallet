@@ -24,6 +24,8 @@ struct ReceiptDetailView: View {
     @State private var errorMessage: String?
     @State private var pickedItem: PhotosPickerItem?
     @State private var isAttaching = false
+    @State private var isPickingFromLibrary = false
+    @State private var isTakingPhoto = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -59,6 +61,18 @@ struct ReceiptDetailView: View {
                         .foregroundStyle(.mainAccent)
                         .padding(.vertical, 16)
                 }
+                // 확인창은 누른 버튼에 붙인다. 화면 전체에 붙이면 버튼과
+                // 동떨어진 곳에 떠서 무엇을 묻는지 한눈에 이어지지 않는다.
+                .confirmationDialog(
+                    "이 영수증을 삭제할까요?",
+                    isPresented: $isConfirmingDeletion,
+                    titleVisibility: .visible
+                ) {
+                    Button("삭제", role: .destructive) { delete() }
+                    Button("취소", role: .cancel) { }
+                } message: {
+                    Text("첨부한 사진도 함께 삭제되며 되돌릴 수 없습니다.")
+                }
 
                 // 떠 있는 탭바가 마지막 항목을 가리지 않도록 여유를 둔다.
                 Spacer(minLength: 100)
@@ -89,15 +103,15 @@ struct ReceiptDetailView: View {
             ReceiptPhotoViewer(photos: photos, index: $viewingIndex,
                               onClose: { isViewingImage = false })
         }
-        .confirmationDialog(
-            "이 영수증을 삭제할까요?",
-            isPresented: $isConfirmingDeletion,
-            titleVisibility: .visible
-        ) {
-            Button("삭제", role: .destructive) { delete() }
-            Button("취소", role: .cancel) { }
-        } message: {
-            Text("첨부한 사진도 함께 삭제되며 되돌릴 수 없습니다.")
+        .photosPicker(isPresented: $isPickingFromLibrary, selection: $pickedItem, matching: .images)
+        .fullScreenCover(isPresented: $isTakingPhoto) {
+            CameraPicker { data in
+                isTakingPhoto = false
+                attachCaptured(data)
+            } onCancel: {
+                isTakingPhoto = false
+            }
+            .ignoresSafeArea()
         }
         .alert("처리하지 못했습니다", isPresented: errorBinding) {
             Button("확인", role: .cancel) { errorMessage = nil }
@@ -151,12 +165,15 @@ struct ReceiptDetailView: View {
                 .foregroundStyle(.gray300)
                 .padding(.top, 8)
         } else {
-            // PhotosPicker 의 label 클로저는 메인 액터에 묶여 있지 않다.
-            let title = isAttaching ? String(localized: "불러오는 중…") : String(localized: "영수증 사진 첨부")
-            PhotosPicker(selection: $pickedItem, matching: .images, photoLibrary: .shared()) {
+            // 목록의 썸네일과 같은 메뉴를 쓴다. 여기서만 보관함으로 곧장
+            // 들어가면, 방금 받은 영수증을 찍으려 할 때 목록으로 되돌아가야 한다.
+            Menu {
+                ReceiptPhotoSourceButtons(onPickLibrary: { isPickingFromLibrary = true },
+                                          onTakePhoto: { isTakingPhoto = true })
+            } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "camera")
-                    Text(title)
+                    Text(isAttaching ? String(localized: "불러오는 중…") : String(localized: "영수증 사진 첨부"))
                 }
                 .font(.body1)
                 .foregroundStyle(.gray400)
@@ -173,6 +190,11 @@ struct ReceiptDetailView: View {
                 .padding(.top, 8)
         }
     }
+
+}
+
+// 금액·상세 블록과 동작. 본문이 길어져 화면 짜임과 갈라 둔다.
+extension ReceiptDetailView {
 
     // MARK: - 금액
 
@@ -291,6 +313,15 @@ struct ReceiptDetailView: View {
             } catch {
                 errorMessage = error.localizedDescription
             }
+        }
+    }
+
+    // 카메라는 이미 다듬은 사진을 넘겨 준다. 목록에서 찍을 때와 같은 길이다.
+    private func attachCaptured(_ data: Data) {
+        do {
+            try store.attachPhoto(data, to: expense)
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 
