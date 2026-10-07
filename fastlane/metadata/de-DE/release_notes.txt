@@ -1,7 +1,8 @@
-Erste Version.
+Kleine Korrekturen für den Alltag.
 
-• Ausgaben per Sprache erfassen
-• Mehrere Belegfotos pro Ausgabe
-• Abrechnung pro Person, Budget je Kategorie
-• Ausgabenkarte und CSV-Export
-• VoiceOver und dynamische Schrift unterstützt
+• Aufgeräumte Reiseauswahl: Jahre und Reisen beginnen direkt oben, der Kalenderknopf ist größer
+• Belegfoto über ein Menü direkt an der angetippten Stelle hinzufügen
+• Foto auch direkt in der Belegansicht aufnehmen
+• Löschbestätigungen erscheinen jetzt an der richtigen Stelle
+• Kategorie- und Ortsauswahl schließen sich nach der Auswahl
+• Kleine Schaltflächen lassen sich leichter antippen

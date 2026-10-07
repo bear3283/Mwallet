@@ -1,7 +1,8 @@
-Prima versione.
+Piccole correzioni per un uso più scorrevole.
 
-• Registra le spese parlando
-• Più foto di scontrino per spesa
-• Divisione per persona e budget per categoria
-• Mappa delle spese ed esportazione CSV
-• Supporto VoiceOver e testo dinamico
+• Selezione del viaggio più pulita: anni e viaggi subito in alto, pulsante calendario più grande
+• Aggiungi la foto dello scontrino da un menu, proprio dove tocchi
+• Scatta una foto direttamente dal dettaglio dello scontrino
+• Le conferme di eliminazione compaiono nel punto giusto
+• Categoria e luogo si chiudono appena scegli
+• I pulsanti piccoli sono più facili da toccare

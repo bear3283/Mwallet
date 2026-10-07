@@ -1,7 +1,8 @@
-Primeira versão.
+Pequenas correções para um uso mais fluido.
 
-• Registre gastos falando
-• Várias fotos de recibo por gasto
-• Divisão por pessoa e orçamento por categoria
-• Mapa de gastos e exportação em CSV
-• Compatível com VoiceOver e texto dinâmico
+• Seleção de viagem mais limpa: anos e viagens logo no topo, com botão de calendário maior
+• Adicione a foto do recibo por um menu, bem onde você toca
+• Tire uma foto direto do detalhe do recibo
+• As confirmações de exclusão aparecem no lugar certo
+• Categoria e local fecham assim que você escolhe
+• Botões pequenos estão mais fáceis de tocar

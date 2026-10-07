@@ -1,7 +1,8 @@
-First release.
+Small fixes that make everyday use smoother.
 
-• Log expenses by voice
-• Attach multiple receipt photos
-• Split by person, budget by category
-• Spending map and CSV export
-• VoiceOver and Dynamic Type support
+• Cleaner trip picker: years and trips start right at the top, with a larger calendar button
+• Attach a receipt photo from a menu right where you tap
+• Take a photo straight from the receipt detail screen
+• Delete confirmations now appear where you expect them
+• Category and location pickers close as soon as you choose
+• Small buttons are easier to tap

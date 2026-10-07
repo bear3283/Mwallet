@@ -1,7 +1,8 @@
-Première version.
+De petites corrections pour un usage plus fluide.
 
-• Enregistrer ses dépenses à la voix
-• Plusieurs photos de reçu par dépense
-• Partage par personne et budget par catégorie
-• Carte des dépenses et export CSV
-• Compatible VoiceOver et texte dynamique
+• Sélection du voyage épurée : années et voyages dès le haut, bouton calendrier plus grand
+• Ajoutez une photo de reçu depuis un menu, là où vous touchez
+• Prenez une photo directement depuis le détail du reçu
+• Les confirmations de suppression s’affichent au bon endroit
+• Les choix de catégorie et de lieu se ferment dès la sélection
+• Les petits boutons sont plus faciles à toucher
