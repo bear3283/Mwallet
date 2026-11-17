@@ -191,14 +191,28 @@ final class ScreenshotTests: XCTestCase {
             return
         }
 
-        // 시스템 사진 선택기. 다른 프로세스가 그리므로 넉넉히 기다린다.
-        let photos = app.scrollViews.firstMatch.images
-        guard photos.element(boundBy: 0).waitForExistence(timeout: 15) else {
+        // 시스템 사진 선택기. 다른 프로세스가 그리고, 처음 열 때는 한동안
+        // 'Loading…' 만 떠 있다.
+        //
+        // 예전에는 `scrollViews.firstMatch.images` 로 사진을 찾았는데, 그 쿼리는
+        // 선택기 뒤에 깔린 폼의 카메라·지도 핀 아이콘에 먼저 걸린다. 그래서
+        // 선택기가 뜨기도 전에 앱 아이콘을 누르고 지나가, 사진은 하나도 골라지지
+        // 않은 채 선택기가 폼을 가려 '수정 완료' 를 못 찾고 끝났다.
+        // 선택기의 사진 칸에만 붙는 식별자로 찾는다.
+        let photos = app.images.matching(identifier: "PXGGridLayout-Info")
+        guard photos.element(boundBy: 1).waitForExistence(timeout: 40) else {
             XCTFail("사진 선택기가 열리지 않았습니다.")
             return
         }
-        photos.element(boundBy: 0).tap()
-        photos.element(boundBy: 1).tap()
+        // 사진 칸은 선택기 프로세스가 그려 hittable 판정을 통과하지 못한다.
+        // 칸의 가운데 좌표를 직접 누른다.
+        settle()
+        for index in 0..<2 {
+            photos.element(boundBy: index)
+                .coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                .tap()
+        }
+        settle()
         capture("14-사진선택기")
 
         for label in ["추가", "Add", "완료", "Done"] where tapIfExists(app.buttons[label].firstMatch, timeout: 2) {
