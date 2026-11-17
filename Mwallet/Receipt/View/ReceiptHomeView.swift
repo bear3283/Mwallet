@@ -17,12 +17,18 @@ struct ReceiptHomeView: View {
     )
     private var allReceipts: FetchedResults<Expense>
 
+    @EnvironmentObject private var mainVM: MainViewModel
+
     private let store = ReceiptStore()
+    private let budgetStore = BudgetStore()
 
     @State private var filter = ReceiptFilter()
     // 상단 여행 선택. nil 이면 모든 여행을 함께 본다.
     @State private var selectedTravel: Travel?
     @State private var travels: [Travel] = []
+    /// 처음 열 때 한 번만 '지금 보던 여행' 으로 맞춘다. 그 뒤로 사용자가
+    /// 전체로 바꿨다면 탭을 오갈 때마다 도로 좁히지 않는다.
+    @State private var didApplyInitialTravel = false
     @State private var isAddingExpense = false
     @State private var deletionTarget: Expense?
     @State private var errorMessage: String?
@@ -82,8 +88,18 @@ struct ReceiptHomeView: View {
                         .frame(height: 20)
 
                     ReceiptSummaryBlock(summaryValue: summaryValue,
-                                        missionName: filter.missionName)
+                                        missionName: filter.missionName,
+                                        budget: selectedBudget)
                         .padding(.horizontal, ReceiptLayout.gutter)
+
+                    // 전체를 볼 때는 합계가 여러 여행의 것이라, 여행마다 나눠 보여 준다.
+                    if selectedTravel == nil, travelEntries.count > 1 {
+                        ReceiptTravelBreakdown(entries: travelEntries) { travel in
+                            selectedTravel = travel
+                            filter.missionName = travel.name
+                        }
+                        .padding(.top, 14)
+                    }
 
                     Spacer()
                         .frame(height: 20)
@@ -117,6 +133,15 @@ struct ReceiptHomeView: View {
                 if let selectedTravel, !travels.contains(selectedTravel) {
                     self.selectedTravel = nil
                     filter.missionName = nil
+                }
+                // 처음에는 기록 탭에서 보던 여행으로 연다. 전체로 열면 합계가
+                // 모든 여행의 것이라 지금 여행에 얼마를 썼는지 바로 읽히지 않는다.
+                if !didApplyInitialTravel {
+                    didApplyInitialTravel = true
+                    if let current = mainVM.selectedTravelInExpense, travels.contains(current) {
+                        selectedTravel = current
+                        filter.missionName = current.name
+                    }
                 }
             }
             .sheet(isPresented: $isAddingExpense) {
@@ -250,8 +275,33 @@ struct ReceiptHomeView: View {
 
     // MARK: - 동작
 
+    /// 사진이 빠진 건수. 고른 여행 안에서만 센다 — 다른 여행의 숙제까지
+    /// 더하면 지금 여행에 몇 장을 더 채워야 하는지 알 수 없다.
     private var missingPhotoCount: Int {
-        allReceipts.filter { $0.needsPhoto }.count
+        allReceipts.filter { expense in
+            guard expense.needsPhoto else { return false }
+            guard let missionName = filter.missionName else { return true }
+            return expense.missionTitle == missionName
+        }.count
+    }
+
+    /// 고른 여행의 예산. 기간·검색으로 좁혀 보는 중이면 내지 않는다.
+    private var selectedBudget: BudgetSummary? {
+        guard let selectedTravel, filter.period == .all, !filter.onlyMissingPhoto,
+              filter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
+        return budgetStore.summary(for: selectedTravel)
+    }
+
+    /// 전체를 볼 때 여행마다 한 칸. 예산도 지출도 없는 여행은 뺀다.
+    private var travelEntries: [ReceiptTravelBreakdown.Entry] {
+        travels.compactMap { travel in
+            let expenses = budgetStore.expenses(for: travel)
+            let budget = budgetStore.summary(for: travel)
+            guard budget.hasBudget || !expenses.isEmpty else { return nil }
+            return ReceiptTravelBreakdown.Entry(travel: travel,
+                                                budget: budget,
+                                                missingPhotoCount: expenses.filter(\.needsPhoto).count)
+        }
     }
 
     private func loadFromLibrary(_ item: PhotosPickerItem?) {
@@ -291,5 +341,6 @@ struct ReceiptHomeView: View {
 
 #Preview {
     ReceiptHomeView()
+        .environmentObject(MainViewModel.shared)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

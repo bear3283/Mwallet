@@ -128,7 +128,7 @@ struct BudgetView: View {
             }
             .padding(.top, 6)
 
-            progressBar(ratio: summary.barRatio, isOver: summary.isOverspent)
+            BudgetProgressBar(ratio: summary.barRatio, isOver: summary.isOverspent)
                 .padding(.top, 12)
 
             HStack(spacing: 0) {
@@ -157,21 +157,6 @@ struct BudgetView: View {
                 .padding(.top, 6)
             }
         }
-    }
-
-    // MARK: - 진행 막대
-
-    private func progressBar(ratio: Double, isOver: Bool) -> some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Color.gray100)
-                Capsule()
-                    .fill(isOver ? Color.mainOrange : Color.mainAccent)
-                    .frame(width: geometry.size.width * ratio)
-            }
-        }
-        .frame(height: 8)
     }
 
     // MARK: - 동작
