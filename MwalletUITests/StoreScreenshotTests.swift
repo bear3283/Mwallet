@@ -70,7 +70,7 @@ final class StoreScreenshotTests: XCTestCase {
     ///
     /// 라벨로 고르면 언어마다 다른 글자를 알아야 한다. 차례는 어느 언어에서도
     /// 같으므로 여기서는 자리가 더 튼튼하다.
-    /// (MainViewModel.Tab — 여행 0 · 예결산 1 · 기록 2 · 영수증 3)
+    /// (화면에 놓인 차례 — 기록 0 · 내역 1 · 예결산 2 · 여행 3)
     private func tapTab(at index: Int, _ what: String) {
         let tab = app.tabBars.buttons.element(boundBy: index)
         XCTAssertTrue(tab.waitForExistence(timeout: 5), "\(what) 탭을 찾지 못했습니다")
@@ -82,16 +82,16 @@ final class StoreScreenshotTests: XCTestCase {
 
     func test_스토어_화면을_찍는다() throws {
         // 앱을 열면 서는 자리. 이 앱이 무엇을 하는 앱인지 한 화면으로 말한다.
-        tapTab(at: 2, "기록")
+        tapTab(at: 0, "기록")
         capture("01-record")
 
-        tapTab(at: 1, "예결산")
+        tapTab(at: 2, "예결산")
         capture("02-budget")
 
-        tapTab(at: 3, "영수증")
+        tapTab(at: 1, "내역")
         capture("03-receipt")
 
-        tapTab(at: 0, "여행")
+        tapTab(at: 3, "여행")
         capture("04-travel")
     }
 }

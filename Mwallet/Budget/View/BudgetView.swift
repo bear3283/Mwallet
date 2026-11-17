@@ -17,10 +17,12 @@ struct BudgetView: View {
     private let store = BudgetStore()
 
     @State private var travels: [Travel] = []
-    @State private var selectedTravel: Travel?
     @State private var isEditingBudget = false
     // 예산을 저장하고 돌아왔을 때 집계를 다시 계산시키는 신호
     @State private var refreshToken = UUID()
+
+    /// 지금 보는 여행. 기록·내역과 같은 것을 본다.
+    private var selectedTravel: Travel? { mainVM.selectedTravel }
 
     private var summary: BudgetSummary {
         _ = refreshToken
@@ -36,7 +38,7 @@ struct BudgetView: View {
                 if travels.isEmpty {
                     ReceiptEmptyState(
                         message: String(localized: "여행이 없어요"),
-                        detail: String(localized: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다.")
+                        detail: String(localized: "여행 탭에서 여행을 먼저 만들면\n예산을 세울 수 있습니다.")
                     )
                 } else {
                     travelSelector
@@ -67,7 +69,7 @@ struct BudgetView: View {
     // 툴바에 있을 때는 제목보다 한 층 위에 떠서 둘이 따로 놀았다.
     private var travelSelector: some View {
         TabHeaderRow {
-            TravelPicker(travels: travels, selection: $selectedTravel) {
+            TravelPicker(travels: travels, selection: $mainVM.selectedTravel) {
                 refreshToken = UUID()
             }
         } actions: {
@@ -84,10 +86,17 @@ struct BudgetView: View {
 
     @ViewBuilder
     private var content: some View {
-        if !summary.hasBudget && summary.totalSpent == 0 {
+        if selectedTravel == nil {
+            // 예산은 여행마다 세운다. 머리줄이 이미 '골라 달라' 고 말하므로
+            // 여기서는 고를 것을 내놓기만 한다.
+            ReceiptTravelBreakdown(entries: travelEntries) { travel in
+                mainVM.selectedTravel = travel
+                refreshToken = UUID()
+            }
+        } else if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(
                 message: String(localized: "아직 예산이 없어요"),
-                detail: String(localized: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요.")
+                detail: String(localized: "위쪽 '예산 편집'에서\n분류별로 금액을 세워 보세요.")
             )
         } else {
             ScrollView(showsIndicators: false) {
@@ -109,6 +118,15 @@ struct BudgetView: View {
         }
     }
 
+    /// 고른 여행이 없을 때 내놓는 여행별 카드. 누르면 그 여행을 본다.
+    private var travelEntries: [ReceiptTravelBreakdown.Entry] {
+        travels.map { travel in
+            ReceiptTravelBreakdown.Entry(travel: travel,
+                                         budget: store.summary(for: travel),
+                                         missingPhotoCount: 0)
+        }
+    }
+
     // MARK: - 총괄
 
     private var overview: some View {
@@ -122,13 +140,13 @@ struct BudgetView: View {
                     .font(.display4)
                     .foregroundStyle(.black)
                     .monospacedDigit()
-                Text("집행")
+                Text("지출")
                     .font(.caption2)
                     .foregroundStyle(.gray300)
             }
             .padding(.top, 6)
 
-            progressBar(ratio: summary.barRatio, isOver: summary.isOverspent)
+            BudgetProgressBar(ratio: summary.barRatio, isOver: summary.isOverspent)
                 .padding(.top, 12)
 
             HStack(spacing: 0) {
@@ -152,26 +170,11 @@ struct BudgetView: View {
 
             if summary.hasUnconvertible {
                 ReceiptNotice(
-                    text: String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다")
+                    text: String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 합계에서 빠졌습니다")
                 )
                 .padding(.top, 6)
             }
         }
-    }
-
-    // MARK: - 진행 막대
-
-    private func progressBar(ratio: Double, isOver: Bool) -> some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Color.gray100)
-                Capsule()
-                    .fill(isOver ? Color.mainOrange : Color.mainAccent)
-                    .frame(width: geometry.size.width * ratio)
-            }
-        }
-        .frame(height: 8)
     }
 
     // MARK: - 동작
@@ -184,11 +187,7 @@ struct BudgetView: View {
 
     private func reload() {
         travels = store.availableTravels()
-        if selectedTravel == nil || !travels.contains(where: { $0.objectID == selectedTravel?.objectID }) {
-            // 가계부 탭에서 고른 여행이 있으면 그것부터 본다.
-            selectedTravel = travels.first { $0.objectID == mainVM.selectedTravelInExpense?.objectID }
-                ?? travels.first
-        }
+        mainVM.dropSelectionIfDeleted()
         refreshToken = UUID()
         publishWidgetSnapshot()
     }
@@ -205,36 +204,24 @@ struct BudgetView: View {
     }
 }
 
-// 막대 그래프 범례에 그대로 찍히는 글자.
-//
-// 색 표(chartForegroundStyleScale)의 열쇠와 막대가 드는 값이 같은 문자열이어야
-// 짝이 맞는다. 두 자리에 따로 적어 두면 번역을 한쪽만 고쳤을 때 색이 통째로
-// 빠지는데, 그때 화면은 아무 말도 하지 않는다. 그래서 한곳에서 만든다.
-//
-// group 은 막대를 나란히 세우는 데만 쓰이고 화면에 나오지 않아 영어로 둔다.
-enum BudgetBarLabel {
-    static let planned = String(localized: "예산")
-    static let spent = String(localized: "집행")
-    static let over = String(localized: "초과")
-}
-
 // MARK: - 그래프 섹션
 
-// 같은 예결산 데이터를 세 가지 질문으로 본다.
-// 집행률: 항목별 진행 · 예산 대비: 세운 것과 쓴 것 비교 · 비중: 집행액 분포
+// 같은 예결산 데이터를 두 가지 질문으로 본다.
+// 집행률: 항목별로 예산을 얼마나 썼나 · 비중: 쓴 돈이 어디로 갔나
+//
+// '예산 대비' 그룹 막대가 하나 더 있었는데, 집행률 목록이 이미 쓴 금액과
+// 예산과 초과 여부를 줄마다 적고 있어 같은 것을 다른 그림으로 보는 셈이었다.
 enum BudgetChartMode: String, CaseIterable, Identifiable {
     // rawValue 는 자리를 가리키는 이름일 뿐이라 언어를 타지 않는다.
     // 화면에 적는 글자는 title 이다.
     case progress
-    case compare
     case share
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
-        case .progress: return String(localized: "집행률")
-        case .compare: return String(localized: "예산 대비")
+        case .progress: return String(localized: "예산 대비")
         case .share: return String(localized: "비중")
         }
     }
@@ -254,7 +241,6 @@ struct BudgetChartSection: View {
             Group {
                 switch mode {
                 case .progress: progressList
-                case .compare: compareChart
                 case .share: shareChart
                 }
             }
@@ -389,75 +375,13 @@ struct BudgetChartSection: View {
         return isOver ? .mainOrange : tint
     }
 
-    // MARK: 예산 대비 — 그룹 막대
-
-    private var compareChart: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Chart(compareBars) { bar in
-                BarMark(
-                    x: .value("금액", bar.amount),
-                    y: .value("카테고리", bar.category)
-                )
-                .foregroundStyle(by: .value("구분", bar.colorKey))
-                .position(by: .value("묶음", bar.group))
-                .cornerRadius(3)
-            }
-            .chartForegroundStyleScale([
-                BudgetBarLabel.planned: Color.gray200,
-                BudgetBarLabel.spent: Color.mainAccent,
-                BudgetBarLabel.over: Color.mainOrange
-            ])
-            .chartLegend(position: .bottom, alignment: .leading, spacing: 12)
-            .chartXAxis {
-                AxisMarks(values: .automatic(desiredCount: 4)) { value in
-                    AxisGridLine().foregroundStyle(Color.gray100)
-                    AxisValueLabel {
-                        if let amount = value.as(Double.self) {
-                            Text(compactWon(amount))
-                                .font(.caption2)
-                                .foregroundStyle(.gray300)
-                        }
-                    }
-                }
-            }
-            .chartYAxis {
-                AxisMarks(preset: .aligned, position: .leading) { value in
-                    AxisValueLabel {
-                        if let name = value.as(String.self) {
-                            Text(name)
-                                .font(.caption1)
-                                .foregroundStyle(.gray400)
-                        }
-                    }
-                }
-            }
-            .frame(height: max(CGFloat(summary.lines.count) * 54 + 24, 140))
-
-            Text("막대가 회색(예산)보다 길면 초과입니다.")
-                .font(.caption1)
-                .foregroundStyle(.gray300)
-        }
-    }
-
-    private var compareBars: [BudgetBar] {
-        summary.lines.flatMap { line -> [BudgetBar] in
-            [
-                BudgetBar(category: line.category.visibleDescription, group: "planned",
-                          colorKey: BudgetBarLabel.planned, amount: line.planned),
-                BudgetBar(category: line.category.visibleDescription, group: "spent",
-                          colorKey: line.isOverspent ? BudgetBarLabel.over : BudgetBarLabel.spent,
-                          amount: line.spent)
-            ]
-        }
-    }
-
     // MARK: 비중 — 집행액 도넛
 
     @ViewBuilder
     private var shareChart: some View {
         let slices = shareSlices
         if slices.isEmpty {
-            Text("아직 집행 내역이 없어요. 지출을 기록하면 비중이 채워집니다.")
+            Text("아직 지출 내역이 없어요. 지출을 기록하면 비중이 채워집니다.")
                 .font(.body1)
                 .foregroundStyle(.gray300)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -478,7 +402,7 @@ struct BudgetChartSection: View {
                 .padding(.vertical, 8)
                 .overlay {
                     VStack(spacing: 2) {
-                        Text("총 집행")
+                        Text("총 지출")
                             .font(.caption1)
                             .foregroundStyle(.gray300)
                         Text(ReceiptFormat.krw(summary.totalSpent))
@@ -522,24 +446,10 @@ struct BudgetChartSection: View {
 
     // MARK: 포맷
 
-    private func compactWon(_ value: Double) -> String {
-        if value <= 0 { return "0" }
-        if value >= 10000 { return String(localized: "\(Int((value / 10000).rounded()))만") }
-        return String(localized: "\(Int((value / 1000).rounded()))천")
-    }
-
     private func sharePercent(_ amount: Double) -> String {
         guard summary.totalSpent > 0 else { return "0%" }
         return String(format: "%.0f%%", amount / summary.totalSpent * 100)
     }
-}
-
-private struct BudgetBar: Identifiable {
-    let id = UUID()
-    let category: String
-    let group: String
-    let colorKey: String
-    let amount: Double
 }
 
 private struct BudgetSlice: Identifiable {

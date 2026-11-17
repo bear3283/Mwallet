@@ -29,7 +29,7 @@ struct RecordSentenceArea: View {
                 .hidden()
             
             Group {
-                if (!isPressing && viewModel.voiceSentence == "") || (!viewModel.AreThereOtherTravels && !viewModel.isExplicitTempRecord) {
+                if !isPressing && viewModel.voiceSentence == "" {
                     VStack(spacing: 16) {
                         // 아래 세 칸이 채워지는 것을 미리 말한다. 설득하는 대신
                         // 보여 주기로 넘기는 자리다 — 예시 말풍선과 세 칸이

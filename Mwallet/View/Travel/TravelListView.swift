@@ -80,7 +80,7 @@ struct TravelListView: View {
             }
         } actions: {
             NavigationLink { SettingView() } label: { TabActionIcon(systemName: "gearshape", label: String(localized: "설정")) }
-            NavigationLink { AddTravelView() } label: { TabActionIcon(systemName: "plus", label: String(localized: "여행 추가")) }
+            NavigationLink { TravelEditView() } label: { TabActionIcon(systemName: "plus", label: String(localized: "여행 추가")) }
         }
     }
 

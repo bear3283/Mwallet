@@ -33,7 +33,7 @@ struct BudgetEditView: View {
                         Divider()
                             .padding(.top, 20)
 
-                        ReceiptSectionTitle(text: String(localized: "카테고리별 예산"))
+                        ReceiptSectionTitle(text: String(localized: "분류별 예산"))
                             .padding(.top, 20)
 
                         ForEach(categories, id: \.objectID) { category in

@@ -196,12 +196,14 @@ struct TravelCard: View {
 struct TravelAllChip: View {
 
     let isSelected: Bool
+    /// 칩에 적을 말. 내역에서는 '전체 여행', 기록에서는 '미분류' 다.
+    var title = String(localized: "전체 여행")
 
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: isSelected ? "checkmark" : "square.grid.2x2")
                 .font(.system(size: 13, weight: .semibold))
-            Text("전체 여행")
+            Text(title)
                 .font(.subhead1)
                 .lineLimit(1)
         }
@@ -213,7 +215,7 @@ struct TravelAllChip: View {
         .frame(minHeight: 44)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("전체 여행")
+        .accessibilityLabel(title)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 }

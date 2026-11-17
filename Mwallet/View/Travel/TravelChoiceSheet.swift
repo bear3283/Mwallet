@@ -31,6 +31,8 @@ struct TravelChoiceSheet: View {
 
     /// 영수증처럼 '고르지 않음' 이 뜻을 갖는 화면에서 켠다.
     var allowsAll = false
+    /// '고르지 않음' 칩에 적을 말.
+    var allTitle = String(localized: "전체 여행")
     /// 고른 뒤에 할 일(집계 갱신, 지도 맞추기 등).
     var onChange: () -> Void = { }
 
@@ -123,7 +125,7 @@ struct TravelChoiceSheet: View {
                         Button {
                             choose(nil)
                         } label: {
-                            TravelAllChip(isSelected: selection == nil)
+                            TravelAllChip(isSelected: selection == nil, title: allTitle)
                         }
                         .buttonStyle(.plain)
                         .frame(maxWidth: .infinity, minHeight: topRowHeight, alignment: .leading)

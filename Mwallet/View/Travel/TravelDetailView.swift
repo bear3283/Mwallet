@@ -125,6 +125,20 @@ struct TravelDetailView: View {
                         .padding(.horizontal, ReceiptLayout.gutter)
                         .padding(.top, 28)
 
+                    // 지우는 길은 맨 아래에 둔다. 예전에는 위쪽 편집 버튼 바로
+                    // 옆이 휴지통이라, 고치려다 지우는 쪽을 누르기 쉬웠다.
+                    Button(role: .destructive) {
+                        isWarningOn = true
+                    } label: {
+                        Text("여행 삭제하기")
+                            .font(.subhead2_2)
+                            .foregroundStyle(.red)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .accessibilityIdentifier("travelDetail.delete")
+                    .padding(.horizontal, ReceiptLayout.gutter)
+                    .padding(.top, 32)
+
                     // 떠 있는 탭바가 마지막 항목을 가리지 않도록 비워 둔다.
                     Spacer(minLength: 110)
                 }
@@ -144,32 +158,23 @@ struct TravelDetailView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 14) {
-                    NavigationLink {
-                        TravelEditView(travel: travel)
-                    } label: {
-                        Image(systemName: "square.and.pencil")
-                            .foregroundStyle(.black)
-                    }
-                    // 화면 테스트가 이름으로 찾는다. 순서로 집으면 버튼이
-                    // 하나 늘거나 줄 때 조용히 다른 것을 누른다.
-                    .accessibilityIdentifier("travelDetail.edit")
-
-                    Button {
-                        isWarningOn = true
-                    } label: {
-                        Image(systemName: "trash")
-                            .foregroundStyle(.black)
-                    }
-                    .accessibilityIdentifier("travelDetail.delete")
+                NavigationLink {
+                    TravelEditView(travel: travel)
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                        .foregroundStyle(.black)
                 }
+                // 화면 테스트가 이름으로 찾는다. 순서로 집으면 버튼이
+                // 하나 늘거나 줄 때 조용히 다른 것을 누른다.
+                .accessibilityIdentifier("travelDetail.edit")
+                .accessibilityLabel("여행 편집")
             }
         }
         .alert("여행 삭제하기", isPresented: $isWarningOn) {
             Button("삭제하기", role: .destructive, action: deleteTravel)
             Button("취소", role: .cancel) { }
         } message: {
-            Text("현재 선택한 여행방에 저장된 지출 기록 및 관련 데이터를 모두 삭제할까요?")
+            Text("이 여행에 적힌 지출과 예산이 모두 지워집니다. 되돌릴 수 없습니다.")
         }
         // 편집에서 돌아왔을 때 이름·기간·인원을 다시 읽는다.
         .onAppear {
@@ -286,23 +291,21 @@ struct TravelDetailView: View {
     }
 
     private func deleteTravel() {
-        let deletedID = travel.id
+        let wasSelected = travel.objectID == mainVM.selectedTravel?.objectID
 
         // 화면이 사라진 뒤에 지워야, 삭제된 객체를 그리려다 죽지 않는다.
         dismiss()
 
         DispatchQueue.main.async {
+            // 보던 여행이면 먼저 손에서 놓는다. 지워진 것을 쥐고 있으면
+            // 다른 탭이 그것을 그리려 든다.
+            if wasSelected { mainVM.selectedTravel = nil }
             do {
                 try travelStore.delete(travel)
             } catch {
                 Logger.data.error("여행 삭제 실패: \(error.localizedDescription, privacy: .public)")
             }
-
-            if let deletedID,
-               deletedID == mainVM.selectedTravel?.id || deletedID == mainVM.selectedTravelInExpense?.id {
-                mainVM.selectedTravelInExpense = findInitialTravelInExpense()
-                mainVM.selectedTravel = findCurrentTravel()
-            }
+            if wasSelected { mainVM.selectedTravel = travelStore.ongoingTravel() }
         }
     }
 }

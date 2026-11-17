@@ -96,7 +96,7 @@ struct LogExpenseIntent: AppIntent {
     static let isDiscoverable = false
 
     @Parameter(title: "금액") var amount: Double
-    @Parameter(title: "카테고리") var categoryIndex: Int
+    @Parameter(title: "분류") var categoryIndex: Int
     @Parameter(title: "내용") var label: String
 
     init() {}
@@ -227,7 +227,7 @@ struct BudgetWidgetView: View {
                 .font(.system(size: family == .systemMedium ? 26 : 22, weight: .bold))
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
-            Text("집행 · 예산 \(MwalletSharedFormat.krw(snapshot.totalPlanned))")
+            Text("지출 · 예산 \(MwalletSharedFormat.krw(snapshot.totalPlanned))")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -260,7 +260,7 @@ struct BudgetWidget: Widget {
             BudgetWidgetView(entry: entry)
         }
         .configurationDisplayName("예산")
-        .description("이번 여행 예산과 집행률을 봅니다.")
+        .description("이번 여행 예산과 쓴 금액을 봅니다.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
@@ -301,10 +301,10 @@ struct SettlementWidgetView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text("카테고리")
+                Text("분류")
                     .font(.caption2).foregroundStyle(.secondary)
                 if snapshot.categories.isEmpty {
-                    Text("집행 없음").font(.caption2).foregroundStyle(.secondary)
+                    Text("지출 없음").font(.caption2).foregroundStyle(.secondary)
                 } else {
                     ForEach(Array(snapshot.categories.prefix(4)), id: \.name) { slice in
                         HStack(spacing: 6) {
@@ -330,7 +330,7 @@ struct SettlementWidget: Widget {
             SettlementWidgetView(entry: entry)
         }
         .configurationDisplayName("결산")
-        .description("예산 대비 집행과 카테고리 내역을 봅니다.")
+        .description("예산 대비 지출과 분류별 내역을 봅니다.")
         .supportedFamilies([.systemMedium])
     }
 }

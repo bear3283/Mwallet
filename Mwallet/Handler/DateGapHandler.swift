@@ -83,4 +83,13 @@ final class DateGapHandler {
         locationManager?.startUpdatingLocation()
     }
 
+    /// 지금 있는 곳. 아직 못 잡았으면 지난번에 적어 둔 자리로 대신한다.
+    var lastKnownCoordinate: CLLocationCoordinate2D? {
+        if let currentLocation { return currentLocation.coordinate }
+        let defaults = UserDefaults.standard
+        guard let latitude = defaults.object(forKey: "currentLocationLatitude") as? CLLocationDegrees,
+              let longitude = defaults.object(forKey: "currentLocationLongitude") as? CLLocationDegrees else { return nil }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+
 }

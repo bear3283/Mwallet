@@ -33,6 +33,8 @@ struct TravelPicker: View {
 
     /// 영수증처럼 '고르지 않음' 이 '모두 본다' 는 뜻인 화면에서 켠다.
     var allowsAll = false
+    /// '고르지 않음' 칩에 적을 말.
+    var allTitle = String(localized: "전체 여행")
 
     /// 글을 어느 쪽으로 붙일지.
     ///
@@ -75,6 +77,7 @@ struct TravelPicker: View {
             TravelChoiceSheet(travels: travels,
                               selection: $selection,
                               allowsAll: allowsAll,
+                              allTitle: allTitle,
                               onChange: onChange)
         }
     }

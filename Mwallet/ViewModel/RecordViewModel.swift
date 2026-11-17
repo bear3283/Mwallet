@@ -33,8 +33,7 @@ enum RecordError: LocalizedError {
 // 오므로, 그 경계에서 메인으로 넘긴다.
 @MainActor
 // 이 클래스는 아직 250줄을 넘는다. 남은 무게는 대부분 오디오다 —
-// AVAudioEngine 으로 소리를 받고, 음성 인식에 흘리고, 파일로 남기는
-// 125줄이 여기 있다. 따로 떼어 낼 자리는 분명히 보인다.
+// AVAudioEngine 으로 소리를 받고 음성 인식에 흘리는 일이 여기 있다. 따로 떼어 낼 자리는 분명히 보인다.
 //
 // 옮기지 않은 것은 확인할 방법이 없어서다. 이 경로는 실기기 마이크가
 // 있어야 돌고, 테스트도 화면 캡처도 그 길을 밟지 않는다. 옮겨서 무언가
@@ -126,25 +125,8 @@ final class RecordViewModel: ObservableObject {
         }
     }
     
-    // travels
-    @Published var travelArray: [Travel] = []
-    
-    // shows other views
-    @Published var travelChoiceModalIsShown = false {
-        willSet {
-            if newValue {
-                do {
-                    travelArray = try viewContext.fetch(Travel.fetchRequest())
-                } catch {
-                    Logger.data.error("여행 목록 조회 실패: \(error.localizedDescription, privacy: .public)")
-                }
-            }
-        }
-    }
-    
     // view state
-    
-    @Published var manualRecordViewIsShown = false
+
     @Published var alertView_emptyIsShown = false {
         didSet {
             if alertView_emptyIsShown {
@@ -159,12 +141,6 @@ final class RecordViewModel: ObservableObject {
             }
         }
     }
-    
-    @Published var addTravelRequestModalIsShown = false
-    @Published var recordButtonIsFocused = false
-    var wantToActivateAutoSaveTimer = true
-    var AreThereOtherTravels = true
-    var isExplicitTempRecord = false
     
     // STT
     private let audioEngine = AVAudioEngine()
@@ -185,13 +161,6 @@ final class RecordViewModel: ObservableObject {
     /// 손을 뗀 뒤 화면이 여기서 기다린다. 인식이 끝났다는 신호(result.isFinal)나
     /// 오류가 오면 깨우고, 둘 다 안 오면 시간 제한이 깨운다.
     private var finalResultContinuation: CheckedContinuation<Void, Never>?
-    
-    // record
-    private var audioRecorder: AVAudioRecorder?
-    
-    // variables to save record file
-    var soundRecordPath: URL?
-    var soundRecordFileName: URL?
     
     // variables to evaluate record button pressing time
     var startRecordTime = CFAbsoluteTimeGetCurrent()
@@ -440,60 +409,6 @@ final class RecordViewModel: ObservableObject {
         continuation?.resume()
     }
 
-    func startRecording() async {
-        // 지출 기록에는 결제 위치가 함께 저장된다. 사용자가 녹음을 시작한
-        // 이 시점이 위치 권한을 요청할 맥락이다. (이미 준비됐으면 무시된다)
-        DateGapHandler.shared.requestAuthorization()
-
-        let recordingSession = AVAudioSession.sharedInstance()
-        do {
-            try recordingSession.setCategory(.playAndRecord, mode: .default)
-            try recordingSession.setActive(true)
-        } catch {
-            Logger.record.error("녹음을 준비하지 못했습니다")
-        }
-        
-        soundRecordPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        
-        // VOICE로 시작하는 파일 삭제
-        if let soundRecordPath {
-            do {
-                let fileManager = FileManager.default
-                let filesInDirectory = try fileManager.contentsOfDirectory(at: soundRecordPath, includingPropertiesForKeys: nil)
-                for fileURL in filesInDirectory where fileURL.lastPathComponent.hasPrefix("VOICE") {
-                    try fileManager.removeItem(at: fileURL)
-                }
-            } catch {
-                Logger.record.error("녹음 파일 삭제 실패: \(error.localizedDescription, privacy: .public)")
-            }
-        }
-        
-        soundRecordFileName = soundRecordPath?.appendingPathComponent("VOICE \(Date().toString(dateFormat: "dd-MM-YY HH:mm:ss")).m4a")
-        
-        let settings = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 12000,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
-        
-        if let soundRecordFileName {
-            do {
-                audioRecorder = try AVAudioRecorder(url: soundRecordFileName, settings: settings)
-                audioRecorder?.prepareToRecord()
-                audioRecorder?.record()
-            } catch {
-                Logger.record.error("녹음 시작에 실패했습니다")
-            }
-        }
-    }
-    
-    func stopRecording() {
-        if self.audioRecorder?.isRecording ?? false {
-            self.audioRecorder?.stop()
-        }
-    }
-    
     // MARK: - 프로퍼티 관리
     
     func resetInStringProperties() {

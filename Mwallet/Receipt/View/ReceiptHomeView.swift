@@ -2,10 +2,11 @@
 //  ReceiptHomeView.swift
 //  Mwallet
 //
-//  영수증 탭. 레이아웃과 타이포그래피는 가계부 탭과 같은 규칙을 따른다.
+//  내역 탭(예전 이름은 영수증). 레이아웃과 타이포그래피는 가계부 탭과 같은 규칙을 따른다.
 //  집계는 ReceiptSummary 에 위임해 통계·CSV 화면과 같은 값을 쓴다.
 //
 
+import CoreData
 import PhotosUI
 import SwiftUI
 
@@ -17,11 +18,15 @@ struct ReceiptHomeView: View {
     )
     private var allReceipts: FetchedResults<Expense>
 
+    @EnvironmentObject private var mainVM: MainViewModel
+
     private let store = ReceiptStore()
+    private let budgetStore = BudgetStore()
 
     @State private var filter = ReceiptFilter()
-    // 상단 여행 선택. nil 이면 모든 여행을 함께 본다.
-    @State private var selectedTravel: Travel?
+
+    /// 지금 보는 여행. 기록·예결산과 같은 것을 본다. nil 이면 모든 여행을 함께 본다.
+    private var selectedTravel: Travel? { mainVM.selectedTravel }
     @State private var travels: [Travel] = []
     @State private var isAddingExpense = false
     @State private var deletionTarget: Expense?
@@ -43,29 +48,30 @@ struct ReceiptHomeView: View {
                 // 여행을 고른다. 검색은 고른 여행 안에서 좁히는 일이라 그 아래에 둔다.
                 TabHeaderRow {
                     TravelPicker(travels: travels,
-                                 selection: $selectedTravel,
-                                 onChange: { filter.missionName = selectedTravel?.name },
+                                 selection: $mainVM.selectedTravel,
                                  emptyTitle: String(localized: "전체 여행"),
-                                 emptyDescription: String(localized: "모든 여행의 영수증을 함께 봅니다"),
+                                 emptyDescription: String(localized: "모든 여행의 지출을 함께 봅니다"),
                                  allowsAll: true)
                 } actions: {
-                    NavigationLink {
-                        ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
-                    } label: {
-                        TabActionIcon(systemName: "chart.pie", label: String(localized: "지출 통계"), isEnabled: !allReceipts.isEmpty)
+                    // 통계는 예결산의 '비중' 과 같은 그림이라 그쪽으로 모았다.
+                    // 여기에는 지금 보이는 목록을 그대로 내보내는 일만 남긴다.
+                    ShareLink(item: csvFile, preview: SharePreview(csvFile.fileName)) {
+                        TabActionIcon(systemName: "square.and.arrow.up",
+                                      label: String(localized: "CSV 내보내기"),
+                                      isEnabled: !filtered.isEmpty)
                     }
-                    .disabled(allReceipts.isEmpty)
+                    .disabled(filtered.isEmpty)
 
                     Button {
                         isAddingExpense = true
                     } label: {
-                        TabActionIcon(systemName: "plus", label: String(localized: "영수증 추가"))
+                        TabActionIcon(systemName: "plus", label: String(localized: "지출 추가"))
                     }
                 }
 
                 if allReceipts.isEmpty {
                     ReceiptEmptyState(
-                        message: String(localized: "아직 영수증이 없어요"),
+                        message: String(localized: "아직 지출이 없어요"),
                         detail: String(localized: "지출이 생기면 바로 남겨두세요.\n오프라인에서도 저장됩니다.")
                     )
                 } else {
@@ -82,8 +88,17 @@ struct ReceiptHomeView: View {
                         .frame(height: 20)
 
                     ReceiptSummaryBlock(summaryValue: summaryValue,
-                                        missionName: filter.missionName)
+                                        missionName: filter.missionName,
+                                        budget: selectedBudget)
                         .padding(.horizontal, ReceiptLayout.gutter)
+
+                    // 전체를 볼 때는 합계가 여러 여행의 것이라, 여행마다 나눠 보여 준다.
+                    if selectedTravel == nil, travelEntries.count > 1 {
+                        ReceiptTravelBreakdown(entries: travelEntries) { travel in
+                            mainVM.selectedTravel = travel
+                        }
+                        .padding(.top, 14)
+                    }
 
                     Spacer()
                         .frame(height: 20)
@@ -110,21 +125,25 @@ struct ReceiptHomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .navigationBar)
             // 다른 탭에서 여행을 만들거나 지우고 돌아올 수 있어 열 때마다 다시 읽는다.
-            // 고른 여행이 사라졌으면 전체로 되돌린다 — 지워진 이름으로 거르면
+            // 고른 여행이 사라졌으면 다시 정한다 — 지워진 이름으로 거르면
             // 아무것도 안 나오는데 화면에는 그 이름이 그대로 남는다.
             .onAppear {
                 travels = store.availableTravels()
-                if let selectedTravel, !travels.contains(selectedTravel) {
-                    self.selectedTravel = nil
-                    filter.missionName = nil
-                }
+                mainVM.dropSelectionIfDeleted()
+                filter.missionName = selectedTravel?.name
+            }
+            // 다른 탭에서 바꾼 여행도 여기서 그대로 거른다.
+            .onChange(of: mainVM.selectedTravel) { _, travel in
+                filter.missionName = travel?.name
             }
             .sheet(isPresented: $isAddingExpense) {
-                AddReceiptView()
+                ExpenseFormView(mode: .create(
+                    store.newDraft(for: selectedTravel,
+                                   coordinate: DateGapHandler.shared.lastKnownCoordinate)))
             }
             // 줄을 길게 눌러 여는 길이라 확인창을 붙여 둘 버튼이 없다.
             // 화면에 붙인 선택창은 엉뚱한 자리에 뜨므로 가운데 알림으로 묻는다.
-            .alert("이 영수증을 삭제할까요?", isPresented: deletionBinding) {
+            .alert("이 지출을 삭제할까요?", isPresented: deletionBinding) {
                 Button("삭제", role: .destructive) { confirmDeletion() }
                 Button("취소", role: .cancel) { deletionTarget = nil }
             } message: {
@@ -159,7 +178,7 @@ struct ReceiptHomeView: View {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 15))
                 .foregroundStyle(.gray300)
-            TextField("상호명, 메모, 카테고리", text: $filter.searchText)
+            TextField("내역, 메모, 분류", text: $filter.searchText)
                 .font(.body1)
                 .foregroundStyle(.black)
                 .tint(.mainAccent)
@@ -212,6 +231,11 @@ struct ReceiptHomeView: View {
         }
     }
 
+}
+
+// 거른 결과와 동작. 화면의 짜임(body)과 갈라 둔다.
+extension ReceiptHomeView {
+
     // MARK: - 합계
 
     // MARK: - 목록
@@ -220,6 +244,12 @@ struct ReceiptHomeView: View {
 
     private var filtered: [Expense] {
         allReceipts.filter { filter.matches($0) }
+    }
+
+    /// 지금 보이는 목록(여행·기간·검색으로 거른 것)을 표로.
+    private var csvFile: ReceiptCSVFile {
+        ReceiptCSVFile(data: ReceiptCSVEncoder.encode(filtered),
+                       fileName: ReceiptCSVEncoder.fileName(missionName: filter.missionName))
     }
 
     private var daySections: [ReceiptDaySection] {
@@ -250,8 +280,33 @@ struct ReceiptHomeView: View {
 
     // MARK: - 동작
 
+    /// 사진이 빠진 건수. 고른 여행 안에서만 센다 — 다른 여행의 숙제까지
+    /// 더하면 지금 여행에 몇 장을 더 채워야 하는지 알 수 없다.
     private var missingPhotoCount: Int {
-        allReceipts.filter { $0.needsPhoto }.count
+        allReceipts.filter { expense in
+            guard expense.needsPhoto else { return false }
+            guard let missionName = filter.missionName else { return true }
+            return expense.missionTitle == missionName
+        }.count
+    }
+
+    /// 고른 여행의 예산. 기간·검색으로 좁혀 보는 중이면 내지 않는다.
+    private var selectedBudget: BudgetSummary? {
+        guard let selectedTravel, filter.period == .all, !filter.onlyMissingPhoto,
+              filter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
+        return budgetStore.summary(for: selectedTravel)
+    }
+
+    /// 전체를 볼 때 여행마다 한 칸. 예산도 지출도 없는 여행은 뺀다.
+    private var travelEntries: [ReceiptTravelBreakdown.Entry] {
+        travels.compactMap { travel in
+            let expenses = budgetStore.expenses(for: travel)
+            let budget = budgetStore.summary(for: travel)
+            guard budget.hasBudget || !expenses.isEmpty else { return nil }
+            return ReceiptTravelBreakdown.Entry(travel: travel,
+                                                budget: budget,
+                                                missingPhotoCount: expenses.filter(\.needsPhoto).count)
+        }
     }
 
     private func loadFromLibrary(_ item: PhotosPickerItem?) {
@@ -291,5 +346,6 @@ struct ReceiptHomeView: View {
 
 #Preview {
     ReceiptHomeView()
+        .environmentObject(MainViewModel.shared)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

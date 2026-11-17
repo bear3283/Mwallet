@@ -1690,70 +1690,6 @@
         }
       }
     },
-    "예산 대비 집행과 카테고리 내역을 봅니다.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sieh die Ausgaben gegen das Budget und die Aufteilung nach Kategorien."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "See spending against budget, and the breakdown by category."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mira el gasto frente al presupuesto y el desglose por categoría."
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mira el gasto frente al presupuesto y el desglose por categoría."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voyez les dépenses face au budget, et le détail par catégorie."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vedi le spese rispetto al budget e il dettaglio per categoria."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "予算に対する支出と、分類ごとの内訳を見ます。"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Veja os gastos frente ao orçamento e o detalhe por categoria."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "查看支出与预算的对比，以及按分类的明细。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "查看支出與預算的對比，以及依分類的明細。"
-          }
-        }
-      }
-    },
     "이 여행에 한 번 기록하면 그때 쓴 금액으로 단추가 생깁니다": {
       "localizations": {
         "de": {
@@ -1814,70 +1750,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "在這個行程記錄一次，就會按當時的金額產生按鈕"
-          }
-        }
-      }
-    },
-    "이번 여행 예산과 집행률을 봅니다.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sieh Budget und Stand dieser Reise."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "See this trip’s budget and how much is spent."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mira el presupuesto de este viaje y cómo va."
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mira el presupuesto de este viaje y cómo va."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voyez le budget de ce voyage et où il en est."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vedi il budget di questo viaggio e a che punto sei."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この旅行の予算と支出の進み具合を見ます。"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Veja o orçamento desta viagem e como ele está."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "查看这次行程的预算和支出进度。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "查看這次行程的預算和支出進度。"
           }
         }
       }
@@ -2138,7 +2010,200 @@
         }
       }
     },
-    "집행 · 예산 %@": {
+    "커피": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaffee"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coffee"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Café"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Café"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Café"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caffè"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コーヒー"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Café"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "咖啡"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "咖啡"
+          }
+        }
+      }
+    },
+    "예산 대비 지출과 분류별 내역을 봅니다.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh die Ausgaben gegen das Budget und die Aufteilung nach Kategorien."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See spending against budget, and the breakdown by category."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mira el gasto frente al presupuesto y el desglose por categoría."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mira el gasto frente al presupuesto y el desglose por categoría."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voyez les dépenses face au budget, et le détail par catégorie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedi le spese rispetto al budget e il dettaglio per categoria."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予算に対する支出と、分類ごとの内訳を見ます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veja os gastos frente ao orçamento e o detalhe por categoria."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看支出与预算的对比，以及按分类的明细。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看支出與預算的對比，以及依分類的明細。"
+          }
+        }
+      }
+    },
+    "이번 여행 예산과 쓴 금액을 봅니다.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh Budget und Stand dieser Reise."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See this trip’s budget and how much is spent."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mira el presupuesto de este viaje y cómo va."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mira el presupuesto de este viaje y cómo va."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voyez le budget de ce voyage et où il en est."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedi il budget di questo viaggio e a che punto sei."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この旅行の予算と支出の進み具合を見ます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veja o orçamento desta viagem e como ele está."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看这次行程的预算和支出进度。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看這次行程的預算和支出進度。"
+          }
+        }
+      }
+    },
+    "지출 · 예산 %@": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2202,7 +2267,7 @@
         }
       }
     },
-    "집행 없음": {
+    "지출 없음": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2266,7 +2331,7 @@
         }
       }
     },
-    "카테고리": {
+    "분류": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2326,71 +2391,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "分類"
-          }
-        }
-      }
-    },
-    "커피": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kaffee"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coffee"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Café"
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Café"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Café"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Caffè"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "コーヒー"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Café"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "咖啡"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "咖啡"
           }
         }
       }

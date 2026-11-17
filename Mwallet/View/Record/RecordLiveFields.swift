@@ -180,7 +180,7 @@ struct RecordLiveFields: View {
                         .padding(.horizontal, 16)
                         .hidden()
             
-                    Text("결제 방식")
+                    Text("결제 수단")
                         .foregroundStyle(.gray400)
                         .font(.subhead2_2)
                         // 언어마다 길이가 다르다. 포르투갈어 'Forma de pagamento' 는
