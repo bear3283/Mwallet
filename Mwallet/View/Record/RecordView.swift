@@ -86,6 +86,11 @@ struct RecordView: View {
         }
     }
 
+}
+
+// 화면의 짜임. 상태와 body 는 위에 두고 조각들은 여기 모은다.
+extension RecordView {
+
     // MARK: - 화면 짜임
     //
     // SE 계열(4.7인치)은 세로가 짧아 넉넉한 여백으로는 아래가 잘린다.
@@ -159,7 +164,7 @@ struct RecordView: View {
                 Text("오늘 \(ReceiptFormat.krw(today))")
                 if budget.hasBudget {
                     Text("·")
-                        .foregroundStyle(.gray200)
+                        .accessibilityHidden(true)
                     Text(BudgetFormat.remaining(budget.remaining))
                         .foregroundStyle(budget.isOverspent ? Color.mainOrange : Color.gray400)
                 }
@@ -350,6 +355,11 @@ struct RecordView: View {
             .opacity(!isDetectingPress && !viewModel.alertView_emptyIsShown && !viewModel.alertView_shortIsShown ? 1 : 0.0000001)
             .allowsHitTesting(false)
     }
+
+}
+
+// 저장과 그 뒤의 일. 화면의 짜임과 갈라 둔다.
+extension RecordView {
 
     // MARK: - 저장
 

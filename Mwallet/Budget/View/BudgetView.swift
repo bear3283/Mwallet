@@ -87,16 +87,11 @@ struct BudgetView: View {
     @ViewBuilder
     private var content: some View {
         if selectedTravel == nil {
-            // 예산은 여행마다 세운다. 고른 여행이 없으면 보여 줄 것이 없다.
-            VStack(alignment: .leading, spacing: 14) {
-                Text("여행을 골라 주세요")
-                    .font(.caption2)
-                    .foregroundStyle(.gray400)
-                    .padding(.horizontal, ReceiptLayout.gutter)
-                ReceiptTravelBreakdown(entries: travelEntries) { travel in
-                    mainVM.selectedTravel = travel
-                    refreshToken = UUID()
-                }
+            // 예산은 여행마다 세운다. 머리줄이 이미 '골라 달라' 고 말하므로
+            // 여기서는 고를 것을 내놓기만 한다.
+            ReceiptTravelBreakdown(entries: travelEntries) { travel in
+                mainVM.selectedTravel = travel
+                refreshToken = UUID()
             }
         } else if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(

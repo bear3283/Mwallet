@@ -190,6 +190,11 @@ struct ExpenseFormView: View {
         }
     }
 
+}
+
+// 줄마다의 생김새와 동작. 화면의 짜임(body)과 갈라 둔다.
+extension ExpenseFormView {
+
     // MARK: - 사역
 
     private var missionBlock: some View {

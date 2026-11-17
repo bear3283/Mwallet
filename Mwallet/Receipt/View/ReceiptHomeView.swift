@@ -2,10 +2,11 @@
 //  ReceiptHomeView.swift
 //  Mwallet
 //
-//  영수증 탭. 레이아웃과 타이포그래피는 가계부 탭과 같은 규칙을 따른다.
+//  내역 탭(예전 이름은 영수증). 레이아웃과 타이포그래피는 가계부 탭과 같은 규칙을 따른다.
 //  집계는 ReceiptSummary 에 위임해 통계·CSV 화면과 같은 값을 쓴다.
 //
 
+import CoreData
 import PhotosUI
 import SwiftUI
 
@@ -229,6 +230,11 @@ struct ReceiptHomeView: View {
             .padding(.horizontal, ReceiptLayout.gutter)
         }
     }
+
+}
+
+// 거른 결과와 동작. 화면의 짜임(body)과 갈라 둔다.
+extension ReceiptHomeView {
 
     // MARK: - 합계
 
