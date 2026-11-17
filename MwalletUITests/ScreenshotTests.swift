@@ -179,7 +179,14 @@ final class ScreenshotTests: XCTestCase {
             return
         }
 
-        guard tapIfExists(app.buttons["영수증 사진 첨부"].firstMatch, timeout: 6) else {
+        // 폼이 하나로 합쳐지며 줄이 늘어, 사진 줄은 한 번 올려야 보인다.
+        let attach = app.buttons["영수증 사진 첨부"].firstMatch
+        if !(attach.waitForExistence(timeout: 4) && attach.isHittable) {
+            app.swipeUp()
+            settle()
+        }
+
+        guard tapIfExists(attach, timeout: 6) else {
             XCTFail("사진 첨부 버튼을 찾지 못했습니다.")
             return
         }
