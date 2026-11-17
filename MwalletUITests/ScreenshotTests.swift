@@ -77,7 +77,7 @@ final class ScreenshotTests: XCTestCase {
         tapTab("예결산")
         capture("02-예결산")
 
-        tapTab("영수증")
+        tapTab("내역")
         capture("03-영수증")
 
         tapTab("여행")
@@ -129,7 +129,7 @@ final class ScreenshotTests: XCTestCase {
 
     /// 영수증 탭에는 '전체 여행' 칸이 하나 더 붙는다.
     func test_06_영수증의_여행_선택을_캡처한다() throws {
-        tapTab("영수증")
+        tapTab("내역")
 
         let picker = app.buttons.matching(
             NSPredicate(format: "label CONTAINS %@ OR label CONTAINS %@", "~", "전체 여행")).firstMatch
@@ -161,7 +161,7 @@ final class ScreenshotTests: XCTestCase {
 
     /// 영수증 사진 여러 장 — 목록의 장수 표시와 상세의 넘겨 보기.
     func test_08_영수증_사진을_캡처한다() throws {
-        tapTab("영수증")
+        tapTab("내역")
         capture("12-영수증목록")
 
         // 사진이 여러 장 붙은 건으로 들어간다.
@@ -209,7 +209,7 @@ final class ScreenshotTests: XCTestCase {
 
         // 목록으로 돌아가면 줄에 장수가 붙어 있어야 한다.
         tapIfExists(app.buttons.matching(identifier: "뒤로").firstMatch, timeout: 2)
-        tapTab("영수증")
+        tapTab("내역")
         capture("17-목록-장수표시")
     }
 
@@ -310,16 +310,14 @@ final class ScreenshotTests: XCTestCase {
             XCTFail("여행 추가(+) 버튼을 찾지 못했습니다.")
             return
         }
-        capture("09-여행생성-날짜")
+        // 만드는 길은 한 화면이다. 이름만 적으면 저장할 수 있다.
+        capture("09-여행생성")
 
-        // 달력에서 오늘을 고르고 다음 단계로.
-        let today = Calendar.current.component(.day, from: Date())
-        tapIfExists(app.staticTexts["\(today)"].firstMatch)
-        tapIfExists(app.buttons["다음"].firstMatch)
-        settle()
-        capture("10-여행생성-인원")
+        let name = app.textFields["여행 이름"].firstMatch
+        if tapIfExists(name) { name.typeText("화면 테스트 여행") }
+        capture("10-여행생성-입력")
 
-        tapIfExists(app.buttons["완료"].firstMatch)
+        tapIfExists(app.buttons["저장"].firstMatch)
         settle(1.5)
         capture("11-여행생성-완료")
     }
@@ -469,7 +467,7 @@ final class LargeTextScreenshotTests: XCTestCase {
     }
 
     func test_큰_글자로_탭을_캡처한다() throws {
-        for tab in ["여행", "예결산", "기록", "영수증"] {
+        for tab in ["기록", "내역", "예결산", "여행"] {
             let button = app.tabBars.buttons[tab]
             guard button.waitForExistence(timeout: 5) else { continue }
             button.tap()
@@ -515,7 +513,7 @@ final class AccessibilityAuditTests: XCTestCase {
     /// 손봐야 하는 일이라, 여기에 묶어 두면 이 테스트가 늘 빨간 채로 남아
     /// 아무도 보지 않게 된다. 이름은 지금 0건이므로 이 자리를 지킨다.
     func test_이름_없는_요소가_없다() throws {
-        for tab in ["여행", "예결산", "기록", "영수증"] {
+        for tab in ["기록", "내역", "예결산", "여행"] {
             let button = app.tabBars.buttons[tab]
             guard button.waitForExistence(timeout: 5) else { continue }
             button.tap()
@@ -540,7 +538,7 @@ final class AccessibilityAuditTests: XCTestCase {
     /// 고쳐 놓고도 고쳐지지 않은 것처럼 보였다. 무엇이 잘못됐는지는 이
     /// 감사가 답한다.
     func test_탭마다_접근성_감사를_돌린다() throws {
-        for tab in ["여행", "예결산", "기록", "영수증"] {
+        for tab in ["기록", "내역", "예결산", "여행"] {
             let button = app.tabBars.buttons[tab]
             guard button.waitForExistence(timeout: 5) else { continue }
             button.tap()

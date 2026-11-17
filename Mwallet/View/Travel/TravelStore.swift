@@ -21,12 +21,24 @@ struct TravelDraft {
     // 종료일 미정을 허용한다. 편도로 떠나는 일정이 있다.
     var endDate: Date?
     var participants: [String]
+    /// 대표 사진. 여행 카드의 바탕과 여행 상세 머리말에 쓰인다.
+    var coverImageData: Data?
+
+    /// 새 여행. 오늘 떠나 오늘 돌아오는 것으로 시작한다.
+    init(now: Date = Date(), calendar: Calendar = .current) {
+        let today = calendar.startOfDay(for: now)
+        self.name = ""
+        self.startDate = today
+        self.endDate = today
+        self.participants = []
+    }
 
     init(from travel: Travel) {
         self.name = travel.name ?? ""
         self.startDate = travel.startDate ?? Date()
         self.endDate = travel.endDate
         self.participants = travel.participants
+        self.coverImageData = travel.coverImageData
     }
 
     var trimmedName: String {
@@ -93,6 +105,53 @@ final class TravelStore {
         self.context = context
     }
 
+    /// 여행을 만든다.
+    ///
+    /// 예전에는 날짜 → 인원 → 완료의 세 화면을 거쳤고 화면마다 뷰모델이
+    /// 따로 저장했다. 고치는 화면과 같은 초안을 받아 한 번에 적는다.
+    ///
+    /// 종료일은 그날의 마지막 순간으로 맞춘다. 0시로 두면 돌아오는 날
+    /// 하루가 '여행 중' 에서 빠진다.
+    @discardableResult
+    func create(from draft: TravelDraft, calendar: Calendar = .current) throws -> Travel {
+        guard !draft.trimmedName.isEmpty else { throw TravelStoreError.emptyName }
+        guard draft.hasValidPeriod else { throw TravelStoreError.endBeforeStart }
+
+        let travel = Travel(context: context)
+        travel.id = UUID()
+        apply(draft, to: travel, calendar: calendar)
+
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
+        return travel
+    }
+
+    /// 초안을 여행에 옮긴다.
+    ///
+    /// 날짜는 만들 때만 하루의 처음과 끝으로 맞춘다(calendar 를 줄 때).
+    /// 고칠 때는 적힌 그대로 둔다 — 이미 맞춰진 값이고, 다시 맞추면 다른
+    /// 시간대에서 고쳤을 때 날짜가 하루 밀린다.
+    private func apply(_ draft: TravelDraft, to travel: Travel, calendar: Calendar? = nil) {
+        travel.name = draft.trimmedName
+        if let calendar {
+            travel.startDate = calendar.startOfDay(for: draft.startDate)
+            travel.endDate = draft.endDate.map { end in
+                let start = calendar.startOfDay(for: end)
+                return calendar.date(byAdding: DateComponents(day: 1, second: -1), to: start) ?? end
+            }
+        } else {
+            travel.startDate = draft.startDate
+            travel.endDate = draft.endDate
+        }
+        travel.participants = draft.cleanedParticipants
+        travel.coverImageData = draft.coverImageData
+        travel.lastUpdate = Date()
+    }
+
     func update(_ travel: Travel, with draft: TravelDraft) throws {
         // 기본함은 사용자가 만든 일정이 아니라 여행을 고르지 않은 지출이 담기는
         // 자리다. 화면에서는 목록에 올리지 않아 닿을 수 없지만, 이름이 편집
@@ -101,11 +160,7 @@ final class TravelStore {
         guard !draft.trimmedName.isEmpty else { throw TravelStoreError.emptyName }
         guard draft.hasValidPeriod else { throw TravelStoreError.endBeforeStart }
 
-        travel.name = draft.trimmedName
-        travel.startDate = draft.startDate
-        travel.endDate = draft.endDate
-        travel.participants = draft.cleanedParticipants
-        travel.lastUpdate = Date()
+        apply(draft, to: travel)
 
         do {
             try context.save()

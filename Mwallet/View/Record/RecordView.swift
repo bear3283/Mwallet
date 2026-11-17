@@ -20,6 +20,7 @@ struct RecordView: View {
     @State private var travelChoices: [Travel] = []
     private let travelStore = TravelStore()
     private let receiptStore = ReceiptStore()
+    private let budgetStore = BudgetStore()
 
     /// 새로 적는 폼에 건넬 초안. 값이 들어오면 폼이 뜬다.
     @State private var formDraft: RecordFormDraft?
@@ -119,6 +120,7 @@ struct RecordView: View {
                              allTitle: String(localized: "미분류"),
                              alignment: .center)
                     .accessibilityIdentifier("record.travelChoice")
+                todayLine
                 Spacer()
                     .frame(height: 36)
                 sentenceOrSavedCard
@@ -136,6 +138,39 @@ struct RecordView: View {
                 Spacer(minLength: metrics.manualBottomInset)
             }
             .frame(maxHeight: .infinity, alignment: .top)
+        }
+    }
+
+    /// 오늘 쓴 돈과 남은 예산 한 줄.
+    ///
+    /// 적으러 들어온 화면에서 가장 자주 궁금한 숫자다. 여기 없으면 한 건
+    /// 적을 때마다 예결산 탭을 다녀와야 한다. 여행을 고르지 않았으면
+    /// 견줄 예산이 없어 내지 않는다.
+    @ViewBuilder
+    private var todayLine: some View {
+        if let travel = mainVM.selectedTravel, !travel.isDeleted {
+            let budget = budgetStore.summary(for: travel)
+            let today = budgetStore.expenses(for: travel)
+                .filter { Calendar.current.isDateInToday($0.paidDate) }
+                .compactMap(\.amountInKRW)
+                .reduce(0, +)
+
+            HStack(spacing: 6) {
+                Text("오늘 \(ReceiptFormat.krw(today))")
+                if budget.hasBudget {
+                    Text("·")
+                        .foregroundStyle(.gray200)
+                    Text(BudgetFormat.remaining(budget.remaining))
+                        .foregroundStyle(budget.isOverspent ? Color.mainOrange : Color.gray400)
+                }
+            }
+            .font(.caption2)
+            .foregroundStyle(.gray400)
+            .monospacedDigit()
+            .lineLimit(1)
+            .padding(.top, 10)
+            // 방금 저장한 것이 바로 반영되도록, 저장할 때마다 다시 그린다.
+            .id(savedExpense?.objectID)
         }
     }
 

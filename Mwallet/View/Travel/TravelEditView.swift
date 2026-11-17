@@ -2,11 +2,13 @@
 //  TravelEditView.swift
 //  Mwallet
 //
-//  여행의 이름·기간·인원을 고친다.
-//  생성은 여러 단계로 나뉜 흐름이지만, 편집은 이미 정해진 값을 손보는 일이라
-//  한 화면에서 끝낸다.
+//  여행을 만들고 고친다. 이름·기간·인원·대표 사진을 한 화면에서 정한다.
+//
+//  만드는 길은 예전에 세 화면(날짜 → 인원 → 완료)이었다. 고치는 화면이
+//  같은 값을 한 장에서 받고 있었으므로 그쪽으로 합쳤다.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct TravelEditView: View {
@@ -14,11 +16,22 @@ struct TravelEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     private let store = TravelStore()
-    private let travel: Travel
+    /// 고치는 여행. nil 이면 새로 만든다.
+    private let travel: Travel?
 
     @State private var draft: TravelDraft
     @State private var hasEndDate: Bool
     @State private var errorMessage: String?
+    @State private var pickedCover: PhotosPickerItem?
+    @State private var isLoadingCover = false
+
+    /// 새 여행을 만든다.
+    init() {
+        self.travel = nil
+        let draft = TravelDraft()
+        _draft = State(initialValue: draft)
+        _hasEndDate = State(initialValue: true)
+    }
 
     init(travel: Travel) {
         self.travel = travel
@@ -32,8 +45,11 @@ struct TravelEditView: View {
             nameSection
             periodSection
             participantSection
+            coverSection
         }
-        .navigationTitle("여행 편집")
+        .navigationTitle(travel == nil ? String(localized: "여행 추가") : String(localized: "여행 편집"))
+        .toolbar(.hidden, for: .tabBar)
+        .onChange(of: pickedCover) { _, item in loadCover(item) }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -44,7 +60,7 @@ struct TravelEditView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("저장", action: save)
                     .fontWeight(.semibold)
-                    .disabled(!draft.isValid)
+                    .disabled(!draft.isValid || isLoadingCover)
             }
         }
         .alert("저장하지 못했습니다",
@@ -144,11 +160,74 @@ struct TravelEditView: View {
         }
     }
 
+    // MARK: - 대표 사진
+
+    private var coverSection: some View {
+        Section {
+            HStack(spacing: 12) {
+                if let data = draft.coverImageData, let image = UIImage(data: data) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 56, height: 56)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .accessibilityHidden(true)
+                }
+
+                PhotosPicker(selection: $pickedCover, matching: .images) {
+                    Label(draft.coverImageData == nil ? String(localized: "사진 선택") : String(localized: "사진 변경"),
+                          systemImage: "photo")
+                        .font(.body1)
+                        .foregroundStyle(Color.mainAccent)
+                }
+                .disabled(isLoadingCover)
+
+                Spacer()
+
+                if isLoadingCover {
+                    ProgressView()
+                } else if draft.coverImageData != nil {
+                    Button {
+                        draft.coverImageData = nil
+                        pickedCover = nil
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.gray300)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("삭제")
+                }
+            }
+        } header: {
+            Text("대표 사진")
+                .font(.caption2)
+                .foregroundStyle(.gray400)
+        }
+    }
+
+    // 원본을 그대로 넣으면 건당 몇 MB 라 저장소가 급격히 커지고
+    // CloudKit 레코드 제한에도 걸린다. 영수증 사진과 같은 규격으로 줄인다.
+    private func loadCover(_ item: PhotosPickerItem?) {
+        guard let item else { return }
+        isLoadingCover = true
+        Task {
+            let raw = try? await item.loadTransferable(type: Data.self)
+            if let raw { draft.coverImageData = ReceiptImageProcessor.process(raw) }
+            isLoadingCover = false
+        }
+    }
+
     // MARK: - 동작
 
     private func save() {
         do {
-            try store.update(travel, with: draft)
+            if let travel {
+                try store.update(travel, with: draft)
+            } else {
+                // 방금 만든 여행을 바로 본다. 만들자마자 예산을 세우거나
+                // 지출을 적으러 가는데, 거기서 다시 고르게 하지 않는다.
+                MainViewModel.shared.selectedTravel = try store.create(from: draft)
+            }
             dismiss()
         } catch {
             errorMessage = error.localizedDescription

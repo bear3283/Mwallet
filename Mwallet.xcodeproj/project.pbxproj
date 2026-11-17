@@ -36,24 +36,17 @@
 		C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */; };
 		C15760182AEE782C0089FFE5 /* CountryList.csv in Resources */ = {isa = PBXBuildFile; fileRef = C15760172AEE782C0089FFE5 /* CountryList.csv */; };
 		C157601E2AF1DD830089FFE5 /* CountryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C157601D2AF1DD830089FFE5 /* CountryInfo.swift */; };
-		C17550542AD54FC900A61BE5 /* AddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17550532AD54FC900A61BE5 /* AddTravelView.swift */; };
-		C17550592AD57B6500A61BE5 /* AddTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17550582AD57B6500A61BE5 /* AddTravelViewModel.swift */; };
 		C17966042ADD66F90036E866 /* WantedSans-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C17965FB2ADD66F90036E866 /* WantedSans-SemiBold.otf */; };
 		C17966072ADD66F90036E866 /* WantedSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = C17965FE2ADD66F90036E866 /* WantedSans-Medium.otf */; };
 		C17966082ADD66F90036E866 /* WantedSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C17965FF2ADD66F90036E866 /* WantedSans-Regular.otf */; };
 		C179660C2ADD68BC0036E866 /* FontsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C179660B2ADD68BC0036E866 /* FontsManager.swift */; };
 		C179660E2ADD6BF90036E866 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C179660D2ADD6BF90036E866 /* Color+Extension.swift */; };
 		C18168022AFDE07000130F79 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18168012AFDE07000130F79 /* SplashView.swift */; };
-		C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */; };
 		C190C20C2ADCD47E0099EE3A /* ButtonTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */; };
 		C19ACF7C2AEA341400D950C9 /* TravelDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */; };
-		C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */; };
-		C19AFAE12ADF709E0037A5F5 /* AddMemberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */; };
 		C19AFAE32ADFB5AE0037A5F5 /* Font+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE22ADFB5AE0037A5F5 /* Font+Extension.swift */; };
-		C19AFAE72ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE62ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift */; };
 		C19AFAEA2AE00A920037A5F5 /* NavigationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAE92AE00A920037A5F5 /* NavigationUtils.swift */; };
 		C19AFAEC2AE107460037A5F5 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAEB2AE107460037A5F5 /* SettingView.swift */; };
-		C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */; };
 		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
 		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
 		C1A11EA700000000000000E2 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* ExpenseFormView.swift */; };
@@ -64,7 +57,6 @@
 		C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010E /* ReceiptDetailView.swift */; };
 		C1A11EA700000000000001A2 /* ReceiptCategoryPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */; };
 		C1A11EA700000000000001B2 /* ReceiptCSVEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */; };
-		C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000001C1 /* ReceiptStatsView.swift */; };
 		C1A11EA700000000000002A2 /* FirstLaunchSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */; };
 		C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000003A1 /* ReceiptDesign.swift */; };
 		C1A11EA700000000000004A2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000004A1 /* CameraPicker.swift */; };
@@ -90,12 +82,9 @@
 		C1A11EA7000000000000A12 /* AllTravelsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A11 /* AllTravelsMap.swift */; };
 		C1A11EA7000000000000B12 /* RecordLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B11 /* RecordLayout.swift */; };
 		C1A11EA7000000000000B22 /* RecordLiveFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B21 /* RecordLiveFields.swift */; };
-		C1A11EA7000000000000C02 /* TravelCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C01 /* TravelCalendar.swift */; };
-		C1A11EA7000000000000C12 /* AddTravelHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C11 /* AddTravelHeader.swift */; };
 		C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */; };
 		C1A11EA7000000000000D12 /* ReceiptListSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000D11 /* ReceiptListSections.swift */; };
 		C1A11EA7000000000000E02 /* TravelSummaryStrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */; };
-		C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000E11 /* AddMemberSections.swift */; };
 		C1A11EA7000000000000F02 /* RecordTopSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000F01 /* RecordTopSections.swift */; };
 		C1A11EA71000000000000A02 /* SettlementSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000A01 /* SettlementSummary.swift */; };
 		C1A11EA71000000000000B02 /* TravelSettlementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA71000000000000B01 /* TravelSettlementSection.swift */; };
@@ -216,8 +205,6 @@
 		C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailViewModel.swift; sourceTree = "<group>"; };
 		C15760172AEE782C0089FFE5 /* CountryList.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryList.csv; sourceTree = "<group>"; };
 		C157601D2AF1DD830089FFE5 /* CountryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfo.swift; sourceTree = "<group>"; };
-		C17550532AD54FC900A61BE5 /* AddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelView.swift; sourceTree = "<group>"; };
-		C17550582AD57B6500A61BE5 /* AddTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelViewModel.swift; sourceTree = "<group>"; };
 		C17965FB2ADD66F90036E866 /* WantedSans-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WantedSans-SemiBold.otf"; sourceTree = "<group>"; };
 		C17965FE2ADD66F90036E866 /* WantedSans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WantedSans-Medium.otf"; sourceTree = "<group>"; };
 		C17965FF2ADD66F90036E866 /* WantedSans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WantedSans-Regular.otf"; sourceTree = "<group>"; };
@@ -225,16 +212,11 @@
 		C179660B2ADD68BC0036E866 /* FontsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontsManager.swift; sourceTree = "<group>"; };
 		C179660D2ADD6BF90036E866 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		C18168012AFDE07000130F79 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
-		C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberView.swift; sourceTree = "<group>"; };
 		C190C20B2ADCD47E0099EE3A /* ButtonTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTheme.swift; sourceTree = "<group>"; };
 		C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDetailView.swift; sourceTree = "<group>"; };
-		C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAddTravelView.swift; sourceTree = "<group>"; };
-		C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberViewModel.swift; sourceTree = "<group>"; };
 		C19AFAE22ADFB5AE0037A5F5 /* Font+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extension.swift"; sourceTree = "<group>"; };
-		C19AFAE62ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAddTravelViewModel.swift; sourceTree = "<group>"; };
 		C19AFAE92AE00A920037A5F5 /* NavigationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationUtils.swift; sourceTree = "<group>"; };
 		C19AFAEB2AE107460037A5F5 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
-		C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousTravelViewModel.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E1 /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
@@ -245,7 +227,6 @@
 		C1A11EA7000000000000010E /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001A1 /* ReceiptCategoryPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCategoryPalette.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000001B1 /* ReceiptCSVEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCSVEncoder.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000001C1 /* ReceiptStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStatsView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000002A1 /* FirstLaunchSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSeeder.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000003A1 /* ReceiptDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDesign.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000004A1 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
@@ -271,12 +252,9 @@
 		C1A11EA7000000000000A11 /* AllTravelsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTravelsMap.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000B11 /* RecordLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLayout.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000B21 /* RecordLiveFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLiveFields.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000C01 /* TravelCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCalendar.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000C11 /* AddTravelHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelHeader.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptEvidenceFields.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000D11 /* ReceiptListSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptListSections.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSummaryStrips.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000E11 /* AddMemberSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberSections.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000F01 /* RecordTopSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopSections.swift; sourceTree = "<group>"; };
 		C1A11EA71000000000000A01 /* SettlementSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementSummary.swift; sourceTree = "<group>"; };
 		C1A11EA71000000000000B01 /* TravelSettlementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSettlementSection.swift; sourceTree = "<group>"; };
@@ -508,12 +486,6 @@
 		57EA421B2ADE1107006CA587 /* Travel */ = {
 			isa = PBXGroup;
 			children = (
-				C1A11EA7000000000000C01 /* TravelCalendar.swift */,
-				C1A11EA7000000000000C11 /* AddTravelHeader.swift */,
-				C17550532AD54FC900A61BE5 /* AddTravelView.swift */,
-				C1A11EA7000000000000E11 /* AddMemberSections.swift */,
-				C190C2022ADAAE2C0099EE3A /* AddMemberView.swift */,
-				C19AFADE2ADEAEC70037A5F5 /* CompleteAddTravelView.swift */,
 				C1A11EA71000000000000B01 /* TravelSettlementSection.swift */,
 				C1A11EA7000000000000E01 /* TravelSummaryStrips.swift */,
 				C19ACF7B2AEA341400D950C9 /* TravelDetailView.swift */,
@@ -577,10 +549,6 @@
 			isa = PBXGroup;
 			children = (
 				57A65D112AD7D5D500131266 /* RecordViewModel.swift */,
-				C17550582AD57B6500A61BE5 /* AddTravelViewModel.swift */,
-				C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */,
-				C19AFAE62ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift */,
-				C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */,
 				C157600B2AEACADC0089FFE5 /* TravelDetailViewModel.swift */,
 				C1DC9A4A2AF3EFAD00CB6298 /* MainViewModel.swift */,
 			);
@@ -653,7 +621,6 @@
 				C1A11EA700000000000000E1 /* ExpenseFormView.swift */,
 				C1A11EA700000000000003A1 /* ReceiptDesign.swift */,
 				C1A11EA70000000000000BB1 /* TabActionBar.swift */,
-				C1A11EA700000000000001C1 /* ReceiptStatsView.swift */,
 				C1A11EA7000000000000010E /* ReceiptDetailView.swift */,
 				C1C00002000000000000AA1 /* ReceiptPhotoViewer.swift */,
 				C1A11EA700000000000007A1 /* LocationPickerView.swift */,
@@ -978,7 +945,6 @@
 				C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */,
 				57CE9C732ADE4CAE00EDAD11 /* Currency.swift in Sources */,
 				SP0000000000000000000002 /* SpeechLocale.swift in Sources */,
-				C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */,
 				57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */,
 				C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */,
 				C1A11EA700000000000009F2 /* Travel+Extension.swift in Sources */,
@@ -998,7 +964,6 @@
 				C1A11EA700000000000000E2 /* ExpenseFormView.swift in Sources */,
 				C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */,
 				C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */,
-				C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */,
 				C1A11EA7000000000000010F /* ReceiptDetailView.swift in Sources */,
 				C1C00002000000000000AA2 /* ReceiptPhotoViewer.swift in Sources */,
 				C1A11EA700000000000007A2 /* LocationPickerView.swift in Sources */,
@@ -1030,17 +995,8 @@
 				C157600C2AEACADC0089FFE5 /* TravelDetailViewModel.swift in Sources */,
 				C18168022AFDE07000130F79 /* SplashView.swift in Sources */,
 				E2D4247E2AEF580E00A9ADC9 /* ExchangeRateHandler.swift in Sources */,
-				C1A11EA7000000000000C02 /* TravelCalendar.swift in Sources */,
-				C1A11EA7000000000000C12 /* AddTravelHeader.swift in Sources */,
-				C17550542AD54FC900A61BE5 /* AddTravelView.swift in Sources */,
-				C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */,
-				C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */,
 				57A65D0A2AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift in Sources */,
-				C19AFAE72ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift in Sources */,
-				C17550592AD57B6500A61BE5 /* AddTravelViewModel.swift in Sources */,
-				C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */,
 				57A65D0E2AD7D51600131266 /* SplitVariety.swift in Sources */,
-				C19AFAE12ADF709E0037A5F5 /* AddMemberViewModel.swift in Sources */,
 				E23733902AF7EC1E008C2613 /* CurrencyInfoModel.swift in Sources */,
 				C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */,
 				57A65D102AD7D52700131266 /* String+Extension.swift in Sources */,

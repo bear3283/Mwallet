@@ -125,6 +125,20 @@ struct TravelDetailView: View {
                         .padding(.horizontal, ReceiptLayout.gutter)
                         .padding(.top, 28)
 
+                    // 지우는 길은 맨 아래에 둔다. 예전에는 위쪽 편집 버튼 바로
+                    // 옆이 휴지통이라, 고치려다 지우는 쪽을 누르기 쉬웠다.
+                    Button(role: .destructive) {
+                        isWarningOn = true
+                    } label: {
+                        Text("여행 삭제하기")
+                            .font(.subhead2_2)
+                            .foregroundStyle(.red)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .accessibilityIdentifier("travelDetail.delete")
+                    .padding(.horizontal, ReceiptLayout.gutter)
+                    .padding(.top, 32)
+
                     // 떠 있는 탭바가 마지막 항목을 가리지 않도록 비워 둔다.
                     Spacer(minLength: 110)
                 }
@@ -144,25 +158,16 @@ struct TravelDetailView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 14) {
-                    NavigationLink {
-                        TravelEditView(travel: travel)
-                    } label: {
-                        Image(systemName: "square.and.pencil")
-                            .foregroundStyle(.black)
-                    }
-                    // 화면 테스트가 이름으로 찾는다. 순서로 집으면 버튼이
-                    // 하나 늘거나 줄 때 조용히 다른 것을 누른다.
-                    .accessibilityIdentifier("travelDetail.edit")
-
-                    Button {
-                        isWarningOn = true
-                    } label: {
-                        Image(systemName: "trash")
-                            .foregroundStyle(.black)
-                    }
-                    .accessibilityIdentifier("travelDetail.delete")
+                NavigationLink {
+                    TravelEditView(travel: travel)
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                        .foregroundStyle(.black)
                 }
+                // 화면 테스트가 이름으로 찾는다. 순서로 집으면 버튼이
+                // 하나 늘거나 줄 때 조용히 다른 것을 누른다.
+                .accessibilityIdentifier("travelDetail.edit")
+                .accessibilityLabel("여행 편집")
             }
         }
         .alert("여행 삭제하기", isPresented: $isWarningOn) {

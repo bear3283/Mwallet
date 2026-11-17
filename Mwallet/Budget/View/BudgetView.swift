@@ -88,10 +88,16 @@ struct BudgetView: View {
     private var content: some View {
         if selectedTravel == nil {
             // 예산은 여행마다 세운다. 고른 여행이 없으면 보여 줄 것이 없다.
-            ReceiptEmptyState(
-                message: String(localized: "여행 선택"),
-                detail: String(localized: "여행을 골라 주세요")
-            )
+            VStack(alignment: .leading, spacing: 14) {
+                Text("여행을 골라 주세요")
+                    .font(.caption2)
+                    .foregroundStyle(.gray400)
+                    .padding(.horizontal, ReceiptLayout.gutter)
+                ReceiptTravelBreakdown(entries: travelEntries) { travel in
+                    mainVM.selectedTravel = travel
+                    refreshToken = UUID()
+                }
+            }
         } else if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(
                 message: String(localized: "아직 예산이 없어요"),
@@ -114,6 +120,15 @@ struct BudgetView: View {
                     Spacer(minLength: 90)
                 }
             }
+        }
+    }
+
+    /// 고른 여행이 없을 때 내놓는 여행별 카드. 누르면 그 여행을 본다.
+    private var travelEntries: [ReceiptTravelBreakdown.Entry] {
+        travels.map { travel in
+            ReceiptTravelBreakdown.Entry(travel: travel,
+                                         budget: store.summary(for: travel),
+                                         missingPhotoCount: 0)
         }
     }
 
@@ -194,28 +209,17 @@ struct BudgetView: View {
     }
 }
 
-// 막대 그래프 범례에 그대로 찍히는 글자.
-//
-// 색 표(chartForegroundStyleScale)의 열쇠와 막대가 드는 값이 같은 문자열이어야
-// 짝이 맞는다. 두 자리에 따로 적어 두면 번역을 한쪽만 고쳤을 때 색이 통째로
-// 빠지는데, 그때 화면은 아무 말도 하지 않는다. 그래서 한곳에서 만든다.
-//
-// group 은 막대를 나란히 세우는 데만 쓰이고 화면에 나오지 않아 영어로 둔다.
-enum BudgetBarLabel {
-    static let planned = String(localized: "예산")
-    static let spent = String(localized: "집행")
-    static let over = String(localized: "초과")
-}
-
 // MARK: - 그래프 섹션
 
-// 같은 예결산 데이터를 세 가지 질문으로 본다.
-// 집행률: 항목별 진행 · 예산 대비: 세운 것과 쓴 것 비교 · 비중: 집행액 분포
+// 같은 예결산 데이터를 두 가지 질문으로 본다.
+// 집행률: 항목별로 예산을 얼마나 썼나 · 비중: 쓴 돈이 어디로 갔나
+//
+// '예산 대비' 그룹 막대가 하나 더 있었는데, 집행률 목록이 이미 쓴 금액과
+// 예산과 초과 여부를 줄마다 적고 있어 같은 것을 다른 그림으로 보는 셈이었다.
 enum BudgetChartMode: String, CaseIterable, Identifiable {
     // rawValue 는 자리를 가리키는 이름일 뿐이라 언어를 타지 않는다.
     // 화면에 적는 글자는 title 이다.
     case progress
-    case compare
     case share
 
     var id: String { rawValue }
@@ -223,7 +227,6 @@ enum BudgetChartMode: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .progress: return String(localized: "집행률")
-        case .compare: return String(localized: "예산 대비")
         case .share: return String(localized: "비중")
         }
     }
@@ -243,7 +246,6 @@ struct BudgetChartSection: View {
             Group {
                 switch mode {
                 case .progress: progressList
-                case .compare: compareChart
                 case .share: shareChart
                 }
             }
@@ -378,68 +380,6 @@ struct BudgetChartSection: View {
         return isOver ? .mainOrange : tint
     }
 
-    // MARK: 예산 대비 — 그룹 막대
-
-    private var compareChart: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Chart(compareBars) { bar in
-                BarMark(
-                    x: .value("금액", bar.amount),
-                    y: .value("카테고리", bar.category)
-                )
-                .foregroundStyle(by: .value("구분", bar.colorKey))
-                .position(by: .value("묶음", bar.group))
-                .cornerRadius(3)
-            }
-            .chartForegroundStyleScale([
-                BudgetBarLabel.planned: Color.gray200,
-                BudgetBarLabel.spent: Color.mainAccent,
-                BudgetBarLabel.over: Color.mainOrange
-            ])
-            .chartLegend(position: .bottom, alignment: .leading, spacing: 12)
-            .chartXAxis {
-                AxisMarks(values: .automatic(desiredCount: 4)) { value in
-                    AxisGridLine().foregroundStyle(Color.gray100)
-                    AxisValueLabel {
-                        if let amount = value.as(Double.self) {
-                            Text(compactWon(amount))
-                                .font(.caption2)
-                                .foregroundStyle(.gray300)
-                        }
-                    }
-                }
-            }
-            .chartYAxis {
-                AxisMarks(preset: .aligned, position: .leading) { value in
-                    AxisValueLabel {
-                        if let name = value.as(String.self) {
-                            Text(name)
-                                .font(.caption1)
-                                .foregroundStyle(.gray400)
-                        }
-                    }
-                }
-            }
-            .frame(height: max(CGFloat(summary.lines.count) * 54 + 24, 140))
-
-            Text("막대가 회색(예산)보다 길면 초과입니다.")
-                .font(.caption1)
-                .foregroundStyle(.gray300)
-        }
-    }
-
-    private var compareBars: [BudgetBar] {
-        summary.lines.flatMap { line -> [BudgetBar] in
-            [
-                BudgetBar(category: line.category.visibleDescription, group: "planned",
-                          colorKey: BudgetBarLabel.planned, amount: line.planned),
-                BudgetBar(category: line.category.visibleDescription, group: "spent",
-                          colorKey: line.isOverspent ? BudgetBarLabel.over : BudgetBarLabel.spent,
-                          amount: line.spent)
-            ]
-        }
-    }
-
     // MARK: 비중 — 집행액 도넛
 
     @ViewBuilder
@@ -511,24 +451,10 @@ struct BudgetChartSection: View {
 
     // MARK: 포맷
 
-    private func compactWon(_ value: Double) -> String {
-        if value <= 0 { return "0" }
-        if value >= 10000 { return String(localized: "\(Int((value / 10000).rounded()))만") }
-        return String(localized: "\(Int((value / 1000).rounded()))천")
-    }
-
     private func sharePercent(_ amount: Double) -> String {
         guard summary.totalSpent > 0 else { return "0%" }
         return String(format: "%.0f%%", amount / summary.totalSpent * 100)
     }
-}
-
-private struct BudgetBar: Identifiable {
-    let id = UUID()
-    let category: String
-    let group: String
-    let colorKey: String
-    let amount: Double
 }
 
 private struct BudgetSlice: Identifiable {

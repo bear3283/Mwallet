@@ -125,3 +125,32 @@ final class ExpenseFormRulesTests: CoreDataTestCase {
         XCTAssertNil(TravelStore(context: context).ongoingTravel(now: now))
     }
 }
+
+// MARK: - 여행 만들기
+
+final class TravelCreateTests: CoreDataTestCase {
+
+    func test_만든_여행은_돌아오는_날_끝까지_여행_중이다() throws {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        var draft = TravelDraft(now: today)
+        draft.name = "  방콕  "
+        draft.participants = ["민수", "", "민수"]
+
+        let travel = try TravelStore(context: context).create(from: draft)
+
+        XCTAssertEqual(travel.name, "방콕")
+        XCTAssertEqual(travel.participants, ["민수"])
+        XCTAssertNotNil(travel.id)
+        XCTAssertTrue(travel.isUserCreated)
+        // 오늘 하루짜리 여행은 오늘 밤 늦게도 여행 중이어야 한다.
+        let lateTonight = today.addingTimeInterval(23 * 3_600 + 59 * 60)
+        XCTAssertEqual(TravelSchedule.state(of: travel, now: lateTonight), .current)
+    }
+
+    func test_이름이_없으면_만들지_않는다() {
+        XCTAssertThrowsError(try TravelStore(context: context).create(from: TravelDraft())) { error in
+            XCTAssertEqual(error as? TravelStoreError, .emptyName)
+        }
+    }
+}

@@ -52,12 +52,14 @@ struct ReceiptHomeView: View {
                                  emptyDescription: String(localized: "모든 여행의 영수증을 함께 봅니다"),
                                  allowsAll: true)
                 } actions: {
-                    NavigationLink {
-                        ReceiptStatsView(expenses: filtered, missionName: filter.missionName)
-                    } label: {
-                        TabActionIcon(systemName: "chart.pie", label: String(localized: "지출 통계"), isEnabled: !allReceipts.isEmpty)
+                    // 통계는 예결산의 '비중' 과 같은 그림이라 그쪽으로 모았다.
+                    // 여기에는 지금 보이는 목록을 그대로 내보내는 일만 남긴다.
+                    ShareLink(item: csvFile, preview: SharePreview(csvFile.fileName)) {
+                        TabActionIcon(systemName: "square.and.arrow.up",
+                                      label: String(localized: "CSV 내보내기"),
+                                      isEnabled: !filtered.isEmpty)
                     }
-                    .disabled(allReceipts.isEmpty)
+                    .disabled(filtered.isEmpty)
 
                     Button {
                         isAddingExpense = true
@@ -236,6 +238,12 @@ struct ReceiptHomeView: View {
 
     private var filtered: [Expense] {
         allReceipts.filter { filter.matches($0) }
+    }
+
+    /// 지금 보이는 목록(여행·기간·검색으로 거른 것)을 표로.
+    private var csvFile: ReceiptCSVFile {
+        ReceiptCSVFile(data: ReceiptCSVEncoder.encode(filtered),
+                       fileName: ReceiptCSVEncoder.fileName(missionName: filter.missionName))
     }
 
     private var daySections: [ReceiptDaySection] {

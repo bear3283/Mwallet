@@ -68,11 +68,16 @@ struct ReceiptSummaryBlock: View {
             }
 
             if summaryValue.byCurrency.count > 1 {
+                // 통화가 여럿이면 한 줄에 다 들어가지 않는다. 숫자가 두 줄로
+                // 접히면 읽을 수 없으므로 접지 않고 옆으로 넘긴다.
+                ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
                     ForEach(Array(summaryValue.byCurrency.enumerated()), id: \.element.id) { index, entry in
                         Text("\(entry.currency) \(decimalText(entry.amount))")
                             .font(.caption2)
                             .foregroundStyle(.gray300)
+                            .lineLimit(1)
+                            .fixedSize()
                         if index != summaryValue.byCurrency.count - 1 {
                             Text("·")
                                 .font(.caption2)
@@ -80,6 +85,7 @@ struct ReceiptSummaryBlock: View {
                                 .padding(.horizontal, 6)
                         }
                     }
+                }
                 }
                 .padding(.top, 8)
             }

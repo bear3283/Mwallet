@@ -43,7 +43,7 @@ struct SettingView: View {
             Button("취소", role: .cancel) { }
             Button("모두 삭제", role: .destructive, action: deleteAllData)
         } message: {
-            Text("이 동작은 되돌릴 수 없습니다.\niCloud 로 연결된 다른 기기에서도 함께 지워집니다.\n\n남겨야 할 기록이 있다면 영수증 탭에서 CSV 로 먼저 내보내세요.")
+            Text("이 동작은 되돌릴 수 없습니다.\niCloud 로 연결된 다른 기기에서도 함께 지워집니다.\n\n남겨야 할 기록이 있다면 내역 탭에서 CSV 로 먼저 내보내세요.")
         }
         .toolbar(.hidden, for: .tabBar)
         .navigationTitle("설정")
@@ -62,8 +62,8 @@ struct SettingView: View {
     
     private var defaultSetting: some View {
         Section {
-            listButton(title: String(localized: "위치 설정"), target: UIApplication.openSettingsURLString)
-            listButton(title: String(localized: "마이크 설정"), target: UIApplication.openSettingsURLString)
+            // 위치와 마이크가 따로 있었는데 둘 다 같은 iOS 설정 화면을 열었다.
+            listButton(title: String(localized: "위치·마이크 권한"), target: UIApplication.openSettingsURLString)
         } header: {
             Text("기본 설정")
                 .font(.caption2)
