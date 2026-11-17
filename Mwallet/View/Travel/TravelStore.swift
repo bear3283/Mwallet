@@ -138,6 +138,19 @@ final class TravelStore {
         }
     }
 
+    /// 지금 다니는 중인 여행. 없으면 nil.
+    ///
+    /// 앱을 열 때 '지금 보는 여행' 을 이것으로 정한다. 여행 중이 아니면
+    /// 짐작하지 않는다 — 지난 여행을 골라 두면 돌아와서 적은 지출이 말없이
+    /// 그 여행에 섞인다.
+    ///
+    /// 겹치는 여행이 둘이면 마지막으로 손댄 쪽이다.
+    func ongoingTravel(now: Date = Date()) -> Travel? {
+        availableTravels()
+            .filter { TravelSchedule.state(of: $0, now: now) == .current }
+            .max { ($0.lastUpdate ?? .distantPast) < ($1.lastUpdate ?? .distantPast) }
+    }
+
     /// 여행을 고르지 않은 지출이 담기는 기본함.
     func defaultTravel() -> Travel? {
         Travel.fetchDefault(in: context)

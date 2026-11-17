@@ -286,23 +286,21 @@ struct TravelDetailView: View {
     }
 
     private func deleteTravel() {
-        let deletedID = travel.id
+        let wasSelected = travel.objectID == mainVM.selectedTravel?.objectID
 
         // 화면이 사라진 뒤에 지워야, 삭제된 객체를 그리려다 죽지 않는다.
         dismiss()
 
         DispatchQueue.main.async {
+            // 보던 여행이면 먼저 손에서 놓는다. 지워진 것을 쥐고 있으면
+            // 다른 탭이 그것을 그리려 든다.
+            if wasSelected { mainVM.selectedTravel = nil }
             do {
                 try travelStore.delete(travel)
             } catch {
                 Logger.data.error("여행 삭제 실패: \(error.localizedDescription, privacy: .public)")
             }
-
-            if let deletedID,
-               deletedID == mainVM.selectedTravel?.id || deletedID == mainVM.selectedTravelInExpense?.id {
-                mainVM.selectedTravelInExpense = findInitialTravelInExpense()
-                mainVM.selectedTravel = findCurrentTravel()
-            }
+            if wasSelected { mainVM.selectedTravel = travelStore.ongoingTravel() }
         }
     }
 }

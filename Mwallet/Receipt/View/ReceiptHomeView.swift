@@ -23,12 +23,10 @@ struct ReceiptHomeView: View {
     private let budgetStore = BudgetStore()
 
     @State private var filter = ReceiptFilter()
-    // 상단 여행 선택. nil 이면 모든 여행을 함께 본다.
-    @State private var selectedTravel: Travel?
+
+    /// 지금 보는 여행. 기록·예결산과 같은 것을 본다. nil 이면 모든 여행을 함께 본다.
+    private var selectedTravel: Travel? { mainVM.selectedTravel }
     @State private var travels: [Travel] = []
-    /// 처음 열 때 한 번만 '지금 보던 여행' 으로 맞춘다. 그 뒤로 사용자가
-    /// 전체로 바꿨다면 탭을 오갈 때마다 도로 좁히지 않는다.
-    @State private var didApplyInitialTravel = false
     @State private var isAddingExpense = false
     @State private var deletionTarget: Expense?
     @State private var errorMessage: String?
@@ -49,8 +47,7 @@ struct ReceiptHomeView: View {
                 // 여행을 고른다. 검색은 고른 여행 안에서 좁히는 일이라 그 아래에 둔다.
                 TabHeaderRow {
                     TravelPicker(travels: travels,
-                                 selection: $selectedTravel,
-                                 onChange: { filter.missionName = selectedTravel?.name },
+                                 selection: $mainVM.selectedTravel,
                                  emptyTitle: String(localized: "전체 여행"),
                                  emptyDescription: String(localized: "모든 여행의 영수증을 함께 봅니다"),
                                  allowsAll: true)
@@ -95,8 +92,7 @@ struct ReceiptHomeView: View {
                     // 전체를 볼 때는 합계가 여러 여행의 것이라, 여행마다 나눠 보여 준다.
                     if selectedTravel == nil, travelEntries.count > 1 {
                         ReceiptTravelBreakdown(entries: travelEntries) { travel in
-                            selectedTravel = travel
-                            filter.missionName = travel.name
+                            mainVM.selectedTravel = travel
                         }
                         .padding(.top, 14)
                     }
@@ -126,26 +122,21 @@ struct ReceiptHomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .navigationBar)
             // 다른 탭에서 여행을 만들거나 지우고 돌아올 수 있어 열 때마다 다시 읽는다.
-            // 고른 여행이 사라졌으면 전체로 되돌린다 — 지워진 이름으로 거르면
+            // 고른 여행이 사라졌으면 다시 정한다 — 지워진 이름으로 거르면
             // 아무것도 안 나오는데 화면에는 그 이름이 그대로 남는다.
             .onAppear {
                 travels = store.availableTravels()
-                if let selectedTravel, !travels.contains(selectedTravel) {
-                    self.selectedTravel = nil
-                    filter.missionName = nil
-                }
-                // 처음에는 기록 탭에서 보던 여행으로 연다. 전체로 열면 합계가
-                // 모든 여행의 것이라 지금 여행에 얼마를 썼는지 바로 읽히지 않는다.
-                if !didApplyInitialTravel {
-                    didApplyInitialTravel = true
-                    if let current = mainVM.selectedTravelInExpense, travels.contains(current) {
-                        selectedTravel = current
-                        filter.missionName = current.name
-                    }
-                }
+                mainVM.dropSelectionIfDeleted()
+                filter.missionName = selectedTravel?.name
+            }
+            // 다른 탭에서 바꾼 여행도 여기서 그대로 거른다.
+            .onChange(of: mainVM.selectedTravel) { _, travel in
+                filter.missionName = travel?.name
             }
             .sheet(isPresented: $isAddingExpense) {
-                AddReceiptView()
+                ExpenseFormView(mode: .create(
+                    store.newDraft(for: selectedTravel,
+                                   coordinate: DateGapHandler.shared.lastKnownCoordinate)))
             }
             // 줄을 길게 눌러 여는 길이라 확인창을 붙여 둘 버튼이 없다.
             // 화면에 붙인 선택창은 엉뚱한 자리에 뜨므로 가운데 알림으로 묻는다.

@@ -27,6 +27,11 @@ struct ReceiptDraft {
     var photos: [Data] = []
     var coordinate: CLLocationCoordinate2D?
     var placeName: String?
+    var paymentMethod: PaymentMethod = .unknown
+    /// 이 지출을 함께 쓴 사람들(저장용 이름). 인원별 정산이 이 값으로 나뉜다.
+    var participants: [String] = [Travel.selfParticipantName]
+    /// CountryList.csv 의 행 번호. 모르면 unknownCountry.
+    var country: Int64 = ExpenseCode.unknownCountry
 
     init() { }
 
@@ -42,11 +47,21 @@ struct ReceiptDraft {
         self.photos = expense.photoDataList
         self.coordinate = expense.coordinate
         self.placeName = expense.location
+        self.paymentMethod = PaymentMethod(rawValue: Int(expense.paymentMethod)) ?? .unknown
+        self.participants = expense.participants
+        self.country = expense.country
     }
 
-    var amount: Double? {
-        let trimmed = amountText.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: ",", with: "")
-        guard let value = Double(trimmed), value >= 0 else { return nil }
+    var amount: Double? { Self.parseAmount(amountText) }
+
+    /// 적힌 글자를 금액으로 읽는다.
+    ///
+    /// 쉼표를 무조건 걷어내면 쉼표를 소수점으로 쓰는 언어(독일어·프랑스어 등)
+    /// 에서 `15,50` 이 1550 이 된다. 어느 쪽이 자릿점인지는 기기에 묻는다.
+    static func parseAmount(_ text: String, locale: Locale = .current) -> Double? {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        let normalized = SentenceRules.normalizingSeparators(trimmed, locale: locale)
+        guard let value = Double(normalized), value >= 0 else { return nil }
         return value
     }
 
@@ -56,12 +71,17 @@ struct ReceiptDraft {
 
     // 24.5 는 "24.5", 3200 은 "3200" 으로 보여 준다.
     // 소수점 없는 금액에 ".0" 이 붙으면 편집할 때 거슬린다.
-    private static func editableAmountText(_ value: Double) -> String {
+    ///
+    /// 소수점은 기기 언어의 것으로 적는다. 읽을 때(parseAmount) 기기에 묻기
+    /// 때문에, 여기서 '.' 로 못 박으면 독일어 기기에서 24.5 가 245 로 읽힌다.
+    static func editableAmountText(_ value: Double, locale: Locale = .current) -> String {
         guard value > 0 else { return "" }
-        if value == value.rounded() {
-            return String(Int(value))
-        }
-        return String(value)
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        formatter.usesGroupingSeparator = false
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: value)) ?? ""
     }
 }
 
@@ -132,6 +152,56 @@ final class ReceiptStore {
         try context.save()
     }
 
+    // MARK: - 새 초안
+
+    /// 새 지출의 초안. 여행에서 미리 알 수 있는 것을 채워 둔다.
+    ///
+    /// 통화와 나라는 그 여행에서 마지막으로 적은 지출의 것을 물려받는다 —
+    /// 위젯과 같은 규칙이다. 방콕에서 계속 바트로 적고 있었다면 다음 것도
+    /// 바트다. 물려받을 것이 없으면 원화로 두고 화면이 위치를 보고 맞춘다.
+    func newDraft(for travel: Travel?, coordinate: CLLocationCoordinate2D? = nil) -> ReceiptDraft {
+        var draft = ReceiptDraft()
+        let travel = travel?.isUserCreated == true ? travel : nil
+        draft.travel = travel
+        draft.participants = [Travel.selfParticipantName] + (travel?.participants ?? [])
+        draft.coordinate = coordinate
+        if let money = inheritedMoney(for: travel) {
+            draft.currency = ExpenseCode.currencyCode(for: money.currency)
+            draft.country = money.country
+        }
+        return draft
+    }
+
+    /// 이 여행(없으면 미분류)에서 마지막으로 적은 지출의 통화·나라.
+    func inheritedMoney(for travel: Travel?) -> QuickExpenseStore.Money? {
+        if let travel { return QuickExpenseStore.inheritedMoney(of: travel) }
+
+        let request = Expense.fetchRequest()
+        request.predicate = NSPredicate(format: "travel == nil OR travel.isDefault == YES")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Expense.payDate, ascending: false)]
+        request.fetchLimit = 20
+        let recent = (try? context.fetch(request)) ?? []
+        guard let latest = recent.first(where: { $0.exchangeRate > 0 }) else { return nil }
+        return QuickExpenseStore.Money(currency: latest.currency,
+                                       exchangeRate: latest.exchangeRate,
+                                       country: latest.country)
+    }
+
+    /// 좌표만 있고 장소 이름이 없는 지출에 이름과 나라를 채운다.
+    ///
+    /// 말로 적은 지출은 묻지 않고 바로 저장하므로, 주소를 찾는 왕복을
+    /// 기다리지 않고 저장한 뒤에 채운다. 실패하면 좌표만 남는다.
+    func fillPlace(_ place: ExpensePlace, for expense: Expense) {
+        guard !expense.isDeleted, expense.managedObjectContext != nil else { return }
+        if (expense.location ?? "").isEmpty, let name = place.name { expense.location = name }
+        if expense.country == ExpenseCode.unknownCountry, let country = place.country { expense.country = country }
+        do {
+            try context.save()
+        } catch {
+            Logger.data.error("장소 채우기 실패: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
     // MARK: - 조회 보조
 
     // 여행 목록. 영수증을 어느 여행에 넣을지 고르는 데 쓴다.
@@ -162,6 +232,10 @@ final class ReceiptStore {
         expense.replacePhotos(with: draft.photos, in: context)
         expense.setCoordinate(draft.coordinate)
         expense.location = draft.placeName
+        expense.paymentMethod = Int64(draft.paymentMethod.rawValue)
+        expense.participants = draft.participants
+        expense.country = draft.country
+        draft.travel?.lastUpdate = Date()
     }
 
     // 원화면 환산이 필요 없으므로 1 을 쓴다.
@@ -177,5 +251,38 @@ final class ReceiptStore {
         return TravelExchangeRate.anchoredRate(for: travel, currencyCode: currency)
             ?? exchangeRateHandler.getExchangeRateFromKRW(currencyCode: currency)
             ?? Expense.unknownExchangeRate
+    }
+}
+
+// MARK: - 좌표에서 장소 찾기
+
+/// 좌표가 가리키는 곳의 이름과 나라.
+struct ExpensePlace: Sendable {
+    let name: String?
+    /// CountryList.csv 의 행 번호.
+    let country: Int64?
+
+    /// 좌표로 주소를 찾는다. 네트워크 왕복이라 몇 초 걸리고 실패할 수 있다.
+    static func resolve(_ coordinate: CLLocationCoordinate2D) async -> ExpensePlace? {
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        guard let placemark = try? await CLGeocoder().reverseGeocodeLocation(location).first else { return nil }
+        let name = placemark.locality ?? placemark.name
+        return ExpensePlace(name: name, country: placemark.isoCountryCode.flatMap(countryIndex(forISO:)))
+    }
+
+    /// ISO 나라 코드('TH')를 CountryList.csv 의 행 번호로.
+    static func countryIndex(forISO code: String) -> Int64? {
+        CountryInfoModel.shared.countryResult.first { _, info in
+            let pair = info.locationNm.components(separatedBy: "-")
+            return pair.count == 2 && pair[1] == code
+        }.map { Int64($0.key) }
+    }
+
+    /// 그 나라에서 주로 쓰는 통화 코드. 표에 없거나 모르는 코드면 nil.
+    static func primaryCurrency(of country: Int64) -> String? {
+        let codes = CountryInfoModel.shared.countryResult[Int(country)]?.relatedCurrencyArray ?? []
+        return codes.first { code in
+            ExpenseCode.currencyCode(for: ExpenseCode.currencyIndex(for: code)).uppercased() == code.uppercased()
+        }
     }
 }

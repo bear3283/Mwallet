@@ -97,7 +97,7 @@ struct ReceiptDetailView: View {
             attachPhoto(from: newItem)
         }
         .sheet(isPresented: $isEditing) {
-            AddReceiptView(mode: .edit(expense))
+            ExpenseFormView(mode: .edit(expense))
         }
         .fullScreenCover(isPresented: $isViewingImage) {
             ReceiptPhotoViewer(photos: photos, index: $viewingIndex,

@@ -5,22 +5,28 @@
 //  Created by Wonil Lee on 10/12/23.
 //
 
+import CoreLocation
 import OSLog
 import SwiftUI
 
 struct RecordView: View {
-    
-    init() {
-    }
-    
+
     let recordButtonAnimationLength = 0.25
-    
+
     @StateObject var viewModel = RecordViewModel()
     @EnvironmentObject var mainVM: MainViewModel
-    
-    /// 여행 선택 시트에 건네줄 목록. 예결산·영수증과 같은 규칙으로 뽑는다.
+
+    /// 여행 선택 시트에 건네줄 목록. 예결산·내역과 같은 규칙으로 뽑는다.
     @State private var travelChoices: [Travel] = []
     private let travelStore = TravelStore()
+    private let receiptStore = ReceiptStore()
+
+    /// 새로 적는 폼에 건넬 초안. 값이 들어오면 폼이 뜬다.
+    @State private var formDraft: RecordFormDraft?
+    /// 방금 저장한 지출. 문장 자리에 결과를 보여 주고 되돌릴 수 있게 한다.
+    @State private var savedExpense: Expense?
+    @State private var editingExpense: Expense?
+    @State private var savedCardTimer: Task<Void, Never>?
 
     @GestureState private var isDetectingPress = false
     @State private var isDetectingPress_showOnButton = false {
@@ -48,52 +54,37 @@ struct RecordView: View {
             .ignoresSafeArea()
             .onAppear {
                 travelChoices = travelStore.availableTravels()
+                mainVM.dropSelectionIfDeleted()
                 viewModel.resetInStringProperties()
-                viewModel.wantToActivateAutoSaveTimer = true
                 viewModel.recordButtonResetTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
                     // 메인 런루프에 걸린 타이머라 항상 메인에서 깨어난다.
                     MainActor.assumeIsolated {
                         guard !isDetectingPress else { return }
                         viewModel.stopSTT()
-                        viewModel.stopRecording()
                     }
                 }
-                
-                // MARK: - decide record button action
-                
-                // 기본함밖에 없으면 녹음 버튼이 여행 추가를 먼저 권한다.
-                let sampleTravel = findInitialTravelInExpense()
-                viewModel.AreThereOtherTravels = sampleTravel?.isUserCreated ?? false
+                openManualEntryIfAsked()
             }
             .onDisappear {
                 viewModel.recordButtonResetTimer?.invalidate()
             }
             // 큰 위젯의 ＋ 칸이 mwallet://record/manual 로 들어온다.
-            // 신호를 보면 직접 기록을 열고, 열면서 도로 내린다 — 내리지 않으면
-            // 그 화면을 닫고 돌아왔을 때 곧바로 다시 열린다.
-            .onChange(of: mainVM.opensManualEntry) { _, wants in
-                guard wants else { return }
-                mainVM.opensManualEntry = false
-                viewModel.manualRecordViewIsShown = true
+            // 신호를 보면 폼을 열고, 열면서 도로 내린다 — 내리지 않으면
+            // 폼을 닫고 돌아왔을 때 곧바로 다시 열린다.
+            .onChange(of: mainVM.opensManualEntry) { _, _ in
+                openManualEntryIfAsked()
             }
-            .sheet(isPresented: $viewModel.addTravelRequestModalIsShown) {
-                AddTravelRequestModal(viewModel: viewModel)
-                    .presentationDetents([.height(247 - 34)])
+            .sheet(item: $formDraft) { box in
+                ExpenseFormView(mode: .create(box.draft)) { expense in
+                    showSaved(expense)
+                }
             }
-            .navigationDestination(isPresented: $viewModel.manualRecordViewIsShown) {
-                ManualRecordView(
-                    given_wantToActivateAutoSaveTimer: viewModel.wantToActivateAutoSaveTimer,
-                    given_payAmount: viewModel.payAmount,
-                    given_info: viewModel.info,
-                    given_infoCategory: viewModel.infoCategory,
-                    given_paymentMethod: viewModel.paymentMethod,
-                    given_soundRecordFileName: viewModel.soundRecordFileName
-                )
-                .environmentObject(mainVM)
+            .sheet(item: $editingExpense) { expense in
+                ExpenseFormView(mode: .edit(expense))
             }
         }
     }
-    
+
     // MARK: - 화면 짜임
     //
     // SE 계열(4.7인치)은 세로가 짧아 넉넉한 여백으로는 아래가 잘린다.
@@ -118,17 +109,19 @@ struct RecordView: View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
                 Spacer(minLength: metrics.topInset)
-                // 예결산·영수증과 같은 컨트롤을 쓴다. 세 탭이 같은 것을 묻는
-                // 자리라 생김새도 하나여야 한다.
+                // 예결산·내역과 같은 컨트롤을 쓴다. 세 탭이 같은 것을 묻는
+                // 자리라 생김새도 하나여야 한다. 고르지 않으면 미분류로 적힌다.
                 TravelPicker(travels: travelChoices,
                              selection: $mainVM.selectedTravel,
                              emptyTitle: String(localized: "여행 선택"),
                              emptyDescription: String(localized: "눌러서 여행을 고르세요"),
+                             allowsAll: true,
+                             allTitle: String(localized: "미분류"),
                              alignment: .center)
                     .accessibilityIdentifier("record.travelChoice")
                 Spacer()
                     .frame(height: 36)
-                RecordSentenceArea(viewModel: viewModel, isPressing: isDetectingPress)
+                sentenceOrSavedCard
                 Spacer()
                     .frame(height: 36)
             }
@@ -144,6 +137,33 @@ struct RecordView: View {
             }
             .frame(maxHeight: .infinity, alignment: .top)
         }
+    }
+
+    /// 문장 자리. 방금 저장한 것이 있으면 그 결과를 같은 자리에 보여 준다.
+    ///
+    /// 문장 영역을 지우지 않고 가리기만 하는 것은 높이를 지키기 위해서다.
+    /// 자리가 바뀌면 그 아래 세 칸이 들썩인다.
+    private var sentenceOrSavedCard: some View {
+        ZStack {
+            RecordSentenceArea(viewModel: viewModel, isPressing: isDetectingPress)
+                .opacity(showsSavedCard ? 0.0000001 : 1)
+                .accessibilityHidden(showsSavedCard)
+
+            if showsSavedCard, let savedExpense {
+                RecordSavedCard(expense: savedExpense,
+                                onUndo: { undo(savedExpense) },
+                                onEdit: {
+                                    hideSavedCard()
+                                    editingExpense = savedExpense
+                                })
+                    .transition(.opacity)
+            }
+        }
+    }
+
+    private var showsSavedCard: Bool {
+        guard let savedExpense, !isDetectingPress else { return false }
+        return !savedExpense.isDeleted && savedExpense.managedObjectContext != nil
     }
 
     // 알림이 떠 있는 동안에는 이 층이 화면 전체의 탭을 받아 알림을 닫는다.
@@ -187,10 +207,8 @@ struct RecordView: View {
     }
 
     private var manualRecordButtonView: some View {
-        ManualRecordLink(isHidden: isDetectingPress
-                         && (viewModel.AreThereOtherTravels || viewModel.isExplicitTempRecord)) {
-            viewModel.wantToActivateAutoSaveTimer = false
-            viewModel.manualRecordViewIsShown = true
+        ManualRecordLink(isHidden: isDetectingPress) {
+            openForm(with: newDraft())
         }
         .disabled(isDetectingPress)
     }
@@ -223,115 +241,72 @@ struct RecordView: View {
         .accessibilityLabel("녹음")
         .accessibilityHint("두 번 누른 채로 있으면 말한 내용을 받아 적습니다")
         .onChange(of: isDetectingPress) { oldValue, newValue in
-            if !oldValue && newValue {
-                // 녹음 시작 (지점 1: 녹음 끝과 순서 뒤집히는 오류 발생 가능)
-            } else if oldValue && !newValue {
-                // 녹음 끝
-                
-                if viewModel.AreThereOtherTravels || viewModel.isExplicitTempRecord {
-                    viewModel.endRecordTime = CFAbsoluteTimeGetCurrent()
-                    isDetectingPress_letButtonBigger = false
-                    viewModel.stopSTT()
-                    viewModel.stopRecording()
+            // 손을 뗐을 때만 본다. 누르기 시작한 쪽은 제스처가 맡는다.
+            guard oldValue && !newValue else { return }
 
-                    // 예전에는 여기서 0.4초를 셌다. 인식 결과가 비동기로 오는데
-                    // 손을 뗀 그 순간에 읽으면 마지막 한 마디가 아직 도착하지
-                    // 않아, 말을 했는데도 '아무것도 못 알아들었다' 가 됐다.
-                    //
-                    // 시간을 세는 대신 인식이 끝났다는 신호를 기다린다.
-                    // 짧게 말하면 짧게, 길게 말하면 그만큼 기다린다.
-                    Task { @MainActor in
-                        await viewModel.awaitFinalTranscription()
+            viewModel.endRecordTime = CFAbsoluteTimeGetCurrent()
+            isDetectingPress_letButtonBigger = false
+            viewModel.stopSTT()
 
-                        let pressed = Double(viewModel.endRecordTime - viewModel.startRecordTime)
-                        switch RecordOutcome.decide(pressedSeconds: pressed,
-                                                    info: viewModel.info,
-                                                    payAmount: viewModel.payAmount) {
-                        case .tooShort:
-                            viewModel.alertView_shortIsShown = true
-                            viewModel.resetInStringProperties()
-                        case .nothingHeard:
-                            viewModel.resetTranscribedString()
-                            viewModel.alertView_emptyIsShown = true
-                            viewModel.resetInStringProperties()
-                        case .proceed:
-                            viewModel.manualRecordViewIsShown = true
-                        }
-                    }
-                } else {
-                    _ = 0
+            // 예전에는 여기서 0.4초를 셌다. 인식 결과가 비동기로 오는데
+            // 손을 뗀 그 순간에 읽으면 마지막 한 마디가 아직 도착하지
+            // 않아, 말을 했는데도 '아무것도 못 알아들었다' 가 됐다.
+            //
+            // 시간을 세는 대신 인식이 끝났다는 신호를 기다린다.
+            // 짧게 말하면 짧게, 길게 말하면 그만큼 기다린다.
+            Task { @MainActor in
+                await viewModel.awaitFinalTranscription()
+
+                let pressed = Double(viewModel.endRecordTime - viewModel.startRecordTime)
+                switch RecordOutcome.decide(pressedSeconds: pressed,
+                                            info: viewModel.info,
+                                            payAmount: viewModel.payAmount) {
+                case .tooShort:
+                    viewModel.alertView_shortIsShown = true
+                    viewModel.resetInStringProperties()
+                case .nothingHeard:
+                    viewModel.resetTranscribedString()
+                    viewModel.alertView_emptyIsShown = true
+                    viewModel.resetInStringProperties()
+                case .proceed:
+                    finishVoiceRecord()
                 }
             }
         }
     }
-    
+
     private var continuousPress: some Gesture {
         LongPressGesture(minimumDuration: 0.01, maximumDistance: 40)
             .sequenced(before: LongPressGesture(minimumDuration: .infinity, maximumDistance: 40))
             .updating($isDetectingPress) { value, state, _ in
                 switch value {
                 case .second(true, nil):
-                    // 녹음 시작 (지점 2: Publishing changes from within view updates 오류 발생 가능)
+                    // 녹음 시작 (Publishing changes from within view updates 오류 발생 가능)
                     state = true
-                    
-                    if viewModel.AreThereOtherTravels || viewModel.isExplicitTempRecord {
-                        viewModel.startRecordTime = CFAbsoluteTimeGetCurrent()
-                        Task {
-                            await viewModel.startRecording()
+
+                    viewModel.startRecordTime = CFAbsoluteTimeGetCurrent()
+                    DispatchQueue.main.async {
+                        // 지출에는 결제 위치가 함께 남는다. 녹음을 시작한 이
+                        // 시점이 위치 권한을 청할 맥락이다. (이미 준비됐으면 무시된다)
+                        DateGapHandler.shared.requestAuthorization()
+                        do {
+                            try viewModel.startSTT()
+                        } catch {
+                            Logger.record.error("녹음 시작 실패: \(error.localizedDescription, privacy: .public)")
                         }
-                        DispatchQueue.main.async {
-                            do {
-                                try viewModel.startSTT()
-                            } catch {
-                                Logger.record.error("녹음 시작 실패: \(error.localizedDescription, privacy: .public)")
-                            }
-                        }
-                        
-                        DispatchQueue.main.async {
-                            isDetectingPress_showOnButton = true
-                            viewModel.alertView_emptyIsShown = false
-                            viewModel.alertView_shortIsShown = false
-                            viewModel.recordButtonIsFocused = true
-                            viewModel.wantToActivateAutoSaveTimer = true
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            viewModel.addTravelRequestModalIsShown = true
-                        }
+
+                        isDetectingPress_showOnButton = true
+                        viewModel.alertView_emptyIsShown = false
+                        viewModel.alertView_shortIsShown = false
+                        hideSavedCard()
                     }
-                    
+
                 default:
                     break
                 }
             }
     }
 
-//    private var alertView_saved: some View {
-//        ZStack {
-//            RoundedRectangle(cornerRadius: 18)
-//                .foregroundStyle(.white)
-//                .opacity(mainVM.alertView_savedIsShown ? 1 : 0.0000001)
-//                .shadow(color: Color(0xCCCCCC), radius: 5)
-//                .layoutPriority(-1)
-//            
-//            VStack(spacing: 8) {
-//                Image("recordBigMainPinkCheck")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 24, height: 24)
-//                Text("지출 기록이 저장되었습니다")
-//                    .font(.subhead2_2)
-//                    .foregroundStyle(.gray300)
-//                    .multilineTextAlignment(.center)
-//                    .padding(.horizontal, 41)
-//            }
-//            .padding(.top, 12)
-//            .padding(.bottom, 16)
-//            .opacity(mainVM.alertView_savedIsShown ? 1 : 0.0000001)
-//        }
-//        .padding(.horizontal, 30)
-//    }
-    
     private var speakWhilePressingView: some View {
         Text("누르는 동안 말하기")
             .font(.subhead3_2)
@@ -341,7 +316,155 @@ struct RecordView: View {
             .allowsHitTesting(false)
     }
 
-    // 무엇을·얼마·어떻게 순서로 말하면 된다는 걸 실제 예시로 보여 준다.
+    // MARK: - 저장
+
+    /// 지금 고른 여행에 맞춘 빈 초안.
+    private func newDraft() -> ReceiptDraft {
+        receiptStore.newDraft(for: mainVM.selectedTravel,
+                              coordinate: DateGapHandler.shared.lastKnownCoordinate)
+    }
+
+    private func openForm(with draft: ReceiptDraft) {
+        hideSavedCard()
+        formDraft = RecordFormDraft(draft: draft)
+    }
+
+    private func openManualEntryIfAsked() {
+        guard mainVM.opensManualEntry else { return }
+        mainVM.opensManualEntry = false
+        openForm(with: newDraft())
+    }
+
+    /// 말로 들은 것을 지출로 적는다.
+    ///
+    /// 묻지 않고 바로 저장한다. 예전에는 확인 화면을 띄우고 8초를 센 뒤
+    /// 저장했는데, 세는 것이 마지막 3초에만 보여 언제 저장되는지 알 수
+    /// 없었다. 저장하고 나서 되돌리거나 고칠 수 있게 하는 편이 빠르고 분명하다.
+    ///
+    /// 다만 짐작해야 하는 것이 있으면 폼을 열어 묻는다 — 금액을 못 들었거나,
+    /// 그 여행에 적은 것이 아직 없어 통화를 모를 때다. 위젯과 같은 규칙이다.
+    private func finishVoiceRecord() {
+        var draft = newDraft()
+        draft.merchant = viewModel.info ?? ""
+        if viewModel.payAmount > 0 {
+            draft.amountText = ReceiptDraft.editableAmountText(viewModel.payAmount)
+        }
+        draft.category = viewModel.infoCategory.description
+        draft.paymentMethod = viewModel.paymentMethod
+        viewModel.resetInStringProperties()
+
+        guard draft.isValid, receiptStore.inheritedMoney(for: draft.travel) != nil else {
+            openForm(with: draft)
+            return
+        }
+
+        do {
+            let expense = try receiptStore.create(from: draft)
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            showSaved(expense)
+            fillPlace(of: expense, at: draft.coordinate)
+        } catch {
+            Logger.data.error("지출 저장 실패: \(error.localizedDescription, privacy: .public)")
+            openForm(with: draft)
+        }
+    }
+
+    /// 주소 찾기는 몇 초 걸리는 왕복이라 저장한 뒤에 채운다.
+    private func fillPlace(of expense: Expense, at coordinate: CLLocationCoordinate2D?) {
+        guard let coordinate else { return }
+        Task { @MainActor in
+            guard let place = await ExpensePlace.resolve(coordinate) else { return }
+            receiptStore.fillPlace(place, for: expense)
+        }
+    }
+
+    private func showSaved(_ expense: Expense) {
+        withAnimation(.easeInOut(duration: 0.2)) { savedExpense = expense }
+        savedCardTimer?.cancel()
+        savedCardTimer = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 8_000_000_000)
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.2)) { savedExpense = nil }
+        }
+    }
+
+    private func hideSavedCard() {
+        savedCardTimer?.cancel()
+        savedExpense = nil
+    }
+
+    private func undo(_ expense: Expense) {
+        hideSavedCard()
+        do {
+            try receiptStore.delete(expense)
+        } catch {
+            Logger.data.error("되돌리기 실패: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+}
+
+/// 폼을 띄울 때 건네는 초안. 시트가 값으로 뜨려면 이름표(id)가 있어야 한다.
+struct RecordFormDraft: Identifiable {
+    let id = UUID()
+    let draft: ReceiptDraft
+}
+
+// MARK: - 방금 저장한 것
+
+/// 저장한 직후 문장 자리에 뜨는 결과. 되돌리거나 고칠 수 있다.
+struct RecordSavedCard: View {
+
+    let expense: Expense
+    var onUndo: () -> Void
+    var onEdit: () -> Void
+
+    var body: some View {
+        VStack(spacing: 14) {
+            HStack(spacing: 6) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 18))
+                    .foregroundStyle(Color.mainAccent)
+                    .accessibilityHidden(true)
+                Text("저장되었습니다")
+                    .font(.subhead2_2)
+                    .foregroundStyle(.gray400)
+            }
+
+            VStack(spacing: 4) {
+                Text(expense.formattedAmount)
+                    .font(.title4)
+                    .foregroundStyle(.black)
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                Text("\(expense.merchantName) · \(expense.missionTitle)")
+                    .font(.caption2)
+                    .foregroundStyle(.gray400)
+                    .lineLimit(1)
+            }
+
+            HStack(spacing: 8) {
+                Button(action: onUndo) {
+                    Text("되돌리기")
+                        .font(.subhead2_2)
+                        .foregroundStyle(.gray400)
+                        .padding(.horizontal, 18)
+                        .frame(minHeight: 44)
+                        .background(Color.gray100, in: Capsule())
+                }
+                Button(action: onEdit) {
+                    Text("편집")
+                        .font(.subhead2_2)
+                        .foregroundStyle(Color.mainAccent)
+                        .padding(.horizontal, 18)
+                        .frame(minHeight: 44)
+                        .background(Color.mainAccent.opacity(0.12), in: Capsule())
+                }
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 32)
+    }
 }
 
 struct ThreeDotsView: View {

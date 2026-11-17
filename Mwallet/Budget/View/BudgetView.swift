@@ -17,10 +17,12 @@ struct BudgetView: View {
     private let store = BudgetStore()
 
     @State private var travels: [Travel] = []
-    @State private var selectedTravel: Travel?
     @State private var isEditingBudget = false
     // 예산을 저장하고 돌아왔을 때 집계를 다시 계산시키는 신호
     @State private var refreshToken = UUID()
+
+    /// 지금 보는 여행. 기록·내역과 같은 것을 본다.
+    private var selectedTravel: Travel? { mainVM.selectedTravel }
 
     private var summary: BudgetSummary {
         _ = refreshToken
@@ -67,7 +69,7 @@ struct BudgetView: View {
     // 툴바에 있을 때는 제목보다 한 층 위에 떠서 둘이 따로 놀았다.
     private var travelSelector: some View {
         TabHeaderRow {
-            TravelPicker(travels: travels, selection: $selectedTravel) {
+            TravelPicker(travels: travels, selection: $mainVM.selectedTravel) {
                 refreshToken = UUID()
             }
         } actions: {
@@ -84,7 +86,13 @@ struct BudgetView: View {
 
     @ViewBuilder
     private var content: some View {
-        if !summary.hasBudget && summary.totalSpent == 0 {
+        if selectedTravel == nil {
+            // 예산은 여행마다 세운다. 고른 여행이 없으면 보여 줄 것이 없다.
+            ReceiptEmptyState(
+                message: String(localized: "여행 선택"),
+                detail: String(localized: "여행을 골라 주세요")
+            )
+        } else if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(
                 message: String(localized: "아직 예산이 없어요"),
                 detail: String(localized: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요.")
@@ -169,11 +177,7 @@ struct BudgetView: View {
 
     private func reload() {
         travels = store.availableTravels()
-        if selectedTravel == nil || !travels.contains(where: { $0.objectID == selectedTravel?.objectID }) {
-            // 가계부 탭에서 고른 여행이 있으면 그것부터 본다.
-            selectedTravel = travels.first { $0.objectID == mainVM.selectedTravelInExpense?.objectID }
-                ?? travels.first
-        }
+        mainVM.dropSelectionIfDeleted()
         refreshToken = UUID()
         publishWidgetSnapshot()
     }

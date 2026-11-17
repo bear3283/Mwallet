@@ -18,37 +18,18 @@ class MainViewModel: ObservableObject {
     // 탭 순서: 0 여행 · 1 가계부(예결산) · 2 기록 · 3 영수증
     // 앱을 열면 가장 자주 쓰는 기록 탭으로 시작한다.
     @Published var selection: Int = Tab.record
-    @Published var selectedTravel: Travel? {
-        didSet {
-            if selectedTravel?.isDefault != true {
-                if selectedTravel != selectedTravelInExpense {
-                    updateSelectedTravelInExpense()
-                }
-            }
-        }
-    }
-    @Published var selectedTravelInExpense: Travel? {
-        didSet {
-            // 비면 여행 중인 것으로 메운다. 메울 것이 있을 때만 대입한다.
-            //
-            // 예전에는 `findCurrentTravel()` 의 답을 그대로 넣었는데, 그 함수도
-            // nil 을 돌려주면 nil 을 도로 넣는 꼴이라 didSet 이 자기를 다시 불렀다.
-            // 멈출 자리가 없어 여행이 하나도 없는 장부에서는 되풀이하다
-            // 스택을 넘어 프로세스가 죽었다 — 부를 때마다 Core Data 를 한 번씩
-            // 뒤지므로 조용히 느려지다 터진다.
-            //
-            // 여행이 없는 장부는 드물지 않다. 지금 보던 여행을 지운 직후가 그렇다.
-            if selectedTravelInExpense == nil, let current = findCurrentTravel() {
-                // 이 대입이 didSet 을 다시 부른다. 뒷일은 그쪽이 맡으므로 여기서 멈춘다.
-                selectedTravelInExpense = current
-                return
-            }
-            if selectedTravelInExpense != selectedTravel {
-                updateSelectedTravel()
-            }
-        }
-    }
-    @Published var chosenTravelInManualRecord: Travel?
+    /// 지금 보는 여행. 앱에 하나뿐이고 기록·내역·예결산이 함께 쓴다.
+    ///
+    /// nil 은 '여행을 고르지 않음' 이다. 기록은 미분류로 적히고, 내역은 모든
+    /// 여행을 함께 보여 준다.
+    ///
+    /// 예전에는 같은 것이 다섯 군데에 있었다 — 여기에 셋, 예결산과 영수증
+    /// 화면에 하나씩. 서로 didSet 으로 맞추다 스스로를 불러 앱이 죽은 적이
+    /// 있고, 한 탭에서 바꾼 여행이 다른 탭에는 닿지 않았다.
+    ///
+    /// 기본함('임시 기록')은 담지 않는다. 사용자가 만든 여행이 아니라
+    /// 고르지 않은 지출이 모이는 자리다.
+    @Published var selectedTravel: Travel?
 
     /// 밖에서 '직접 기록' 화면까지 열어 달라고 들어온 요청.
     ///
@@ -58,10 +39,17 @@ class MainViewModel: ObservableObject {
     @Published var opensManualEntry = false
     
     private init() {
-        selectedTravelInExpense = findInitialTravelInExpense()
-        selectedTravel = findCurrentTravel() // defaultTravel이면 selectedTravelInExpense를 업데이트하지 않는다.
+        selectedTravel = TravelStore().ongoingTravel()
     }
-    
+
+    /// 고른 여행이 지워졌으면 다시 정한다. 화면이 열릴 때마다 부른다.
+    func dropSelectionIfDeleted() {
+        guard let travel = selectedTravel else { return }
+        if travel.isDeleted || travel.managedObjectContext == nil {
+            selectedTravel = TravelStore().ongoingTravel()
+        }
+    }
+
     // 탭 인덱스를 코드 곳곳에 숫자로 흩뿌리지 않기 위해 한곳에 모은다.
     enum Tab {
         static let travel = 0
@@ -80,13 +68,5 @@ class MainViewModel: ObservableObject {
 
     func navigationToTravelView() {
         self.selection = Tab.travel
-    }
-    
-    private func updateSelectedTravelInExpense() {
-        selectedTravelInExpense = selectedTravel
-    }
-    
-    private func updateSelectedTravel() {
-        selectedTravel = selectedTravelInExpense
     }
 }

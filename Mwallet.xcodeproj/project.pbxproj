@@ -14,14 +14,9 @@
 		571A426E2ACE857600FA3D2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 571A426D2ACE857600FA3D2B /* Assets.xcassets */; };
 		571A42712ACE857600FA3D2B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 571A42702ACE857600FA3D2B /* Preview Assets.xcassets */; };
 		5720A56F2B0F4C4700B12E66 /* InfoClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5720A56E2B0F4C4700B12E66 /* InfoClassifier.mlmodel */; };
-		572BE1EA2AE4BB3A005933E7 /* CategoryChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572BE1E92AE4BB3A005933E7 /* CategoryChoiceModal.swift */; };
-		572DBD492AE2D7F100FC88B6 /* ManualRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572DBD482AE2D7F100FC88B6 /* ManualRecordViewModel.swift */; };
 		573889672AF6AFB300FAEF50 /* DateGapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573889662AF6AFB300FAEF50 /* DateGapHandler.swift */; };
 		5744185F2B033C420057A2B5 /* travelModalSortRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744185E2B033C420057A2B5 /* travelModalSortRule.swift */; };
 		5754FAB62AD3F94900A3FCE8 /* Mwallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5754FAB42AD3F94900A3FCE8 /* Mwallet.xcdatamodeld */; };
-		57597A8A2AF096C2000D46A9 /* CountryChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */; };
-		575F287F2AF38C0300F9484E /* AddTravelRequestModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */; };
-		5760066D2ADD42FA006CD8DF /* ManualRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */; };
 		57A65D052AD7D4A900131266 /* Character+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D042AD7D4A900131266 /* Character+Extension.swift */; };
 		57A65D082AD7D4D100131266 /* CharacterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D072AD7D4D100131266 /* CharacterForm.swift */; };
 		57A65D0A2AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D092AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift */; };
@@ -33,7 +28,6 @@
 		57A65D162AD7D6B000131266 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D152AD7D6B000131266 /* PaymentMethod.swift */; };
 		57A65D182AD7DDA700131266 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65D172AD7DDA700131266 /* RecordView.swift */; };
 		57C41DFC2AD4F1EB00345253 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C41DFB2AD4F1EB00345253 /* Persistence.swift */; };
-		57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */; };
 		57CE9C732ADE4CAE00EDAD11 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CE9C722ADE4CAE00EDAD11 /* Currency.swift */; };
 		57CE9C752ADE97A600EDAD11 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CE9C742ADE97A600EDAD11 /* Date+Extension.swift */; };
 		57EA42202ADE38EE006CA587 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EA421F2ADE38EE006CA587 /* Country.swift */; };
@@ -62,7 +56,7 @@
 		C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */; };
 		C1A11EA700000000000000B2 /* Expense+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000B1 /* Expense+Extension.swift */; };
 		C1A11EA700000000000000D2 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000D1 /* ReceiptStore.swift */; };
-		C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* AddReceiptView.swift */; };
+		C1A11EA700000000000000E2 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E1 /* ExpenseFormView.swift */; };
 		C1A11EA700000000000000E4 /* ReceiptHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000E3 /* ReceiptHomeView.swift */; };
 		C1A11EA700000000000000F2 /* ReceiptImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */; };
 		C1A11EA7000000000000010B /* ReceiptSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000010A /* ReceiptSummary.swift */; };
@@ -94,7 +88,6 @@
 		C1A11EA70000000000000E42 /* KoreanNumberReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA70000000000000E31 /* KoreanNumberReader.swift */; };
 		C1A11EA7000000000000A02 /* TravelPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A01 /* TravelPalette.swift */; };
 		C1A11EA7000000000000A12 /* AllTravelsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000A11 /* AllTravelsMap.swift */; };
-		C1A11EA7000000000000B02 /* RecordFieldBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */; };
 		C1A11EA7000000000000B12 /* RecordLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B11 /* RecordLayout.swift */; };
 		C1A11EA7000000000000B22 /* RecordLiveFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000B21 /* RecordLiveFields.swift */; };
 		C1A11EA7000000000000C02 /* TravelCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A11EA7000000000000C01 /* TravelCalendar.swift */; };
@@ -131,7 +124,6 @@
 		E23733902AF7EC1E008C2613 /* CurrencyInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E237338F2AF7EC1E008C2613 /* CurrencyInfoModel.swift */; };
 		E2D4247E2AEF580E00A9ADC9 /* ExchangeRateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D4247D2AEF580E00A9ADC9 /* ExchangeRateHandler.swift */; };
 		E2D5C05C2ADD921400907501 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C05B2ADD921400907501 /* MainView.swift */; };
-		E2D5C0722ADD928C00907501 /* findCurrentTravel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */; };
 		FA00000000000000000000A2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
 		FA00000000000000000000B2 /* MwalletBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000B1 /* MwalletBridge.swift */; };
 		FA00000000000000000000C2 /* MwalletShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A1 /* MwalletShared.swift */; };
@@ -201,14 +193,9 @@
 		571A426D2ACE857600FA3D2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		571A42702ACE857600FA3D2B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5720A56E2B0F4C4700B12E66 /* InfoClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = InfoClassifier.mlmodel; sourceTree = "<group>"; };
-		572BE1E92AE4BB3A005933E7 /* CategoryChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChoiceModal.swift; sourceTree = "<group>"; };
-		572DBD482AE2D7F100FC88B6 /* ManualRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualRecordViewModel.swift; sourceTree = "<group>"; };
 		573889662AF6AFB300FAEF50 /* DateGapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGapHandler.swift; sourceTree = "<group>"; };
 		5744185E2B033C420057A2B5 /* travelModalSortRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = travelModalSortRule.swift; sourceTree = "<group>"; };
 		5754FAB52AD3F94900A3FCE8 /* Mwallet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mwallet.xcdatamodel; sourceTree = "<group>"; };
-		57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryChoiceModal.swift; sourceTree = "<group>"; };
-		575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelRequestModal.swift; sourceTree = "<group>"; };
-		5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualRecordView.swift; sourceTree = "<group>"; };
 		57A65CFF2AD7D3DF00131266 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		57A65D042AD7D4A900131266 /* Character+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Character+Extension.swift"; sourceTree = "<group>"; };
 		57A65D072AD7D4D100131266 /* CharacterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterForm.swift; sourceTree = "<group>"; };
@@ -221,7 +208,6 @@
 		57A65D152AD7D6B000131266 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
 		57A65D172AD7DDA700131266 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		57C41DFB2AD4F1EB00345253 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateChoiceModal.swift; sourceTree = "<group>"; };
 		57CE9C722ADE4CAE00EDAD11 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		57CE9C742ADE97A600EDAD11 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		57EA421F2ADE38EE006CA587 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
@@ -251,7 +237,7 @@
 		C19AFAF52AE163990037A5F5 /* PreviousTravelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousTravelViewModel.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000B1 /* Expense+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Extension.swift"; sourceTree = "<group>"; };
 		C1A11EA700000000000000D1 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
-		C1A11EA700000000000000E1 /* AddReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptView.swift; sourceTree = "<group>"; };
+		C1A11EA700000000000000E1 /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000E3 /* ReceiptHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHomeView.swift; sourceTree = "<group>"; };
 		C1A11EA700000000000000F1 /* ReceiptImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptImageProcessor.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000010A /* ReceiptSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSummary.swift; sourceTree = "<group>"; };
@@ -283,7 +269,6 @@
 		C1A11EA70000000000000E31 /* KoreanNumberReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoreanNumberReader.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000A01 /* TravelPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPalette.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000A11 /* AllTravelsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTravelsMap.swift; sourceTree = "<group>"; };
-		C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFieldBlocks.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000B11 /* RecordLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLayout.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000B21 /* RecordLiveFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordLiveFields.swift; sourceTree = "<group>"; };
 		C1A11EA7000000000000C01 /* TravelCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCalendar.swift; sourceTree = "<group>"; };
@@ -320,7 +305,6 @@
 		E237338F2AF7EC1E008C2613 /* CurrencyInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInfoModel.swift; sourceTree = "<group>"; };
 		E2D4247D2AEF580E00A9ADC9 /* ExchangeRateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateHandler.swift; sourceTree = "<group>"; };
 		E2D5C05B2ADD921400907501 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = findCurrentTravel.swift; sourceTree = "<group>"; };
 		E366F1762B02014B003CCA88 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FA00000000000000000000A1 /* MwalletShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletShared.swift; path = Shared/MwalletShared.swift; sourceTree = SOURCE_ROOT; };
 		FA00000000000000000000B1 /* MwalletBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MwalletBridge.swift; path = Shared/MwalletBridge.swift; sourceTree = SOURCE_ROOT; };
@@ -454,10 +438,6 @@
 		571C52CC2AE49ACB00C10377 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
-				572BE1E92AE4BB3A005933E7 /* CategoryChoiceModal.swift */,
-				57597A892AF096C2000D46A9 /* CountryChoiceModal.swift */,
-				575F287E2AF38C0300F9484E /* AddTravelRequestModal.swift */,
-				57C8342E2AF8B2540097AE99 /* DateChoiceModal.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -559,8 +539,6 @@
 				C1A11EA7000000000000B21 /* RecordLiveFields.swift */,
 				C1A11EA7000000000000F01 /* RecordTopSections.swift */,
 				57A65D172AD7DDA700131266 /* RecordView.swift */,
-				C1A11EA7000000000000B01 /* RecordFieldBlocks.swift */,
-				5760066C2ADD42FA006CD8DF /* ManualRecordView.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -599,7 +577,6 @@
 			isa = PBXGroup;
 			children = (
 				57A65D112AD7D5D500131266 /* RecordViewModel.swift */,
-				572DBD482AE2D7F100FC88B6 /* ManualRecordViewModel.swift */,
 				C17550582AD57B6500A61BE5 /* AddTravelViewModel.swift */,
 				C19AFAE02ADF709E0037A5F5 /* AddMemberViewModel.swift */,
 				C19AFAE62ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift */,
@@ -673,7 +650,7 @@
 			isa = PBXGroup;
 			children = (
 				C1A11EA7000000000000D01 /* ReceiptEvidenceFields.swift */,
-				C1A11EA700000000000000E1 /* AddReceiptView.swift */,
+				C1A11EA700000000000000E1 /* ExpenseFormView.swift */,
 				C1A11EA700000000000003A1 /* ReceiptDesign.swift */,
 				C1A11EA70000000000000BB1 /* TabActionBar.swift */,
 				C1A11EA700000000000001C1 /* ReceiptStatsView.swift */,
@@ -746,7 +723,6 @@
 		E2D5C0702ADD928100907501 /* Handler */ = {
 			isa = PBXGroup;
 			children = (
-				E2D5C0712ADD928C00907501 /* findCurrentTravel.swift */,
 				SP0000000000000000000001 /* SpeechLocale.swift */,
 				E2D4247D2AEF580E00A9ADC9 /* ExchangeRateHandler.swift */,
 				E23357A72AE2B42300E17CFF /* dateFormatter.swift */,
@@ -974,14 +950,11 @@
 				C1A11EA700000000000009A2 /* CSVParser.swift in Sources */,
 				57EA42202ADE38EE006CA587 /* Country.swift in Sources */,
 				C157601E2AF1DD830089FFE5 /* CountryInfo.swift in Sources */,
-				572DBD492AE2D7F100FC88B6 /* ManualRecordViewModel.swift in Sources */,
 				C1DC9A492AF3859B00CB6298 /* Gesture+Extension.swift in Sources */,
 				57F72CEF2B04C85800464B06 /* NumberFormatter.swift in Sources */,
 				E23357A62AE273E700E17CFF /* NSObject+Extension.swift in Sources */,
 				57CE9C752ADE97A600EDAD11 /* Date+Extension.swift in Sources */,
 				E2D5C05C2ADD921400907501 /* MainView.swift in Sources */,
-				C1A11EA7000000000000B02 /* RecordFieldBlocks.swift in Sources */,
-				5760066D2ADD42FA006CD8DF /* ManualRecordView.swift in Sources */,
 				E237338E2AF7EB8B008C2613 /* CurrencyInfo.swift in Sources */,
 				5744185F2B033C420057A2B5 /* travelModalSortRule.swift in Sources */,
 				C19AFAE32ADFB5AE0037A5F5 /* Font+Extension.swift in Sources */,
@@ -1004,7 +977,6 @@
 				C1A11EA700000000000009B2 /* TravelExpenseMap.swift in Sources */,
 				C1B2D2AC2AFCF51700E5C2B2 /* SortingHandler.swift in Sources */,
 				57CE9C732ADE4CAE00EDAD11 /* Currency.swift in Sources */,
-				E2D5C0722ADD928C00907501 /* findCurrentTravel.swift in Sources */,
 				SP0000000000000000000002 /* SpeechLocale.swift in Sources */,
 				C19AFADF2ADEAEC80037A5F5 /* CompleteAddTravelView.swift in Sources */,
 				57F72CF12B04CAE900464B06 /* Double+Extension.swift in Sources */,
@@ -1023,7 +995,7 @@
 				C1A11EA700000000000006E2 /* BudgetEditView.swift in Sources */,
 				C200000A000000000000AA2 /* BudgetCategoryDetailView.swift in Sources */,
 				C1A11EA7000000000000D02 /* ReceiptEvidenceFields.swift in Sources */,
-				C1A11EA700000000000000E2 /* AddReceiptView.swift in Sources */,
+				C1A11EA700000000000000E2 /* ExpenseFormView.swift in Sources */,
 				C1A11EA700000000000003A2 /* ReceiptDesign.swift in Sources */,
 				C1A11EA70000000000000BB2 /* TabActionBar.swift in Sources */,
 				C1A11EA700000000000001C2 /* ReceiptStatsView.swift in Sources */,
@@ -1064,17 +1036,13 @@
 				C1A11EA7000000000000E12 /* AddMemberSections.swift in Sources */,
 				C190C2032ADAAE2C0099EE3A /* AddMemberView.swift in Sources */,
 				57A65D0A2AD7D4EB00131266 /* Array<CharacterForm>+Extension.swift in Sources */,
-				57597A8A2AF096C2000D46A9 /* CountryChoiceModal.swift in Sources */,
 				C19AFAE72ADFF1440037A5F5 /* CompleteAddTravelViewModel.swift in Sources */,
 				C17550592AD57B6500A61BE5 /* AddTravelViewModel.swift in Sources */,
-				572BE1EA2AE4BB3A005933E7 /* CategoryChoiceModal.swift in Sources */,
 				C19AFAF62AE163990037A5F5 /* PreviousTravelViewModel.swift in Sources */,
 				57A65D0E2AD7D51600131266 /* SplitVariety.swift in Sources */,
 				C19AFAE12ADF709E0037A5F5 /* AddMemberViewModel.swift in Sources */,
 				E23733902AF7EC1E008C2613 /* CurrencyInfoModel.swift in Sources */,
 				C1DC9A472AF3428C00CB6298 /* CountryInfoModel.swift in Sources */,
-				57C8342F2AF8B2540097AE99 /* DateChoiceModal.swift in Sources */,
-				575F287F2AF38C0300F9484E /* AddTravelRequestModal.swift in Sources */,
 				57A65D102AD7D52700131266 /* String+Extension.swift in Sources */,
 				5754FAB62AD3F94900A3FCE8 /* Mwallet.xcdatamodeld in Sources */,
 				E23357A82AE2B42300E17CFF /* dateFormatter.swift in Sources */,
