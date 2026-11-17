@@ -201,7 +201,7 @@ extension ExpenseFormView {
         VStack(alignment: .leading, spacing: 0) {
             ReceiptFieldRow(label: String(localized: "여행")) {
                 if travels.isEmpty {
-                    Text("여행 탭에서 일정을 먼저 만들어 주세요")
+                    Text("여행 탭에서 여행을 먼저 만들어 주세요")
                         .font(.caption2)
                         .foregroundStyle(.gray300)
                 } else {
@@ -251,13 +251,13 @@ extension ExpenseFormView {
 
     private var detailBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ReceiptFieldRow(label: String(localized: "상호명")) {
+            ReceiptFieldRow(label: String(localized: "결제 내역")) {
                 TextField("어디에서 썼나요", text: $draft.merchant)
                     .focused($focusedField, equals: .merchant)
                     .receiptField()
             }
 
-            ReceiptFieldRow(label: String(localized: "카테고리")) {
+            ReceiptFieldRow(label: String(localized: "분류")) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 4) {
                         // 카테고리는 Core Data 에 Int64 코드로 저장되므로 자유 입력을 받지 않는다.

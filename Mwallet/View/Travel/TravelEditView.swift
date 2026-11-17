@@ -163,7 +163,10 @@ struct TravelEditView: View {
     // MARK: - 대표 사진
 
     private var coverSection: some View {
-        Section {
+        // 화면 상태를 PhotosPicker 의 라벨 클로저 안에서 읽지 않는다. 그 클로저는
+        // 메인 액터 밖으로 취급되어 경고가 난다. 밖에서 읽어 값으로 건넨다.
+        let pickerTitle = draft.coverImageData == nil ? String(localized: "사진 선택") : String(localized: "사진 변경")
+        return Section {
             HStack(spacing: 12) {
                 if let data = draft.coverImageData, let image = UIImage(data: data) {
                     Image(uiImage: image)
@@ -175,8 +178,7 @@ struct TravelEditView: View {
                 }
 
                 PhotosPicker(selection: $pickedCover, matching: .images) {
-                    Label(draft.coverImageData == nil ? String(localized: "사진 선택") : String(localized: "사진 변경"),
-                          systemImage: "photo")
+                    Label(pickerTitle, systemImage: "photo")
                         .font(.body1)
                         .foregroundStyle(Color.mainAccent)
                 }

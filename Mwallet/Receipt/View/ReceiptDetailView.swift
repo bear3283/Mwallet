@@ -56,7 +56,7 @@ struct ReceiptDetailView: View {
                 Button {
                     isConfirmingDeletion = true
                 } label: {
-                    Text("영수증 삭제")
+                    Text("지출 삭제")
                         .font(.body1)
                         .foregroundStyle(.mainAccent)
                         .padding(.vertical, 16)
@@ -64,7 +64,7 @@ struct ReceiptDetailView: View {
                 // 확인창은 누른 버튼에 붙인다. 화면 전체에 붙이면 버튼과
                 // 동떨어진 곳에 떠서 무엇을 묻는지 한눈에 이어지지 않는다.
                 .confirmationDialog(
-                    "이 영수증을 삭제할까요?",
+                    "이 지출을 삭제할까요?",
                     isPresented: $isConfirmingDeletion,
                     titleVisibility: .visible
                 ) {
@@ -249,7 +249,7 @@ extension ReceiptDetailView {
         VStack(spacing: 0) {
             ReceiptValueRow(label: String(localized: "여행"), value: expense.missionTitle)
             Divider()
-            ReceiptValueRow(label: String(localized: "카테고리"),
+            ReceiptValueRow(label: String(localized: "분류"),
                             value: ExpenseInfoCategory.displayName(forStored: expense.categoryName))
             Divider()
             ReceiptValueRow(label: String(localized: "결제 일자"), value: expense.formattedDate())

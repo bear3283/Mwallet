@@ -38,7 +38,7 @@ struct BudgetView: View {
                 if travels.isEmpty {
                     ReceiptEmptyState(
                         message: String(localized: "여행이 없어요"),
-                        detail: String(localized: "여행 탭에서 일정을 먼저 만들면\n예산을 세울 수 있습니다.")
+                        detail: String(localized: "여행 탭에서 여행을 먼저 만들면\n예산을 세울 수 있습니다.")
                     )
                 } else {
                     travelSelector
@@ -96,7 +96,7 @@ struct BudgetView: View {
         } else if !summary.hasBudget && summary.totalSpent == 0 {
             ReceiptEmptyState(
                 message: String(localized: "아직 예산이 없어요"),
-                detail: String(localized: "위쪽 '예산 편집'에서\n카테고리별로 금액을 세워 보세요.")
+                detail: String(localized: "위쪽 '예산 편집'에서\n분류별로 금액을 세워 보세요.")
             )
         } else {
             ScrollView(showsIndicators: false) {
@@ -140,7 +140,7 @@ struct BudgetView: View {
                     .font(.display4)
                     .foregroundStyle(.black)
                     .monospacedDigit()
-                Text("집행")
+                Text("지출")
                     .font(.caption2)
                     .foregroundStyle(.gray300)
             }
@@ -170,7 +170,7 @@ struct BudgetView: View {
 
             if summary.hasUnconvertible {
                 ReceiptNotice(
-                    text: String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 집행액에서 빠졌습니다")
+                    text: String(localized: "환율을 받지 못한 \(summary.unconvertibleCount)건은 합계에서 빠졌습니다")
                 )
                 .padding(.top, 6)
             }
@@ -221,7 +221,7 @@ enum BudgetChartMode: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .progress: return String(localized: "집행률")
+        case .progress: return String(localized: "예산 대비")
         case .share: return String(localized: "비중")
         }
     }
@@ -381,7 +381,7 @@ struct BudgetChartSection: View {
     private var shareChart: some View {
         let slices = shareSlices
         if slices.isEmpty {
-            Text("아직 집행 내역이 없어요. 지출을 기록하면 비중이 채워집니다.")
+            Text("아직 지출 내역이 없어요. 지출을 기록하면 비중이 채워집니다.")
                 .font(.body1)
                 .foregroundStyle(.gray300)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -402,7 +402,7 @@ struct BudgetChartSection: View {
                 .padding(.vertical, 8)
                 .overlay {
                     VStack(spacing: 2) {
-                        Text("총 집행")
+                        Text("총 지출")
                             .font(.caption1)
                             .foregroundStyle(.gray300)
                         Text(ReceiptFormat.krw(summary.totalSpent))

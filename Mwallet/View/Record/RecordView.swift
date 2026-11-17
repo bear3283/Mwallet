@@ -216,7 +216,7 @@ extension RecordView {
                 Spacer()
                 ZStack(alignment: .bottom) {
                     speakWhilePressingView
-                    RecordAlertBubble(message: String(localized: "소비내역이나 금액 중 한 가지는\n반드시 기록해야 저장할 수 있어요"),
+                    RecordAlertBubble(message: String(localized: "내역이나 금액 중 한 가지는\n말해야 저장할 수 있어요"),
                                       isShown: viewModel.alertView_emptyIsShown)
                     RecordAlertBubble(message: String(localized: "길게 누른 채로 말해주세요"),
                                       isShown: viewModel.alertView_shortIsShown)

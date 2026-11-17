@@ -50,7 +50,7 @@ struct ReceiptHomeView: View {
                     TravelPicker(travels: travels,
                                  selection: $mainVM.selectedTravel,
                                  emptyTitle: String(localized: "전체 여행"),
-                                 emptyDescription: String(localized: "모든 여행의 영수증을 함께 봅니다"),
+                                 emptyDescription: String(localized: "모든 여행의 지출을 함께 봅니다"),
                                  allowsAll: true)
                 } actions: {
                     // 통계는 예결산의 '비중' 과 같은 그림이라 그쪽으로 모았다.
@@ -65,13 +65,13 @@ struct ReceiptHomeView: View {
                     Button {
                         isAddingExpense = true
                     } label: {
-                        TabActionIcon(systemName: "plus", label: String(localized: "영수증 추가"))
+                        TabActionIcon(systemName: "plus", label: String(localized: "지출 추가"))
                     }
                 }
 
                 if allReceipts.isEmpty {
                     ReceiptEmptyState(
-                        message: String(localized: "아직 영수증이 없어요"),
+                        message: String(localized: "아직 지출이 없어요"),
                         detail: String(localized: "지출이 생기면 바로 남겨두세요.\n오프라인에서도 저장됩니다.")
                     )
                 } else {
@@ -143,7 +143,7 @@ struct ReceiptHomeView: View {
             }
             // 줄을 길게 눌러 여는 길이라 확인창을 붙여 둘 버튼이 없다.
             // 화면에 붙인 선택창은 엉뚱한 자리에 뜨므로 가운데 알림으로 묻는다.
-            .alert("이 영수증을 삭제할까요?", isPresented: deletionBinding) {
+            .alert("이 지출을 삭제할까요?", isPresented: deletionBinding) {
                 Button("삭제", role: .destructive) { confirmDeletion() }
                 Button("취소", role: .cancel) { deletionTarget = nil }
             } message: {
@@ -178,7 +178,7 @@ struct ReceiptHomeView: View {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 15))
                 .foregroundStyle(.gray300)
-            TextField("상호명, 메모, 카테고리", text: $filter.searchText)
+            TextField("내역, 메모, 분류", text: $filter.searchText)
                 .font(.body1)
                 .foregroundStyle(.black)
                 .tint(.mainAccent)

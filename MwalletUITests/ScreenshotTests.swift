@@ -165,7 +165,7 @@ final class ScreenshotTests: XCTestCase {
         capture("12-영수증목록")
 
         // 사진이 여러 장 붙은 건으로 들어간다.
-        let row = app.staticTexts["바다뷰 게스트하우스"].firstMatch
+        let row = app.staticTexts["산토니뇨 성당"].firstMatch
         guard tapIfExists(row) else {
             XCTFail("사진이 붙은 영수증을 찾지 못했습니다.")
             return

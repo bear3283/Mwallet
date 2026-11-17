@@ -174,7 +174,7 @@ struct TravelDetailView: View {
             Button("삭제하기", role: .destructive, action: deleteTravel)
             Button("취소", role: .cancel) { }
         } message: {
-            Text("현재 선택한 여행방에 저장된 지출 기록 및 관련 데이터를 모두 삭제할까요?")
+            Text("이 여행에 적힌 지출과 예산이 모두 지워집니다. 되돌릴 수 없습니다.")
         }
         // 편집에서 돌아왔을 때 이름·기간·인원을 다시 읽는다.
         .onAppear {
